@@ -58,6 +58,14 @@
                 width: 100% !important;
                 margin: 0rem;
             }
+            #iutf{
+                display:none
+            }
+
+            #imgLogo{
+                width: 120px !important;
+                height:auto !important
+            }
 
             header{
                 width: 100% !important;
@@ -73,6 +81,7 @@
                 width: 100% !important;
                 margin: 0rem;
             }
+
 
             header{
                 width: 100% !important;
@@ -133,6 +142,7 @@
         }
 
         @media (max-width: 988px) {
+
             #menuHorizontal {
                 display: none !important;
             }
@@ -141,8 +151,8 @@
     <header id="header" class="fijoAbajo" style="position: fixed; top: 0; width: 100%; z-index: 999999999 !important;">
         <nav id="top" class="navbar navbar-expand-lg navbar-light" style="background-color: yellow;">
             <div class="container-fluid">
-                <img src="/images/logomtf.jpg" alt="Imagen al 20%" id="logoUTF" style="width: 9%; height: 70%; border-radius: 0.51rem;">
-                <a class="navbar-brand" href="#" style="margin-left:-20rem"> Usa Tienda Fácil</a>
+                <img id="imgLogo" src="/images/logomtf.jpg" alt="Imagen al 20%" id="logoUTF" style="width: 9%; height: 70%; border-radius: 0.51rem;">
+                <p id="iutf" class="navbar-brand" href="" style="margin-left:-20rem"> Usa Tienda Fácil</p>
                 <button class="navbar-toggler" type="button" id="btnMenuCel">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -239,7 +249,7 @@
             });
         });
     </script>
-    <body style="background-color: rgb(17, 109, 239); height: 2800px !important;" align="center" class="">
+    <body style="background-color: rgb(17, 109, 239); min-height: auto !important;" align="center" class="">
         <style>
             .checklist {
                 font-size: 0.9rem;
@@ -503,14 +513,6 @@
                             </div>                        
                         </div>
                         <br><br>
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" hidden>
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" hidden>
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -525,6 +527,7 @@
         <div id="cPanelOff" class="container-fluid full-height d-flex flex-column justify-content-center align-items-center" align="center" style="position: relative !important; color: white;" >
             <br<br>
             <h4>Panel de control de fácil uso e intuitivo</h4>
+            <br>
             <div style="margin: auto; margin-top:-1rem" id="carouselExampleIndicators23" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="3000">
                 <ol class="carousel-indicators" >
                     <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
@@ -559,6 +562,7 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
+            <!-- lunita -->
             <a href="#compa" class="moon-link" style="position: absolute; top:-9%; left: 0% !important; transform: translate(-50%, -50%); z-index: 999;">
                 <span class="moon" align="center">
                     <i class="fas fa-arrow-down"></i>
@@ -568,7 +572,7 @@
         <hr id="compa" style="position: relative !important">
         <br><br>
         <!-- 4ta pantalla comparaciones-->
-        <div class="container-fluid d-flex flex-wrap justify-content-center align-items-center" id="1er" style="position: relative;">
+        <div align="center" class="container-fluid d-flex flex-wrap justify-content-center align-items-center" id="1er" style="position: relative;">
             <div class="col-lg-3 col-md-6 col-sm-12 p-2">
                 <img src="/images/compTM1.jpg" alt="Descripción de la imagen" class="img-fluid rounded">
             </div>
@@ -589,11 +593,10 @@
         </div>
         <hr id="4ta">
         <!-- 5ta pantalla membresías-->
-        <div class="container-fluid full-height d-flex flex-column justify-content-between;" id="1er" style="">
-            <br><br>
+        <div align="center"class="container-xxl" id="1er" style="position: relative;">
             <!-- Modal de pago Membresía MP-->
             <div class="modal fade" id="signupModalPremiumXYZ123" tabindex="-1" aria-labelledby="signupModalLabelXYZ123" aria-hidden="true" style="z-index: 9999999998 !important;">
-                <!-- modal del pago del login membresua premium -->
+                <!-- modal del pago del login membresia premium -->
                 <div class="modal-dialog modal-lg" align="center" >
                     <div class="modal-content p-4" align="center">
                         <div class="modal-header">
@@ -851,9 +854,9 @@
     });
 });
             </script>
-            <div class="row w-100 h-100">
+            <div class="row text-start">
                 <!-- Membresía Basic -->
-                <div class="col-lg-4 col-md-6 col-12 part" style="z-index: 99999999;">
+                <div class="col-lg-4 col-md-4 col-12 mb-1">
                     <style>
                         /* Estilo para listas de verificación */
                         .checklist {
@@ -960,7 +963,7 @@
                     </script>
                 </div>
                 <!-- Membresía Premium -->
-                <div class="col-lg-4 col-md-6 col-12 part" style="z-index: 99999999;">
+                <div class="col-lg-4 col-md-4 col-12 mb-1">
                     <div class="card" id="premium-card">
                         <div class="card-header">
                             <h4>Membresía Premium</h4>
@@ -1277,7 +1280,7 @@
                     </script>
                 </div>
                 <!-- Membresía CUSTOM Diseña tu propio e-commerce -->
-                <div class="col-lg-4 col-md-12 col-12 part" style="z-index: 99999999;">
+                <div class="col-lg-4 col-md-4 col-12 mb-1">
                     <style>
                         .checklist {
                             padding-left: 20px;
@@ -1475,7 +1478,6 @@
         </div>
         <!-- Footer -->
         <hr id="contacto">
-        <br>
         <style>
         
             .footer {
@@ -1525,81 +1527,67 @@
                 box-shadow: 0 2px 4px rgba(240, 255, 201, 0.2);
             }
         
-            /* Estilos para container2 */
-            .container2 {
-                background-color: #0E4FB0; /* Un tono más oscuro que el fondo del body */
-                padding: 2rem;
-                border-radius: 15px;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
 
         </style> 
-        <!-- contctos        -->
-        <div class="container2" align="center">
-            <footer class="footer" id="contact">
-                <br><br>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <h2 class="text-center">Contactos</h2>
-                            <br>
-                            <div class="row justify-content-center">
-                                <div class="col-md-3 mb-3">
-                                    <a href="#" class="icon round fab fa-whatsapp"><span class="label"></span></a>
+        <footer class="container mx-5 p-5" id="contact">
+                <div class="justify-content-center">
+                        <h2 class="text-center mb-5">Contactos</h2>
+                        <div class="d-flex justify-content-center mt-2">
+                            <div class="mb-3 me-3">
+                                <a href="#" class="icon round fab fa-whatsapp"><span class="label"></span></a>
+                            </div>
+                            <div class="mb-3 me-3">
+                                <a href="#" class="icon round fab fa-facebook-f"><span class="label"></span></a>
+                            </div>
+                            <div class="mb-3 me-3">
+                                <a href="#" class="icon round fab fa-instagram"><span class="label"></span></a>
+                            </div>
+                            <div class="mb-3">
+                                <a href="#" class="icon round fab fa-linkedin-in"><span class="label"></span></a>
+                            </div>
+                        </div>
+                        
+                        <form id="contactForm" action="" method="post">
+                            <input type="text" value="744108/5220963puebloiruya" name="tbstk" hidden>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input class="form-control" name="nombre" id="nameCon" type="text" placeholder="Nombre">
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <a href="#" class="icon round fab fa-facebook-f"><span class="label"></span></a>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input class="form-control" name="email" id="emailCon" type="email" placeholder="Email">
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <a href="#" class="icon round fab fa-instagram"><span class="label"></span></a>
+                                <div class="col-md-6 mb-3">
+                                    <label for="city" class="form-label">Apellido</label>
+                                    <input class="form-control" name="Apellido" id="ApellidoCon" type="text" placeholder="Apellido">
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <a href="#" class="icon round fab fa-linkedin-in"><span class="label"></span></a>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Celular</label>
+                                    <input class="form-control" name="numCel" id="numCelCon" type="text" placeholder="Número de celular">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="message" class="form-label">Mensaje</label>
+                                    <textarea class="form-control" name="mensaje" id="messageCon" rows="4" placeholder="Agrega tu mensaje incluye tu ciudad y país"></textarea>
                                 </div>
                             </div>
-                            <form id="contactForm" action="" method="post">
-                                <input type="text" value="744108/5220963puebloiruya" name="tbstk" hidden>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="name" class="form-label">Nombre</label>
-                                        <input class="form-control" name="nombre" id="nameCon" type="text" placeholder="Nombre">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input class="form-control" name="email" id="emailCon" type="email" placeholder="Email">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="city" class="form-label">Apellido</label>
-                                        <input class="form-control" name="Apellido" id="ApellidoCon" type="text" placeholder="Apellido">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="phone" class="form-label">Celular</label>
-                                        <input class="form-control" name="numCel" id="numCelCon" type="text" placeholder="Número de celular">
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="message" class="form-label">Mensaje</label>
-                                        <textarea class="form-control" name="mensaje" id="messageCon" rows="4" placeholder="Agrega tu mensaje incluye tu ciudad y país"></textarea>
-                                    </div>
-                                </div>
-                                <!-- Botón -->
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-success" id="submitBtn48521">Enviar mensaje</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="text-center mt-5">
-                        <a href="https://tbs-it.net/">
-                            <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
-                            <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
-                        </a>
-                        <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
-                        <span style="margin: 0 1rem;">|</span>
-                        <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
-                    </div>
+                            <!-- Botón -->
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" id="submitBtn48521">Enviar mensaje</button>
+                            </div>
+                        </form>
                 </div>
-            </footer>
-        </div>
+                <div class="text-center mt-5">
+                    <a href="https://tbs-it.net/">
+                        <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
+                        <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
+                    </a>
+                    <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
+                    <span style="margin: 0 1rem;">|</span>
+                    <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
+                </div>
+        </footer>
+
         <!-- Js de contacto -->
         <script>
             document.getElementById('submitBtn48521').addEventListener('click', async function(event) {
@@ -1654,7 +1642,6 @@
                 }
             });
         </script>
-
     </body>
 
     <!-- Todos los modales -->
@@ -1740,15 +1727,6 @@
         </div>
     </div>
 
-    <script src="/alertas.js"></script>
-    <script src="/landingPageFunctions/LPF.js"></script>
-    <script src="/landingPageFunctions/LPmpWallet.js"></script>
-    <script src="/landingPageFunctions/LPmpTCDEf.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 	<!-- //Modal de esperando los datos -->
 	<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true" style="z-index:999999999999 !important;background-color: lightgray; opacity: 0.8;">
 		<div class="modal-dialog modal-dialog-centered">
@@ -1832,6 +1810,17 @@
                     });
                 });
     </script>
+
+
+<script src="/alertas.js"></script>
+<script src="/landingPageFunctions/LPF.js"></script>
+<script src="/landingPageFunctions/LPmpWallet.js"></script>
+<script src="/landingPageFunctions/LPmpTCDEf.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
 </html>
 
