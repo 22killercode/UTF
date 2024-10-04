@@ -2702,7 +2702,6 @@ imgGiga.forEach((img, index) => {
 							const jwToken = sessionStorage.getItem('jwtToken');
 							const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
 							const response = await fetch(`${endpoints[88]}`, {
-							//const response = await fetch('http://localhost:3020/cancelar/envio/pedido', {
 								method: 'POST',
 								headers: {
 									'Content-Type': 'application/json',
