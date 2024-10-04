@@ -76,20 +76,39 @@
             }
         }
 
-        @media (max-width: 430px) {
-            html{
-                width: 100% !important;
-                margin: 0rem;
-            }
+        @media (max-width: 450px) {
+/* Estilos generales para todos los tamaños de pantalla */
+html, body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
 
+    html, body {
+        width: 440px !important;  /* Ocupar todo el ancho disponible */
+        margin: 0;
+        padding: 0;
+    }
 
-            header{
-                width: 100% !important;
-            }
+    header {
+        width: 100% !important;  /* El header ocupará el 100% del ancho de la pantalla */
+        margin: 0 auto;          /* Centrado automático si es necesario */
+    }
 
-            body{
-                width: 100% !important;
-            }
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 1rem;           /* Evitar que el contenido se pegue a los bordes */
+        display: flex;
+        flex-direction: column;  /* Alinea los hijos en columna para pantallas pequeñas */
+    }
+
+    .flex-item {
+        margin-bottom: 1rem;     /* Espaciado entre los elementos */
+        width: 100%;             /* Cada hijo ocupa el 100% del contenedor */
+        text-align: left;        /* Alineación del texto a la izquierda */
+    }
+
 
             #cPanel654, #cPanelOff {
                 display: none !important
@@ -142,14 +161,13 @@
         }
 
         @media (max-width: 988px) {
-
             #menuHorizontal {
                 display: none !important;
             }
         }
     </style>
-    <header id="header" class="fijoAbajo" style="position: fixed; top: 0; width: 100%; z-index: 999999999 !important;">
-        <nav id="top" class="navbar navbar-expand-lg navbar-light" style="background-color: yellow;">
+    <header id="header" class="fijoAbajo " style="position: fixed; top: 0; width: 100%; z-index: 999999999 !important;">
+        <nav id="top" class="p-1 navbar navbar-expand-lg navbar-light" style="background-color: yellow;">
             <div class="container-fluid">
                 <img id="imgLogo" src="/images/logomtf.jpg" alt="Imagen al 20%" id="logoUTF" style="width: 9%; height: 70%; border-radius: 0.51rem;">
                 <p id="iutf" class="navbar-brand" href="" style="margin-left:-20rem"> Usa Tienda Fácil</p>
@@ -249,7 +267,7 @@
             });
         });
     </script>
-    <body style="background-color: rgb(17, 109, 239); min-height: auto !important;" align="center" class="">
+    <body style="background-color: rgb(17, 109, 239); min-height: auto !important;" align="center" class="justify-content-center">
         <style>
             .checklist {
                 font-size: 0.9rem;
@@ -421,7 +439,7 @@
         
         </style>
         <!-- 1er pantalla -->
-        <div class="container-fluid full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
+        <div class="m-4 p-2 container-xxl full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
             <div class="row w-100">
                 <div class="col-md-6 left-section" style="margin-top: 5rem; text-align: center;">
                     <h1 style="font-size: 3.8vw;">
@@ -475,7 +493,7 @@
         </div>
         <hr id="2da651">
         <!-- 2da pantalla diseños-->
-        <div class="container-fluid full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
+        <div class="m-4 p-2 container-xxl full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
             <div class="row w-100">
                 <div class="col-md-6 left-section" style="margin-top: 4rem; text-align: center;">
                     <h1 style="font-size: 3vw;"><span class="highlight">Elije el diseño que más te guste.</span>
@@ -524,7 +542,7 @@
         </div>
         <hr id="cPanel654">
         <!-- 3era pantalla cPanel-->
-        <div id="cPanelOff" class="container-fluid full-height d-flex flex-column justify-content-center align-items-center" align="center" style="position: relative !important; color: white;" >
+        <div id="cPanelOff" class="m-4 p-2 container-xxl full-height d-flex flex-column justify-content-center align-items-center" align="center" style="position: relative !important; color: white;" >
             <br<br>
             <h4>Panel de control de fácil uso e intuitivo</h4>
             <br>
@@ -572,7 +590,7 @@
         <hr id="compa" style="position: relative !important">
         <br><br>
         <!-- 4ta pantalla comparaciones-->
-        <div align="center" class="container-fluid d-flex flex-wrap justify-content-center align-items-center" id="1er" style="position: relative;">
+        <div align="center" class="m-4 p-2 container-xxl d-flex flex-wrap justify-content-center align-items-center" id="1er" style="position: relative;">
             <div class="col-lg-3 col-md-6 col-sm-12 p-2">
                 <img src="/images/compTM1.jpg" alt="Descripción de la imagen" class="img-fluid rounded">
             </div>
@@ -593,7 +611,7 @@
         </div>
         <hr id="4ta">
         <!-- 5ta pantalla membresías-->
-        <div align="center"class="container-xxl" id="1er" style="position: relative;">
+        <div align="center"class="m-4 p-2 container-xxl" id="1er" style="position: relative;">
             <!-- Modal de pago Membresía MP-->
             <div class="modal fade" id="signupModalPremiumXYZ123" tabindex="-1" aria-labelledby="signupModalLabelXYZ123" aria-hidden="true" style="z-index: 9999999998 !important;">
                 <!-- modal del pago del login membresia premium -->
@@ -1529,7 +1547,7 @@
         
 
         </style> 
-        <footer class="container mx-5 p-5" id="contact">
+        <footer class="m-4 p-2 container-xxl " id="contact">
                 <div class="justify-content-center">
                         <h2 class="text-center mb-5">Contactos</h2>
                         <div class="d-flex justify-content-center mt-2">
