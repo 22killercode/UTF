@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="es" > 
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- //fontAwosome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-yH0I1BgeG5rvOQSDk/HCWc8XcF7FvXSUGlINuUs56a0yg8p1ZC7dF60v/4HFOtA2DprzMyHlsPvh6KlLV0xV4Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<!-- Agrega el script de NodeGeocoder -->
+		<script src="https://cdn.jsdelivr.net/npm/node-geocoder@3.29.0/dist/node-geocoder.min.js"></script>
+		<!-- Agrega el script de Leaflet -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+		<!-- Agrega la biblioteca de Bootstrap -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<link href="/assets/css/main.css" rel="stylesheet">
+		<link rel="stylesheet" href="public/css/font-awesome.min.css" />
+		<!-- Include jQuery and Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		<!-- Bootstrap bundle JS (popper.js + bootstrap.js) -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">	  
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+		<script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/t1QIqDE8YFUZHfb7dGB6j8f5M6EExQgA8N7gk=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></script>
+			<!-- Bootstrap JS y Popper.js NO MOVER DE AQUI-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+			<!-- Incluye la biblioteca Slick Carousel -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+        <!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap JS (incluye Popper.js) -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+                            
+		<!--REVISAR //config toast -->
+		<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+		<title id="titulo">Usa Tienda Facil</title>
+		
+		<!-- Mercado Pago -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://sdk.mercadopago.com/js/v2"></script>
+        <!-- reiniciar  -->
+        <script src="/reiniciar.js"></script>
+
+        <!-- manifest -->
+        <link rel="manifest" href="manifests/webmanifest.json">
+		
+	</head>
+    <style> 
+        @media (max-width: 700px) {
+            html{
+                width: 100% !important;
+                margin: 0rem;
+            }
+
+            header{
+                width: 100% !important;
+            }
+
+            body{
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 430px) {
+            html{
+                width: 100% !important;
+                margin: 0rem;
+            }
+
+            header{
+                width: 100% !important;
+            }
+
+            body{
+                width: 100% !important;
+            }
+
+            #cPanel654, #cPanelOff {
+                display: none !important
+
+            }
+
+        }
+
+        /* Ocultar el botón del menú en pantallas horizontales */
+        @media (min-width: 987px) {
+            #btnMenuCel {
+                display: none;
+            }
+        }
+        
+        /* Estilos para el menú deslizable */
+        #menuCelu {
+            position: fixed;
+            top: 0;
+            right: -250px; /* Oculto inicialmente */
+            width: 250px;
+            height: 100%;
+            background-color: yellow;
+            transition: right 0.3s ease;
+            z-index: 9999;
+            padding: 20px;
+        }
+    
+        #menuCelu.show {
+            right: 0; /* Muestra el menú */
+        }
+    
+        #menuCelu .close-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    
+        /* Ocultar el botón de cierre en pantallas horizontales */
+        @media (min-width: 768px) {
+            #menuCelu .close-btn {
+                display: none;
+            }
+            #menuHorizontal{
+                display: none;
+            }
+
+        }
+
+        @media (max-width: 988px) {
+            #menuHorizontal {
+                display: none !important;
+            }
+        }
+    </style>
+    <header id="header" class="fijoAbajo" style="position: fixed; top: 0; width: 100%; z-index: 999999999 !important;">
+        <nav id="top" class="navbar navbar-expand-lg navbar-light" style="background-color: yellow;">
+            <div class="container-fluid">
+                <img src="/images/logomtf.jpg" alt="Imagen al 20%" id="logoUTF" style="width: 9%; height: 70%; border-radius: 0.51rem;">
+                <a class="navbar-brand" href="#" style="margin-left:-20rem"> Usa Tienda Fácil</a>
+                <button class="navbar-toggler" type="button" id="btnMenuCel">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- menu solo visible en pantallas de celulares -->
+                <div id="menuCelu">
+                    <span class="close-btn" id="closeMenu">&times;</span>
+                    <ul class="navbar-nav me-auto my-2 my-lg-0 " style="">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#compa">Comparaciones</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Soluciones & opciones
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                <li><a class="dropdown-item" href="#3era">Membresías</a></li>
+                                <li><a class="dropdown-item" href="#2da">Galería de estilos</a></li>
+                                <li><a class="dropdown-item" href="#contact">Contáctenos</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#4ta" tabindex="-1">Precios</a>
+                        </li>
+                        <li>
+                            <form class="">
+                                <div>
+                                    <a class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#signupModalSignIn" href="#">Login</a>
+                                </div>
+                                <br>
+                                <div>
+                                    <a class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#signupModal" href="#" style="">Crea tu tienda gratis</a>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Menú visible en pantallas horizontales -->
+                <div id="menuHorizontal" class="d-block d-sm-none d-md-block">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#compa">Comparaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#4ta" tabindex="-1">Precios</a>
+                        </li>
+                        <li class="nav-item ">
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Soluciones & opciones
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                    <li><a class="dropdown-item" href="#2da651">Galería de estilos</a></li>
+                                    <li><a class="dropdown-item"href="#cPanel654" >Panel de Control</a></li>
+                                    <li><a class="dropdown-item" href="#4ta">Membresías</a></li>
+                                    <li><a class="dropdown-item" href="#contact">Contáctenos</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <form class="d-flex">
+                            <a class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#signupModalSignIn" href="#">Login</a>
+                            <a class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#signupModal" href="#" style="margin: 0 0.5rem;">Crea tu tienda gratis</a>
+                        </form>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <script>
+        //56209242
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnMenuCel = document.getElementById('btnMenuCel');
+            const menuCelu = document.getElementById('menuCelu');
+            const closeMenu = document.getElementById('closeMenu');
+    
+            btnMenuCel.addEventListener('click', function () {
+                menuCelu.classList.add('show');
+            });
+    
+            closeMenu.addEventListener('click', function () {
+                menuCelu.classList.remove('show');
+            });
+    
+            // Cerrar el menú si se hace clic fuera de él
+            document.addEventListener('click', function (event) {
+                if (!menuCelu.contains(event.target) && !btnMenuCel.contains(event.target)) {
+                    menuCelu.classList.remove('show');
+                }
+            });
+        });
+    </script>
+    <body style="background-color: rgb(17, 109, 239); height: 2800px !important;" align="center" class="">
+        <style>
+            .checklist {
+                font-size: 0.9rem;
+                line-height: 1.1;
+                color: black;
+            }
+            .checklist li {
+                list-style: none;
+                margin: 0.5rem 0;
+                display: flex;
+                align-items: center;
+            }
+            .checklist li::before {
+                content: "\f00c"; /* Font Awesome check icon */
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                color: green;
+                margin-right: 0.5rem;
+            }        
+            .carousel-indicators li {
+                width: 5px !important;
+                height: 10px;
+                border-radius: 50%;
+                background-color: white; /* Puedes cambiar el color aquí */
+            }
+
+            .carousel-indicators .active {
+                background-color: white; /* Puedes cambiar el color aquí */
+            }
+
+            /* Estilos del fondo */
+            #section {
+                height: 2000px; /* Altura de la sección */
+                background-color: #f5f5f5; /* Color de fondo */
+                margin-bottom: 5px; /* Espacio en la parte inferior para la luna */
+            }
+
+            .full-height {
+                height: 100vh;
+            }
+            .carousel-item {
+                height: 100%;
+            }
+            .carousel-item img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+            }
+            .left-section {
+                align-items: center !important;
+                justify-content: center !important;
+                background-color: rgb(17, 109, 239);
+                padding: 2rem;
+                color: white
+            }
+            .left-section h1 {
+                font-size: 2.2rem;
+                text-align: center;
+                font-family: 'sans-serif';
+                color: white;
+            }
+            .left-section h1 .highlight {
+                font-weight: bold;
+                color: #ff6347; /* Tomate */
+            }
+            @media (min-width: 5px) and (max-width: 768px) {
+                .left-section h1 {
+                    font-size: 2.5rem !important;
+
+                }
+                .moon-link{
+                    display: none;
+                }
+            }
+
+            /* Estilos del fondo */
+            #section {
+                height: auto; /* Altura de la sección */
+                background-color: #f5f5f5; /* Color de fondo */
+                margin-bottom: 10px; /* Espacio en la parte inferior para la luna */
+            }
+
+            /* Estilos de la luna */
+            .moon {
+                width: 30px;
+                height: 30px;
+                background-color: #f0e68c; /* Color de la luna */
+                border-radius: 50%;
+                border: 0.1px solid #333; /* Borde de la luna */
+                transition: background-color 0.3s ease, opacity 1s linear; /* Transición de color de fondo y opacidad */
+                animation: shine 4s infinite; /* Animación de brillo */
+                z-index: 9999999; /* Asegura que la luna esté por encima de otros elementos */
+                display: block;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Estilos del enlace de LUNA */
+            .moon-link {
+                position: relative !important;
+                bottom: 30px; /* Coloca el enlace 20px desde el fondo del contenedor */
+                left: 50% !important;
+                transform: translateX(-50%);
+                z-index: 999;
+                animation: moonEntrance 3s forwards; /* Animación de entrada */
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Estilos de la luna cuando se hace hover */
+            .moon:hover {
+                background-color: #ffd700; /* Cambia a color sol */
+            }
+
+            /* Estilos de la luna cuando se hace clic */
+            .moon:active {
+                background-color: orange; /* Cambia a color naranja */
+            }
+
+
+
+            /* Animación de entrada de la luna */
+            @keyframes moonEntrance {
+                0% {
+                    bottom: -50px; /* Comienza desde fuera de la pantalla */
+                }
+                100% {
+                    bottom: 40px; /* Se detiene a 10px del borde inferior */
+                }
+            }
+    
+            /* Animación de brillo */
+            @keyframes shine {
+                0% {
+                    opacity: 0.051; /* Brillo máximo al principio */
+                }
+                10% {
+                    opacity: 0.1; /* Brillo aumentado al 50% */
+                }
+                20% {
+                    opacity: 0.2; /* Brillo aumentado al 50% */
+                }
+                30% {
+                    opacity: 0.3; /* Brillo aumentado al 50% */
+                }
+                40% {
+                    opacity: 0.4; /* Regresa al brillo máximo */
+                }
+                50% {
+                    opacity: 0.5; /* Regresa al brillo máximo */
+                }
+                60% {
+                    opacity: 0.6; /* Regresa al brillo máximo */
+                }
+                70% {
+                    opacity: 0.7; /* Regresa al brillo máximo */
+                }
+                80% {
+                    opacity: 0.8; /* Regresa al brillo máximo */
+                }
+                90% {
+                    opacity: 0.9; /* Regresa al brillo máximo */
+                }
+                100% {
+                    opacity: 1; /* Regresa al brillo máximo */
+                }
+
+            }
+        
+        </style>
+        <!-- 1er pantalla -->
+        <div class="container-fluid full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
+            <div class="row w-100">
+                <div class="col-md-6 left-section" style="margin-top: 5rem; text-align: center;">
+                    <h1 style="font-size: 3.8vw;">
+                        <span class="highlight">Tu tienda gratis <br> en un par de clicks.</span>
+                        <br>
+                        !
+                        Abrí tu tienda fácil, <br> publicas fácil, <br> vendes fácil...!</h1>
+                    <br>
+                    <h5 style="font-size: 1.4vw;">¡Inscribete sin cargo y empezá a vender hoy mismo!</h5>
+                    <br>
+                    <a class="btn btn-success" href="#4ta" tabindex="-1" style="margin: 0 0.5rem; font-size: 1.5rem;">Crea tu tienda gratis</a>
+                </div>
+                <div class="col-md-6 p-0">
+                    <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="10000">
+                        <ol class="carousel-indicators" >
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></li>
+                        </ol>
+                        <div class="carousel-inner h-100">
+                            <div class="carousel-item active" style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/dispositivos" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/rubros" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/pasos" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/incluye" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" hidden>
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" hidden>
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <a href="#2da651" class="moon-link" style="margin-left: 31.5%;">
+                <span class="moon">
+                    <i class="fas fa-arrow-down" style="margin-left:0.51rem;"></i>
+                </span>
+            </a>
+        </div>
+        <hr id="2da651">
+        <!-- 2da pantalla diseños-->
+        <div class="container-fluid full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
+            <div class="row w-100">
+                <div class="col-md-6 left-section" style="margin-top: 4rem; text-align: center;">
+                    <h1 style="font-size: 3vw;"><span class="highlight">Elije el diseño que más te guste.</span>
+                        <br><br>
+                        !Más de una docena de diseños exclusivos para tu tienda online!</h1>
+                    <br><br>
+                    <h5 style="font-size: 1.4vw;">¡Inscribete sin cargo y empezá a vender hoy mismo!</h5>
+                    <br><br>
+                    <a class="btn btn-success" href="#4ta" tabindex="-1" style="margin: 0 0.5rem; font-size: 1.5rem;">Crea tu tienda gratis</a>
+                </div>
+                <div class="col-md-6 p-0 mt-3"  >
+                    <div style="margin: 0 0 0 1rem" id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="4000">
+                        <ol class="carousel-indicators" >
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></li>
+                            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"></li>
+                        </ol>
+                        <div class="carousel-inner h-100">
+                            <div class="carousel-item active" style="margin-top:4.5rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/dispo1" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:5rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/dispo2" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:5rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/dispo3" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:5rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/dispo4" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:5rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/dispo5" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            </div>                        
+                        </div>
+                        <br><br>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" hidden>
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" hidden>
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <a href="#cPanel654" class="moon-link" style="margin-left: 32%;">
+                <span class="moon">
+                    <i class="fas fa-arrow-down" style="margin-left:0.51rem;"></i>
+                </span>
+            </a>           
+        </div>
+        <hr id="cPanel654">
+        <!-- 3era pantalla cPanel-->
+        <div id="cPanelOff" class="container-fluid full-height d-flex flex-column justify-content-center align-items-center" align="center" style="position: relative !important; color: white;" >
+            <br<br>
+            <h4>Panel de control de fácil uso e intuitivo</h4>
+            <div style="margin: auto; margin-top:-1rem" id="carouselExampleIndicators23" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="3000">
+                <ol class="carousel-indicators" >
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"></li>
+                </ol>
+                <div class="carousel-inner h-100" align="center">
+                    <div class="carousel-item active" style="margin-top:1rem; max-width: 100%; height: 90%; justify-content: center; align-items: center;">
+                        <img src="/images/cPanel1.jpg" alt="Descripción de la imagen" style="max-width: 75%; height: auto;">
+                    </div>
+                    <div class="carousel-item " style="margin-top:1rem;max-width: 100%; height: 90%; justify-content: center; align-items: center;">
+                        <img src="/images/cPanel2.jpg" alt="Descripción de la imagen" style="max-width: 75%; height: auto;">
+                    </div>
+                    <div class="carousel-item " style="margin-top:1rem;max-width: 100%; height: 90%; justify-content: center; align-items: center;">
+                        <img src="/images/cPanel3.jpg" alt="Descripción de la imagen" style="max-width: 75%; height: auto;">
+                    </div>
+                    <div class="carousel-item " style="margin-top:1rem;max-width: 100%; height: 90%; justify-content: center; align-items: center;">
+                        <img src="/images/cPanel4.jpg" alt="Descripción de la imagen" style="max-width: 75%; height: auto;">
+                    </div>
+                    <div class="carousel-item " style="margin-top:1rem;max-width: 100%; height: 90%; justify-content: center; align-items: center;">
+                        <img src="/images/cPanel5.jpg" alt="Descripción de la imagen" style="max-width: 70%; height: auto;">
+                    </div>                        
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators23" role="button" data-slide="prev" >
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators23" role="button" data-slide="next" >
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <a href="#compa" class="moon-link" style="position: absolute; top:-9%; left: 0% !important; transform: translate(-50%, -50%); z-index: 999;">
+                <span class="moon" align="center">
+                    <i class="fas fa-arrow-down"></i>
+                </span>
+            </a>
+        </div>
+        <hr id="compa" style="position: relative !important">
+        <br><br>
+        <!-- 4ta pantalla comparaciones-->
+        <div class="container-fluid d-flex flex-wrap justify-content-center align-items-center" id="1er" style="position: relative;">
+            <div class="col-lg-3 col-md-6 col-sm-12 p-2">
+                <img src="/images/compTM1.jpg" alt="Descripción de la imagen" class="img-fluid rounded">
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 p-2">
+                <img src="/images/compMS2.jpg" alt="Descripción de la imagen" class="img-fluid rounded">
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 p-2">
+                <img src="/images/compTN3.jpg" alt="Descripción de la imagen" class="img-fluid rounded">
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 p-2 position-relative">
+                <img src="/images/compSho4.jpg" alt="Descripción de la imagen" class="img-fluid rounded">
+            </div>
+            <a href="#4ta" class="moon-link" style="position: absolute; margin-top: 1%; left: 1% !important; transform: translate(-50%, -50%); z-index: 999;">
+                <span class="moon" align="center">
+                    <i class="fas fa-arrow-down"></i>
+                </span>
+            </a>
+        </div>
+        <hr id="4ta">
+        <!-- 5ta pantalla membresías-->
+        <div class="container-fluid full-height d-flex flex-column justify-content-between;" id="1er" style="">
+            <br><br>
+            <!-- Modal de pago Membresía MP-->
+            <div class="modal fade" id="signupModalPremiumXYZ123" tabindex="-1" aria-labelledby="signupModalLabelXYZ123" aria-hidden="true" style="z-index: 9999999998 !important;">
+                <!-- modal del pago del login membresua premium -->
+                <div class="modal-dialog modal-lg" align="center" >
+                    <div class="modal-content p-4" align="center">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="signupModalLabelXYZ123">Abona Membresía Premium</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="location.reload();"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div align="center">
+                                <div id="cantyPrecio54" class="mb-3">
+                                    <h5 align="center" id="precioFinal" style="color:green"> </h5>
+                                </div>
+                                <p id="sacarCompletaData">Completa los datos.</p>
+                            </div>
+                            <form action="" id="form54354gegghte5">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="NombreXYZ123" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="NombreXYZ123" placeholder="tu nombre" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="ApellidoXYZ123" class="form-label">Apellido</label>
+                                        <input type="text" class="form-control" id="ApellidoXYZ123" placeholder="Tu Apellido" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="emailXYZ123" class="form-label">Email para tu tienda online</label>
+                                        <input type="email" class="form-control" id="emailXYZ123" placeholder="nombre@ejemplo.com" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="passwordXYZ123" class="form-label">Contraseña para tu tienda online</label>
+                                        <input type="password" class="form-control" id="passwordXYZ123" placeholder="Contraseña" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6 offset-md-3">
+                                        <label for="confirmPasswordXYZ123" class="form-label">Verificar Contraseña</label>
+                                        <input type="password" class="form-control" id="confirmPasswordXYZ123" placeholder="Repite tu contraseña" required>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="shopping-cart"></div>
+                        <div id="statusScreenBrick_container"></div>
+                        <div id="payment"></div>
+                        <div id="paymentBrick_container"></div>
+                        <div id="walletBrick_container"></div>
+                        <div id="statusScreen"></div>
+                        <div id="wallet_container"></div>
+                        <fieldset class="card-container p-1" id="opcionesDePagoLandindPage"></fieldset>
+                        <div id="borrarBTNMP">
+                            <button class="btn btn-primary" id="signupFormXYZ123651465165">
+                                Pagar con Mercado Libre.
+                            </button>
+                            <button class="btn btn-primary" id="PagoManual">
+                                Pago Manual.
+                            </button>
+                        </div>
+                        <br>
+                        <div class="modal-footer d-flex flex-column align-items-center">
+                            <p>Si no usas MP puedes abonar desde cualquier billetera con el alias: <strong>usatiendafacil.com.mp</strong> y enviar el comprobante al <strong> +054 9 11-6140-9440 </strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                let dataMP = {}
+                let dataPay = {}
+                let dataOwner2 = {}
+                // Llama a la función asincrónica
+                let cotizacionDolar = {};
+                (async () => {
+                    try {
+                        cotizacionDolar = await cotizacionesDolaresPaises();
+                        console.log('Cotización del dólar:', cotizacionDolar);
+                    } catch (error) {
+                        console.error('Error al obtener la cotización del dólar:', error);
+                    }
+                })();
+                const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+                const idEnpointCheq = dataBasic.data.endpointTokensArray2
+                //const jwToken = dataBasic.data.jwToken
+                if (!dataBasic) {
+                    reloadPage()
+                }
+                function collectData() {
+                    const nombre = document.getElementById('NombreXYZ123').value.trim();
+                    const apellido = document.getElementById('ApellidoXYZ123').value.trim();
+                    const emailXYZ123 = document.getElementById('emailXYZ123').value.trim();
+                    const passwordXYZ123 = document.getElementById('passwordXYZ123').value;
+                    const confirmPasswordXYZ123 = document.getElementById('confirmPasswordXYZ123').value;
+
+                    // Validación de que la contraseña sea alfanumérica y tenga al menos 8 caracteres
+                    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                    if (!passwordPattern.test(passwordXYZ123)) {
+                        mostrarAlerta(`La contraseña debe ser alfanumérica y tener al menos 8 caracteres.<br>Nombre: ${nombre} ${apellido}`);
+                        // Recargar la página después de 3 segundos
+                        setTimeout(() => {
+                            reloadPage();
+                        }, 3000);
+                    }
+
+                    // Validación de que las contraseñas coincidan
+                    if (passwordXYZ123 !== confirmPasswordXYZ123) {
+                        mostrarAlerta(`Las contraseñas no coinciden.`);
+                        // Recargar la página después de 3 segundos
+                        setTimeout(() => {
+                            reloadPage();
+                        }, 3000);
+                    }
+
+                    // Validación de campos vacíos
+                    if (!nombre || !apellido) {
+                        mostrarAlerta('El nombre y el apellido son campos obligatorios.');
+                        // Recargar la página después de 3 segundos
+                        setTimeout(() => {
+                            reloadPage();
+                        }, 3000);
+                    }
+
+                    dataPay = dataMP;
+                    dataOwner2 = { nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123 };
+                    //console.log("8888888888Que armo la funcion collect data", dataPay, dataOwner);
+                    return {dataPay, dataOwner2}
+                }
+                // Se agrega botones de pago Wallet y con tC
+                document.getElementById('signupFormXYZ123651465165').addEventListener('click', async function (e) {
+                    //console.log("1111111111111111Apreto el boton de pagar con wallet")
+                    mostrarModalLoading()
+                    e.preventDefault();
+                    collectData()
+                    await LPmpWallet(dataPay, dataOwner2);
+                });
+                // Pago Manual
+                document.getElementById('PagoManual').addEventListener('click', function () {
+                    console.log("Entro al pago manual por la landing page")
+                    //mostrarModalLoading()
+                    const borrarBtn456 = document.getElementById('borrarBTNMP')
+                    borrarBtn456.innerHTML=""
+                    const dataColect = collectData()
+                    console.log("Entro al pago manual landng pageeee", dataColect)
+                    const modalBody = document.getElementById('form54354gegghte5');
+                    // Limpiar el contenido del modal, excepto el div con ID 'cantyPrecio54'
+                    //ocultarModalLoading()
+                    modalBody.innerHTML = `
+    <div class="mb-3 text-center">
+        <h2>Pago Manual<h2>
+        <h5 style="color:green">
+            CVU Mercado Pago: usatiendafacil.com.mp <br>
+            CBU Bco. Galicia: 16546465146546165456465465465
+        </h5>
+    </div>
+    <form id="manualPaymentForm">
+        <div class="mb-3">
+            <label for="paymentMethod" class="form-label">Método de Pago</label>
+            <select class="form-select" id="paymentMethod" required>
+                <option value="" disabled selected>Seleccionar método</option>
+                <option value="transferencia">CVU Mercado Pago</option>
+                <option value="cbu">CBU Galicia</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="ticketNumber" class="form-label">Número de Ticket</label>
+            <input type="text" class="form-control" id="ticketNumber" placeholder="Número de ticket" required>
+        </div>
+        <div class="mb-3">
+            <label for="extraData" class="form-label">Datos Extras y Observaciones</label>
+            <textarea class="form-control" id="extraData" rows="3" placeholder="Escribe tus observaciones aquí..." required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="receiptImage" class="form-label">Subir Comprobante</label>
+            <input type="file" class="form-control" id="receiptImage" accept="image/*" required>
+            <small class="form-text text-muted">La imagen debe ser menor a 1MB.</small>
+        </div>
+        <button type="button" id="efggeee16566" class="btn btn-primary w-100">Enviar Datos</button>
+    </form>
+`;
+                    document.getElementById('efggeee16566').addEventListener('click', async function (e) {
+    e.preventDefault();
+    // Obtener los valores de los campos
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const ticketNumber = document.getElementById('ticketNumber').value;
+    const extraData = document.getElementById('extraData').value;
+    const receiptImage = document.getElementById('receiptImage');
+    // Validar que todos los campos estén completos
+    if (!paymentMethod || !ticketNumber || !receiptImage.files[0]) {
+        mostrarAlerta('Todos los campos deben ser completados incluyendo la imagen del ticket.');
+        // Recargar la página después de 3 segundos
+        setTimeout(() => {
+            reloadPage();
+        }, 3000);
+    }
+    // Validar tamaño de la imagen
+    if (receiptImage.files[0].size > 1 * 1024 * 1024) { // 1MB en bytes
+        mostrarAlerta('La imagen debe ser menor a 1MB.');
+        // Recargar la página después de 3 segundos
+        setTimeout(() => {
+            reloadPage();
+        }, 3000);
+    }
+    // Crear un objeto FormData para enviar la imagen y los datos del formulario
+    const formData = new FormData();
+    formData.append('paymentMethod', paymentMethod);
+    formData.append('ticketNumber', ticketNumber);
+    formData.append('extraData', extraData);
+    formData.append('dataOwner', JSON.stringify(dataOwner2));
+    formData.append('dataPay', JSON.stringify(dataPay));
+    // Agregar la imagen al FormData
+    formData.append('imgTicket', receiptImage.files[0]);
+    console.log("LPM 111111111Imagen seleccionada:", receiptImage.files[0]);
+    console.log("LPM 222222222FormData antes del envío:", formData);
+    try {
+        const jwToken = dataBasic.data.jwToken
+        const idEnpointCheq141 = idEnpointCheq[141]
+        const response = await fetch(`${idEnpointCheq141}`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${jwToken}`
+            }
+        });
+
+        if (!response.ok) {
+            // Obtener los datos de error del backend
+            const errorData = await response.json();
+            // Si el backend no envía un mensaje, usa un mensaje por defecto
+            const errorMessage = errorData.message || 'Error en el envío de datos.';
+            throw new Error(errorMessage);
+        }
+
+        // Convierte la respuesta a JSON
+        const result = await response.json();
+        console.log('Resultado del envío:', result);
+        mostrarExito(`
+            Bienvenid@ a nuestra membresía Premium.<br>
+            Tu pago esta siendo procesado. <br>
+            Recibirás un email con las indicaciones para continuar con tu inscripción.<br>
+            Si no lo encuentras en tu bandeja de entrada, por favor revisa en tu carpeta de spam y colócalo como deseado.<br>
+            Gracias.
+        `);
+        // Recargar la página después de 3 segundos
+        setTimeout(() => {
+            reloadPage();
+        }, 8000);
+
+    } catch (error) {
+            // Mostrar el mensaje de error que proviene del backend
+            console.error('Error:', error.message);
+            mostrarAlerta(error.message); // Aquí se muestra el mensaje de error en el frontend
+            // Recargar la página después de 3 segundos
+            setTimeout(() => {
+                reloadPage();
+            }, 3000);
+        }
+    });
+});
+            </script>
+            <div class="row w-100 h-100">
+                <!-- Membresía Basic -->
+                <div class="col-lg-4 col-md-6 col-12 part" style="z-index: 99999999;">
+                    <style>
+                        /* Estilo para listas de verificación */
+                        .checklist {
+                            padding-left: 20px;
+                        }
+                    
+                        /* Estilo para enlaces que parecen botones */
+                        .btn-link {
+                            color: #007bff;
+                            text-decoration: none;
+                            cursor: pointer;
+                        }
+                    
+                        /* Estilo para el estado hover de los enlaces que parecen botones */
+                        .btn-link:hover {
+                            text-decoration: underline;
+                        }
+                    
+                        /* Estilo para el estado focus de los enlaces que parecen botones */
+                        .btn-link:focus {
+                            outline: none;
+                        }
+                    
+                        /* Estilo para el contenedor colapsable */
+                        .includes-hidden {
+                            max-height: 0;
+                            overflow: hidden;
+                            transition: max-height 1.5s ease-out, padding 1.5s ease-out;
+                            padding: 0; /* Establecer padding inicial a 0 */
+                        }
+                    
+                        /* Estilo cuando el contenedor colapsable está activo */
+                        .includes-hidden.active {
+                            max-height: 1000px; /* Un valor alto para garantizar que se cubra todo el contenido */
+                            padding: 10px; /* Añadir padding para proporcionar espacio interno */
+                        }
+                    
+                        /* Estilo para el contenedor del card */
+                        .card {
+                            transition: height 1.5s ease-out;
+                            display: flex;
+                            flex-direction: column;
+                        }
+                    
+                        /* Estilo para los grupos de entrada */
+                        .input-group {
+                            display: flex;
+                            align-items: center;
+                        }
+                    
+                        /* Estilo para los botones dentro de un grupo de entrada */
+                        .input-group button {
+                            width: 40px;
+                        }
+                    
+                        /* Estilo para los campos de entrada dentro de un grupo de entrada */
+                        .input-group input {
+                            text-align: center;
+                        }
+                    </style>
+                    <div class="card" id="basic-card">
+                        <div class="card-header">
+                            <h4>Membresía Basic</h4>
+                        </div>
+                        <div class="card-body" style="margin-top:0rem">
+                            <p align="center"><strong>Con comisiones</strong></p>
+                            <ul>
+                                <li><strong>Comisión 16.5%:</strong> Incluye los costos de la pasarela de pago.</li>
+                                <li><strong>Inscripción Gratuita:</strong> Regístrate sin costo alguno.</li>
+                                <li><strong>Marketing & promociones:</strong> Arma increíbles campañas de promociones.</li>
+                                <li><strong>Soporte Continuo:</strong> Mantenimiento con soporte sin tarifas ocultas.</li>
+                                <li><strong>Medios de pago:</strong> Varios medios de pago en tu moneda local.</li>
+                                <li><strong>Community Manager:</strong> Puedes contratar servicios de gestión de redes sociales.</li>
+                            </ul>
+                            <div style="margin-top:2rem">
+                                <button class="btn btn-link p-0" id="toggle-basic-includes">Ver que incluye ▼</button>
+                                <div id="basic-includes" class="includes-hidden">
+                                    <ul class="checklist">
+                                        <li>Panel de control fácil y predictivo.</li>
+                                        <li>Tus redes sociales incluidas.</li>
+                                        <li>Estadísticas de ventas.</li>
+                                        <li>Opción de Envíos.</li>
+                                        <li>Promociones.</li>
+                                        <li>Control de tu stock con avisos automáticos de faltante.</li>
+                                        <li>Mensajes automáticos de ventas y alertas.</li>
+                                        <li>Pasarelas de pagos.</li>
+                                        <li>Diseños profesionales de tu sitio intercambiables sin cargo extra.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center" style="margin-top:0.2rem">
+                            <a class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#signupModal" href="#" style="margin: 0 0.5rem;">Adquirir</a>
+                        </div>
+                    </div>
+                    <!-- // Función para alternar la visibilidad de la sección "Incluye" -->
+                    <script>
+                        document.getElementById('toggle-basic-includes').addEventListener('click', function() {
+                            var includesSection = document.getElementById('basic-includes');
+                            includesSection.classList.toggle('active');
+                            var isActive = includesSection.classList.contains('active');
+                            this.textContent = isActive ? 'Ver que incluye ▲' : 'Ver que incluye ▼';
+                        });
+                    </script>
+                </div>
+                <!-- Membresía Premium -->
+                <div class="col-lg-4 col-md-6 col-12 part" style="z-index: 99999999;">
+                    <div class="card" id="premium-card">
+                        <div class="card-header">
+                            <h4>Membresía Premium</h4>
+                        </div>
+                        <div class="card-body" style="margin-top:-0.1rem">
+                            <p align="center" style="margin: 1rem 0;"><strong>Sin comisiones.</strong></p>
+                            <p>
+                                Configura tu tienda online, con al menos 10 productos, cada uno con stock ilimitado y tu propio dominio y ssl. Pagas en tu moneda local.
+                            </p>
+                            <div class="row ml-4" align="center">
+                                <div class="col-5">
+                                    <p><strong>Duración:</strong></p>
+                                    <select class="form-select premium-select" name="tiempoContrato" id="membership-duration">
+                                        <option value="12">12 meses</option>
+                                        <option value="24">24 meses</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>Productos:</strong></p>
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary" id="decrease-quantity">-</button>
+                                        <input type="number" name="cantPROD" class="form-control premium-input" id="product-quantity" min="10" value="10" >
+                                        <button class="btn btn-outline-secondary" id="increase-quantity">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="" style="margin: 0.65rem 0rem;">
+                                <div id="membership-value"></div>
+                            </div>
+                            <div id="discount-code-section" style="display: none;" align="center">
+                                <label for="discount-code">Ingresa tu código de descuento:</label>
+                                <input type="text" id="discount-code" class="form-control w-50" maxlength="8">
+                                <p id="discount-status" style="color: blue;"></p>
+                            </div>
+                            <br>
+                            <!-- Sección Incluye -->
+                            <button class="btn btn-link" style="margin: -3rem 0 0 -1rem" id="toggle-includes">Ver que incluye ▼</button>
+                            <div id="includes" class="includes-hidden">
+                                <ul class="checklist">
+                                    <li>Beneficios de membresía Basic, más...</li>
+                                    <li>Dominio propio, SSL y hosting.</li>
+                                    <li>Atención Humana personalizada.</li>
+                                    <li>Estrategias CEO / SEM & marketing digital en redes sociales.</li>
+                                    <li>Soporte continuo.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center" style="z-index: 9999999999999; margin-top:-1.2rem;">
+                            <button id="sendDataPremium" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#signupModalPremiumXYZ123">
+                                Adquirir
+                            </button>
+                        </div>
+                    </div>
+                    <style>
+                            /* Estilo para los selectores y campos de entrada */
+                        .form-select, .form-control {
+                            font-size: 0.9rem;
+                            border-radius: 5px;
+                        }
+                        
+                        /* Estilo para mostrar el valor de la membresía */
+                        #membership-value {
+                            font-weight: bold;
+                            color: #333;
+                        }
+                        
+                        /* Estilo para listas de verificación */
+                        .checklist {
+                            padding-left: 20px;
+                        }
+                        
+                        /* Estilo para enlaces que parecen botones */
+                        .btn-link {
+                            color: #007bff;
+                            text-decoration: none;
+                            cursor: pointer;
+                        }
+                        
+                        /* Estilo para el estado hover de los enlaces que parecen botones */
+                        .btn-link:hover {
+                            text-decoration: underline;
+                        }
+                        
+                        /* Estilo para el estado focus de los enlaces que parecen botones */
+                        .btn-link:focus {
+                            outline: none;
+                        }
+                        
+                        /* Estilo para el contenedor colapsable */
+                        #includes {
+                            max-height: 0;
+                            overflow: hidden;
+                            transition: max-height 1.5s ease-out, padding 1.5s ease-out;
+                            padding: 0; /* Establecer padding inicial a 0 */
+                        }
+                        
+                        /* Estilo cuando el contenedor colapsable está activo */
+                        #includes.active {
+                            max-height: 1500px; /* Un valor alto para garantizar que se cubra todo el contenido */
+                            padding: 10px; /* Añadir padding para proporcionar espacio interno */
+                        }
+                        
+                        /* Estilo para el contenedor del card premium */
+                        #premium-card {
+                            transition: height 1.5s ease-out;
+                            min-height: 300px; /* Establecer una altura mínima para el card */
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        
+                        /* Estilo para los grupos de entrada */
+                        .input-group {
+                            display: flex;
+                            align-items: center;
+                        }
+                        
+                        /* Estilo para los botones dentro de un grupo de entrada */
+                        .input-group button {
+                            width: 40px;
+                        }
+                        
+                        /* Estilo para los campos de entrada dentro de un grupo de entrada */
+                        .input-group input {
+                            text-align: center;
+                        }
+                        
+                        
+                    </style>
+                    <script>
+                        let precioFinal = 0
+                        let subFinalPrice = 0
+                        let finalPrice = 0
+                        let quantity = 10
+                        let tiempoContratoO = 0
+                        const dataBasic0 = JSON.parse(sessionStorage.getItem('datosBasicos'));
+                        const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice } = dataBasic0.data.ConfigsOne[0]
+
+                        const inserPrecioyCant = document.getElementById('cantyPrecio54')
+                        const validDiscountCodes = Vendedores; // Ejemplos de códigos válidos
+                        document.getElementById('membership-duration').addEventListener('change', calculateMembership);
+                        document.getElementById('product-quantity').addEventListener('input', calculateMembership);
+                        document.getElementById('toggle-includes').addEventListener('click', toggleIncludes);
+                        document.getElementById('discount-code').addEventListener('input', applyDiscount);
+                        document.getElementById('decrease-quantity').addEventListener('click', () => {
+                            adjustQuantity(-1);
+                        });
+                        
+                        document.getElementById('increase-quantity').addEventListener('click', () => {
+                            adjustQuantity(1);
+                        });
+                        
+                        async function calculateMembership() {
+                            quantity = parseInt(document.getElementById('product-quantity').value) ;
+                            const duration = parseInt(document.getElementById('membership-duration').value);
+                            tiempoContratoO = duration
+                            //console.log("Cual es el valor inicial de productos", quantity)
+                            let totalPrice = basePrice;
+                            let totalExtraPrice = 0;
+                            const discountedProductPrice = extraProductPrice * discount; // Precio del producto con descuento
+                    
+                            if (quantity > 10) {
+                                totalExtraPrice = (quantity - 10) * discountedProductPrice;
+                            }
+                    
+                            finalPrice = ((quantity * extraProductPrice * discount ) / 12 * duration  )
+                            const precioSinDesc = (quantity * extraProductPrice  )
+                    
+                            //console.log("que perecio final teine", finalPrice)
+                            // Mostrar el input para código de descuento si la cantidad de productos es 25
+                            if (quantity >= 25) {
+                                document.getElementById('discount-code-section').style.display = 'block';
+                            } else {
+                                document.getElementById('discount-code-section').style.display = 'none';
+                            }
+                    
+                            let discountAmount = 0;
+                            subFinalPrice = finalPrice;
+                            let subFinalPrice2 = 0
+                            
+                            if (quantity >= 25 && applyAdditionalDiscount) {
+                                discountAmount = finalPrice * codeDiscount;
+                                subFinalPrice2 = subFinalPrice
+                                finalPrice = subFinalPrice2 - discountAmount
+                                subFinalPrice = null
+                                console.log("Cuales son los valores", discountAmount, subFinalPrice2, finalPrice, subFinalPrice)
+                            } else {
+                                applyAdditionalDiscount = false;
+                            }
+
+                            // Inicialización para mostrar 10 productos
+                            if (quantity <= 10) {
+                                // Obtén la cotización del dólar
+                                const cotizacionDolar = await cotizacionesDolaresPaises();
+                                //console.log("Tiene menos de 10 productos", quantity)
+                                // inserto en membresia Premium
+                                //console.log("fkdvnefjkvjkefnvg", basePrice, duration, cotizacionDolar)
+                                inserPrecioyCant.innerHTML = ""
+                                document.getElementById('membership-value').innerHTML = `
+                                    <h5 align="center" id="precioFinal" style="color:green">
+                                        10 productos distintos con stock ilimitado. <br>
+                                        Periodo membresia Premium: ${duration} meses:<br> 
+                                        $${(basePrice / 12 * duration ).toFixed(2)} dolares.<br>
+                                        $${(basePrice / 12 * duration * cotizacionDolar ).toFixed(2)} pesos.<br>
+                                    </h5>
+                                `;
+                                // modal MP para a cobrar 
+                                inserPrecioyCant.innerHTML = `
+                                    <h4 align="center" id="precioFinal" style="color:green">
+                                        10 productos distintos con stock ilimitado. <br>
+                                        Periodo membresia Premium: ${duration} meses:<br> 
+                                        $${(basePrice / 12 * duration ).toFixed(2)} dolares.<br>
+                                        $${(basePrice / 12 * duration * cotizacionDolar).toFixed(2)} pesos.<br>                                        
+                                    </h4>
+                                `;
+                            } 
+                            else {
+                                console.log("Tiene MAS de 10 productos", quantity)
+                                // inserto en membresia Premium
+                                inserPrecioyCant.innerHTML = ""
+                                document.getElementById('membership-value').innerHTML = `
+                                    <p style="color:red"> 
+                                        Precio x producto sin descuento: $${extraProductPrice.toFixed(2)} dólares<br>
+                                        Precio sin descuento: $${precioSinDesc.toFixed(2)} dólares
+                                    </p>
+                                    <p style="margin-top:-1rem"> 
+                                        Descuento x Producto (50%):  $${discountedProductPrice.toFixed(2)} dólares<br>
+                                        ${quantity >= 25 && applyAdditionalDiscount ? `
+                                        Sub-Precio final: $${subFinalPrice2.toFixed(2)} dólares
+                                        <br>
+                                        Descuento 10% por código:  $${discountAmount.toFixed(2)} dólares
+                                        ` : ''}
+                                    </p>
+                                    <h3 align="center" id="precioFinal" style="color:green">  Precio final: $${(subFinalPrice || finalPrice).toFixed(2)} dólares
+                                    $${((subFinalPrice || finalPrice) * cotizacionDolar ).toFixed(2)} pesos.<br>
+                                    </h3>
+                                `;
+                                // modal MP para pasar a cobrar
+                                inserPrecioyCant.innerHTML = `
+                                    <h4> 
+                                        Precio para ${quantity} productos distintos con stock ilimitado, por un periodo de ${duration} meses:
+                                        <br>
+                                        $ ${((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
+                                            .toFixed(2)
+                                            .replace('.', ',')
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')} Pesos.
+                                        <br>
+                                    </h4> 
+                                `;
+                            }
+                        }
+                        
+                        function toggleIncludes() {
+                            const includes = document.getElementById('includes');
+                            const card = document.getElementById('premium-card');
+                        
+                            includes.classList.toggle('active');
+                        
+                            setTimeout(() => {
+                                card.style.height = includes.classList.contains('active') ? `${card.scrollHeight + 150}px` : 'auto';
+
+                            }, 150);
+                        }
+                        
+                        function adjustQuantity(amount) {
+                            const input = document.getElementById('product-quantity');
+                            let currentValue = parseInt(input.value);
+                        
+                            if ((currentValue > 10 || amount > 0) && currentValue + amount >= 10) {
+                                input.value = currentValue + amount;
+                                calculateMembership();
+                            }
+                        }
+                        
+                        function applyDiscount() {
+                            const discountCode = document.getElementById('discount-code').value.trim();
+                            const discountStatus = document.getElementById('discount-status');
+                            console.log("Que codigos me validDiscountCodes", validDiscountCodes)
+                            for (const e of validDiscountCodes) {
+                                console.log("Que codigos me compara", discountCode, e.codVend)
+                                if (e.codVend === String(discountCode)) {
+                                    discountStatus.textContent = "Código válido. Descuento aplicado.";
+                                    discountStatus.style.color = "green";  // Mensaje en verde si es válido
+                                    applyAdditionalDiscount = true;  // Aplicar descuento adicional del 10%
+                                    calculateMembership();
+                                    return
+                                } else if (discountCode.length === 8) {
+                                    discountStatus.textContent = "Código no válido.";
+                                    discountStatus.style.color = "red";  // Mensaje en rojo si es inválido
+                                    applyAdditionalDiscount = false;
+                                } else {
+                                    discountStatus.textContent = "";
+                                    applyAdditionalDiscount = false;
+                                }
+                            }
+                        }
+                        
+                        // Inicialización del estado del descuento
+                        let applyAdditionalDiscount = false;
+
+                        document.getElementById('sendDataPremium').addEventListener('click', function() {
+                            if (quantity <= 10) {
+                                precioFinal = (basePrice * cotizacionDolar) || (basePrice * cotizacionDolar)
+                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO}
+                                //console.log("Apreto el boton dataMP menos 10 productos",dataMP)
+                            }else{
+                                precioFinal = ((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
+                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO}
+                                //console.log("Apreto el boton dataMP",dataMP)
+                            }
+                        })
+
+                        // se activa automaticamente para obtener los datos del precio inicial 
+                        calculateMembership()
+                    </script>
+                </div>
+                <!-- Membresía CUSTOM Diseña tu propio e-commerce -->
+                <div class="col-lg-4 col-md-12 col-12 part" style="z-index: 99999999;">
+                    <style>
+                        .checklist {
+                            padding-left: 20px;
+                        }
+                
+                        .btn-link {
+                            color: #007bff;
+                            text-decoration: none;
+                            cursor: pointer;
+                        }
+                
+                        .btn-link:hover {
+                            text-decoration: underline;
+                        }
+                
+                        .includes-hidden {
+                            max-height: 0;
+                            overflow: hidden;
+                            transition: max-height 1.5s ease-out, padding 1.5s ease-out;
+                            padding: 0;
+                        }
+                
+                        .includes-hidden.active {
+                            max-height: 1000px;
+                            padding: 10px;
+                        }
+                
+                        .input-group {
+                            display: flex;
+                            align-items: center;
+                        }
+                
+                        .input-group button {
+                            width: 40px;
+                        }
+                
+                        .input-group input {
+                            text-align: center;
+                        }
+                    </style>
+                    <div class="card" style="margin-top: auto;">
+                        <div class="card-header">
+                            <h4>Membresía Custom</h4>
+                        </div>
+                        <div class="card-body text-center">
+                            <p><strong>Diseñaló a tu gusto.</strong></p>
+                            <ul class="text-left">
+                                <li><strong>Desarrollos exclusivos:</strong> Personaliza tu tienda online con código y diseño UX/UI exclusivos para tu proyecto o negocio.</li>
+                                <li><strong>Administración completa:</strong> Nos encargamos de la gestión total de tu tienda online.</li>
+                                <li><strong>Community Manager:</strong> Personalizado que gestiona tus redes con estrategias efectivas.</li>
+                                <li><strong>Optimización de presupuesto y ROAS:</strong> Estrategias de marketing para maximizar tu inversión y asegurar un alto retorno.</li>
+                            </ul>
+                            <div class="text-left" style="margin-top:1.5rem;">
+                                <button class="btn-primary btn-block p-0" id="toggle-form">Saber más</button>
+                                <div id="custom-form" class="includes-hidden">
+                                    <form id="uxuiForm156156">
+                                        <div class="form-group">
+                                            <label for="namename" class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" id="namename" placeholder="Nombre" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="apel" class="form-label">Apellido</label>
+                                            <input type="text" class="form-control" id="apel" placeholder="Apellido" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cel544" class="form-label">Núm. cel. contacto</label>
+                                            <input type="number" class="form-control" id="cel544" placeholder="Numero Celular" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" placeholder="nombre@ejemplo.com" required>
+                                        </div>
+                                        <div class="form-group" style="margin-top:-1rem">
+                                            <label for="project-description" class="form-label">Describa brevemente su proyecto</label>
+                                            <textarea class="form-control" id="project-description" rows="3" placeholder="Describa brevemente su proyecto" required></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <button style="margin-top:0.1rem;" class="btn btn-link" id="toggle-custom-includes7456">Ver que incluye ▼</button>
+                                <div id="custom-includes89" class="includes-hidden">
+                                    <ul class="checklist">
+                                        <li>Incluye beneficios de membresía Premium, más...</li>
+                                        <li>Diseño personalizado.</li>
+                                        <li>Data entry para mantener tu catálogo actualizado.</li>
+                                        <li>Integración de funcionalidades avanzadas.</li>
+                                        <li>Soporte continuo.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center" style="margin-top:-0.3rem;">
+                            <button id="enviarData" type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+                        <script>
+                            document.getElementById('enviarData').addEventListener('click', async function(event) {
+                                event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+                                
+                                // Obtén los datos del formulario
+                                const nombre = document.getElementById('namename').value;
+                                const apellido = document.getElementById('apel').value;
+                                const celular = document.getElementById('cel544').value;
+                                const email = document.getElementById('email').value;
+                                const descripcionProyecto = document.getElementById('project-description').value;
+                        
+                                // Crea el objeto con los datos del formulario
+                                const datosFormulario = {
+                                    nombre,
+                                    apellido,
+                                    celular,
+                                    email,
+                                    descripcionProyecto
+                                };
+                        
+                                // Verifica qué campos están vacíos
+                                const camposVacios = [];
+                                for (const [key, value] of Object.entries(datosFormulario)) {
+                                    if (!value) {
+                                        camposVacios.push(key);
+                                    }
+                                }
+                        
+                                // Si hay campos vacíos, muestra un mensaje en alerta
+                                if (camposVacios.length > 0) {
+                                    mostrarAlerta('Los siguientes campos están vacíos: ' + camposVacios.join(', '));
+                                    return; // Detiene la ejecución del script si hay campos vacíos
+                                }
+                        
+                                // Si no hay campos vacíos, procede con la solicitud
+                                const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+                                const jwToken = dataBasic.data.jwToken;
+                                
+                                try {
+                                    const idEnpointCheq = dataBasic.data.endpointTokensArray2;
+                                    const idEnpointCheq101 = idEnpointCheq[101];
+                                    
+                                    // Envía los datos CUSTOM al servidor usando fetch
+                                    console.log("Hizo click en el form de Custom",idEnpointCheq101, );
+                                    const response = await fetch(`${idEnpointCheq101}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${jwToken}`
+                                        },
+                                        body: JSON.stringify(datosFormulario)
+                                    });
+                        
+                                    // Procesa la respuesta del servidor
+                                    if (!response.ok) {
+                                        // Si la respuesta no es ok, lanza un error
+                                        throw new Error('Error en la solicitud: ' + response.statusText);
+                                    }
+                        
+                                    // Convierte la respuesta a JSON
+                                    const resultado = await response.json();
+                        
+                                    // Muestra un mensaje en alerta con el resultado del servidor
+                                    mostrarExito('Respuesta del servidor: ' + JSON.stringify(resultado.message));
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 2000); // 2000 milisegundos = 2 segundos
+
+                                } catch (error) {
+                                    // Muestra un mensaje de error en caso de que falle la solicitud
+                                    mostrarAlerta('Error al enviar el formulario: ' + error.message);
+                                }
+                            });
+                        </script>
+                    </div>
+                    <script>
+                        // Alternar visibilidad de la sección "Incluye"
+                        document.getElementById('toggle-custom-includes7456').addEventListener('click', function () {
+                            var includesSection = document.getElementById('custom-includes89');
+                            includesSection.classList.toggle('active');
+                            this.textContent = includesSection.classList.contains('active') ? 'Ver que incluye ▲' : 'Ver que incluye ▼';
+
+                        });
+                
+                        // Alternar visibilidad del formulario
+                        document.getElementById('toggle-form').addEventListener('click', function () {
+                            var formSection = document.getElementById('custom-form');
+                            formSection.classList.toggle('active');
+                            this.textContent = formSection.classList.contains('active') ? 'Ocultar' : 'Saber más';
+                        });
+                
+                    </script>
+                </div>
+            </div>
+            <br>
+            <!-- lunita -->
+            <a hef="#" class="moon-link mt-1" style="margin: -12rem 0 0 32% !important; z-index:99999999 !important" hidden>
+                <span class="moon">
+                    <i class="fas fa-arrow-down" style="margin-left: 0.51rem !important;"></i>
+                </span>
+            </a> 
+        </div>
+        <!-- Footer -->
+        <hr id="contacto">
+        <br>
+        <style>
+        
+            .footer {
+                background-color: #116DEF;
+                color: black !important;
+                padding-bottom: 1rem;
+                margin-top: auto;
+            }
+        
+            /* Estilos para los íconos */
+            .icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                border-radius: 50%;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+        
+            .fab.fa-whatsapp {
+                color: #25D366;
+                font-size: 2rem;
+            }
+        
+            .fab.fa-facebook-f {
+                color: #083c80;
+                font-size: 2rem;
+            }
+        
+            .fab.fa-instagram {
+                color: #E4405F;
+                font-size: 2rem;
+            }
+        
+            .fab.fa-linkedin-in {
+                color: #0077B5;
+                font-size: 2rem;
+            }
+        
+            .icon:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+        
+            .icon:active {
+                transform: scale(1);
+                box-shadow: 0 2px 4px rgba(240, 255, 201, 0.2);
+            }
+        
+            /* Estilos para container2 */
+            .container2 {
+                background-color: #0E4FB0; /* Un tono más oscuro que el fondo del body */
+                padding: 2rem;
+                border-radius: 15px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+        </style> 
+        <!-- contctos        -->
+        <div class="container2" align="center">
+            <footer class="footer" id="contact">
+                <br><br>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <h2 class="text-center">Contactos</h2>
+                            <br>
+                            <div class="row justify-content-center">
+                                <div class="col-md-3 mb-3">
+                                    <a href="#" class="icon round fab fa-whatsapp"><span class="label"></span></a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="#" class="icon round fab fa-facebook-f"><span class="label"></span></a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="#" class="icon round fab fa-instagram"><span class="label"></span></a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="#" class="icon round fab fa-linkedin-in"><span class="label"></span></a>
+                                </div>
+                            </div>
+                            <form id="contactForm" action="" method="post">
+                                <input type="text" value="744108/5220963puebloiruya" name="tbstk" hidden>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Nombre</label>
+                                        <input class="form-control" name="nombre" id="nameCon" type="text" placeholder="Nombre">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input class="form-control" name="email" id="emailCon" type="email" placeholder="Email">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="city" class="form-label">Apellido</label>
+                                        <input class="form-control" name="Apellido" id="ApellidoCon" type="text" placeholder="Apellido">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label">Celular</label>
+                                        <input class="form-control" name="numCel" id="numCelCon" type="text" placeholder="Número de celular">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="message" class="form-label">Mensaje</label>
+                                        <textarea class="form-control" name="mensaje" id="messageCon" rows="4" placeholder="Agrega tu mensaje incluye tu ciudad y país"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Botón -->
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success" id="submitBtn48521">Enviar mensaje</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="text-center mt-5">
+                        <a href="https://tbs-it.net/">
+                            <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
+                            <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
+                        </a>
+                        <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
+                        <span style="margin: 0 1rem;">|</span>
+                        <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- Js de contacto -->
+        <script>
+            document.getElementById('submitBtn48521').addEventListener('click', async function(event) {
+                event.preventDefault(); // Evita el envío del formulario de manera tradicional
+                const nombre = document.getElementById('nameCon').value.trim();
+                const email = document.getElementById('emailCon').value.trim();
+                const apellido = document.getElementById('ApellidoCon').value.trim();
+                const celular = document.getElementById('numCelCon').value.trim();
+                const mensaje = document.getElementById('messageCon').value.trim();
+                
+                const camposFaltantes = [];
+                
+                // Verificar campos vacíos
+                if (!nombre) camposFaltantes.push('Nombre');
+                if (!email) camposFaltantes.push('Email');
+                if (!apellido) camposFaltantes.push('País y ciudad');
+                if (!celular) camposFaltantes.push('Número de celular');
+                if (!mensaje) camposFaltantes.push('Mensaje');
+                
+                if (camposFaltantes.length > 0) {
+                    mostrarAlerta('Por favor, completa los siguientes campos: ' + camposFaltantes.join(', '));
+                    return
+                }
+                const datosFormulario = { nombre, email, apellido, celular, descripcionProyecto:mensaje, consulta:true };
+                //console.log("Que datos tiene consulta", datosFormulario)
+                // Obtén el JWT del sessionStorage
+                const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+                const jwToken = dataBasic.data.jwToken;
+                
+                try {
+                    const idEnpointCheq101 = idEnpointCheq[101];
+                    // Envía los datos CUSTOM al servidor usando fetch
+                    console.log("Hizo click en el form de CONSULTAS",idEnpointCheq101, );
+                    const response = await fetch(`${idEnpointCheq101}`, {
+                    //const response = await fetch('/recibir/consultas', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${jwToken}`
+                        },
+                        body: JSON.stringify(datosFormulario)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Error en la solicitud: ' + response.statusText);
+                    }
+                    
+                    const resultado = await response.json();
+                    mostrarExito('Respuesta del servidor: ' + JSON.stringify(resultado.message));
+                } catch (error) {
+                    mostrarAlerta('Error al enviar el formulario: ' + error.message);
+                }
+            });
+        </script>
+
+    </body>
+
+    <!-- Todos los modales -->
+    <!-- aqui van los datos de las alertas -->
+	<div id="muestraAlerta" style="z-index: 9999999999999999999999999999999999999 !important; position: absolute;"></div>
+	<div id="muestraExito"  style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="exitoVenta"   data-bs-backdrop="static"  style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="opciones"      style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="pagoWallet"    style="z-index: 999999999999999 !important; position: absolute;"></div>
+
+    <!-- modales signUp-->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true" style="z-index: 999999999 !important">  
+        <div class="modal-dialog">  
+            <div class="modal-content">  
+                <div class="modal-header">  
+                    <h5 class="modal-title" id="signupModalLabel">Crea tu tienda online</h5>  
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>  
+                </div>  
+                <div class="modal-body">  
+                    <form id="registrationForm">  
+                        <div class="mb-3">  
+                            <label for="email" class="form-label">Email</label>  
+                            <input type="email" class="form-control" id="email1" placeholder="Ingrese su email" required>  
+                        </div>  
+                        <div class="mb-3">  
+                            <label for="password" class="form-label">Contraseña</label>  
+                            <div class="input-group">  
+                                <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required>  
+                                <span class="input-group-text toggle-password" onclick="togglePassword('password')" style="cursor: pointer;">&#128065;</span>  
+                            </div>  
+                        </div>  
+                        <div class="mb-3">  
+                            <label for="confirm-password" class="form-label">Confirma tu Contraseña</label>  
+                            <div class="input-group">  
+                                <input type="password" class="form-control" id="confirm-password" placeholder="Confirma tu contraseña" required>  
+                                <span class="input-group-text toggle-password" onclick="togglePassword('confirm-password')" style="cursor: pointer;">&#128065;</span>  
+                            </div>  
+                        </div>  
+                        <div class="form-check text-center">  
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck22" required>  
+                            <label class="form-check-label" for="invalidCheck22" style="cursor: pointer; color: black !important;">  
+                                Acepto los términos y condiciones  
+                            </label>  
+                            <div style="color:black !important">  
+                                <p>Se le enviará un email para confirmar su inscripción.</p>  
+                            </div>  
+                        </div>  
+                        <div class="d-grid">  
+                            <button type="button" id="botonSignUp09870" class="btn btn-primary">Registrarse</button>  
+                        </div>  
+                    </form>  
+                </div>  
+            </div>  
+        </div>  
+    </div>
+
+    <!-- modales signIn-->
+    <div class="modal fade" id="signupModalSignIn" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true" style="z-index: 999999999 !important">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">Ingresa a TiendaFacil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="loginFormLP56">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emailSignIn" placeholder="Ingrese su email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="passwordSignIN" placeholder="Ingrese su contraseña" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" id="btnSignIn1598563" class="btn btn-success">Ingresar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/alertas.js"></script>
+    <script src="/landingPageFunctions/LPF.js"></script>
+    <script src="/landingPageFunctions/LPmpWallet.js"></script>
+    <script src="/landingPageFunctions/LPmpTCDEf.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+	<!-- //Modal de esperando los datos -->
+	<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true" style="z-index:999999999999 !important;background-color: lightgray; opacity: 0.8;">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body text-center" style="">
+
+					<div class="spinner-border text-primary" role="status">
+					<span class="visually-hidden">Loading...</span>
+					</div>
+
+					<h5 style=""><strong> Procesando informacion... </strong></h5>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <!-- !-- Include Bootstrap 5 --> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- para enviar un mensaje de consulta -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('contactForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // Evitar el envío del formulario por defecto
+                const dataOwner = JSON.parse(sessionStorage.getItem("DataOwnerEcom"));
+                const dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'));
+                //const jwToken = JSON.parse(sessionStorage.getItem('jwtToken'));
+                const jwToken = sessionStorage.getItem('jwtToken');
+                if (!(dataCliente && dataOwner && jwToken)) {
+                    mostrarAlerta("Por favor, inicie sesión para enviar su consulta.");
+                    return false;
+                }
+                const idOwner = dataOwner._id 
+                const idCliente = dataCliente._id 
+                // Validar el reCAPTCHA
+                var response = grecaptcha.getResponse();
+                if (response.length === 0) {
+                    mostrarAlerta("Por favor, complete el reCAPTCHA.");
+                    return false;
+                }
+                // Capturar datos del formulario
+                var nombre = document.getElementById('name').value;
+                var email = document.getElementById('email').value;
+                var ciudad = document.getElementById('city').value;
+                var numCel = document.getElementById('numCel').value;
+                var mensaje = document.getElementById('message').value;
+                const nombreOwner = dataOwner.nombre
+                const numcelOwner = dataOwner.numCel[0]
+                // Construir mensaje para WhatsApp
+                var mensajeWhatsApp = encodeURIComponent(`Hola ${nombreOwner} tengo la siguiente consulta:\nMensaje: ${mensaje}\nMis datos:\nNombre: ${nombre}\nEmail: ${email}\nCiudad: ${ciudad}\nNúmero de celular: ${numCel}`);
+                // Construir URL de WhatsApp
+                var numeroWhatsApp = `${numcelOwner}`; // Cambia el número según tus necesidades
+                var urlWhatsApp = 'https://api.whatsapp.com/send?phone=' + numeroWhatsApp + '&text=' + mensajeWhatsApp;
+                // Abrir WhatsApp en una nueva pestaña
+                window.open(urlWhatsApp, '_blank');
+                const data = {dataOwner, dataCliente, jwToken, nombre, email, ciudad, numCel, mensaje}
+                const urlServer = dataCliente.urlServer
+
+                // Enviar formulario
+                const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))							
+                fetch(`${endpoints[33]}`, { 
+                //fetch(`${urlServer}/recibiendoMensajeDesdeContacto`, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${jwToken}`
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Respuesta recibida del servidor:", data);
+                            mostrarExito(data.message);
+                        })
+                        .catch(error => {
+                            console.error("Error al recibir la respuesta del servidor:", error);
+                            mostrarAlerta(data.message)
+                            // Aquí podrías manejar el error de acuerdo a tus necesidades
+                        });
+                    });
+                });
+    </script>
+
+</html>
+
+<!--  -->

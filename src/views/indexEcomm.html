@@ -1,0 +1,3456 @@
+<!DOCTYPE html>
+<html lang="es"> 
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- //fontAwosome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<!-- Agrega el script de NodeGeocoder -->
+		<script src="https://cdn.jsdelivr.net/npm/node-geocoder@3.29.0/dist/node-geocoder.min.js"></script>
+		<!-- Agrega el script de Leaflet -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+		<!-- Agrega la biblioteca de Bootstrap -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+		<link href="/css/main.css" rel="stylesheet">
+
+		<!-- <link rel="stylesheet" href="assets/css/font-awesome.min.css" /> -->
+		<link rel="stylesheet" href="public/css/font-awesome.min.css" />
+		<!-- Include jQuery and Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		<!-- Bootstrap bundle JS (popper.js + bootstrap.js) -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">	  
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+		<script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/t1QIqDE8YFUZHfb7dGB6j8f5M6EExQgA8N7gk=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></script>
+			<!-- Bootstrap JS y Popper.js NO MOVER DE AQUI-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+			<!-- Incluye la biblioteca Slick Carousel -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+			<!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!--REVISAR //config toast -->
+		<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+		<title id="titulo">Tu E-Commerce</title>
+		
+        <!-- // descargar a excel -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+		<!-- Mercado Pago -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+		<script src="/alertas.js"></script>    
+		<!-- <script src="/reiniciar.js"></script>     -->
+
+		<link rel="manifest" href="manifests/manifest.json">
+		
+
+	</head> 
+
+	<header id="barraMenuArriba" style="z-index:9999999 !important;display:none !important; margin: 0 !important; opacity: 0; height: 3.5rem !important; position: sticky !important; width: 100vw; justify-content: space-between; align-items: center;">
+		<input autocomplete="off" placeholder="Buscar producto" type="text" id="buscarProductoInput" oninput="mostrarProductos()" style="width: 15%; height: 60%;">
+		<a id="buscador5445" class="fas fa-search" onclick="buscarProducto()"></a>
+		<select id="productosEncontrados" size="5" onchange="seleccionarProducto()" style="width: 25%; height: 100px; color: white;"></select>
+		<div id="menuContainer" style="display: flex; justify-content: space-around; align-items: center; flex: 1;">
+			<!-- aquí va el nombre del comercio -->
+			<div id="duenoEcom22" style="flex: 1; max-width: 300px !important; text-align: center;">Nombre del Comercio</div>
+			
+			<!-- aquí va el logo del comercio -->
+			<div id="logoOwner222" style="flex: 0 0 50px; text-align: center; margin: 0rem;">
+				<img src="logo.png" alt="Logo" style="max-width: 100%; height: auto;">
+			</div>
+			
+			<!-- aquí va el nombre del usuario -->
+			<div id="nombreUserArriba" style="flex: 1; text-align: center; max-width: 300px !important; overflow: hidden;"></div>
+		</div>
+		<!-- aquí van los iconos fontAwesome del menú -->
+		<div id="menuLogos">
+			<a class="fas fa-bullhorn icon-hover" id="corneta" data-bs-toggle="modal" data-bs-target="#modelNews"></a>
+			<i id="carriToxico">
+				<a class="fas fa-shopping-cart icon-hover blanco" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" style="color:white !important"></a>
+			</i>
+			<i id="chekUser">
+				<a class="fas fa-user icon-hover" data-bs-toggle="modal" data-bs-target="#usuario"></a>
+			</i>
+			
+			<button id="butonMenu9898" style="background:transparent; margin: 0 0 0 -1rem !important;" class="fas fa-bars blanco icon-hover" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></button>
+			
+			<style>
+				.icon-hover {
+					transition: box-shadow 0.3s ease;
+					transition: font-size 0.3s ease;
+				}
+				
+				.icon-hover:hover {
+					box-shadow: 0 20px 30px rgba(0, 0, 0, 0);
+					font-size: 1.25rem;
+				}
+			</style>
+		</div>
+		<style>
+			/* Media query para dispositivos con un ancho máximo de 600px (celulares) */
+			@media screen and (max-width: 1000px) {
+				#logo{
+				margin: auto !important;
+				height: 70% !important;;
+				width: auto !important;;
+				}
+				#carriToxico a {
+				margin: 0 0 0 0!important;
+				padding: 0 0 0 0!important;
+				}
+				#chekUser a{
+				margin: 1rem !important;
+				padding: 0 0 0 0!important;
+				}
+				#nombreUserArriba{
+				margin: 0 !important;
+				padding: 0 !important;
+				}
+				#buscador5445{
+				margin: 0 1rem !important;
+				padding: 0 0 0 0!important;
+				}
+			}
+			@media screen and (max-width: 830px) {
+				#nombreUserArriba {
+					display: none; /* Oculta el elemento en dispositivos móviles */
+				}
+				#logo{
+				margin: 0 0 0 4rem !important;
+				height: 70%;
+				width: auto;
+				}
+				#carriToxico a {
+					display: none; /* Oculta el elemento en dispositivos móviles */
+					margin: 0 0 0 0!important;
+					padding: 0 0 0 0!important;
+				}
+				#corneta {
+					display: none; /* Oculta el elemento en dispositivos móviles */
+					margin: 0 0 0 0!important;
+					padding: 0 0 0 0!important;
+				}
+
+				#chekUser a{
+					display: none; /* Oculta el elemento en dispositivos móviles */
+					margin: 0 !important;
+					padding: 0 0 0 0!important;
+				}
+				#buscador5445{
+				margin: 0 1rem !important;
+				padding: 0 0 0 0!important;
+				}
+				#butonMenu9898{
+				margin: 0 1rem !important;
+				padding: 0 0 0 0!important;
+				}
+
+			}
+			@media (max-width: 450px) {
+				html{
+					width: 430px !important;
+					margin: 0rem;
+					padding: 0 !important;
+				}
+				header{
+					width: 100% !important;
+				}
+				body{
+					width: 100% !important;
+				}
+				#duenoEcom22 {
+				display: none; /* Oculta el elemento en dispositivos móviles */
+				}
+				#nombreUserArriba {
+				display: none; /* Oculta el elemento en dispositivos móviles */
+				}
+				#logo{
+				margin: 0 0 0 4rem !important;
+				height: 70%;
+				width: auto;
+				}
+				#carriToxico a {
+				margin: 0 0 0 0!important;
+				padding: 0 0 0 0!important;
+				}
+				#chekUser a{
+					display: none; /* Oculta el elemento en dispositivos móviles */
+					margin: 0 !important;
+					padding: 0 0 0 0!important;
+				}
+				#buscador5445{
+				margin: 0 1rem !important;
+				padding: 0 0 0 0!important;
+				}
+			}
+		</style>
+		<nav class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="z-index: 9999999999999999999999999 !important;width: 100vw; max-width: 400px; overflow-y: auto;">
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			<div class="offcanvas-header">
+				<ul class="links" style="margin-top: 0; list-style-type: none;">
+					<li id="logoUser21"></li>
+					<li id="signIn23"><a href="" data-bs-toggle="modal" data-bs-target="#usuario">Ingresar</a></li>
+					<li><a href="#">Noticias</a></li>
+					<li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Carrito</a></li>
+					<div class="links accordion accordion-flush" id="accordionFlushExample" style="margin-left: -2rem;">
+						<li>
+							<div class="accordion-item" style="background: transparent !important;">
+								<button id="botonaso" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" style="background: transparent !important;" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+									Categorías
+								</button>
+								<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+									<div class="accordion-body">
+										<ul style="list-style-type: none;">
+											<li id="catego" style="margin: 0 0 0 -2rem;"></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="accordion-item" style="background: transparent !important; margin-top: -0.5rem;">
+								<button id="botonaso" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" style="background: transparent !important;" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+									Productos
+								</button>
+								<div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="background: transparent !important;">
+									<div class="accordion-body" style="background: transparent !important;">
+										<ul style="list-style-type: none;">
+											<li id="prods" style="margin: 0 0 0 -2rem;"></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</li>
+					</div>					
+					<li><a data-bs-toggle="modal" data-bs-target="#icon" href="#icon">Icono en tu pantalla</a></li>
+					<li><a href="#footer">Contacto</a></li>
+					<li><a href="" data-bs-toggle="modal" data-bs-target="#quienesSomos">Quienes somos</a></li>
+					<li id="salir"></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<body style="overflow-x: hidden; width: 99vw; max-width: 100%;  " id="intenertOK">
+		<!-- pagina inicial -->
+		<section id="banner2233" align="center">
+			<di align="center" class="inner" style="color: white !important;">
+				<div style="height: 500px">
+					<input type="text" value="147852369" name="formData" hidden>
+					<!-- Carousel de noticias, promociones y descuentos -->
+					<div id="newsCarousel" class="carousel slide" data-ride="carousel" align="center">
+						<div class="carousel-inner" id="promosincertings2345" style="margin: 0;" align="center"> 
+							<!-- Los ítems del carrusel se insertarán aquí dinámicamente -->
+						</div>
+						<a class="carousel-control-prev" href="#newsCarousel" role="button" data-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a>
+						<a class="carousel-control-next" href="#newsCarousel" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+				</div>
+				<!-- redes sociales --> 
+				<div id="savedlinks989" align="center" style="margin: -4rem 0 0 1rem">
+					<style>
+						.list-inline-item {
+							transition: transform 0.3s ease-in-out; /* Transición suave */
+						}
+					
+						.list-inline-item:hover {
+							transform: scale(1.05); /* Escala del 105% al hacer hover */
+						}
+					</style>
+					<ul class="list-inline"></ul>
+				</div>
+				<br><br>
+				<style>
+		           /* Estilos de la luna */
+					.moon {
+						width: 30px;
+						height: 30px;
+						background-color: #f0e68c; /* Color de la luna */
+						border-radius: 50%;
+						border: 0.1px solid #333; /* Borde de la luna */
+						transition: background-color 0.3s ease, opacity 1s linear; /* Transición de color de fondo y opacidad */
+						animation: shine 4s infinite; /* Animación de brillo */
+						z-index: 9999999; /* Asegura que la luna esté por encima de otros elementos */
+						display: block;
+						align-items: center;
+						justify-content: center;
+					}
+
+					/* Estilos del enlace de LUNA */
+					.moon-link {
+						position: relative !important;
+						bottom: 20px; /* Coloca el enlace 20px desde el fondo del contenedor */
+						left: 50% !important;
+						transform: translateX(-50%);
+						z-index: 999;
+						animation: moonEntrance 3s forwards; /* Animación de entrada */
+						align-items: center;
+						justify-content: center;
+					}
+
+					/* Estilos de la luna cuando se hace hover */
+					.moon:hover {
+						background-color: #ffd700; /* Cambia a color sol */
+					}
+
+					/* Estilos de la luna cuando se hace clic */
+					.moon:active {
+						background-color: orange; /* Cambia a color naranja */
+					}
+
+
+
+					/* Animación de entrada de la luna */
+					@keyframes moonEntrance {
+						0% {
+							bottom: -40px; /* Comienza desde fuera de la pantalla */
+						}
+						100% {
+							bottom: 50px; /* Se detiene a 10px del borde inferior */
+						}
+					}
+			
+					/* Animación de brillo */
+					@keyframes shine {
+						0% {
+							opacity: 0.051; /* Brillo máximo al principio */
+						}
+						10% {
+							opacity: 0.1; /* Brillo aumentado al 50% */
+						}
+						20% {
+							opacity: 0.2; /* Brillo aumentado al 50% */
+						}
+						30% {
+							opacity: 0.3; /* Brillo aumentado al 50% */
+						}
+						40% {
+							opacity: 0.4; /* Regresa al brillo máximo */
+						}
+						50% {
+							opacity: 0.5; /* Regresa al brillo máximo */
+						}
+						60% {
+							opacity: 0.6; /* Regresa al brillo máximo */
+						}
+						70% {
+							opacity: 0.7; /* Regresa al brillo máximo */
+						}
+						80% {
+							opacity: 0.8; /* Regresa al brillo máximo */
+						}
+						90% {
+							opacity: 0.9; /* Regresa al brillo máximo */
+						}
+						100% {
+							opacity: 1; /* Regresa al brillo máximo */
+						}
+
+					}
+				
+				</style>
+				<a align="center" href="#lunita" class="moon-link">
+					<span class="moon" align="center">
+						<i class="fas fa-arrow-down" align="center" hidden></i>
+					</span>
+				</a>
+			</di>
+			<div  id="lunita" style="margin-top: -110px !important;"></div>
+		</section>
+		<div id="insertLogo"></div>
+		<!-- Contenedor de productos y categorías y promociones -->
+		<div  align="center" style="padding-bottom: 1rem;">
+			<style>
+				.nav-tabs {
+					position: absolute !important; 
+					z-index: 89999; 
+					margin: -3.3rem 0 0 0 !important; 
+					background: transparent;
+				}
+				.nav-tabs .nav-link {
+					border: 1px solid #dee2e6;
+					border-radius: 0.5rem 0.5rem 0 0;
+					color: black;
+					transition: background-color 0.3s, color 0.3s;
+					padding: 0.5rem 1rem;
+					margin: 0 ;
+				}
+				.nav-tabs .nav-link.active {
+					background-color: #007bff;
+					color: white !important;
+					font-size: 2rem !important;
+					font-weight: bold;
+				}
+				.nav-tabs .nav-link.active h6 {
+					font-size: 1.1rem; /* Ajustar el tamaño de h5 */
+				}
+				.nav-tabs .nav-link:hover {
+					background-color: #e9ecef;
+					color: black;
+				}
+				.nav-tabs {
+					border-bottom: none;
+				}
+				.nav-item {
+					margin-left: 0rem;
+				}
+			</style>
+			<!-- menu productos y promos --> 
+			<ul class="nav nav-tabs w-100" style="z-index: 8;">
+				<li class="nav-item">
+					<a class="nav-link active" data-bs-toggle="tab" href="#produc" id="colorBtnProdProm">
+						<h6 class="tab-text">Productos & servicios</h6>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="tab" href="#promi" id="colorBtnProdProm2">
+						<h6 class="tab-text">Promociones & Descuentos</h6>
+					</a>
+				</li>
+			</ul>
+			<!-- tabs productos y promos -->
+			<div class=" tab-content w-100" >
+				<!-- productos -->
+				<div  id="produc" class="tab-pane active">
+					<div id="productos-servicios" class="">
+						<img src="images/alfisaludo.png" alt="" srcset="" style="margin: 2rem; border-radius: 2rem; height: 450px; width: auto !important;">
+						<h2>Carga algún producto o revisa tu conexión a internet</h2>
+					</div>
+					<style>
+/* Tamaño general de la escarapela */
+.escarapela {
+    width: 75px; /* Tamaño de la escarapela */
+    height: 75px; /* Tamaño de la escarapela */
+    position: relative;
+    margin: 0 0 0 2rem;
+    animation: latir 2s infinite; /* Animación de latido */
+}
+
+/* Capas de la escarapela */
+.capa {
+    position: absolute;
+    border-radius: 50%;
+    top: 30%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+}
+
+/* Capas de la escarapela */
+.capa1 {
+    width: 100%;
+    height: 100%;
+    background-color: lightgreen;
+}
+
+.capa2 {
+    width: 80%;
+    height: 80%;
+    background-color: lightgreen;
+}
+
+.capa3 {
+    width: 60%;
+    height: 60%;
+    background-color: lightgreen;
+}
+
+.textoE {
+    position: relative;
+    font-size: 1rem;
+    top: 25px !important; /* Centrar verticalmente */
+    left: 20px !important; /* Centrar horizontalmente */
+    transform: translate(-50%, -50%); /* Ajustar el centro */
+    color: white;
+    text-align: center;
+    z-index: 1;
+    width: 80%; /* Asegura que el texto se mantenga dentro de los bordes */
+    padding: 2px 0; /* Espacio vertical para que no toque los bordes */
+    overflow: hidden; /* Oculta cualquier parte del texto que sobresalga */
+}
+
+@keyframes latir {
+    0%, 100% {
+        transform: scale(1) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-45deg);
+    }
+}
+
+/* Corazón */
+.corazon {
+    padding: 0.5rem;
+    width: 45px; /* Tamaño reducido */
+    height: 45px; /* Tamaño reducido */
+    background-color: red;
+    position: relative;
+    transform: rotate(-45deg); /* Sin !important */
+    animation: latir 1s infinite; /* Mantener aquí la animación */
+    margin: 0 0 0 2rem;
+}
+
+.corazon::before,
+.corazon::after {
+    content: '';
+    width: 45px; /* Tamaño reducido */
+    height: 45px; /* Tamaño reducido */
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.corazon::before {
+    top: -25px; /* Ajustado para la mitad */
+    left: 0;
+}
+
+.corazon::after {
+    left: 25px; /* Ajustado para la mitad */
+    top: 0;
+}
+
+.textoC {
+    font-size: 1rem;
+    padding: 0.5rem;
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%); /* Inclinación del texto */
+    color: white; /* Color del texto */
+    text-align: center; /* Centra el texto */
+    z-index: 1; /* Asegura que el texto esté delante del corazón */
+}
+						.carousel-container {
+							margin:  0 !important;
+							padding: 0!important;
+							overflow: hidden;
+						}
+						
+						.carousel-inner img {
+							overflow: hidden;
+							border-radius: 1rem;
+							height: 280px;
+							width: 250px;
+							margin: 0 5px 5px 5px !important;
+							padding: 5px!important;
+							object-fit: cover !important;
+							align-items: center;
+							justify-content: center;
+						}
+					
+						.cardH-body {
+							margin: 0px !important;
+							padding: 0!important;
+							width: 150px !important;
+							flex: 1;
+							order: 2; /* Contenido a la derecha */
+						}
+					
+						.product-name {
+							padding: 5px;
+							font-size: 1.25rem;
+							font-weight: bold;
+						}
+					
+						.price-info {
+							font-size: 1.125rem;
+							font-weight: bold;
+							margin: 10px 0;
+						}
+					
+						.product-quantity {
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+						}
+					
+						.product-quantity p {
+							margin-bottom: 0;
+							margin-right: 5px;
+						}
+					
+						.product-quantity input {
+							width: 35px;
+							margin: 2px 5px;
+						}
+
+
+
+					</style> 
+				</div>
+				<!-- promos -->
+				<div id="promi" class="container-xxl tab-pane fade" align="center" style="margin: 0 !important; padding:0 !important">
+					<style>
+						.cardPromo {
+							height: auto !important;
+							width: auto; /* Ajusta el ancho según el espacio disponible */
+							display: inline-flex; /* Permite que las tarjetas se alineen horizontalmente */
+							background-color: transparent;
+							justify-content: center; /* Alinea el contenido de la tarjeta en el centro */
+							margin: 10px; /* Ajusta el margen alrededor de cada tarjeta */
+							padding: 5px;
+							box-sizing: border-box; /* Incluye el padding y borde en el tamaño total del elemento */
+						}
+						.cardP-body {
+							margin: 2px !important;
+							padding: 0!important;
+							width: 100% !important;
+							flex: 1;
+							order: 2; /* Contenido a la derecha */
+						}
+					</style>
+					<script>
+					</script>
+					<div class="container-xxl" id="promociones9y97834" style="margin-top: -2rem !important; width: 100% !important;">
+						<img src="images/alfisaludo.png" alt="" srcset="" style="margin: 2rem; border-radius: 2rem; height: 450px; width: auto !important;">
+						<h2>Carga alguno producto o revisa tu conexión a internet</h2>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ofcanvas de carrito donde se ponen todos los productos elegidos a la izquierda-->
+		<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style="z-index:999999999 !important ; width: 100vw; max-width: 540px; background: linear-gradient(to bottom right, #fff, #3498db); border: none; max-height: 100vh; overflow-y: auto;color:white">
+				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" align="right"></button>
+				<div class="" align="center" >
+					<h5 class="fas fa-shopping-cart" id=""> </h5>
+					<h6>Tu Carrito</h6>
+					<hr>
+					<pre style="margin: 0 0 0 -2rem; color:White">  Imagen       Productos    Cantidad       Sub total     Quitar</pre>
+					<hr>
+				</div>
+				<div class="offcanvas-body" id="offcanvasBody" style="border:none !important">
+					<!-- Contenido del carrito de compras  -->
+					<div id="contedorDelProdcto" style="margin:-1rem; padding:auto;text-align: center; width: 100% !important;border:none !important; color:white">
+						<br><br><br>
+						<img src="images/carritoCompras.jpg" alt="Carrito de Compras" style="opacity: 0.6; height: 190px !important; width: auto; border-radius: 4rem;">
+						<p>Agrega productos a tu carrito</p>
+					</div>
+					<!-- Agrega más elementos aquí si es necesario -->
+				</div>
+				<div id="" style="display: flex; flex-direction: column; align-items: center; color:white">
+					<div id="sumatoria"></div>
+					<button class="btn btn-success btn-block" id="btnPagar007" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdropMediosPago">Pagar</button>
+					<script>
+							const botonetero = document.getElementById('btnPagar007');
+							botonetero.addEventListener("click", async () => {
+								if (!cheqOkComprar) {
+									console.log("Al menos en algún producto solicitas mas cantidad que la que hay en stock, revisalo.");
+									mostrarAlerta("Al menos en algún producto solicitas mas cantidad que la que hay en stock, revíselo. ")
+									return;
+								}
+								// Almacena la lista de productos en sessionStorage con la clave "pedidoCarritoPendientePago"
+								const stringylistaPedido = JSON.stringify(listaPedido)
+								sessionStorage.setItem("pedidoCarritoPendientePago", stringylistaPedido);
+
+								//console.log("que listado de pedidos guarda desde pagar",stringylistaPedido )
+								const clienteDataString  = sessionStorage.getItem('clienteEcomm');
+								const ownerDataString    = sessionStorage.getItem('ownerEcom');
+								const dataCliente        = JSON.parse(clienteDataString)  
+								//const dataOwner          = JSON.parse(ownerDataString)
+								//console.log("Oprimio el boton de pago id=btnPagar007", dataCliente,dataOwner)
+								// si no hay ningun pedido te avisa y reinicia la pagina
+								if ( listaPedido.length == 0  ) {
+									mostrarAlerta("Agrega algún producto al carrito")
+									// Esperar 1 segundos (3000 milisegundos)
+									setTimeout(() => {
+										// Recargar la página
+										window.location.reload();
+									}, 1500);
+								}
+								if ( !dataCliente  ) {
+									// si no hay nadie logeado debe inscribirse o logerse
+									// Recargar la página
+									setTimeout(() => {
+										// Recargar la página
+										window.location.reload();
+									}, 1500);
+								}
+								if (dataCliente && listaPedido.length >= 1) {
+									// envia el boton de mercado pago al modal de la selección de medios de pago
+									await mpWallet(dataCliente, dataOwner) 
+								}else{
+									// se el cliente no esta logeado se llama al modal sigIng/UP para que lo haga
+								 	// Abrir el modal
+									$('#usuario').modal('show');
+								}
+								
+							});
+
+					</script>
+					<a type="button" data-bs-dismiss="offcanvas" >Seguir comprando</a>
+				</div>
+		</div>
+
+		<!-- Footer -->
+		<footer id="footer" style="background-color: skyblue; color: black !important;">
+			<div class="inner" id="cont" style="margin-top:-4rem !important">
+				<br><br>
+				<h2>Contactos</h2>
+				<div id="redesSocialesLinks" align="center" style="margin-top:-2rem">
+					<style>
+        
+						.footer {
+							background-color: #116DEF;
+							color: black !important;
+							padding-bottom: 1rem;
+							margin-top: auto;
+						}
+					
+						/* Estilos para los íconos */
+						.icon {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							text-decoration: none;
+							border-radius: 50%;
+							transition: transform 0.3s ease, box-shadow 0.3s ease;
+						}
+					
+						.fab.fa-whatsapp {
+							color: #25D366;
+							font-size: 2rem;
+						}
+					
+						.fab.fa-facebook-f {
+							color: #083c80;
+							font-size: 2rem;
+						}
+					
+						.fab.fa-instagram {
+							color: #E4405F;
+							font-size: 2rem;
+						}
+					
+						.fab.fa-linkedin-in {
+							color: #0077B5;
+							font-size: 2rem;
+						}
+					
+						.icon:hover {
+							transform: scale(1.1);
+							box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+						}
+					
+						.icon:active {
+							transform: scale(1);
+							box-shadow: 0 2px 4px rgba(240, 255, 201, 0.2);
+						}
+					
+						/* Estilos para container2 */
+						.container2 {
+							background-color: #0E4FB0; /* Un tono más oscuro que el fondo del body */
+							padding: 2rem;
+							border-radius: 15px;
+							transition: transform 0.3s ease, box-shadow 0.3s ease;
+						}
+						.list-inline-item {
+							transition: transform 0.3s ease-in-out; /* Transición suave */
+						}
+					
+						.list-inline-item:hover {
+							transform: scale(1.05); /* Escala del 105% al hacer hover */
+						}
+					</style>
+					<ul class="list-inline"></ul>
+				</div>
+                <br><br>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <form id="contactForm" action="" method="post">
+                                <input type="text" value="744108/5220963puebloiruya" name="tbstk" hidden>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Nombre</label>
+                                        <input class="form-control" name="nombre" id="nameCon" type="text" placeholder="Nombre">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input class="form-control" name="email" id="emailCon" type="email" placeholder="Email">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="city" class="form-label">Apellido</label>
+                                        <input class="form-control" name="Apellido" id="ApellidoCon" type="text" placeholder="Apellido">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label">Celular</label>
+                                        <input class="form-control" name="numCel" id="numCelCon" type="text" placeholder="Número de celular">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="message" class="form-label">Mensaje</label>
+                                        <textarea class="form-control" name="mensaje" id="messageCon" rows="4" placeholder="Agrega tu mensaje incluye tu ciudad y país"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Botón -->
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success" id="submitBtn48521">Enviar mensaje</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+					<script>
+						document.getElementById('submitBtn48521').addEventListener('click', async function(event) {
+							event.preventDefault(); // Evita el envío del formulario de manera tradicional
+							
+							const nombre = document.getElementById('nameCon').value.trim();
+							const email = document.getElementById('emailCon').value.trim();
+							const apellido = document.getElementById('ApellidoCon').value.trim();
+							const celular = document.getElementById('numCelCon').value.trim();
+							const mensaje = document.getElementById('messageCon').value.trim();
+							
+							const camposFaltantes = [];
+							
+							// Verificar campos vacíos
+							if (!nombre) camposFaltantes.push('Nombre');
+							if (!email) camposFaltantes.push('Email');
+							if (!apellido) camposFaltantes.push('País y ciudad');
+							if (!celular) camposFaltantes.push('Número de celular');
+							if (!mensaje) camposFaltantes.push('Mensaje');
+							
+							if (camposFaltantes.length > 0) {
+								mostrarAlerta('Por favor, completa los siguientes campos: ' + camposFaltantes.join(', '));
+								return
+							}
+							
+				const datosFormulario = { nombre, email, apellido, celular, descripcionProyecto:mensaje, consulta:true };
+							
+							console.log("Que datos tiene consulta", datosFormulario)
+							// Obtén el JWT del sessionStorage
+							const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+							const jwToken = dataBasic.data.jwToken;
+							
+							try {
+								const idEnpointCheq = dataBasic.data.endpointTokensArray2;
+								const idEnpointCheq101 = idEnpointCheq[101];
+								// Envía los datos CUSTOM al servidor usando fetch
+								console.log("Hizo click en el form de CONSULTAS",idEnpointCheq101, );
+								const response = await fetch(`${idEnpointCheq101}`, {
+								//const response = await fetch('/recibir/consultas', {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json',
+										'Authorization': `Bearer ${jwToken}`
+									},
+									body: JSON.stringify(datosFormulario)
+								});
+								
+								if (!response.ok) {
+									throw new Error('Error en la solicitud: ' + response.statusText);
+								}
+								
+								const resultado = await response.json();
+								mostrarExito('Respuesta del servidor: ' + JSON.stringify(resultado.message));
+							} catch (error) {
+								mostrarAlerta('Error al enviar el formulario: ' + error.message);
+							}
+						});
+					</script>
+                    <div class="text-center mt-5">
+                        <a href="https://tbs-it.net/">
+                            <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
+                            <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
+                        </a>
+                        <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
+                        <span style="margin: 0 1rem;">|</span>
+                        <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
+                    </div>
+                </div>
+			</div>
+		</footer>
+
+	<!--******** modales ******y modulos***************************** -->
+
+	<!-- aqui van los datos de las alertas -->
+	<div id="muestraAlerta" class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="muestraChau"  class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="muestraExito"  class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="exitoVenta"   data-bs-backdrop="static"  class="" data-bs-backdrop="static" style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="opciones"      class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="pagoWallet"    class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
+
+	<!-- Modal medios de cobro-->
+	<div class="modal fade" id="staticBackdropMediosPago" data-bs-target="#staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 9999999999 !important">
+		<div  class="modal-dialog modal-dialog-centered modal-lg" style="overflow: hidden;">
+			<div id="coloreamePAgos" class="modal-content">
+				<div class="modal-header">
+					<h5 class="text-center" id="staticBackdropLabel">Contenido de tu carrito</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="cerrarModalPagos"></button>
+				</div>
+				<style>
+					.modal-body {
+						text-align: center;
+					}
+					
+					.btn {
+						display: inline-block;
+						text-align: center;
+						vertical-align: middle;
+						margin: 10px; /* Ajusta el margen según sea necesario */
+					}
+					
+					.btn img {
+						display: block;
+						margin: 0 auto;
+						width: 20%;
+						height: auto;
+						border-radius: 2rem;
+					}
+					
+					.btn p {
+						margin: 10px 0;
+					}
+				</style>
+				<div class="modal-body">
+					<div id="idProductoss" hidden></div>
+					<div id="quantityCompra" class="row d-flex justify-content-center" style="width: 100% !important; height: 220px !important; overflow-y: auto;"></div>
+					<br>
+					<p id="totalCantidad"></p>
+					<!-- TODO termnar esto de incluir el costod e envio solo arme este id -->
+					<p id="CostoEnvio123"></p> 
+					<p id="summary-total"></p>
+					<h5>Elige tu forma de pago</h5>
+					<div id="shopping-cart"></div>
+					<div id="statusScreenBrick_container"></div>
+					<div id="payment"></div>
+					<div id="paymentBrick_container"></div>
+					<div id="walletBrick_container"></div>
+					<div id="statusScreen"></div>
+					<div id="btnPagDir"></div>
+					<div id="wallet_container"></div>
+					<fieldset class="card-container" id="opcionesDePago">
+						<p>Espere, Cargando opciones de Mercado Pago</p>
+						<div class="spinner-border text-primary" role="status">
+							<span class="visually-hidden"></span>
+						</div>
+						<br><br>
+					</fieldset>
+					<script>
+						const DataOwner = JSON.parse(sessionStorage.getItem("ownerData"))||[]	;
+						const InsertBtnPgDir = document.getElementById("btnPagDir");
+						if (DataOwner.tipoMembresia === "premium") {
+							InsertBtnPgDir.innerHTML = `
+								<button class="btn-block btn-primary" id="PCE" style="border-radius: 0.45rem; align-items: center;">
+									<div style="display: flex; align-items: center; justify-content: center;" align="center">
+										<div>
+											<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem;">
+										</div>
+										<div style="color: white; margin-left: 1rem;">
+											<p style="margin: 0;">Pago Seguro & Directo. (Vendedor & Cliente)</p>
+										</div>
+									</div>
+								</button>
+							`;
+						}else{
+							InsertBtnPgDir.innerHTML = `
+								<button class="btn-block btn-secondary" id="" style="border-radius: 0.45rem; align-items: center; pointer-events: none; opacity: 0.5;">
+									<div style="display: flex; align-items: center; justify-content: center;" align="center">
+										<div>
+											<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem;">
+										</div>
+										<div style="color: white; margin-left: 1rem;">
+											<p style="margin: 0;">Pago Seguro & Directo. (Solo membresía premium)</p>
+										</div>
+									</div>
+								</button>
+							`;
+						}
+					</script>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal New´s -->
+	<div class="modal fade" id="modelNews" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index:999999999999999999999999999 !important">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content" id="noticiasColor">
+				<div class="modal-header" style="">
+					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Noticias</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>Las noticias se ordenan de la mas reciente a las mas antigua.</p>
+					<div id="newsMmodal">
+						<h3>No hay nuevas noticias hoy</h3>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" hidden>Close</button>
+					<button type="button" class="btn btn-primary" hidden>Volver</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Icono en tu pantalla-->
+	<div class="modal fade" id="icon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<style>
+        .responsive-img {
+            width: 100% !important; /* Ajusta la imagen a su tamaño real */
+            height: auto; /* Mantiene la proporción de la imagen */
+            display: block; /* Elimina cualquier espacio en línea que pueda causar problemas con el tamaño del contenedor */
+            transition: transform 0.3s ease; /* Añade una transición suave para el efecto hover */
+        }
+
+        .responsive-img:hover {
+            transform: scale(1.05); /* Aumenta el tamaño de la imagen en un 5% al pasar el ratón por encima */
+        }
+
+        .center-align {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+		<div class="modal-dialog modal-fullscreen-xxl-down" id="">
+			<div class="modal-content" id="coloreame2">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Icono en tu pantalla.</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="content">
+						<div class="card-header" style="width: 100%;">
+							<h4>Agrega un icono de inicio rápido a tu pantalla</h4>
+						</div>
+						<div class="row card-body" style="padding: 0.5rem;">
+							<h5>Elije el tipo de navegador y dispositivo en el que quieres agregar el icono.</h5>
+							<br><br>
+							<div class="col card-header center-align" style="margin: 0.2rem;">
+								<h3>PC</h3>
+								<button class="btn" data-bs-toggle="modal" data-bs-target="#Chrome">
+									<img src="/images/iconoChrome.jpg" alt="Chrome" class="responsive-img">
+								</button>
+							</div>
+							<div class="col card-header center-align" style="margin: 0.2rem;">
+								<h4>IOS</h4>
+								<button class="btn" data-bs-toggle="modal" data-bs-target="#IOS">
+									<img src="/images/iconoIOS.jpg" alt="IOS" class="responsive-img">
+								</button>
+							</div>
+							<div class="col card-header center-align" style="margin: 0.2rem;">
+								<h4>Android</h4>
+								<button class="btn" data-bs-toggle="modal" data-bs-target="#Android">
+									<img src="/images/iconoAndroid.jpg" alt="Android" class="responsive-img">
+								</button>
+							</div>
+						</div>
+					</div>                    
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" hidden>Close</button>
+					<button type="button" class="btn btn-primary" hidden>Volver</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Chrome -->
+	<div class="modal fade" id="Chrome" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<br><br>
+		<div class="modal-dialog">
+			<div class="modal-content center-align" style="border-radius:1rem;">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-header" >
+					<img style="margin:auto; padding:auto; width:50%; border-radius:100%;" src="/images/iconoChrome.jpg" >
+				</div>
+				<div class="modal-body text-left" >
+					<h4>Agregar un icono en el escritorio de Windows.</h4>
+					<p>Para agregar un acceso directo a una aplicación web en el escritorio de Windows, sigue estos pasos:</p>
+					<ol>
+						<li>Abre tu navegador web en tu PC con Windows.</li>
+						<li>Dirígete a la aplicación web que deseas agregar.</li>
+						<li>Haz clic en el botón de menú en el navegador (generalmente representado por tres puntos verticales o un icono similar) para acceder a las opciones adicionales.</li>
+						<li>Busca y selecciona la opción "Crear acceso directo" o "Agregar a escritorio" en el menú desplegable.</li>
+						<li>Aparecerá una ventana emergente preguntando si deseas crear un acceso directo en el escritorio. Haz clic en "Aceptar" o "Crear" para confirmar.</li>
+					</ol>
+					<p>Una vez que hayas seguido estos pasos, se creará un acceso directo en el escritorio de tu PC con Windows que te llevará directamente a la aplicación web cuando lo selecciones.</p>
+					<p>Ten en cuenta que los nombres y las ubicaciones exactas de los botones y las opciones pueden variar según el navegador web que estés utilizando, pero en general, estos pasos deberían ayudarte a agregar un acceso directo de una aplicación web a tu escritorio de Windows.</p>
+					<br>
+					<h4>Agregar un icono en el escritorio del explorador Safari de Apple/macOS de una aplicación web</h4>
+					<p>Para agregar un acceso directo el escritorio de Apple/macOS, sigue estos pasos:</p>
+					<ol>
+						<li>Abre tu navegador web en tu Mac con macOS.</li>
+						<li>Dirígete a la aplicación web que deseas agregar.</li>
+						<li>Haz clic y arrastra el icono situado a la izquierda de la URL (la dirección web) directamente al escritorio.</li>
+					</ol>
+					<p>Una vez que hayas seguido estos pasos, se creará un acceso directo en el escritorio de tu Mac con macOS que te llevará directamente a la aplicación web cuando lo selecciones.</p>
+					<p>Ten en cuenta que estos pasos pueden variar ligeramente según el navegador web que estés utilizando en tu Mac con macOS, pero en general, arrastrar el icono de la dirección web al escritorio debería crear un acceso directo de la aplicación web.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal Android -->
+	<div class="modal fade" id="Android" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<br>
+	<div  class="modal-dialog">
+		<div class="modal-content center-align" style="border-radius:1rem;">
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-header" >
+				<img style="width:100%; border-radius:100%;" src="/images/iconoAndroid.jpg" >
+			</div>
+			<div class="modal-body text-left">
+				<h4>Agregar un icono en el escritorio de Android de una aplicación web</h4>
+				<p>Para agregar un acceso directo a una aplicación web en tu escritorio de Android, sigue estos pasos:</p>
+				<ol>
+				<li>Abre el navegador web en tu dispositivo Android.</li>
+				<li>Dirígete a la aplicación web que deseas agregar.</li>
+				<li>Toca el botón de menú en el navegador (generalmente representado por tres puntos verticales o un icono similar) para acceder a las opciones adicionales.</li>
+				<li>Busca y selecciona la opción "Agregar a pantalla de inicio" o "Añadir acceso directo" en el menú desplegable.</li>
+				<li>Se te pedirá que personalices el nombre del acceso directo. Puedes cambiar el nombre si lo deseas o dejarlo tal como está.</li>
+				<li>Toca el botón "Agregar" o "Aceptar" para confirmar la creación del acceso directo.</li>
+				</ol>
+				<p>Una vez que hayas seguido estos pasos, se creará un acceso directo en tu pantalla de inicio de Android que te llevará directamente a la aplicación web cuando lo selecciones.</p>
+				<p>Cabe mencionar que los nombres y las ubicaciones exactas de los botones y las opciones pueden variar según la versión del navegador web y la interfaz de tu dispositivo Android, pero en general, estos pasos deberían ayudarte a agregar un acceso directo de una aplicación web a tu pantalla de inicio.</p>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- Modal IOS -->
+	<div class="modal fade" id="IOS" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<br>
+		<div  class="modal-dialog">
+			<div class="modal-content" style="border-radius:1rem;">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-header">
+					<img style="width:100%;border-radius:100%;" src="/images/iconoIOS.jpg" >
+				</div>
+				<div class="modal-body  text-left">
+					<h4>Agregar un icono en la pantalla de inicio de iOS de una aplicación web</h4>
+					<p>Para agregar un acceso directo a una aplicación web en la pantalla de inicio de iOS, sigue estos pasos:</p>
+					<ol>
+					<li>Abre el navegador web en tu dispositivo iOS.</li>
+					<li>Dirígete a la aplicación web que deseas agregar.</li>
+					<li>Toca el botón de "Compartir" en la parte inferior de la pantalla. Generalmente se representa con un ícono cuadrado con una flecha hacia arriba.</li>
+					<li>En el menú desplegable, busca y selecciona la opción "Agregar a pantalla de inicio".</li>
+					<li>Se te pedirá que personalices el nombre del acceso directo. Puedes cambiar el nombre si lo deseas o dejarlo tal como está.</li>
+					<li>Toca el botón "Agregar" o "Aceptar" para confirmar la creación del acceso directo.</li>
+					</ol>
+					<p>Una vez que hayas seguido estos pasos, se creará un acceso directo en la pantalla de inicio de tu dispositivo iOS que te llevará directamente a la aplicación web cuando lo selecciones.</p>
+					<p>Ten en cuenta que los nombres y las ubicaciones exactas de los botones y las opciones pueden variar según la versión del navegador web y la versión de iOS que estés utilizando, pero en general, estos pasos deberían ayudarte a agregar un acceso directo de una aplicación web a tu pantalla de inicio en iOS.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- SIGNUP inscribir a nuevos usuarios clientes ecommerce -->
+	<div id="signUp" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999;" data-bs-target="#staticBackdrop">
+		<div class="modal-dialog modal-lg modal-dialog-centered" >
+			<div class="modal-content" id="colorElsign">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Completa tu inscripción</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="text-center mb-4">
+						<i id="logoSigUp"></i>
+						<p class="mt-2">Los passwords deben cumplir con los siguientes criterios:</p>
+						<ul class="list-unstyled">
+							<li>Tener al menos una letra mayúscula.</li>
+							<li>Ser alfanuméricas, es decir, contener letras y números.</li>
+							<li>Tener una longitud mínima de 8 caracteres.</li>
+							<li>Ejemplo: "Minombre22".</li>
+						</ul>
+					</div>
+					<form id="signUpForm" class="needs-validation" novalidate>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="validationCustom01" class="form-label">Nombre</label>
+									<input type="text" class="form-control" id="validationCustom01" placeholder="Ingrese su nombre" required name="nombre">
+									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="invalid-feedback">¡Agregue un nombre!</div>
+								</div>
+								<div class="mb-3">
+									<label for="validationCustom02" class="form-label">Apellido</label>
+									<input type="text" class="form-control" id="validationCustom02" placeholder="Ingrese su apellido" required name="apellido">
+									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="invalid-feedback">¡Agregue un apellido!</div>
+								</div>
+								<div class="mb-3">
+									<label for="validationCustom03" class="form-label">Celular (como aparece en su Whatsapp)</label>
+									<input type="number" class="form-control" id="validationCustom03" placeholder="Ingrese su celular" required name="numCel">
+									<div class="invalid-feedback">Por favor, proporcione un número de celular válido.</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="email" class="form-label">Email</label>
+									<input type="email" class="form-control" id="email" placeholder="Ingrese su email" required name="email">
+									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="invalid-feedback">¡Agregue un email!</div>
+								</div>
+								<div class="mb-3">
+									<label for="validationCustomPassword" class="form-label">Password</label>
+									<div class="input-group has-validation position-relative">
+										<input type="password" class="form-control" id="validationCustomPassword" placeholder="Elija un password" required name="password">
+										<span class="eye-icon position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%);" onclick="togglePassword('validationCustomPassword')">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+												<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zm-8 3a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+												<path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+											</svg>
+										</span>
+										<div class="invalid-feedback">Por favor, elija un password.</div>
+									</div>
+								</div>
+								<div class="mb-3">
+									<label for="validationCustomPassword2" class="form-label">Repita su Password</label>
+									<div class="input-group has-validation position-relative">
+										<input type="password" class="form-control" id="validationCustomPassword2" placeholder="Repita su password" required name="chekPass">
+										<span class="eye-icon position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%);" onclick="togglePassword('validationCustomPassword2')">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+												<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zm-8 3a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+												<path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+											</svg>
+										</span>
+										<div class="invalid-feedback">Por favor, repita su password.</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="mb-3">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="" id="invalidCheck22" required>
+								<label class="form-check-label" for="invalidCheck22">
+									Acepto los términos y condiciones
+								</label>
+								<div class="invalid-feedback">Debe aceptar antes de enviar.</div>
+							</div>
+						</div>
+						<div class="mb-3 text-center">
+							<button class="btn btn-primary w-100" type="submit">Enviar</button>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			// Función para alternar la visibilidad de la contraseña
+			function togglePassword(id) {
+				const passwordField = document.getElementById(id);
+				const eyeIcon = passwordField.nextElementSibling.querySelector('svg');
+				if (passwordField.type === 'password') {
+					passwordField.type = 'text';
+					eyeIcon.classList.replace('bi-eye', 'bi-eye-slash');
+				} else {
+					passwordField.type = 'password';
+					eyeIcon.classList.replace('bi-eye-slash', 'bi-eye');
+				}
+			}
+	
+			// Validar contraseñas antes de enviar el formulario
+			function validarContraseñas() {
+				const password1 = document.getElementById('validationCustomPassword').value;
+				const password2 = document.getElementById('validationCustomPassword2').value;
+				if (password1.length < 8 || !/\d/.test(password1) || !/[A-Z]/.test(password1)) {
+					alert('La contraseña debe tener al menos 8 caracteres, incluir letras mayúsculas y números.');
+					return false;
+				}
+				if (password1 !== password2) {
+					alert('Las contraseñas no coinciden.');
+					return false;
+				}
+				return true;
+			}
+	
+			document.getElementById('signUpForm').addEventListener('submit', function(event) {
+				event.preventDefault();
+				if (validarContraseñas()) {
+					const form = event.target;
+					const formData = new FormData(form);
+	
+					// Obtener datos del propietario desde sessionStorage
+					let dataOwner = sessionStorage.getItem("DataOwnerEcom");
+					if (dataOwner) {
+						dataOwner = JSON.parse(dataOwner);
+						const urlOwnerID = dataOwner.urlOwner;
+						formData.append('urlOwner', urlOwnerID || '');
+						const urlServer = dataOwner.urlServer;
+						formData.append('urlServer', urlServer || '');
+	
+						// Obtener JWT token desde sessionStorage
+						const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"));
+						const endpoint = endpoints[27];
+						//console.log("Que endpoit y que token usa", "********",  endpoint)
+						fetch(endpoint, {
+							method: 'POST',
+							body: JSON.stringify(Object.fromEntries(formData)),
+							headers: {
+								'Content-Type': 'application/json',
+							}
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								console.log('Respuesta del servidor:', data);
+								mostrarExito(data.dataInfo.message);
+								// También puedes guardar el token si es necesario
+								sessionStorage.setItem('jwtToken', data.dataInfo.token);
+								setTimeout(() => window.location.reload(), 2000);
+							} else {
+								console.error('Error al enviar los datos:', error);
+								mostrarAlerta(`${data.message}`);
+								setTimeout(() => window.location.reload(), 2000000);
+							}
+						})
+						.catch(error => {
+							console.error('Error al enviar los datos:', error);
+							mostrarAlerta(`Error al enviar los datos. Inténtelo nuevamente., ${error}`);
+							setTimeout(() => window.location.reload(), 2000000);
+						});
+					}
+				}
+			});
+		</script>
+	</div>
+
+	<!-- SIGIN Modal Usuarios SignIn-->
+	<div style="z-index: 999999999 !important;" id="usuario" class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content" id="sigIngColor">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Inicia sesión</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="container mt-1">
+						<div class="row justify-content-center">
+							<i id="logoOwner22"></i>
+							<i id="duenoEcom2288"></i>
+							<br>
+							<p>Ingresa tu usuario y contraseña</p>
+							<div class="col-md-8">
+								<!-- Iniciar Sesión -->
+								<div  class="card-body">
+									<!-- Agregar formulario de inicio de sesión aquí -->
+									<div>
+										<form id="loginForm" onsubmit="enviarDatos(event)">
+											<div class="form-floating">
+												<input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com" style="color:black !important; width: 100%;" required>
+												<label for="floatingInput" style="color:black !important;">Email</label>
+											</div>
+											<br>
+											<div class="form-floating">
+												<input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+												<label for="floatingPassword" style="color:black !important;">Password</label>
+											</div>
+											<br>
+											<button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+										</form>
+										<script>
+											async function enviarDatos(event) {
+												event.preventDefault();
+												const email = document.getElementById('floatingInput').value;
+												const password = document.getElementById('floatingPassword').value;
+												console.log("Datos MANUAL", password, email);
+												try {
+													//cerrar el modal loading
+													mostrarModalLoading()
+													const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+													const jwToken = sessionStorage.getItem('jwtToken');
+													const response = await fetch(`${endpoints[10]}`, {
+														method: 'POST',
+														headers: {
+															'Content-Type': 'application/json'
+														},
+														body: JSON.stringify({ email, password }),
+														headers: {
+															'Content-Type': 'application/json',
+															'Authorization': `Bearer ${jwToken}`
+														}													
+													});
+													if (response.status === 200) {
+														//cerrar el modal loading
+														ocultarModalLoading()
+														const responseData = await response.json();
+														console.log("Datos MANUAL signIN", responseData);
+														// Verificar si los datos necesarios están presentes en la respuesta
+														if (responseData.success && responseData.data) {
+															const { clienteEcomm, token } = responseData.data;
+															const { idCliente } = clienteEcomm;
+															if (idCliente) {
+																console.log("paso el filtro responseData y guarda el cliente y JWT en sessionStorage",clienteEcomm, token);
+																// Guarda datos del cliente Convertir el objeto a una cadena JSON y guardarlo en sessionStorage
+																const guardarClienteEcom = JSON.stringify(clienteEcomm);
+																sessionStorage.setItem('clienteEcomm', guardarClienteEcom);
+																// También puedes guardar el token si es necesario
+																sessionStorage.setItem('jwtToken', token);
+																// Refrescar la página
+																window.location.reload();
+															} else {
+																const error = "No hay cliente registrado";
+																console.error(`Error: ${error}`);
+																mostrarAlerta(`Error: ${error}`);
+																ocultarModalLoading()
+															}
+														} else {
+															const error = "No hay data";
+															console.error(`Error al buscar la info del cliente en el signIn manual: ${error}`);
+															mostrarAlerta(`Error: ${error}`);
+															ocultarModalLoading()
+														}
+													} else if (response.status === 401 || response.status === 404 || response.status === 400) {
+														const responseData = await response.json();
+														console.error(responseData.message);
+														mostrarAlerta(responseData.message);
+														ocultarModalLoading()
+													} else {
+														//cerrar el modal loading
+														ocultarModalLoading()
+														sessionStorage.removeItem('jwtToken');
+														console.error("Error en la respuesta del servidor:", response);
+														mostrarAlerta(`Error en la respuesta del servidor: ${response.statusText}`);
+														ocultarModalLoading()
+													}
+												} catch (error) {
+													//cerrar el modal loading
+													ocultarModalLoading()
+													sessionStorage.removeItem('jwtToken');
+													console.error("Ocurrió un error en la solicitud.", error);
+													mostrarAlerta(`Tu sesión a vencido inténtalo de nuevo. ${error}`);
+												}
+											}
+
+										</script>
+									</div>
+									<div class="card-header" style="margin:-1rem 0 0rem 0;">
+										<a href="" data-bs-toggle="modal" data-bs-target="#signUp" style="margin:-1rem 0 1rem 0;">Registrarse</a>
+										<br><br>
+										<a href="" hidden> Inicia sesión con Google </a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" hidden>Close</button>
+					<button type="button" class="btn btn-primary" hidden>Volver</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Quiénes Somos -->
+	<div class="modal fade" id="quienesSomos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalQuienesSomosLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" align="center">
+			<div class="modal-content" id="coloreame">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalQuienesSomosLabel" style="text-align: center;">Quiénes Somos</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<br>
+				<i id="logo561651614645"></i>
+				<div class="modal-body d-flex justify-content-center align-items-center" style="font-size: 2rem !important;">
+					<div class="container-xl">
+						<div class="card mt-4 w-100 h-10">
+							<div class="card-body h-10">
+								<h2 class="card-title">¿Quienes somos?</h2>
+								<p class="card-text" id="modalDescription">El comercio no ha agregado los datos.</p>
+							</div>
+						</div>
+						<div class="card mt-4 w-100 h-10">
+							<div class="card-body h-10">
+								<h2 class="card-title">Misión, Visión & Valores</h2>
+								<p class="card-text" id="modalMission">El comercio no ha agregado los datos.</p>
+							</div>
+						</div>
+						<div class="card mt-4 w-100 h-10">
+							<div class="card-body h-10">
+								<h2 class="card-title">Objetivos</h2>
+								<p class="card-text" id="modalObjectives">El comercio no ha agregado los datos.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			// Función para abrir el modal y mostrar los datos de quienesSomos
+			const dataOwner = JSON.parse(sessionStorage.getItem("ownerData")) || JSON.parse(sessionStorage.getItem("DataOwnerEcom")) || []
+			const quienesSomosData = dataOwner.quienesSomos || null
+			//console.log("quienesSomosDatakfgnkegnikngiknquienesSomosDatagikngkntgik",quienesSomosData)
+				// Verifica si hay datos para mostrar
+				if (quienesSomosData) {
+					// Llena los campos del modal con la información proporcionada
+					document.getElementById('modalDescription').textContent = quienesSomosData.description || 'El comercio no ha agregado los datos.';
+					document.getElementById('modalMission').textContent = quienesSomosData.mission || 'El comercio no ha agregado los datos.';
+					document.getElementById('modalObjectives').textContent = quienesSomosData.objectives || 'El comercio no ha agregado los datos.';
+				}
+				// Suponiendo que dataOwner es un objeto que contiene la URL de la imagen en pathLogo
+				const logoElement = document.getElementById('logo561651614645');
+			const pathLogo = dataOwner.pathLogo; // Aquí debe ser la URL de la imagen que se quiere mostrar
+		
+			// Crear un elemento de imagen
+			const imgElement = document.createElement('img');
+			imgElement.src = pathLogo;
+			imgElement.alt = 'Logo';
+		
+			// Aplicar estilos para hacer la imagen redonda
+			imgElement.style.width = '200px'; // Ajustar el tamaño según sea necesario
+			imgElement.style.height = '200px';
+			imgElement.style.borderRadius = '50%';
+			imgElement.style.objectFit = 'cover'; // Para ajustar la imagen dentro del círculo
+		
+			// Añadir la imagen al elemento <i id="logo"></i>
+			logoElement.appendChild(imgElement);
+		</script>
+	</div>
+
+	<!-- // Modal confirma direccion -->
+	<div style="z-index:999999999 !important" class="modal fade" id="exampleModalToggleDir" aria-hidden="true" aria-labelledby="exampleModalToggleLabelDir" tabindex="-1" data-bs-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content" id="coloredDir">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalToggleLabelDir">Confirma dirección de envió</h5>
+					<button type="button" class="btn-close"  aria-label="Close" onclick="cerrarModal(exampleModalToggleDir)" id=""></button>
+				</div>
+				<!-- primera opcion de direccion -->
+				<div class="modal-body" id="direccionEnvio11" style="height: 400px !important; overflow-y: scroll !important;">
+					<div id="">
+						<div id="direccionInfo">
+							<p id="pais">País: </p>
+							<p id="ciudad">Ciudad: </p>
+							<p id="calle">Calle: </p>
+							<p id="CP">Código Postal: </p>
+						</div>
+						<div id="map" style="height: 200px; width: 100%;"></div>
+					</div>
+					<script>
+						let country1 = {}
+						let direccion1 = {}
+						document.addEventListener('DOMContentLoaded', async function() {
+							// Inicializa el popup
+							var popup = L.popup();
+							// Función para manejar el evento de clic en el mapa
+							function onMapClick(e) {
+								obtenerDireccion(e.latlng.lat, e.latlng.lng, function(direccion) {
+									popup
+										.setLatLng(e.latlng)
+										.setContent("Dirección: " + direccion.road + direccion.house_number)
+										.openOn(map);
+								});
+							}
+							// Evento para escuchar el clic en el mapa
+							map.on('click', onMapClick);
+							// Función para obtener la ubicación del usuario
+							async function obtenerUbicacion() {
+								if (navigator.geolocation) {
+									navigator.geolocation.getCurrentPosition(async function(position) {
+										var latitud = position.coords.latitude;
+										var longitud = position.coords.longitude;
+										latitud1  = latitud
+										longitud1 = longitud
+										await obtenerDireccion(latitud, longitud, await mostrarDireccion); // Obtiene información de dirección y muestra la dirección
+									});
+								} else {
+									mostrarAlerta('Geolocalización no es compatible en este navegador.');
+								}
+							}
+							// Función para obtener información de dirección basada en coordenadas utilizando la API de OpenCage
+							async function obtenerDireccion(latitud, longitud, callback) {
+								var apiKey = '88c66a70b2324b81a65c9059116e088c'; // Recuerda reemplazar con tu propia API key
+								var url = `https://api.opencagedata.com/geocode/v1/json?q=${latitud}+${longitud}&key=${apiKey}`;
+								fetch(url)
+									.then(response => response.json())
+									.then(data => {
+										if (data.results && data.results.length > 0) {
+											var direccion = data.results[0].components;
+											mostrarDireccion(direccion);
+											map.setView([latitud, longitud], 16); // Centra el mapa en el punto encontrado
+											// Crea un polígono para la ubicación del usuario
+											const dire = ("Calle: " + direccion.road + "<br>Número: " + direccion.house_number)
+											userPolygon = L.polygon([
+												[latitud - 0.0001, longitud - 0.0001],
+											], {
+												color: 'blue',
+												fillColor: '#3388ff',
+												fillOpacity: 0.5
+											}).addTo(map);
+											var popup = L.popup()
+											.setLatLng([latitud, longitud])
+											.setContent(dire)
+											.openOn(map);
+											// Agrega la calle y el número como etiquetas en el polígono
+											//marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+											userPolygon.bindPopup("Calle: " + direccion.road + "<br>Número: " + direccion.house_number).openPopup();
+									} else {
+											console.error('No se encontró ninguna dirección.');
+										}
+									})
+									.catch(error => {
+										console.error('Error al obtener la dirección:', error);
+									});
+							}
+	
+							// Función para mostrar información de dirección en los elementos <p>
+							async function mostrarDireccion(direccion) {
+								if (!document.getElementById('pais')) return;
+
+								if (direccion.country){ country1 = direccion.country}
+								if (direccion){ direccion1 = direccion}
+								if (direccion) {
+									//console.log("DENTRO DE direccione encontro?", direccion)
+									document.getElementById('pais').textContent = 'País: ' + (direccion.country || '(No disponible)');
+									document.getElementById('ciudad').textContent = 'Ciudad:' + " " + (direccion.state) + " " + "Localidad"+ "  /   " +(direccion.state_district || '(No disponible)');
+									document.getElementById('calle').textContent = 'Calle: ' + (direccion.road + "  " + 'Numero: ' + direccion.house_number || '(No disponible)');
+									document.getElementById('CP').textContent = 'Código Postal: ' + (direccion.state_code+direccion.postcode || '(No disponible)');
+								} else {
+									document.getElementById('pais').textContent = 'País: (No disponible)';
+									document.getElementById('ciudad').textContent = 'Ciudad: (No disponible)';
+									document.getElementById('calle').textContent = 'Calle: (No disponible)';
+									document.getElementById('CP').textContent = 'Código Postal: (No disponible)';
+								}
+							}
+							// Llama a la función para obtener la ubicación del usuario al cargar la página
+							await obtenerUbicacion();
+						}); 
+					</script>
+					<p>Si es la direccion correcta de envió presiona "Confirmar" o </p>
+					<p>Busca en el mapa la nueva direccion y presiona "Confirma" o </p>
+					<p>Si no anda bien el mapa presiona "Otra Direccion" y escribela</p>
+				</div>
+				<div class="modal-footer" id="cambiarBotonera">
+					<button class="btn btn-success" id="confirmarDireecion">Confirmar</button>
+					<button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Otra direccion</button>
+					<script>
+							// Obtener referencia al botón de confirmación
+							const confirmButton1 = document.getElementById("confirmarDireecion");
+							// Agregar event listener al botón de confirmación
+							confirmButton1.addEventListener("click", async function(event) {
+								// Evitar que el formulario se envíe automáticamente
+								event.preventDefault();
+								// Obtener los valores de los campos del formulario
+								const pais         = direccion1.country
+								const estado       = direccion1.state
+								const localidad    = direccion1.state_district
+								const calle        = direccion1.road
+								const numeroPuerta = direccion1.house_number
+								const CP           = direccion1.state_code+direccion1.postcode
+								const lat          = latitud1
+								const lng          = longitud1
+								
+								// Obtener los datos almacenados en el sessionStorage
+								const token       = sessionStorage.getItem('jwtToken');
+								const dataCliente = sessionStorage.getItem('clienteEcomm');
+								const dataPedido  = sessionStorage.getItem('pedidoCarritoPendientePago');
+								// Verificar si los datos del formulario y del sessionStorage existen
+								if (estado && localidad && calle && numeroPuerta && CP && token && dataCliente && dataPedido) {
+									const direccion       = {lat:lat, lng:lng, pais:pais, estado:estado, localidad:localidad, calle:calle, numeroPuerta:numeroPuerta, CP:CP}
+									const dataPedidoConf = {dataCliente, dataPedido, direccion, token}
+									console.log('*****Intenta guardar la dire y pasa a cobrar los productos',dataPedidoConf);
+									await cobrarProductos(dataPedidoConf)
+								}
+								else{
+									console.log('//////////////////////////////////////Entro a guardar nueva direccion');
+									const direccion = {lat:lat, lng:lng, pais:pais, estado:estado, localidad:localidad, calle:calle, numeroPuerta:numeroPuerta, CP:CP}
+									await guardarNuevaDireccion(direccion)
+								}
+							});
+					</script>
+				</div>
+			</div>
+		</div>
+		</div>
+		<!-- segunda opcion de direccion -->
+		<div style="z-index:999999999 !important" class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1" data-bs-backdrop="static">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalToggleLabel2">Confirma dirección de envío</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" >
+						<form class="row g-3">
+							<input type="text" id="lat" name="lat" hidden>
+							<input type="text" id="lng" name="lng" hidden>
+							<div class="col-md-6">
+								<label style="color: black !important" for="validationDefault03" class="form-label">Estado/Provincia</label>
+								<input name="estado" id="estado" style="color: black !important" type="text" class="form-control" id="validationDefault01" required>
+							</div>
+							<div class="col-md-6">
+								<label style="color: black !important" for="validationDefault03" class="form-label">Localidad/Ciudad</label>
+								<input name="localidad" id="localidad" style="color: black !important" type="text" class="form-control" id="validationDefault02" required>
+							</div>
+							<div class="col-md-6">
+								<label style="color: black !important" for="validationDefault03" class="form-label">Calle</label>
+								<input name="calle" id="calle2" style="color: black !important" type="text" class="form-control" id="validationDefault02" required>
+							</div>
+							<div class="col-md-6">
+								<label style="color: black !important" for="numeroPuertaC" class="form-label">Número de puerta</label>
+								<input name="numeroPuertaC" id="numeroPuertaC" style="color: black !important" type="text" class="form-control" required>
+								<small id="errorNumeroPuerta" style="color: red; display: none;">Por favor, ingrese solo números.</small>
+							</div>
+							<script>
+								document.getElementById('numeroPuertaC').addEventListener('input', function () {
+									const input = this.value;
+									const errorLabel = document.getElementById('errorNumeroPuerta');
+							
+									// Verificar si el valor contiene solo números
+									if (/^\d*$/.test(input)) {
+										errorLabel.style.display = 'none';  // Ocultar el mensaje de error si solo hay números
+									} else {
+										errorLabel.style.display = 'block';  // Mostrar el mensaje de error si hay caracteres no numéricos
+									}
+								});
+							</script>
+							<div class="col-md-3">
+								<label for="validationDefault05" class="form-label" style="color: black !important">C.P.</label>
+								<input name="CP" id="CP2" type="text" class="form-control" id="validationDefault05" required>
+							</div>
+							<div class="mb-3">
+								<label for="validationTextarea" class="form-label" style="color: black !important">Observaciones</label>
+								<textarea name="obsDire" id="obsDire" class="form-control is-invalid" id="validationTextarea" placeholder="Required example textarea" required></textarea>
+								<div class="invalid-feedback" style="color: black !important">
+									Describa una referencia para llegar a su domicilio, ejemplo casa blanca, portón negro, NO anda el timbre, llamar cuando estés abajo, al lado de...
+								</div>
+							</div>
+							<button id="btnNuevaDir" class="btn btn-primary" style="width: 125px;">Ver en el mapa</button>
+						</form>
+						<div id="map2" style="height: 200px; width: 100%;"></div>
+						<script>
+							let map22 = false;
+							let mapi2;
+							let latitud   = 0
+							let longitud  = 0
+							// Obtener referencia al botón
+							const btnNuevaDir = document.getElementById("btnNuevaDir");
+						
+							// Agregar event listener al botón
+							btnNuevaDir.addEventListener("click", function(event) {
+								// Evitar que el formulario se envíe automáticamente
+								event.preventDefault();
+						
+								// Obtener los valores de los campos del formulario
+								const state          = document.getElementById("estado").value;
+								const state_district = document.getElementById("localidad").value;
+								const road           = document.getElementById("calle2").value;
+								const house_number   = document.getElementById("numeroPuertaC").value;
+								const postcode       = document.getElementById("CP2").value;
+								const obsDire        = document.getElementById("obsDire").value;
+						
+								// Crear la dirección concatenando los valores
+								const direccion = `${road}, ${house_number}, ${state_district}, ${state}, ${postcode}, ${country1} `;
+								console.error('Que nueva direccion ARMO?',direccion);
+								// Llamar a la función para obtener la dirección
+								obtenerDireccion(direccion);
+							});
+						
+							function obtenerDireccion(direccion) {
+								var apiKey = '88c66a70b2324b81a65c9059116e088c'; // Recuerda reemplazar con tu propia API key
+								const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(direccion)}&key=${apiKey}`;
+								fetch(url)
+									.then(response => response.json())
+									.then(data => {
+										if (data.results && data.results.length > 0) {
+											latitud  = data.results[0].geometry.lat;
+											longitud = data.results[0].geometry.lng;
+											const direccionCompleta = data.results[0].formatted;
+											mostrarDireccion(latitud, longitud, direccionCompleta);
+											console.error('Que nueva direccion encontró?',latitud, longitud, direccionCompleta);
+										} else {
+											console.error('No se encontró ninguna dirección.');
+										}
+									})
+									.catch(error => {
+										console.error('Error al obtener la dirección:', error);
+									});
+							}
+						
+							function mostrarDireccion(latitud, longitud, direccionCompleta) {
+								// Destruir el mapa existente si está inicializado
+								if (map22) {
+									mapi2.off();
+									mapi2.remove();
+								}
+								// Mostrar y poner data de dirección en los campos de formulario
+								document.getElementsByName("lat").value       = latitud;
+								document.getElementsByName("lng").value       = longitud;
+								document.getElementsByName("estado").value       = direccionCompleta.state;
+								document.getElementsByName("localidad").value    = direccionCompleta.state_district;
+								document.getElementsByName("calle").value        = direccionCompleta.road;
+								document.getElementsByName("numeroPuertaC").value = direccionCompleta.house_number;
+								document.getElementsByName("CP").value           = direccionCompleta.state_code+direccionCompleta.postcode;
+						
+								// Mostrar dirección en el mapa
+								mapi2 = L.map('map2').setView([latitud, longitud], 16);
+								L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+									attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+								}).addTo(mapi2);
+						
+								L.marker([latitud, longitud]).addTo(mapi2)
+									.bindPopup(direccionCompleta)
+									.openPopup();
+								map22 = true;
+							}
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-success" id="confirDir2">Confirmar</button>
+						<script>
+							// Obtener referencia al botón de confirmación
+							const confirmButton = document.getElementById("confirDir2");
+						
+							// Agregar event listener al botón de confirmación
+							confirmButton.addEventListener("click", async function(event) {
+								// Evitar que el formulario se envíe automáticamente
+								event.preventDefault();
+						
+								// Obtener los valores de los campos del formulario
+								const pais         = country1;
+								lat          = document.getElementsByName("lat")[0].value;
+								lng          = document.getElementsByName("lng")[0].value;
+								const estado       = document.getElementsByName("estado")[0].value;
+								const localidad    = document.getElementsByName("localidad")[0].value;
+								const calle        = document.getElementsByName("calle")[0].value;
+								const numeroPuerta = document.getElementsByName("numeroPuertaC")[0].value || 0;
+								const CP           = document.getElementsByName("CP")[0].value;
+						
+								// Obtener los datos almacenados en el sessionStorage
+								const token       = sessionStorage.getItem('jwtToken');
+								const dataCliente = sessionStorage.getItem('clienteEcomm');
+								const dataPedido  = sessionStorage.getItem('pedidoCarritoPendientePago');
+						
+								// Verificar si los datos del formulario y del sessionStorage existen
+								if (estado && localidad && calle && numeroPuerta && CP && token && dataCliente && dataPedido) {
+									// Parsear los datos del cliente y del pedido si es necesario
+									const cliente        = JSON.parse(dataCliente);
+									const pedido         = JSON.parse(dataPedido);
+									// Aquí envia los datos al backend para confirmar la compra
+									//console.log("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQue dataPedido encuenta",pedido)
+									const direccion       = {lat:latitud, lng:longitud, pais:pais, estado:estado, localidad:localidad, calle:calle, numeroPuerta:numeroPuerta, CP:CP, pedido:pedido}
+									if (latitud == "") {
+										mostrarAlerta("Verifique su direccion de nuevo, NO pudimos setearla.")
+										return
+									}
+									const dataPedidoConf = {dataCliente, dataPedido, direccion, token}
+									console.log('Que datos se encontraron para enviar al backend y cobrar',direccion);
+									await cobrarProductos(dataPedidoConf)
+								}
+									else{
+									const direccion = {lat:latitud, lng:longitud, pais:pais, estado:estado, localidad:localidad, calle:calle, numeroPuerta:numeroPuerta, CP:CP}
+									if (latitud == "") {
+										mostrarAlerta("Verifique su direccion de nuevo, NO pudimos setearla.")
+										return
+									}
+									await guardarNuevaDireccion(direccion)
+									console.log('Entro a guardar nueva direccion');
+								}
+							});
+						</script>
+						<button class="btn btn-primary" data-bs-target="#exampleModalToggleDir" data-bs-toggle="modal" data-bs-dismiss="modal">Volver</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Full screen modulo del usuario cliente E-commerce su datos y los datos del estado de sus pedidos-->
+	<div id="dataUsuario" class="modal fade mt-5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<script>
+
+			// Función que se activa cuando se muestra el modal
+			document.getElementById('dataUsuario').addEventListener('shown.bs.modal', function () {
+				// Lógica que deseas ejecutar cuando se abre el modal
+				console.log('El modal se ha abierto');
+				// Llamar a la función que deseas ejecutar
+				activarScript();
+			});
+
+		// Función que deseas ejecutar cuando se abre el modal
+		function activarScript() {
+			const jwToken = sessionStorage.getItem('jwtToken');
+			const clienteEcommString = sessionStorage.getItem('clienteEcomm');
+			const clienteData = JSON.parse(clienteEcommString);
+	
+			const formData2 = { jwToken, clienteData }; // Corregido para incluir jwtToken y usar clienteEcommString solo una vez
+
+			//console.log("que cliente encontro en el MODAL DE DATOS DEL CLIENTE ECOMM??",clienteData)
+
+				if (clienteData) {
+						// Desestructurar el objeto de datos del cliente
+						let { apellido, comprasCliente, direcciones, duenoEcom, emails, idCliente, ipCliente, nombre, numCel, password, realPass, imgCli } = clienteData;
+						document.getElementById('idCliente').value = idCliente;
+
+						//envia a un scope mas alto y general
+						comprasClientes2 = clienteData
+
+						// Utilizar los datos desestructurados como sea necesario
+						console.log('Datos del cliente*****************:',comprasCliente);
+						// Renderizar la plantilla con los datos del cliente
+						const nombreCli = `
+						<p>Hola ${nombre}, estos son tus datos generales.</p>`
+						// Crear el nuevo elemento div y renderizarlo en el DOM la imagen del cliente
+						const renderDataCli = document.getElementById("clienteInfo");
+						const html = `
+						<div style="margin: auto auto auto 1rem">
+							<label for="fileInput">
+								<img id="cambiarImagen" src="${imgCli}" alt="" srcset="" height="150" width="150" style="border-radius: 100rem; cursor: pointer;">
+								<p style="color: black;">Click en la imagen para cambiarla.</p>
+							</label>
+							<input id="fileInput" type="file" hidden>
+							<p><strong>Nombre:</strong> ${nombre} <span></span> <strong>Apellido:</strong> ${apellido}</p>
+						</div>
+						`;
+						renderDataCli.innerHTML = html;
+
+						// Función para manejar el evento de cambio de imagen con fetch
+						const handleImageChange = async (event) => {
+							const file = event.target.files[0]; // Obtener el archivo seleccionado
+
+							// Crear un objeto FormData para enviar el archivo al backend
+							const formData = new FormData();
+							formData.append('cambiarImg', true); // Agregar el ID de cambiar imagen
+							formData.append('idCliente', idCliente); // Agregar el ID del cliente al FormData
+							formData.append('imagen', file); // Agregar el archivo al objeto FormData
+
+							try {
+								//cerrar el modal loading
+								mostrarModalLoading()
+								const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+								const response = await fetch(`${endpoints[14]}`, {
+									method: 'POST',
+									body: formData, // Enviar el objeto FormData que contiene la imagen al backend
+									headers: {
+										'Authorization': `Bearer ${jwToken}`
+									}	
+								});
+								if (response.ok) {
+									//cerrar el modal loading
+									ocultarModalLoading()
+									console.log('La imagen se cargó correctamente');
+									mostrarExito('La imagen se cargó/cambio correctamente');
+									// Recargar la página después de 5 segundos
+									setTimeout(() => {
+										location.reload();
+									}, 3000); // 5000 milisegundos = 5 segundos
+								} else {
+									//cerrar el modal loading
+									ocultarModalLoading()
+									console.error('Error al cargar la imagen en el backend');
+									mostrarAlerta('Error al cargar la imagen en el backend');
+								}
+							} catch (error) {
+								//cerrar el modal loading
+								ocultarModalLoading()
+								console.error('Ocurrió un error al enviar la imagen al backend', error);
+								mostrarAlerta('Ocurrió un error al enviar la imagen al backend');
+							}
+						};
+						// Obtener el elemento de la imagen y el input de tipo file
+						const cambiarImagen = document.getElementById('cambiarImagen');
+						const fileInput = document.getElementById('fileInput');
+						// Agregar evento click al elemento de la imagen
+						cambiarImagen.addEventListener('click', () => {
+							// Agregar evento change al input de tipo file
+							fileInput.addEventListener('change', handleImageChange);
+						});
+
+
+						// Insertar el HTML renderizado en el elemento deseado en tu página
+						document.getElementById("nombreCliente").innerHTML = nombreCli;
+
+						const aqilosCelus = document.getElementById("insertaNumCel");
+						// Iterar sobre todos los números celulares y agregarlos como opciones al elemento select
+						if (numCel.length >= 1) {
+							numCel.forEach(numCelu => {
+								const option = document.createElement('option');
+								option.value = numCelu.numCelCliente;
+								option.textContent = `Núm cel. ${numCelu.numCelCliente}`;
+								aqilosCelus.appendChild(option);
+							});
+							const numCelu = `
+								<p><strong>Numero de celular principal:</strong> ${numCel[0].numCelCliente}</p>
+							`
+							document.getElementById("numCelu").innerHTML = numCelu ? numCelu : "<strong>No tiene celular, agrega uno</strong>";
+						}
+						else{
+							document.getElementById("emailCli").innerHTML = {numCelu : "No tiene Email agrega uno"}
+						}
+						const aqilosEmail = document.getElementById("insertaEmails");
+						if (emails.length >= 1) {
+							// Iterar sobre todos los números celulares y agregarlos como opciones al elemento select
+							emails.forEach(e => {
+								const option = document.createElement('option');
+								option.value = e.emailCliente;
+								option.textContent = `Email: ${e.emailCliente}`;
+								aqilosEmail.appendChild(option);
+							});
+							const emailCli = `
+								<p><strong>Email principal:</strong> ${emails[0].emailCliente}</p>
+							`
+							document.getElementById("emailCli").innerHTML = emailCli ? emailCli : "No tienes email agrega uno";
+						}
+						else{
+							document.getElementById("emailCli").innerHTML = {emailCli : "No tiene email agrega uno"}
+						}
+
+						const pass = `
+							<p><strong>Password:</strong> ${realPass}</p>
+						`
+						//document.getElementById("idClientaso").innerHTML = inputIdCli;
+						// Modificar el contenido de los elementos
+
+						document.getElementById("passwordi").innerHTML = realPass ? pass : "No tiene password";
+
+						const container = document.getElementById("DireccionesResgistaradas");
+						let direccionesHTML = '';
+						// Verificar que la variable 'direcciones' esté definida y no sea null o undefined
+						if (direcciones.length >= 1) {
+							// Generar HTML para las direcciones
+							function generarHTMLDirecciones(direcciones) {
+								let direccionesHTML = '';
+								direcciones.forEach(direccion => {
+									direccionesHTML += `
+										<div class="col-md-4 mb-4">
+											<div class="card" style="min-height: 50px !important;">
+												<div class="card-body">
+													<p class="text-left"><strong>Pais:</strong> ${direccion.pais}</p>
+													<p class="text-left"><strong>Estado:</strong> ${direccion.estado}</p>
+													<p class="text-left"><strong>Localidad:</strong> ${direccion.localidad}</p>
+													<p class="text-left"><strong>Calle:</strong> ${direccion.calle}<span>  </span><strong>Número:</strong>${direccion.numeroPuerta}</p>
+													<p class="text-left"><strong>C.P:</strong> ${direccion.CP}</p>
+													<!-- Agregar un identificador único a cada botón de eliminación -->
+													<input type="hidden" id="idCliente-${direccion._id}" value="${direccion._id}">
+													<button class="btn btn-danger delete-btn" id="idcliente-${direccion._id}" value="${direccion._id}">
+														<i class="fas fa-trash"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									`;
+								});
+								return direccionesHTML;
+							}
+							// Lógica principal para renderizar las direcciones
+							const container = document.getElementById("DireccionesResgistaradas");
+							const direccionesHTML = generarHTMLDirecciones(direcciones);
+							container.innerHTML = `
+								<div class="row">
+									${direccionesHTML}
+								</div>
+							`;
+							// Función para agregar evento de clic a los botones de eliminación
+							document.querySelectorAll('.delete-btn').forEach(button => {
+								button.addEventListener('click', async function(event) {
+									// Función para confirmar y eliminar la dirección
+									// Obtener el id de la dirección del atributo 'data-id' del botón
+									const idDireccion = button.value;
+									console.log("Que idDireccion encontro", idDireccion)
+									const jwtToken = sessionStorage.getItem("jwtToken");
+									const clienteEc1 = sessionStorage.getItem('clienteEcomm');
+									const dataCliente = JSON.parse(clienteEc1);
+									const deleteAdress = true;
+									const data = {
+										idDireccion: idDireccion,
+										idCliente: dataCliente.idCliente,
+										Token: jwtToken,
+										deleteAdress: deleteAdress
+									};
+									const mensaje = "¿Deseas eliminar esta direccion?"
+									const rechaza = () => {
+										location.reload();
+									}
+									const confirma = async function confirmaEliminarDire() {
+										const data = {
+										idDireccion: idDireccion,
+										idCliente: dataCliente.idCliente,
+										Token: jwtToken,
+										deleteAdress: deleteAdress
+									};
+										try {
+											//mostrar el modal loading
+											mostrarModalLoading()
+											const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+											const jwToken = jwtToken
+											const response = await fetch(`${endpoints[14]}`, {
+											//const response = await fetch('http://localhost:3020/upDate/datos/Cliente', {
+												method: 'POST',
+												headers: {
+													'Content-Type': 'application/json'
+												},
+												body: JSON.stringify(data),
+												headers: {
+													'Content-Type': 'application/json',
+													'Authorization': `Bearer ${jwToken}`
+												}	
+											});
+
+											const responseData = await response.json();
+											//cerrar el modal loading
+											ocultarModalLoading()
+
+											if (response.ok) {
+												mostrarExito(responseData.message);
+												// Esperar 2 segundos (2000 milisegundos)
+												setTimeout(function() {
+													// Refrescar la página
+													location.reload();
+												}, 1000); // 2000 milisegundos = 2 segundos
+											} else {
+												throw new Error(responseData.message); // Lanzar un error con el mensaje del backend
+											}
+										} catch (error) {
+											mostrarAlerta(error.message); // Mostrar el mensaje de error del backend
+											setTimeout(function() {
+												// Refrescar la página
+												location.reload();
+											}, 1000); // 2000 milisegundos = 2 segundos
+										}
+									}
+
+
+									// Llamar a confirmOptions con confirma como argumento
+									const opcion33 = await confirmOptions(mensaje, confirma, rechaza);
+									if (opcion33 == "true") {
+										console.log("Que devuelve la funcion confirmOptions",opcion33)
+										confirmaEliminarDire(data)
+									}
+										// Aquí iría la lógica para eliminar la dirección
+										// Por ejemplo, podrías enviar una solicitud al servidor para eliminarla
+										// luego de confirmar la eliminación
+								});
+							});
+						}
+						else{
+							// Lógica principal para renderizar las direcciones
+							const container = document.getElementById("DireccionesResgistaradas");
+							container.innerHTML = `
+								<div class="row">
+									<p>No tienes direcciones de entrega, agrega una por favor</p>
+								</div>
+							`;
+						}
+
+	// Obtener el elemento con el ID "pedidos"********************************************************************
+						let todosLosPedidos = [];
+						const pedidosContainer = document.getElementById('pedidos223');
+
+						// Renderizar los pedidos al cargar la página
+						renderizarPedidos(comprasCliente);
+					
+						// Agregar eventos a los enlaces de "Ver Envío" si es necesario
+						const linksVerEnvio = pedidosContainer.querySelectorAll('.ver-envio');
+						linksVerEnvio.forEach(link => {
+							link.addEventListener('click', function(event) {
+								// Agrega aquí la lógica para mostrar detalles del envío cuando se hace clic en el enlace
+								event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+								console.log('Se hizo clic en "Ver Envío"');
+							});
+						});
+						// va a interno scope local
+						datosPedidos = comprasCliente
+						// Llamar a la función para calcular estadísticas al cargar la página
+						calcularEstadisticas(datosPedidos);
+						// va a externo scope maximo
+						comprasClientes2 = comprasCliente
+
+						//Filtra por fechas seleccionadas desde hasta
+						document.getElementById('fechaDesde').addEventListener('change', function() {
+							const fechaDesde = new Date(this.value + "T00:00:00"); // Agregamos la hora para asegurar consistencia en las comparaciones
+							const fechaHasta = new Date(document.getElementById('fechaHasta').value + "T23:59:59"); // Agregamos la hora para asegurar consistencia en las comparaciones
+							const pedidosFiltrados = datosPedidos.filter(pedido => {
+								const fechaPedido = new Date(pedido.fecha);
+								return fechaPedido >= fechaDesde && fechaPedido <= fechaHasta;
+							});
+							renderizarPedidos(pedidosFiltrados);
+						});
+						document.getElementById('fechaHasta').addEventListener('change', function() {
+							const fechaDesde = new Date(document.getElementById('fechaDesde').value + "T00:00:00"); // Agregamos la hora para asegurar consistencia en las comparaciones
+							const fechaHasta = new Date(this.value + "T23:59:59"); // Agregamos la hora para asegurar consistencia en las comparaciones
+							const pedidosFiltrados = datosPedidos.filter(pedido => {
+								const fechaPedido = new Date(pedido.fecha);
+								return fechaPedido >= fechaDesde && fechaPedido <= fechaHasta;
+							});
+							renderizarPedidos(pedidosFiltrados);
+							// Llamar a la función para calcular estadísticas al cargar la página
+							calcularEstadisticas(pedidosFiltrados);
+						});
+					
+					}
+				else {
+					throw new Error('El servidor no pudo obtener los datos del cliente');
+				}
+
+		}
+		
+		</script>
+		<div class="modal-dialog modal-lg mt-5 ">
+			<div class="modal-content " id="colorCpanelCli2587">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel"><p id="nombreCliente"></p></h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<br><br>
+					<!-- menus de opciones -->
+					<nav>
+						<ul  class="nav nav-tabs" id="nav-tab" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" href="#modalActive" data-bs-toggle="tab">Datos Generales</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#modalLink2" data-bs-toggle="tab">Mis pedidos</a>
+							</li>
+						</ul>
+					</nav>
+					<br>
+					<div  class="tab-content" id="nav-tabContent">
+						<!-- datos Generales del cliente -->
+						<div class="tab-pane fade show active " id="modalActive">
+							<div class="content center">
+								<div class="header">
+									<h5 class="modal-title" id="modalActiveLabel">Datos Generales</h5>
+								</div>
+								<br>
+								<!-- modal de datos del usuario -->
+								<div class="body">
+									<div class="d-flex flex-wrap align-items-center justify-content-center">
+										<!-- aqui entra la info dle usuario datos y foto -->
+										<div class="card1" style="text-align:left;" id="clienteInfo">
+											<h5>Buscando tus datos</h5>
+											<div class="spinner-border text-info" role="status">
+												<span class="visually-hidden">Loading...</span>
+											</div>
+										</div>
+										<!-- upDate celular -->
+										<div class="card1" style="margin: auto;">
+											<i id="numCelu">
+												<h5>Buscando tu celu</h5>
+												<div class="spinner-border text-info" role="status">
+													<span class="visually-hidden">Loading...</span>
+												</div>
+											</i>
+											<label class="form-label" style="color:black !important">Elige lo que deseas hacer</label>
+											<select class="form-control" id="numerosCelulares" style="color: black !important;">
+												<optgroup id="insertaNumCel">
+													<option value="">Agregar nuevo número celular</option>
+												</optgroup>
+											</select>
+											<label style="color:black !important">Abajo usar para agregar o cambiar</label>
+											<input type="number" class="form-control" id="confirmCel" placeholder="Agrega o cambia" style="margin-top: 0rem;">
+											<input type="text" name="updateCel" value="true" hidden >
+											<input type="text" name="idCliente" id="idCliente" value="{{idCliente}}" hidden>
+											<button type="button" class="btn btn-primary" id="btnUpdate2">Agregar Eliminar Cambiar</button>
+											<br>
+											<a href="#" data-bs-toggle="modal" data-bs-target="#instruccionesUdpated">Instrucciones de uso</a>
+										</div>
+										<script>
+											// Función para enviar los datos por Fetch
+											function enviarDatosUpdate() {
+												const idClientee = document.getElementsByName('idCliente')[0].value;
+												// Obtener los valores de los campos de entrada
+												const confirmCel = document.getElementById('confirmCel').value;
+												const updateCel = document.querySelector('input[name="updateCel"]').value;
+												const numerosCelulares = document.getElementById('numerosCelulares').value; // Obtener el valor seleccionado del select
+												const jwToken = sessionStorage.getItem('jwtToken');
+												// Crear un objeto con los datos a enviar
+												const data = {
+													idCliente: idClientee,
+													confirmCel: confirmCel,
+													updateCel: updateCel,
+													numerosCelulares: numerosCelulares, 
+													jwToken
+												};
+										
+												// Configurar las opciones de la solicitud Fetch
+												const options = {
+													method: 'POST', // Método de la solicitud
+													headers: {
+														'Content-Type': 'application/json' // Tipo de contenido de la solicitud
+													},
+													body: JSON.stringify(data), // Convertir el objeto de datos a formato JSON
+													headers: {
+														'Content-Type': 'application/json',
+														'Authorization': `Bearer ${jwToken}`
+													}	
+												};
+										
+												// Realizar la solicitud Fetch
+												//cerrar el modal loading
+												mostrarModalLoading()
+												const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+												fetch(`${endpoints[14]}`, options)
+												.then(response => {
+													// Verificar si la solicitud fue exitosa
+													if (response.ok) {
+															console.log('Datos enviados correctamente');
+															// Aquí puedes agregar lógica adicional si la solicitud fue exitosa
+															return response.json(); // Convertir la respuesta a JSON
+														} else {
+															console.error('Error enviad por el servers:', response);
+															return response.json(); // Convertir la respuesta a JSON para obtener el mensaje de error
+														}
+													})
+													.then(data => {
+														if (data && data.success === false) {
+															//cerrar el modal loading
+															ocultarModalLoading()
+															// Si la respuesta tiene un estado 400 y contiene un mensaje de error, mostrarlo en la alerta
+															mostrarAlerta(data.data.message);
+														} else {
+															//cerrar el modal loading
+															ocultarModalLoading()
+															// Manejar la respuesta si es exitosa
+															mostrarExito(data.data.message); // Mostrar la respuesta en un alert
+															// Esperar 3 segundos antes de recargar la página
+															setTimeout(() => {
+																location.reload(); // Recargar la página
+															}, 3000); // 3000 milisegundos = 3 segundos
+														}
+													})
+													.catch(error => {
+														//cerrar el modal loading
+														ocultarModalLoading()
+														console.error('Error al enviar los datos en la solicitud Fetch:', error);
+														mostrarAlerta('Error en en el envio de datos puede que no tengas internet, intenta mas tarde.'); // Mostrar un mensaje genérico de error en un alert
+													});
+											}
+										
+											// Obtener el botón y agregar un evento de clic para llamar a la función enviarDatos
+											document.getElementById('btnUpdate2').addEventListener('click', enviarDatosUpdate);
+										</script>
+										<!-- upDate Email -->
+										<div class="card1" style="margin: auto;">
+											<i id="emailCli">
+												<h5>Buscando tu Email</h5>
+												<div class="spinner-border text-info" role="status">
+													<span class="visually-hidden">Loading...</span>
+												</div>
+											</i>
+											<label class="form-label" style="color:black !important">Elige lo que deseas hacer</label>
+											<select class="form-control" id="Emailsss" style="color: black !important;">
+												<optgroup id="insertaEmails">
+													<option ><strong>Elije emodificar/Elimina un Email</strong></option>
+												</optgroup>
+											</select>
+											<label style="color:black !important">Abajo usar para agregar o cambiar</label>
+											<input type="text" class="form-control" id="confirmEmail" placeholder="Agrega o cambia" style="margin-top: 0rem;">
+											<input type="text" name="idCliente" id="idCliente" value="{{idCliente}}" hidden>
+											<button type="button" class="btn btn-primary" id="btnUpdateEmail">Agregar Eliminar Cambiar</button>
+											<br>
+											<a href="#" data-bs-toggle="modal" data-bs-target="#instruccionesUdpated">Instrucciones de uso</a>
+										</div>
+										<script>
+											// Función para enviar los datos por Fetch
+											function enviarDatosUpdate2() {
+												const idClientee = document.getElementsByName('idCliente')[0].value;
+												// Obtener los valores de los campos de entrada
+												const confirmMail = document.getElementById('confirmEmail').value;
+												//const updateMail = document.querySelector('input[name="updateEmail"]').value;
+												const todosLosEmails = document.getElementById('Emailsss').value; // Obtener el valor seleccionado del select
+												const jwToken = sessionStorage.getItem('jwtToken');
+												// Crear un objeto con los datos a enviar
+												const dataMail = {
+													idCliente: idClientee,
+													confirmEmail: confirmMail,
+													updateEmail: true,
+													AllEmails: todosLosEmails, // Agregar el valor del select al objeto de datos
+													jwToken
+												};
+												console.log("que estamos enviando para el CRUD de emails", dataMail)
+										
+												// Configurar las opciones de la solicitud Fetch
+												const options28 = {
+													method: 'POST', // Método de la solicitud
+													headers: {
+														'Content-Type': 'application/json' // Tipo de contenido de la solicitud
+													},
+													body: JSON.stringify(dataMail), // Convertir el objeto de datos a formato JSON
+													headers: {
+														'Content-Type': 'application/json',
+														'Authorization': `Bearer ${jwToken}`
+													}	
+												};
+												//cerrar el modal loading
+												mostrarModalLoading()
+												// Realizar la solicitud Fetch
+												const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+												fetch(`${endpoints[14]}`, options28) 
+												//fetch('http://localhost:3020/upDate/datos/Cliente', options2)
+												.then(response => {
+													//cerrar el modal loading
+													ocultarModalLoading()
+														// Verificar si la solicitud fue exitosa
+														if (response.ok) {
+															console.log('Datos enviados correctamente');
+															// Aquí puedes agregar lógica adicional si la solicitud fue exitosa
+															return response.json(); // Convertir la respuesta a JSON
+														} else {
+															console.error('Error al enviar los datos:', response);
+															// Esperar 3 segundos antes de recargar la página
+															setTimeout(() => {
+																location.reload(); // Recargar la página
+															}, 3000); // 3000 milisegundos = 3 segundos
+															return response.json(); // Convertir la respuesta a JSON para obtener el mensaje de error
+														}
+													})
+													.then(data => {
+														if (data && data.success === false) {
+															// Si la respuesta tiene un estado 400 y contiene un mensaje de error, mostrarlo en la alerta
+															mostrarAlerta(data.data.message);
+														} else {
+															// Manejar la respuesta si es exitosa
+															mostrarExito(data.data.message); // Mostrar la respuesta en un alert
+															// Esperar 3 segundos antes de recargar la página
+															setTimeout(() => {
+																location.reload(); // Recargar la página
+															}, 3000); // 3000 milisegundos = 3 segundos
+														}
+													})
+													.catch(error => {
+														// Esperar 3 segundos antes de recargar la página
+														setTimeout(() => {
+															location.reload(); // Recargar la página
+														}, 3000); // 3000 milisegundos = 3 segundos
+														console.error('Error en la solicitud Fetch:', error);
+														mostrarAlerta('Error en la solicitud Fetch, ocultarModalLoading'); // Mostrar un mensaje genérico de error en un alert
+													});
+											}
+										
+											// Obtener el botón y agregar un evento de clic para llamar a la función enviarDatos
+											document.getElementById('btnUpdateEmail').addEventListener('click', enviarDatosUpdate2);
+										</script>
+										<!-- cambiar password -->
+										<div class="card1">
+											<i id="passwordi">
+												<h5>Buscando tu password</h5>
+												<div class="spinner-border text-info" role="status">
+													<span class="visually-hidden">Loading...</span>
+												</div>
+											</i>
+											<label for="changePassword" class="form-label" style="color:black !important">Cambiar Contraseña</label>
+											<input type="password" class="form-control" id="changePassword" placeholder="Nueva Contraseña" style="color:black !important">
+											<label for="confirmPassword" class="form-label" style="color:black !important">Confirmar nueva contraseña</label>
+											<input type="password" class="form-control" id="changeConfirmPassword" placeholder="Confirmar Contraseña" style="color:black !important">
+											<button type="button" class="btn btn-primary" id="changePass">Cambiar</button>
+										</div>
+										<script>
+											document.getElementById('changePass').addEventListener('click', async () => {
+												const idClientee = document.getElementsByName('idCliente')[0].value;
+												const newPassword = document.getElementById('changePassword').value;
+												const confirmPassword = document.getElementById('changeConfirmPassword').value;
+												const jwToken = sessionStorage.getItem('jwtToken');
+												const changPass = true
+												// Verificar si las contraseñas coinciden
+												if (newPassword !== confirmPassword) {
+													mostrarAlerta('Las contraseñas no coinciden');
+													return;
+												}
+
+												// Objeto con los datos a enviar al backend
+												const data = {
+													newPassword: newPassword,
+													confirmPassword: confirmPassword,
+													idCliente: idClientee,
+													jwToken,
+													changPass
+												};
+													// Realizar la solicitud fetch
+													try {
+														//cerrar el modal loading
+														mostrarModalLoading()
+														const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+														const response = await fetch(`${endpoints[14]}`, {
+														//const response = await fetch('http://localhost:3020/upDate/datos/Cliente', {
+															method: 'POST',
+															headers: {
+																'Content-Type': 'application/json'
+															},
+															body: JSON.stringify(data),
+															headers: {
+																'Content-Type': 'application/json',
+																'Authorization': `Bearer ${jwToken}`
+															}	
+														});
+														//cerrar el modal loading
+														ocultarModalLoading()
+														// Verificar si la solicitud fue exitosa
+														if (response.ok) {
+															const responseData = await response.json();
+															mostrarExito(responseData.message); // Mostrar mensaje del backend en la función mostrarAlerta
+															// Esperar 3 segundos antes de recargar la página
+															setTimeout(() => {
+																location.reload(); // Recargar la página
+															}, 3000); // 3000 milisegundos = 3 segundos
+														} else {
+															// Capturar el mensaje de error del backend si está presente
+															let errorMessage = 'Error al enviar los datos para canviar su password';
+															try {
+																const responseData = await response.json();
+																if (responseData && responseData.message) {
+																	errorMessage = responseData.message;
+																}
+															} catch (error) {
+																console.error('Error al parsear la respuesta del backend:', error);
+															}
+															throw new Error(errorMessage);
+														}
+													} catch (error) {
+														console.error('Error en la solicitud Fetch para canviar su password:', error);
+														mostrarAlerta("para canviar su password",error.message); // Mostrar mensaje de error en la función mostrarAlerta
+													}
+												})
+										</script>
+									</div>
+									<br>
+									<!-- <br>// direcciones registradas -->
+									<fieldset class="" >
+										<h6>Direcciones Registradas de Entregas:</h6>
+										<!-- Botón para abrir el modal -->
+										<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalToggleDir">Agregar Dirección</button>
+										<div id="DireccionesResgistaradas"><!-- Aquí se inserta dinámicamente la lista de direcciones -->
+											<h5>Buscando tus direcciones</h5>
+											<div class="spinner-border text-info" role="status">
+												<span class="visually-hidden">Loading...</span>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+						<!-- Estado de los pedidos -->
+						<div class="tab-pane fade" id="modalLink2">
+							<div class="card-header" style="margin-top: 1rem !important;">
+								<h2 class="text-center mt-4">Estados de los pedidos</h2>
+								<p id="cantPedi">No tienes pedidos</p>
+								<!-- Buscador y filtro por fechas -->
+								<div class="d-flex justify-content-center align-items-center mb-3">
+									<!-- Buscador -->
+									<div class="card-header form-group position-relative me-3">
+										<p>Buscar pedido por código</p>
+										<div class="flex">
+											<input placeholder="Buscar pedido" type="text" id="buscarPedidoInput" oninput="mostrarPedidos()" style="width:150px; height:60%">
+											<a class="fas fa-search" onclick="buscarPedido()"></a>
+											<!-- Select ahora se comportará como un modal -->
+											<select id="pedidosEncontrados" size="5" onchange="seleccionarPedido()" style="width:150px; height: 100px ;color: black; display:none"></select>
+										</div>
+										<script>
+											function mostrarPedidos() {
+												const inputValor = document.getElementById('buscarPedidoInput').value.toLowerCase();
+												const selectProductos = document.getElementById('pedidosEncontrados');
+												selectProductos.innerHTML = '';
+									
+												// Filtrar productos que contienen la letra ingresada
+												const pedidosFiltrados = [];
+												comprasClientes2.find(pedido => pedido.codigoPedido.toLowerCase().includes(inputValor) && pedidosFiltrados.push(pedido));
+									
+												// Mostrar productos en el select
+												pedidosFiltrados.forEach(pedido => {
+													const option = document.createElement('option');
+													option.text = pedido.codigoPedido;
+													option.style.color = 'orange'; // Agregar color rojo al texto de la opción
+													selectProductos.add(option);
+												});
+									
+												// Mostrar el select como un modal
+												// Establecer la altura del select
+												selectProductos.style.height = (pedidosFiltrados.length * 35) + 'px'; // Multiplica la altura de cada opción por el número total de opciones
+												selectProductos.style.display = pedidosFiltrados.length > 0 ? 'block' : 'none';
+											}
+									
+											function seleccionarPedido() {
+												const selectedOption = document.getElementById('pedidosEncontrados').value;
+												document.getElementById('buscarPedidoInput').value = selectedOption;
+												buscarPedido(selectedOption);
+											}
+									
+											function buscarPedido(selectedOption) {
+												console.log("que tipo de pedido encontro array u object", selectedOption)
+												const valorInput = document.getElementById('buscarPedidoInput').value;
+												const elementoProducto = document.getElementById(valorInput);
+												const pedidosEncontradosDiv = document.getElementById('pedidos223');
+
+												// Verificar si se encontró el elemento
+												if (elementoProducto) {
+													// Filtrar productos que contienen la letra ingresada
+													const pedidosBuscado = comprasClientes2.filter(pedido => pedido.codigoPedido == selectedOption);
+													renderizarPedidos(pedidosBuscado)
+													calcularEstadisticas(pedidosBuscado)
+												} else {
+													// Mostrar un mensaje si el producto no se encuentra
+													mostrarAlerta('Pedido no encontrado');
+												}
+												// Ocultar el select después de seleccionar un producto
+												document.getElementById('pedidosEncontrados').style.display = 'none';
+											}
+										</script>
+									</div>
+									<!-- Filtro por fechas -->
+									<div class="card-header">
+										<p>Filtrar y ordenar por fechas</p>
+										<div>
+											<div class="row align-items-center">
+												<div class="col">
+													<div class="form-group">
+														<label for="fechaDesde" style="color:black !important">Desde:</label>
+														<input type="date" id="fechaDesde" class="form-control">
+													</div>
+												</div>
+												<div class="col">
+													<div class="form-group">
+														<label for="fechaHasta" style="color:black !important">Hasta:</label>
+														<input type="date" id="fechaHasta" class="form-control">
+													</div>
+												</div>
+												<div class="col-auto">
+													<button class="btn btn-outline-secondary" onclick="reiniciarFechas()">
+														<i class="fas fa-sync-alt" style="color:black !important"></i>
+													</button>
+													<script>
+														// Función para reiniciar las fechas al rango completo
+														function reiniciarFechas() {
+															const fechaHoy = new Date().toISOString().split('T')[0];
+															document.getElementById('fechaDesde').value = '';
+															document.getElementById('fechaHasta').value = fechaHoy;
+															renderizarPedidos(datosPedidos);
+															// Llamar a la función para calcular estadísticas al cargar la página
+															calcularEstadisticas(datosPedidos);
+														}
+													</script>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="content card-body" id="pedidos223">
+								<h2>No has realizado ningún pedido</h2>
+								<!-- Los divs se insertarán dinámicamente aquí -->
+							</div>
+								<style>
+									#pedidos223 {
+										display: flex;
+										flex-wrap: wrap;
+										justify-content: center; /* Centra horizontalmente el contenido */
+										align-items: center; /* Centra verticalmente el contenido */
+									}
+								
+									#pedidos223 .pedido {
+										width: calc(33.33% - 20px);
+										margin: 10px;
+										background-color: #f0f0f0;
+										border: 1px solid #ccc;
+										box-sizing: border-box;
+									}
+								
+									#pedidos223 .pedido h3 {
+										margin: 0;
+										padding: 10px;
+									}
+								
+									@media screen and (max-width: 768px) {
+										#pedidos223 .pedido {
+											width: calc(50% - 20px);
+										}
+									}
+								
+									@media screen and (max-width: 480px) {
+										#pedidos223 .pedido {
+											width: calc(100% - 20px);
+										}
+									}
+								</style>
+							<div class="card-footer fijoAbajo" style="background-color:white;opacity: 0.8;" >
+								<!-- Estadísticas -->
+								<div class="d-flex justify-content-between align-items-center">
+									<!-- Estadísticas de pedidos y compras -->
+									<div align="left">
+										<p><strong>Total de pedidos:</strong> <span id="totalPedidos"></span>
+										<p><strong>Total de compras:</strong> <span id="totalCompras"></span></p>
+									</div>
+									<!-- Botón para descargar en Excel -->
+									<button class="btn btn-primary" onclick="exportarAExcel(comprasClientes2)">Descargar en Excel</button>
+								</div>
+								<script>
+									function exportarAExcel(comprasClientes2) {
+    try {
+        // Crear una nueva hoja de trabajo
+        const worksheet = XLSX.utils.json_to_sheet(comprasClientes2);
+
+        // Crear un nuevo libro de trabajo
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas");
+
+        // Generar un archivo Excel
+        XLSX.writeFile(workbook, 'comprasCliente.xlsx');
+        
+        // Mostrar alerta de éxito
+        mostrarExito("El archivo Excel se ha descargado correctamente.");
+    } catch (error) {
+        // Mostrar alerta de error
+        mostrarAlerta("Hubo un error al intentar descargar el archivo. Por favor, intenta nuevamente más tarde.");
+    }
+}
+									// Función para descargar en Excel
+									function descargarExcel(data) {
+											// Crear un objeto FormData y agregar los datos
+											const formData = new FormData();
+											formData.append('data', JSON.stringify(data));
+												//mostrar el modal loading
+												mostrarModalLoading()
+											// Realizar la solicitud fetch
+											const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+											const jwToken = sessionStorage.getItem('jwtToken');
+											fetch(`${endpoints[56]}`, { 
+													method: 'POST',
+													body: formData,
+													headers: {
+														'Content-Type': 'application/json',
+														'Authorization': `Bearer ${jwToken}`
+													}	
+												})
+												.then(response => {
+													// Ocultar modal después de recibir la respuesta del servidor
+													ocultarModalLoading();
+													if (response.ok) { 
+														// Crear una URL para el blob y crear un enlace para descargar el archivo
+														const url = window.URL.createObjectURL(blob);
+														const a = document.createElement('a');
+														a.href = url;
+														a.download = 'Pedidos.xlsx'; // Nombre del archivo Excel
+														document.body.appendChild(a);
+														a.click();
+														window.URL.revokeObjectURL(url); // Liberar recursos
+														// Descargar el archivo Excel directamente
+														mostrarExito("Tu excel a sido descargado y enviado por email")
+														// Esperar 3 segundos (3000 milisegundos)
+														setTimeout(() => {
+															// Recargar la página
+															window.location.reload();
+														}, 3000);
+													} else {
+														// Si hay un error en la respuesta, mostramos un mensaje de error
+														mostrarAlerta('Error en la respuesta del servidor');
+														throw new Error('Error en la respuesta del servidor');
+													}
+												})
+												.catch(error => {
+													// Si hay un error, mostrar el mensaje de error
+													console.error('Error al intentar descargar en Excel:', error.message);
+													mostrarAlerta('Error al descargar en Excel: ' + error.message);
+												});
+									}
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal para ver la lista de pedidos -->
+	<div class="modal" tabindex="-1" id="modalPedido5998" style="background-color: #cce5ff;z-index: 99999999999999999999 !important;">
+		<div class="modal-dialog modal-dialog-scrollable modal-xl"> <!-- Agrega la clase modal-xl aquí -->
+			<div class="modal-content">
+				<br>
+				<div class="modal-header">
+					<h5 align=center>Lista de productos de tu pedido.</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="" >
+					<p id="dataPedido45698987" style=""></p>
+					<!-- Encabezado del modal -->
+					<div class="" id="modalBody8899" >
+						<!-- Cuerpo del modal -->
+					</div>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- // modal de reclamo de pediddos -->
+	<div class="modal" tabindex="-1" id="modalReclamos" style="background-color: #cce5ff;">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<!-- Encabezado del modal -->
+					<h4 id="tituloPedido">Código del pedido</h4>
+					<br>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body22" id="" style="margin: 1rem;">
+					<h5 class="modal-title" align="center">Inicia tu reclamo</h5>
+					<!-- Cuerpo del modal -->
+					<form id="formularioReclamo">
+						<div class="mb-3">
+							<label for="nombreCliente" class="form-label text-dark">Nombre:</label>
+							<input type="text" class="form-control" id="nombreCliente2" placeholder="Ingrese su nombre" required>
+						</div>
+						<div class="mb-3">
+							<label for="mensajeReclamo" class="form-label text-dark">Mensaje de reclamo:</label>
+							<textarea class="form-control" id="mensajeReclamo" rows="4" placeholder="Describa su reclamo aquí" required></textarea>
+						</div>
+						<button type="submit" class="btn btn-primary" id="enviarReclamoBtn">Enviar reclamo</button>
+					</form>
+				</div>
+				<div class="alert-danger" style="margin-top: -2.8rem;">
+					<h5 class="text-center">¡ATENCIÓN!</h5>
+					<p class="text-center">Los reclamos son privados entre las partes. En TBS-IT no intervenimos ni arbitraremos en ellos, aunque los reclamos reiterados sin atención e irresponsables pueden resultar en la cancelación de la cuenta. Se enviará un correo electrónico a las partes sobre el reclamo.</p>
+				</div>
+				
+				<script>
+						const jwToken = sessionStorage.getItem('jwtToken');
+						if (jwToken) {
+							let clienteEcomm = null;
+							try {
+								const clienteEcommS = sessionStorage.getItem('clienteEcomm');
+								//console.log("kmngelkngkjoengekongkrjnr", clienteEcommS)
+								if (clienteEcommS !== null || clienteEcommS !== undefined) {
+									clienteEcomm = JSON.parse(clienteEcommS);
+								}
+							} catch (error) {
+								console.error('Error al obtener o analizar la cadena JSON:', error);
+							}
+							//console.log("que cliente encontro?",clienteEcomm)
+								document.getElementById('enviarReclamoBtn').addEventListener('click', function(event) {
+									event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+									const tituloPedido = document.getElementById('tituloPedido').innerText;
+									//const nombreCliente = document.getElementById('nombreCliente').value;
+									const nombreCliente22 = document.querySelector('#nombreCliente2').value;
+									const mensajeReclamo = document.getElementById('mensajeReclamo').value;
+								// Validar que los campos estén completos
+								if (!tituloPedido || !mensajeReclamo) {
+									mostrarAlerta('Por favor complete todos los campos');
+									return; // Detener la ejecución si algún campo está vacío
+								}
+									console.log('Título del pedido:', tituloPedido);
+									console.log('Nombre del cliente:', nombreCliente22);
+									console.log('Mensaje del reclamo:', mensajeReclamo);
+							
+									const data = {
+										jwToken,
+										dataCLiente : clienteEcomm,
+										titulo: tituloPedido,
+										nombre: nombreCliente22,
+										mensaje: mensajeReclamo
+									};
+							
+									console.log('Datos a enviar:', data);
+									//cerrar el modal loading
+									mostrarModalLoading()
+									const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+									fetch(`${endpoints[18]}`, { 
+									//fetch('http://localhost:3020/enviar/reclamo', {
+										method: 'POST',
+										headers: {
+											'Content-Type': 'application/json'
+										},
+										body: JSON.stringify(data),
+										headers: {
+											'Content-Type': 'application/json',
+											'Authorization': `Bearer ${jwToken}`
+										}	
+									})
+									.then(response => {
+										//cerrar el modal loading
+										ocultarModalLoading()
+										if (response.ok) {
+											// Aquí puedes manejar la respuesta exitosa si lo deseas
+											console.log('Reclamo enviado con éxito');
+											mostrarExito('Reclamo enviado con éxito');
+											setTimeout(() => {
+												location.reload();
+											}, 2000); // 2000 milisegundos = 2 segundos
+										} else {
+											throw new Error('Error al enviar el reclamo');
+											mostrarAlerta('Error al enviar el reclamo, intente más tarde');
+										}
+									})
+									.catch(error => {
+										console.error('Error:', error);
+										// Aquí puedes manejar el error si lo deseas
+									});
+								});
+							}
+				</script>
+				
+			</div>
+			
+		</div>
+	</div>
+
+	<!-- Modal para cambiar direccion de entrega-->
+	<div class="modal fade" id="exampleModalToggleDirChange" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1" style="background-color: lightslategray !important;">
+		<div class="modal-dialog modal-dialog-centered" id="coloredChangeDir">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalToggleLabel">Confirma cambio de dirección de envió</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<!-- primera opcion de direccion -->
+				<div class="modal-body" id="direccionEnvio">
+					<p>Direccion actual de entrega</p>
+					<div id="">
+						<div id="codPed78877"></div>
+						<div id="direccionInfo88799" style="text-align:left !important"></div>
+						<div id="map787" style="height: 200px; width: 100%;"></div>
+					</div>
+
+					<p>Si es la direccion correcta de cambio de envió presiona "Confirmar" o </p>
+					<p>Busca en el mapa la nueva direccion y presiona "Confirma" o </p>
+					<p>Si no anda bien el mapa presiona "Otra Direccion" y escribe la nueva direccion de envio</p>
+				</div>
+				<div class="modal-footer" id="cambiarBotonera">
+					<button class="btn btn-success" id="confirmarDireecion2233">Confirmar</button>
+					<button class="btn btn-primary" data-bs-target="#exampleModalToggle332" data-bs-toggle="modal" data-bs-dismiss="modal">Otra direccion</button>
+					<script>
+							// Obtener referencia al botón de confirmación
+							const confirmButton122 = document.getElementById("confirmarDireecion2233");
+							const direccionInfo88799 = document.getElementById("direccionInfo88799");
+							confirmButton122.addEventListener("click", async function(event) {
+							const direccionInfoContent = direccionInfo88799.innerHTML;
+							console.log(direccionInfoContent);
+							// Expresiones regulares para extraer los valores de cada campo
+							const paisRegex = /País:\s*([^<]+)/;
+							const ciudadRegex = /Ciudad:\s*([^\/]+)\s*\/\s*([^<]+)/; // Expresión regular para separar ciudad y partido
+							const localidadRegex = /Localidad:\s*([^\/]+)\s*\/\s*([^<]+)/; // Expresión regular para separar ciudad y partido
+							const calleRegex = /Calle:\s*([^<]+)/;
+							const numeroRegex = /Nro.\s*puerta:\s*([^<]+)/;
+							const CPRegex = /Código Postal:\s*([^<]+)/;
+							const latRegex = /lat:\s*([^<]+)/;
+							const lngRegex = /lng:\s*([^<]+)/;
+							const idClienteRegex = /idCliente:\s*([^<]+)/;
+							const codigoPedidoRegex = /codigoPedido:\s*([^<]+)/;
+
+							// Función para extraer los valores de los campos
+							function extraerValor(regex, html) {
+								const match = html.match(regex);
+								return match ? match[1].trim() : null;
+							}
+
+							// Convertir la cadena HTML en un objeto con los datos de la dirección
+							const direccionHTML = direccionInfoContent;
+
+							const pais = extraerValor(paisRegex, direccionHTML);
+							const estado = extraerValor(ciudadRegex, direccionHTML);
+							const localidad = extraerValor(localidadRegex, direccionHTML);
+							const calle = extraerValor(calleRegex, direccionHTML);
+							const numero = extraerValor(numeroRegex, direccionHTML);
+							const codigoPostal = extraerValor(CPRegex, direccionHTML);
+							const latitud = extraerValor(latRegex, direccionHTML);
+							const longitud = extraerValor(lngRegex, direccionHTML);
+							const idCliente = extraerValor(idClienteRegex, direccionHTML);
+							const codigoPedido = extraerValor(codigoPedidoRegex, direccionHTML);
+
+
+
+// ubicar el pedido por su codigoPedido
+
+		const direccion = {	idCliente,    pais,    estado,    localidad,    calle,    numero,    codigoPostal,    latitud,    longitud,	codigoPedido};
+
+//		console.log("**************Obtudvo lsod atos del dueño?",dataOwner);
+		//console.log("**************que datos de direccion encotnro",direccion);
+
+    // Configurar los datos para la solicitud fetch
+	const jwToken = sessionStorage.getItem('jwtToken');
+    const requestOptions = {
+        method: 'POST',
+		body: JSON.stringify({ direccion }),
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${jwToken}`
+		}
+    };
+    try {
+		//cerrar el modal loading
+		mostrarModalLoading()
+        // Realizar la solicitud fetch para actualizar la dirección del pedido
+		const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+		const response = await fetch(`${endpoints[97]}`, requestOptions)
+        //const response = await fetch('http://localhost:3020/actualizar/cambioDeDireccionDelPedido', requestOptions);
+		//cerrar el modal loading
+		ocultarModalLoading()
+        if (!response.ok) {
+            throw new Error('Ocurrió un error al actualizar la dirección del pedido.');
+        }
+        console.log('¡La dirección de entrega se actualizó correctamente y se envió al provedor!');
+		mostrarExito('¡La dirección de entrega se actualizó correctamente y se envió al provedor!')
+		// Conteo de 2 segundos
+		setTimeout(() => {
+			// Recargar la página
+			location.reload();
+		}, 2000);
+    } catch (error) {
+        console.error('Error al actualizar la dirección de entrega:', error.message);
+		// Conteo de 2 segundos
+		setTimeout(() => {
+			// Recargar la página
+			location.reload();
+		}, 2000);
+    }
+
+});
+
+
+					</script>
+				</div>
+			</div>
+		</div>
+		</div>
+		<!-- segunda opcion de direccion -->
+		<div class="modal fade" id="exampleModalToggle332" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalToggleLabel2">Confirma nueva dirección de envío</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" >
+						<form class="row g-3">
+							<input type="text" id="lat" name="lat9978" hidden>
+							<input type="text" id="lng" name="lng9978" hidden>
+							<div class="col-md-6">
+								<label style="color: black !important" for="validationDefault03" class="form-label">Estado/Provincia</label>
+								<input name="estado99" id="estado88" style="color: black !important" type="text" class="form-control" id="validationDefault01" required>
+							</div>
+							<div class="col-md-6">
+								<label style="color: black !important" for="validationDefault03" class="form-label">Localidad/Ciudad</label>
+								<input name="localidad99" id="localidad88" style="color: black !important" type="text" class="form-control" id="validationDefault02" required>
+							</div>
+							<div class="col-md-6">
+								<label style="color: black !important" for="validationDefault03" class="form-label">Calle</label>
+								<input name="calle99" id="calle288" style="color: black !important" type="text" class="form-control" id="validationDefault02" required>
+							</div>
+							<div class="col-md-6">
+								<label style="color: black !important" for="validationDefault03" class="form-label">Numero</label>
+								<input name="numeroPuerta98957859" id="numeroPuerta88" style="color: black !important" type="text" class="form-control" id="validationDefault04" required>
+							</div>
+							<div class="col-md-3">
+								<label for="validationDefault05" class="form-label" style="color: black !important">C.P.</label>
+								<input name="CP99" id="CP288" type="text" class="form-control" id="validationDefault05" required>
+							</div>
+							<div class="mb-3">
+								<label for="validationTextarea" class="form-label" style="color: black !important">Observaciones</label>
+								<textarea name="obsDire99" id="obsDire88" class="form-control is-invalid" id="validationTextarea" placeholder="Required example textarea" required></textarea>
+								<div class="invalid-feedback" style="color: black !important">
+									Describa una referencia para llegar a su domicilio, ejemplo casa blanca, portón negro, NO anda el timbre, llamar cuando estés abajo, al lado de...
+								</div>
+							</div>
+							<button id="btnNuevaDir2298" class="btn btn-primary" style="width: 125px;">Ver en el mapa</button>
+						</form>
+						<div id="mapi222" style="height: 200px; width: 100%;"></div>
+						<script>
+
+							let mapi222 = false
+							//const jwToken = sessionStorage.getItem('jwtToken');
+							// Obtener referencia al botón
+							const btnNuevaDir2298 = document.getElementById("btnNuevaDir2298");
+						
+							// Agregar event listener al botón
+							btnNuevaDir2298.addEventListener("click", function(event) {
+								// Evitar que el formulario se envíe automáticamente
+								event.preventDefault();
+
+								// Obtener los valores de los campos del formulario
+								const state          = document.getElementById("estado88").value;
+								const state_district = document.getElementById("localidad88").value;
+								const road           = document.getElementById("calle288").value;
+								const house_number   = document.getElementById("numeroPuerta88").value;
+								const postcode       = document.getElementById("CP288").value;
+								const obsDire        = document.getElementById("obsDire88").value;
+						
+								// Crear la dirección concatenando los valores
+								const direccion = `${road}, ${house_number}, ${state_district}, ${state}, ${postcode}, ${obsDire}, ${country1}, `;
+								console.error('Que nueva direccion ARMO?',direccion);
+								// Llamar a la función para obtener la dirección
+								obtenerDireccion22(direccion);
+							});
+						
+							function obtenerDireccion22(direccion) {
+								var apiKey = '88c66a70b2324b81a65c9059116e088c'; // Recuerda reemplazar con tu propia API key
+								const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(direccion)}&key=${apiKey}`;
+								fetch(url)
+									.then(response => response.json())
+									.then(data => {
+										if (data.results && data.results.length > 0) {
+											const latitud  = data.results[0].geometry.lat;
+											const longitud = data.results[0].geometry.lng;
+											const direccionCompleta = data.results[0].formatted;
+											mostrarDireccion88(latitud, longitud, direccionCompleta);
+											console.error('Que nueva direccion encontró?',latitud, longitud, direccionCompleta);
+										} else {
+											console.error('No se encontró ninguna dirección.');
+										}
+									})
+									.catch(error => {
+										console.error('Error al obtener la dirección:', error);
+									});
+							}
+						
+							function mostrarDireccion88(latitud, longitud, direccionCompleta) {
+								// Destruir el mapa existente si está inicializado
+								if (mapi222 ) {
+									mapi222.off();
+									mapi222.remove();
+									map787.off();
+									map787.remove();
+								}
+								// Mostrar y poner data de dirección en los campos de formulario
+								coordenadas98789 = {latitud, longitud}
+								document.getElementsByName("estado99").value       = direccionCompleta.state;
+								document.getElementsByName("localidad99").value    = direccionCompleta.state_district;
+								document.getElementsByName("calle99").value        = direccionCompleta.road;
+								document.getElementsByName("numeroPuerta99").value = direccionCompleta.house_number;
+								document.getElementsByName("CP99").value           = direccionCompleta.state_code+direccionCompleta.postcode;
+
+								// Mostrar dirección en el mapa
+								mapi222 = L.map('mapi222').setView([latitud, longitud], 16);
+								L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+									attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+								}).addTo(mapi222);
+						
+								L.marker([latitud, longitud]).addTo(mapi222)
+									.bindPopup(direccionCompleta)
+									.openPopup();
+									mapi222 = true;
+							}
+						</script>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-success" id="confirDir2398983">Confirmar</button>
+						<script>
+							// Obtener referencia al botón de confirmación
+							const confirmButton33998759 = document.getElementById("confirDir2398983");
+						
+								// Agregar event listener al botón de confirmación
+								confirmButton33998759.addEventListener("click", async function(event) {
+									// Evitar que el formulario se envíe automáticamente
+									event.preventDefault();
+									const dataOwnerCrudo = sessionStorage.getItem('DataOwnerEcom');
+									const dataOwner = JSON.parse(dataOwnerCrudo);
+									const idOwner22 = dataOwner._id
+									console.log("444444444444444444444444444Que dato de idOwner tiene",idOwner22)
+									// Obtener los valores de los campos del formulario
+									const pais         = country1;
+									const {latitud, longitud} = coordenadas98789
+									const estado       = document.getElementsByName("estado99")[0].value;
+									const localidad    = document.getElementsByName("localidad99")[0].value;
+									const calle        = document.getElementsByName("calle99")[0].value;
+									const numeroPuerta = document.getElementsByName("numeroPuerta98957859")[0].value;
+									const CP           = document.getElementsByName("CP99")[0].value;
+									const obsDire = document.getElementsByName("obsDire99")[0].value      
+							
+									// Obtener los datos almacenados en el sessionStorage
+									const token       = sessionStorage.getItem('jwtToken');
+									const dataCliente = sessionStorage.getItem('clienteEcomm');
+									const dataPedido  = sessionStorage.getItem('pedidoCarritoPendientePago');
+							
+										const direccion = {	idCliente:idOwner22, pais:pais, estado:estado, localidad:localidad, calle:calle,    numero:numeroPuerta,    codigoPostal:CP,    latitud: latitud,    longitud: longitud,	codigoPedido:codigoPedido25741, obsDire};
+
+							//		console.log("**************Obtudvo lsod atos del dueño?",dataOwner);
+									console.log("**88888888888888888888888888888************que datos de direccion encotnr o",codigoPedido25741,direccion);
+								// Configurar los datos para la solicitud fetch
+								const requestOptions = {
+									method: 'POST',
+									body: JSON.stringify({ direccion }),
+									headers: {
+										'Content-Type': 'application/json',
+										'Authorization': `Bearer ${jwToken}`
+									},
+								};
+
+								// enviar a cambioar la direccion de entrega
+								try {
+									//mostrar el modal loading
+									mostrarModalLoading()
+									// Realizar la solicitud fetch para actualizar la dirección del pedido
+									const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+									const response = await fetch(`${endpoints[97]}`, requestOptions)
+									//const response = await fetch('http://localhost:3020/actualizar/cambioDeDireccionDelPedido', requestOptions);
+									//cerrar el modal loading
+									ocultarModalLoading()
+									if (!response.ok) {
+										throw new Error('Ocurrió un error al actualizar la dirección del pedido.');
+									}
+									console.log('¡La dirección de entrega se actualizó correctamente y se envió al provedor!');
+									mostrarExito('¡La dirección de entrega se actualizó correctamente y se envió al provedor!')
+									// Conteo de 2 segundos
+									setTimeout(() => {
+										// Recargar la página
+										location.reload();
+									}, 3000);
+								} 
+								catch (error) {
+									console.error('Error al actualizar la dirección de entrega:', error.message);
+									// Conteo de 2 segundos
+									setTimeout(() => {
+										// Recargar la página
+										location.reload();
+									}, 2000);
+								}
+							});
+						</script>
+						<button class="btn btn-primary" data-bs-target="#exampleModalToggleDirChange" data-bs-toggle="modal" data-bs-dismiss="modal">Volver</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Instrucicones de uso de los update de email y celus-->
+	<div class="modal fade" id="instruccionesUdpated" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Instrucciones de uso de los Up-Date</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<style>
+				.modal-body ul {
+					list-style-type: none;
+					padding-left: 0;
+					text-align: left;
+				}
+				
+				.modal-body li {
+					margin-bottom: 10px;
+				}
+			</style>
+				<h3>Instrucciones</h3>
+				<p>
+					Para actualizar tanto los números celulares como los correos electrónicos es muy simple:
+				</p>
+				<ul>
+					<li><strong>Para actualizar:</strong> Elige el número o correo electrónico que deseas actualizar, abajo coloca el número o correo electrónico a actualizar y oprime el botón.</li>
+					<li><strong>Para agregar:</strong> Elige la opción "Agregar nuevo celular" o "Agregar nuevo correo" si fuera el caso, y abajo coloca el número celular o correo electrónico, y aprieta el botón.</li>
+					<li><strong>Para eliminar:</strong> Elige el número o correo electrónico a eliminar. Abajo, no pongas nada y oprime el botón.</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" hidden>Close</button>
+				<button type="button" class="btn btn-primary" hidden>Volver</button>
+			</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- toast mensajes push-->
+	<div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; bottom: 0; right: 0; z-index: 1000; padding: 20px;">
+	</div>
+	
+	<!-- Menú offcanvas de opciones el que esta a la derecha-->
+	<nav class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 100vw; max-width: 400px; background: linear-gradient(to bottom right, #1155e9, #adc4fb ); overflow-y: auto;">
+		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		<div class="offcanvas-header">
+			<!-- Encabezado del menú offcanvas -->
+		</div>
+		<div class="offcanvas-body">
+			<!-- Contenido del menú offcanvas -->
+		</div>
+	</nav>
+
+	<!-- Modal para mostrar las imágenes del producto -->
+	<div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-fullscreen">
+			<div class="modal-content">
+				<div class="modal-body">
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="font-size: 1.5rem ;position: absolute; top: 0; left: 50%; z-index: 9999;"></button>
+					<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+						<div class="carousel-inner" id="carouselInner">
+							<!-- Aquí se agregarán dinámicamente las imágenes del producto -->
+						</div>
+						<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal para mostrar las imágenes GGIANTES de las Promos -->
+	<div class="modal fade" id="modalPromos" tabindex="-1" aria-labelledby="modalHomeLabel" aria-hidden="true" data-bs-backdrop="static" style="z-index: 9999999999999999999999 !important;">
+		<div class="modal-dialog modal-dialog-centered" style="max-width: 800px;" align="center"> <!-- Cambiado a un ancho personalizado -->
+			<div class="modal-content" style="padding:0; margin:0;" id="designPromos" align="center">
+				<div class="modal-header">
+					<div class="sliding-text-container" align="center">
+						<h2 class="sliding-text" id="modalHomeLabel" style="color:red; z-index:99999999999 !important;">
+							<strong>¡Aprovecha esta promoción ya!...    Es por tiempo y stock limitados...</strong>
+						</h2>
+					</div>
+					<button id="inicioPag949849" type="button" class="btn-close my-3" style="font-size: 1.2rem;"></button>
+				</div>
+				<div class="modal-body p-0 w-100 h-100" style="overflow-y: auto;">
+					<div id="promoExpuesta" class="h-100 w-100" style="z-index: 8;">
+						<h3>La promoción ya venció, prueba buscando nuevas promociones...</h3>
+					</div>
+				</div>
+				<div class="modal-footer" hidden>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary">Guardar cambios</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', (event) => {
+				// Obtener los datos almacenados en sessionStorage
+				// Función para redirigir a la URL base
+				function goToHome() {
+					//console.log("apreto botonito", serverDueno);
+					window.location.href = dominioUrl(); // Corregido: uso de template literals
+				}
+		
+				// Asegurarse de que el elemento existe antes de asignar el evento
+				const button = document.getElementById('inicioPag949849');
+				if (button) {
+					//console.log("Encontro 1651561561561561561561 botonito");
+					button.addEventListener('click', goToHome);
+				} else {
+					console.error('Botón no encontrado.');
+				}
+			});
+		</script>
+	</div>
+	
+
+	<!-- //Modal de esperando los datos -->
+	<div class="modal fade" id="loadingModal" data-bs-backdrop="static"  tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true" style="z-index:999999999999 !important;background-color: lightgray; opacity: 0.8;">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body text-center" style="">
+
+					<div class="spinner-border text-primary" role="status">
+					<span class="visually-hidden">Loading...</span>
+					</div>
+
+					<h5 style=""><strong> Procesando informacion... </strong></h5>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<!-- Scripts -->
+		<!-- Archivo JS de Bootstrap (requerido para funcionalidades como los botones de navegación) -->
+		<script src="/ecommerceFront/jquery.min.js"></script>
+		<script src="/ecommerceFront/jquery.scrolly.min.js"></script>
+		<script src="/ecommerceFront/jquery.scrollex.min.js"></script>
+
+		
+		<script src="/ecommerceFront/index.js"></script>
+
+		<!-- <script src="/ecommerceFront/skel.min.js"></script>
+		<script src="/ecommerceFront/util.js"></script>
+		<script src="/ecommerceFront/main.js"></script>  -->
+
+		<script src="/ecommerceFront/mensajes.js"></script>
+		<script src="/alertas.js"></script>
+		<script src="/landingPageFunctions/LPF.js"></script>
+
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+
+
+		<script src="/ecommerceFront/mpWallet.js"></script>
+		<script src="/ecommerceFront/mpTCDEf.js"></script>
+		<script src="/ecommerceFront/sw.js"></script>
+	</body>
+
+	<!-- Modal de imagnes gigantes -->
+	<div class="modal fad container-xxl" id="imagenModalPRomos" tabindex="-1" aria-labelledby="imagenModalPRomosLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" >
+			<div class="modal-content" id="color23BigImg">
+				<div class="modal-header">
+					<h5 id="imagenModalPRomosLabel" style="font-size: inherit; font-weight: normal; text-transform: none; font-style: normal; text-decoration: none;">
+						Imágenes del Producto
+					</h5>
+					
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" align="center">
+					<!-- Carrusel de imágenes -->
+					<div id="carouselInnerPRods" class="carousel slide" data-bs-ride="carousel">
+						<div class="carousel-inner">
+						<!-- Las imágenes se agregarán dinámicamente aquí -->
+						</div>
+						<button class="carousel-control-prev" type="button" data-bs-target="#carouselInnerPRods" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#carouselInnerPRods" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Estilos del carrusel -->
+	<style>
+	/* Ajuste de tamaño de las imágenes dentro del modal */
+	#imagenModalPRomos .carousel-inner img {
+		width: 90%;
+		height: auto;
+		object-fit: contain; /* Mantiene la relación de aspecto de la imagen */
+	}
+
+	#imagenModalPRomos .modal-dialog.modal-lg {
+		max-width: 90vw; /* Ajusta el tamaño del modal */
+		z-index: 9999999999999999999999999999999999999999999999999999999999999999999999999999999999999 !important;
+	}
+
+	#imagenModalPRomos .modal-content {
+		background-color: #fff;
+		border-radius: 0;
+	}
+
+	#imagenModalPRomos .modal-header {
+		border-bottom: 0;
+	}
+
+	#imagenModalPRomos .modal-body {
+		padding: 0;
+	}
+
+	#imagenModalPRomos .carousel-control-prev-icon,
+	#imagenModalPRomos .carousel-control-next-icon {
+		background-color: rgba(0, 0, 0, 0.5); /* Color de fondo para mejor visibilidad */
+		border-radius: 50%;
+	}
+	</style>
+
+</html>
+
+
+
+

@@ -1,0 +1,1403 @@
+<!DOCTYPE HTML>
+<!--
+	Road Trip by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- //fontAwosome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<!-- Agrega el script de NodeGeocoder -->
+		<script src="https://cdn.jsdelivr.net/npm/node-geocoder@3.29.0/dist/node-geocoder.min.js"></script>
+		<!-- Agrega el script de Leaflet -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+		<!-- Agrega la biblioteca de Bootstrap -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<link href="/assets/css/main.css" rel="stylesheet">
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+		<!-- Include jQuery and Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		<!-- Bootstrap bundle JS (popper.js + bootstrap.js) -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">	  
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+		<script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/t1QIqDE8YFUZHfb7dGB6j8f5M6EExQgA8N7gk=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></script>
+			<!-- Bootstrap JS y Popper.js NO MOVER DE AQUI-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+			<!-- Incluye la biblioteca Slick Carousel -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+			<!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!--REVISAR //config toast -->
+		<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+		<title id="titulo">Mercadotienda</title>
+		
+		<!-- Mercado Pago -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://sdk.mercadopago.com/js/v2"></script>
+		
+	</head>
+	<body class="subpage">
+
+		<!-- Header -->
+			<header id="header" class="alt">
+				<div class="logo"><a href="index.html">Road Trip <span>by TEMPLATED</span></a></div>
+				<a href="#menu"><span>Menu</span></a>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="generic.html">Generic</a></li>
+					<li><a href="elements.html">Elements</a></li>
+				</ul>
+			</nav>
+
+		<!-- Main -->
+			<div id="main" class="container">
+
+				<!-- Content -->
+					<h2>Elements</h2>
+					<p>Praesent ac adipiscing ullamcorper semper ut amet ac risus. Lorem sapien ut odio odio nunc. Ac adipiscing nibh porttitor erat risus justo adipiscing adipiscing amet placerat accumsan. Vis. Faucibus odio magna tempus adipiscing a non. In mi primis arcu ut non accumsan vivamus ac blandit adipiscing adipiscing arcu metus praesent turpis eu ac lacinia nunc ac commodo gravida adipiscing eget accumsan ac nunc adipiscing adipiscing.</p>
+					<div class="row">
+						<div class="6u 12u$(small)">
+							<h3>Sem turpis amet semper</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat commodo eu sed ante lacinia. Sapien a lorem in integer ornare praesent commodo adipiscing arcu in massa commodo lorem accumsan at odio massa ac ac. Semper adipiscing varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+						<div class="6u$ 12u$(small)">
+							<h3>Magna odio tempus commodo</h3>
+							<p>In arcu accumsan arcu adipiscing accumsan orci ac. Felis id enim aliquet. Accumsan ac integer lobortis commodo ornare aliquet accumsan erat tempus amet porttitor. Ante commodo blandit adipiscing integer semper orci eget. Faucibus commodo adipiscing mi eu nullam accumsan morbi arcu ornare odio mi adipiscing nascetur lacus ac interdum morbi accumsan vis mi accumsan ac praesent.</p>
+						</div>
+						<!-- Break -->
+						<div class="4u 12u$(medium)">
+							<h3>Interdum sapien gravida</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+						<div class="4u 12u$(medium)">
+							<h3>Faucibus consequat lorem</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+						<div class="4u$ 12u$(medium)">
+							<h3>Accumsan montes viverra</h3>
+							<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+						</div>
+					</div>
+
+				<hr class="major" />
+
+				<!-- Elements -->
+					<h2 id="elements">Elements</h2>
+					<div class="row 200%">
+						<div class="6u 12u$(medium)">
+
+							<!-- Text stuff -->
+								<h3>Text</h3>
+								<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+								This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+								This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>.
+								Finally, this is a <a href="#">link</a>.</p>
+								<hr />
+								<h2>Heading Level 2</h2>
+								<h3>Heading Level 3</h3>
+								<h4>Heading Level 4</h4>
+								<h5>Heading Level 5</h5>
+								<h6>Heading Level 6</h6>
+								<hr />
+								<header>
+									<h2>Heading with a Subtitle</h2>
+									<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+								</header>
+								<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+								<header>
+									<h3>Heading with a Subtitle</h3>
+									<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+								</header>
+								<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+								<header>
+									<h4>Heading with a Subtitle</h4>
+									<p>Lorem ipsum dolor sit amet nullam id egestas urna aliquam</p>
+								</header>
+								<p>Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida odio porttitor sem non mi integer non faucibus ornare mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem accumsan varius montes viverra nibh in adipiscing blandit tempus accumsan.</p>
+
+							<!-- Lists -->
+								<h3>Lists</h3>
+								<div class="row">
+									<div class="6u 12u$(small)">
+
+										<h4>Unordered</h4>
+										<ul>
+											<li>Dolor pulvinar etiam magna etiam.</li>
+											<li>Sagittis adipiscing lorem eleifend.</li>
+											<li>Felis enim feugiat dolore viverra.</li>
+										</ul>
+
+										<h4>Alternate</h4>
+										<ul class="alt">
+											<li>Dolor pulvinar etiam magna etiam.</li>
+											<li>Sagittis adipiscing lorem eleifend.</li>
+											<li>Felis enim feugiat dolore viverra.</li>
+										</ul>
+
+									</div>
+									<div class="6u$ 12u$(small)">
+
+										<h4>Ordered</h4>
+										<ol>
+											<li>Dolor pulvinar etiam magna etiam.</li>
+											<li>Etiam vel felis at lorem sed viverra.</li>
+											<li>Felis enim feugiat dolore viverra.</li>
+											<li>Dolor pulvinar etiam magna etiam.</li>
+											<li>Etiam vel felis at lorem sed viverra.</li>
+											<li>Felis enim feugiat dolore viverra.</li>
+										</ol>
+
+										<h4>Icons</h4>
+										<ul class="icons">
+											<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+											<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+											<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+											<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
+											<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+											<li><a href="#" class="icon fa-tumblr"><span class="label">Tumblr</span></a></li>
+										</ul>
+
+									</div>
+								</div>
+								<h4>Definition</h4>
+								<dl>
+									<dt>Item 1</dt>
+									<dd>
+										<p>Lorem ipsum dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+									</dd>
+									<dt>Item 2</dt>
+									<dd>
+										<p>Lorem ipsum dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+									</dd>
+									<dt>Item 3</dt>
+									<dd>
+										<p>Lorem ipsum dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent.</p>
+									</dd>
+								</dl>
+
+								<h4>Actions</h4>
+								<ul class="actions">
+									<li><a href="#" class="button special">Default</a></li>
+									<li><a href="#" class="button">Default</a></li>
+									<li><a href="#" class="button alt">Default</a></li>
+								</ul>
+								<ul class="actions small">
+									<li><a href="#" class="button special small">Small</a></li>
+									<li><a href="#" class="button small">Small</a></li>
+									<li><a href="#" class="button alt small">Small</a></li>
+								</ul>
+								<div class="row">
+									<div class="3u 12u$(small)">
+										<ul class="actions vertical">
+											<li><a href="#" class="button special">Default</a></li>
+											<li><a href="#" class="button">Default</a></li>
+											<li><a href="#" class="button alt">Default</a></li>
+										</ul>
+									</div>
+									<div class="3u 12u$(small)">
+										<ul class="actions vertical small">
+											<li><a href="#" class="button special small">Small</a></li>
+											<li><a href="#" class="button small">Small</a></li>
+											<li><a href="#" class="button alt small">Small</a></li>
+										</ul>
+									</div>
+									<div class="3u 12u$(small)">
+										<ul class="actions vertical">
+											<li><a href="#" class="button special fit">Default</a></li>
+											<li><a href="#" class="button fit">Default</a></li>
+											<li><a href="#" class="button alt fit">Default</a></li>
+										</ul>
+									</div>
+									<div class="3u$ 12u$(small)">
+										<ul class="actions vertical small">
+											<li><a href="#" class="button special small fit">Small</a></li>
+											<li><a href="#" class="button small fit">Small</a></li>
+											<li><a href="#" class="button alt small fit">Small</a></li>
+										</ul>
+									</div>
+								</div>
+
+							<!-- Blockquote -->
+								<h3>Blockquote</h3>
+								<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis.</blockquote>
+
+							<!-- Table -->
+								<h3>Table</h3>
+
+								<h4>Default</h4>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Description</th>
+												<th>Price</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Item 1</td>
+												<td>Ante turpis integer aliquet porttitor.</td>
+												<td>29.99</td>
+											</tr>
+											<tr>
+												<td>Item 2</td>
+												<td>Vis ac commodo adipiscing arcu aliquet.</td>
+												<td>19.99</td>
+											</tr>
+											<tr>
+												<td>Item 3</td>
+												<td> Morbi faucibus arcu accumsan lorem.</td>
+												<td>29.99</td>
+											</tr>
+											<tr>
+												<td>Item 4</td>
+												<td>Vitae integer tempus condimentum.</td>
+												<td>19.99</td>
+											</tr>
+											<tr>
+												<td>Item 5</td>
+												<td>Ante turpis integer aliquet porttitor.</td>
+												<td>29.99</td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="2"></td>
+												<td>100.00</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+
+								<h4>Alternate</h4>
+								<div class="table-wrapper">
+									<table class="alt">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Description</th>
+												<th>Price</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Item 1</td>
+												<td>Ante turpis integer aliquet porttitor.</td>
+												<td>29.99</td>
+											</tr>
+											<tr>
+												<td>Item 2</td>
+												<td>Vis ac commodo adipiscing arcu aliquet.</td>
+												<td>19.99</td>
+											</tr>
+											<tr>
+												<td>Item 3</td>
+												<td> Morbi faucibus arcu accumsan lorem.</td>
+												<td>29.99</td>
+											</tr>
+											<tr>
+												<td>Item 4</td>
+												<td>Vitae integer tempus condimentum.</td>
+												<td>19.99</td>
+											</tr>
+											<tr>
+												<td>Item 5</td>
+												<td>Ante turpis integer aliquet porttitor.</td>
+												<td>29.99</td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="2"></td>
+												<td>100.00</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+
+						</div>
+						<div class="6u$ 12u$(medium)">
+
+							<!-- Buttons -->
+								<h3>Buttons</h3>
+								<ul class="actions">
+									<li><a href="#" class="button special">Special</a></li>
+									<li><a href="#" class="button">Default</a></li>
+									<li><a href="#" class="button alt">Alternate</a></li>
+								</ul>
+								<ul class="actions">
+									<li><a href="#" class="button special big">Big</a></li>
+									<li><a href="#" class="button">Default</a></li>
+									<li><a href="#" class="button alt small">Small</a></li>
+								</ul>
+								<ul class="actions fit">
+									<li><a href="#" class="button special fit">Fit</a></li>
+									<li><a href="#" class="button fit">Fit</a></li>
+									<li><a href="#" class="button alt fit">Fit</a></li>
+								</ul>
+								<ul class="actions fit small">
+									<li><a href="#" class="button special fit small">Fit + Small</a></li>
+									<li><a href="#" class="button fit small">Fit + Small</a></li>
+									<li><a href="#" class="button alt fit small">Fit + Small</a></li>
+								</ul>
+								<ul class="actions">
+									<li><a href="#" class="button special icon fa-search">Icon</a></li>
+									<li><a href="#" class="button icon fa-download">Icon</a></li>
+									<li><a href="#" class="button alt icon fa-check">Icon</a></li>
+								</ul>
+								<ul class="actions">
+									<li><span class="button special disabled">Special</span></li>
+									<li><span class="button disabled">Default</span></li>
+									<li><span class="button alt disabled">Alternate</span></li>
+								</ul>
+
+							<!-- Form -->
+								<h3>Form</h3>
+
+								<form method="post" action="#">
+									<div class="row uniform">
+										<div class="6u 12u$(xsmall)">
+											<input type="text" name="name" id="name" value="" placeholder="Name" />
+										</div>
+										<div class="6u$ 12u$(xsmall)">
+											<input type="email" name="email" id="email" value="" placeholder="Email" />
+										</div>
+										<!-- Break -->
+										<div class="12u$">
+											<div class="select-wrapper">
+												<select name="category" id="category">
+													<option value="">- Category -</option>
+													<option value="1">Manufacturing</option>
+													<option value="1">Shipping</option>
+													<option value="1">Administration</option>
+													<option value="1">Human Resources</option>
+												</select>
+											</div>
+										</div>
+										<!-- Break -->
+										<div class="4u 12u$(small)">
+											<input type="radio" id="priority-low" name="priority" checked>
+											<label for="priority-low">Low Priority</label>
+										</div>
+										<div class="4u 12u$(small)">
+											<input type="radio" id="priority-normal" name="priority">
+											<label for="priority-normal">Normal Priority</label>
+										</div>
+										<div class="4u$ 12u$(small)">
+											<input type="radio" id="priority-high" name="priority">
+											<label for="priority-high">High Priority</label>
+										</div>
+										<!-- Break -->
+										<div class="6u 12u$(small)">
+											<input type="checkbox" id="copy" name="copy">
+											<label for="copy">Email me a copy of this message</label>
+										</div>
+										<div class="6u$ 12u$(small)">
+											<input type="checkbox" id="human" name="human" checked>
+											<label for="human">I am a human and not a robot</label>
+										</div>
+										<!-- Break -->
+										<div class="12u$">
+											<textarea name="message" id="message" placeholder="Enter your message" rows="6"></textarea>
+										</div>
+										<!-- Break -->
+										<div class="12u$">
+											<ul class="actions">
+												<li><input type="submit" value="Send Message" /></li>
+												<li><input type="reset" value="Reset" class="alt" /></li>
+											</ul>
+										</div>
+									</div>
+								</form>
+
+								<hr />
+
+								<form method="post" action="#">
+									<div class="row uniform">
+										<div class="9u 12u$(small)">
+											<input type="text" name="query" id="query" value="" placeholder="Query" />
+										</div>
+										<div class="3u$ 12u$(small)">
+											<input type="submit" value="Search" class="fit" />
+										</div>
+									</div>
+								</form>
+
+							<!-- Image -->
+								<h3>Image</h3>
+
+								<h4>Fit</h4>
+								<span class="image fit"><img src="images/pic01.jpg" alt="" /></span>
+								<div class="box alt">
+									<div class="row 50% uniform">
+										<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<div class="4u$"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<!-- Break -->
+										<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<div class="4u$"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<!-- Break -->
+										<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<div class="4u"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+										<div class="4u$"><span class="image fit"><img src="images/pic01.jpg" alt="" /></span></div>
+									</div>
+								</div>
+
+								<h4>Left &amp; Right</h4>
+								<p><span class="image left"><img src="images/pic02.jpg" alt="" /></span>Lorem ipsum dolor sit accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Vestibulum ante ipsum primis in faucibus magna blandit adipiscing eu felis iaculis volutpat lorem ipsum dolor sit amet dolor consequat.</p>
+								<p><span class="image right"><img src="images/pic02.jpg" alt="" /></span>Lorem ipsum dolor sit accumsan interdum nisi, quis tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent. Vestibulum ante ipsum primis in faucibus magna blandit adipiscing eu felis iaculis volutpat lorem ipsum dolor sit amet dolor consequat.</p>
+
+							<!-- Box -->
+								<h3>Box</h3>
+								<div class="box">
+									<p>Felis sagittis eget tempus primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus. Integer ac pellentesque praesent tincidunt felis sagittis eget. tempus euismod. Magna sed etiam ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan eu faucibus lorem ipsum dolor sit amet nullam.</p>
+								</div>
+
+							<!-- Preformatted Code -->
+								<h3>Preformatted</h3>
+								<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+    print 'Iteration ' + i;
+    deck.shuffle();
+    i++;
+}
+
+print 'It took ' + i + ' iterations to sort the deck.';
+</code></pre>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+
+					<h2>Contact Me</h2>
+
+					<form action="#" method="post">
+
+						<div class="field half first">
+							<label for="name">Name</label>
+							<input name="name" id="name" type="text" placeholder="Name">
+						</div>
+						<div class="field half">
+							<label for="email">Email</label>
+							<input name="email" id="email" type="email" placeholder="Email">
+						</div>
+						<div class="field">
+							<label for="message">Message</label>
+							<textarea name="message" id="message" rows="6" placeholder="Message"></textarea>
+						</div>
+						<ul class="actions">
+							<li><input value="Send Message" class="button alt" type="submit"></li>
+						</ul>
+					</form>
+
+					<ul class="icons">
+						<li><a href="#" class="icon round fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon round fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon round fa-instagram"><span class="label">Instagram</span></a></li>
+					</ul>
+
+					<div class="copyright">
+						&copy; Untitled. Design: <a href="https://templated.co">TEMPLATED</a>. Images: <a href="https://unsplash.com">Unsplash</a>.
+					</div>
+
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
+
+<div class="container-fluid full-height d-flex"  style="margin-top: -2rem;">
+	<div class="row w-100">
+		<style>
+			.benefit-card {
+				border: 1px solid #dee2e6;
+				border-radius: 0.375rem;
+				box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+				margin-bottom: 1.5rem;
+			}
+			.benefit-card h5 {
+				font-weight: bold;
+				color: #495057;
+			}
+			.benefit-card ul {
+				list-style-type: none;
+				padding-left: 0;
+			}
+			.benefit-card li {
+				padding: 0.5rem 0;
+				border-bottom: 1px solid #dee2e6;
+			}
+			.benefit-card li:last-child {
+				border-bottom: none;
+			}
+			.check-icon {
+				color: green;
+				font-weight: bold;
+			}
+			.cross-icon {
+				color: red;
+				font-weight: bold;
+			}
+		</style>
+		<div class="container mt-5" >
+			<div class="row">
+				<!-- TiendaFacil -->
+				<div class="col-lg-3 col-md-6 col-12">
+					<div class="card benefit-card">
+						<div class="card-header">
+							<h5>TiendaFacil</h5>
+						</div>
+						<div class="card-body">
+							<ul>
+								<li><span class="check-icon">✓</span> Libre de cargo por ventas</li>
+								<li><span class="check-icon">✓</span> Dominio propio, SSL y hosting.</li>
+								<li><span class="check-icon">✓</span> Pagos con múltiples pasarelas</li>
+								<li><span class="check-icon">✓</span> Política carrito abandonado</li>
+								<li><span class="check-icon">✓</span> Estadísticas ventas detalladas & stock con descarga excel.</li>
+								<li><span class="check-icon">✓</span> Soporte Humano, al cliente</li>
+								<li><span class="check-icon">✓</span> Aviso y alarmas por email</li>
+								<li><span class="check-icon">✓</span> Consultoría incluida en marketing redes sociales</li>
+								<li><span class="check-icon">✓</span> Configuracion sin conocimientos de sistemas</li>
+								<li hidden><span class="check-icon">✓</span> Costo promedio aproximado por venta: 10% de tu producto</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- Mercado Shops -->
+				<div class="col-lg-3 col-md-6 col-12">
+					<div class="card benefit-card">
+						<div class="card-header">
+							<h5>Mercado Shops</h5>
+						</div>
+						<div class="card-body">
+							<ul>
+								<li><span class="cross-icon">*</span> Cobra x vender $3.49 dolares + imp.</li>
+								<li><span class="cross-icon">✗</span> Dominio propio, SSL y hosting.</li>
+								<li><span class="cross-icon">✗</span> Pagos con múltiples pasarelas.</li>
+								<li><span class="cross-icon">✗</span> Política carrito abandonado</li>
+								<li><span class="cross-icon">✗</span> Estadísticas ventas detalladas & stock con descarga excel.</li>
+								<li><span class="cross-icon">✗</span> Soporte humano, al cliente </li>
+								<li><span class="check-icon">✓</span> Aviso y alarmas por email</li>
+								<li><span class="cross-icon">✗</span> Consultoría incluida en marketing redes sociales</li>
+								<li><span class="cross-icon">✗</span> Configuracion sin conocimientos de sistemas</li>
+								<li hidden><span class="check-icon">✓</span> Costo promedio aproximado por venta: 15% de tu producto</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- Tienda Nube -->
+				<div class="col-lg-3 col-md-6 col-12">
+					<div class="card benefit-card">
+						<div class="card-header">
+							<h5>Tienda Nube</h5>
+						</div>
+						<div class="card-body">
+							<ul>
+								<li><span class="cross-icon">*</span> Cobra x vender $4.49 dolares + imp.</li>
+								<li><span class="cross-icon">✗</span> Dominio propio, SSL y hosting.</li>
+								<li><span class="cross-icon">✗</span> Pagos con múltiples pasarelas.</li>
+								<li><span class="check-icon">✓</span> Política carrito abandonado</li>
+								<li><span class="cross-icon">✗</span> Estadísticas ventas detalladas & stock con descarga excel.</li>
+								<li><span class="cross-icon">✗</span> Soporte humano, al cliente </li>
+								<li><span class="check-icon">✓</span> Aviso y alarmas por email</li>
+								<li><span class="cross-icon">✗</span> Consultoría incluida en marketing redes sociales</li>
+								<li><span class="cross-icon">✗</span> Configuracion sin conocimientos de sistemas</li>
+								<li hidden><span class="check-icon">✓</span> Costo promedio aproximado por venta: 16% de tu producto</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- Shopify -->
+				<div class="col-lg-3 col-md-6 col-12">
+					<div class="card benefit-card">
+						<div class="card-header">
+							<h5>Shopify</h5>
+						</div>
+						<div class="card-body">
+							<ul>
+								<li><span class="cross-icon">*</span> Cobra x vender $4.49 dolares + imp.</li>
+								<li><span class="cross-icon">✗</span> Dominio propio, SSL y hosting.</li>
+								<li><span class="cross-icon">✗</span> Pagos con múltiples pasarelas.</li>
+								<li><span class="cross-icon">✗</span> Política carrito abandonado</li>
+								<li><span class="cross-icon">✗</span> Estadísticas ventas detalladas & stock con descarga excel.</li>
+								<li><span class="cross-icon">✗</span> Soporte humano, al cliente </li>
+								<li><span class="check-icon">✓</span> Aviso y alarmas por email</li>
+								<li><span class="cross-icon">✗</span> Consultoría incluida en marketing redes sociales</li>
+								<li><span class="cross-icon">✗</span> Configuracion sin conocimientos de sistemas</li>
+								<li hidden><span class="check-icon">✓</span> Costo promedio aproximado por venta: 12% de tu producto</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p style="color: white; font-size:0.8rem; margin-top:-1rem">La información es obtenida desde las distintas paginas web de esta empresas que NO tienen nada que ver con TiendaFacil.com NO son socios ni subsidiarias y solo representa información de mercado.
+			No somos responsables por las marcas mencionadas.
+			El concepto de "Costo promedio aproximado por venta: xx% de tu producto" es un calculo realizado por estudios de mercado tomando las distintas opciones de membresías porcentajes por ventas costos fijos y precios de productos de la canasta básica.</p>
+		</div>
+		<a href="#3era" class="moon-link2" style="z-index: 9999999">
+			<span class="moon2"></span>
+		</a>
+	</div>
+</div>
+
+
+<select class="form-select" name="categoria" id="floatingSelect" aria-label="Floating label select example">
+	<optgroup label="Buscar categoría">
+		<option value="Promociones con descuentos">Busca la categoría del producto</option>
+	</optgroup>
+	<optgroup label="Agregar categoría">
+		<option value="Nueva categoría">Nueva categoría</option>
+	</optgroup>
+	<optgroup label="Todo tipo de ropa">
+		<option value="Pantalones Mujer">Pantalones Mujer</option>
+		<option value="Pantalones Hombre">Pantalones Hombre</option>
+		<option value="Pantalones Niñes">Pantalones Niñes</option>
+		<option value="Super Tallajes">Super Tallajes</option>
+		<option value="Camisetas Mujer">Camisetas Mujer</option>
+		<option value="Camisetas Hombre">Camisetas Hombre</option>
+		<option value="Camisetas Niñes">Camisetas Niñes</option>
+		<option value="Vestidos">Vestidos</option>
+		<option value="Faldas">Faldas</option>
+		<option value="Trajes Hombre">Trajes Hombre</option>
+		<option value="Trajes Mujer">Trajes Mujer</option>
+		<option value="Abrigos Mujer">Abrigos Mujer</option>
+		<option value="Abrigos Hombre">Abrigos Hombre</option>
+		<option value="Ropa Interior Mujer">Ropa Interior Mujer</option>
+		<option value="Ropa Interior Hombre">Ropa Interior Hombre</option>
+		<option value="Ropa Interior Niñes">Ropa Interior Niñes</option>
+		<option value="Zapatos Mujer">Zapatos Mujer</option>
+		<option value="Zapatos Hombre">Zapatos Hombre</option>
+		<option value="Zapatos Niñes">Zapatos Niñes</option>
+		<option value="Accesorios Mujer">Accesorios Mujer</option>
+		<option value="Accesorios Hombre">Accesorios Hombre</option>
+		<option value="Accesorios Niñes">Accesorios Niñes</option>
+	</optgroup>  
+	<optgroup label="Paramotores & parapentes">
+		<option value="Parapentes">Parapentes</option>
+		<option value="Paramotores">Paramotores</option>
+	</optgroup>
+	<optgroup label="Compras en línea">
+		<option value="Electrónica">Electrónica</option>
+		<option value="Ropa y Moda">Ropa y Moda</option>
+		<option value="Hogar y Jardín">Hogar y Jardín</option>
+		<option value="Deportes">Deportes</option>
+		<option value="Belleza y Cuidado Personal">Belleza y Cuidado Personal</option>
+		<option value="Juguetes y Juegos">Juguetes y Juegos</option>
+		<option value="Libros y Medios">Libros y Medios</option>
+		<option value="Automotriz">Automotriz</option>
+		<option value="Electrodomésticos">Electrodomésticos</option>
+		<option value="Muebles y Decoración">Muebles y Decoración</option>
+		<option value="Salud y Bienestar">Salud y Bienestar</option>
+		<option value="Joyería y Accesorios">Joyería y Accesorios</option>
+	</optgroup>
+	<optgroup label="Productos de veterinaria y accesorios para mascotas">
+		<option value="Alimentos balanceados para perros">Alimentos balanceados para perros</option>
+		<option value="Alimentos balanceados para gatos">Alimentos balanceados para gatos</option>
+		<option value="Snacks y premios para mascotas">Snacks y premios para mascotas</option>
+		<option value="Juguetes para perros">Juguetes para perros</option>
+		<option value="Juguetes para gatos">Juguetes para gatos</option>
+		<option value="Ropa para mascotas">Ropa para mascotas</option>
+		<option value="Camas y colchonetas para mascotas">Camas y colchonetas para mascotas</option>
+		<option value="Collares y correas">Collares y correas</option>
+		<option value="Transportadoras y jaulas">Transportadoras y jaulas</option>
+		<option value="Artículos de higiene y cuidado">Artículos de higiene y cuidado</option>
+		<option value="Productos antipulgas y garrapatas">Productos antipulgas y garrapatas</option>
+		<option value="Champús y acondicionadores">Champús y acondicionadores</option>
+		<option value="Cepillos y peines para mascotas">Cepillos y peines para mascotas</option>
+		<option value="Accesorios para acuarios">Accesorios para acuarios</option>
+		<option value="Comederos y bebederos">Comederos y bebederos</option>
+		<option value="Cajas de arena y accesorios para gatos">Cajas de arena y accesorios para gatos</option>
+		<option value="Herramientas de adiestramiento">Herramientas de adiestramiento</option>
+		<option value="Suplementos y vitaminas para mascotas">Suplementos y vitaminas para mascotas</option>
+		<option value="Artículos de viaje para mascotas">Artículos de viaje para mascotas</option>
+		<!-- Aquí van más opciones -->
+	</optgroup>
+	<optgroup label="Útiles escolares y papelería">
+		<option value="Libretas">Libretas</option>
+		<option value="Cuadernos">Cuadernos</option>
+		<option value="Agendas">Agendas</option>
+		<option value="Bolígrafos">Bolígrafos</option>
+		<option value="Lápices">Lapices</option>
+		<option value="Borradores">Borradores</option>
+		<option value="Marcadores">Marcadores</option>
+		<option value="Reglas">Reglas</option>
+		<option value="Tijeras">Tijeras</option>
+		<option value="Pegamento">Pegamento</option>
+		<option value="Calculadoras">Calculadoras</option>
+		<option value="Mochilas">Mochilas</option>
+		<option value="Estuches">Estuches</option>
+		<option value="Hojas">Hojas</option>
+		<option value="Papel de colores">Papel de colores</option>
+		<option value="Lapices de colores">Lapices de colores</option>
+		<option value="Folios">Folios</option>
+		<option value="Rotuladores">Rotuladores</option>
+		<option value="Cinta adhesiva">Cinta adhesiva</option>
+		<option value="Gomas">Gomas</option>
+		<option value="Clips">Clips</option>
+		<option value="Grapas">Grapas</option>
+		<option value="Fibrones">Fibrones</option>
+		<option value="Carpeta">Carpeta</option>
+		<option value="Archivadores">Archivadores</option>
+		<option value="Portafolios">Portafolios</option>
+		<option value="Papel de regalo">Papel de regalo</option>
+		<option value="Sellos">Sellos</option>
+		<option value="Resaltadores">Resaltadores</option>
+		<option value="Subrayadores">Subrayadores</option>
+		<option value="Corrector líquido">Corrector líquido</option>
+		<option value="Libro de ejercicios">Libro de ejercicios</option>
+		<option value="Pizarra blanca">Pizarra blanca</option>
+		<option value="Borrador de pizarra">Borrador de pizarra</option>
+		<option value="Papel milimetrado">Papel milimetrado</option>
+		<option value="Pegatinas">Pegatinas</option>
+		<option value="Cartulinas">Cartulinas</option>
+		<option value="Plastilina">Plastilina</option>
+		<option value="Papel de seda">Papel de seda</option>
+		<option value="Papel crepé">Papel crepé</option>
+		<option value="Estilógrafos">Estilógrafos</option>
+		<option value="Borrador de tinta">Borrador de tinta</option>
+		<option value="Sobres">Sobres</option>
+		<option value="Portaminas">Portaminas</option>
+		<option value="Estuche de rotuladores">Estuche de rotuladores</option>
+		<option value="Compás">Compás</option>
+		<option value="Set de geometría">Set de geometría</option>
+		<option value="Cinta correctora">Cinta correctora</option>
+		<option value="Pincel">Pincel</option>
+		<option value="Marcadores permanentes">Marcadores permanentes</option>
+		<option value="Papel autocopiativo">Papel autocopiativo</option>
+		<option value="Papel adhesivo">Papel adhesivo</option>
+		<option value="Carpetas clasificadoras">Carpetas clasificadoras</option>
+		<option value="Porta documentos">Porta documentos</option>
+		<option value="Bolígrafos de gel">Bolígrafos de gel</option>
+		<option value="Agenda escolar">Agenda escolar</option>
+		<option value="Lápices de colores acuarelables">Lápices de colores acuarelables</option>
+		<option value="Rotuladores de pizarra">Rotuladores de pizarra</option>
+		<option value="Plumas estilográficas">Plumas estilográficas</option>
+		<option value="Carpeta de anillas">Carpeta de anillas</option>
+		<option value="Bolígrafos de colores">Bolígrafos de colores</option>
+		<option value="Regla flexible">Regla flexible</option>
+		<option value="Clips decorativos">Clips decorativos</option>
+		<option value="Set de dibujo">Set de dibujo</option>
+		<option value="Caja de lápices de grafito">Caja de lápices de grafito</option>
+		<option value="Rotuladores de punta fina">Rotuladores de punta fina</option>
+		<option value="Tijeras de precisión">Tijeras de precisión</option>
+		<option value="Papel para origami">Papel para origami</option>
+		<option value="Caja de lápices de colores">Caja de lápices de colores</option>
+		<option value="Marcadores fluorescentes">Marcadores fluorescentes</option>
+		<option value="Papel para scrapbooking">Papel para scrapbooking</option>
+		<option value="Plumas de gel">Plumas de gel</option>
+		<option value="Papel milimetrado">Papel milimetrado</option>
+		<option value="Caja de lápices de cera">Caja de lápices de cera</option>
+		<option value="Cinta de doble cara">Cinta de doble cara</option>
+		<option value="Plantillas de dibujo">Plantillas de dibujo</option>
+		<option value="Borrador de pizarra">Borrador de pizarra</option>
+		<option value="Rotuladores de tiza líquida">Rotuladores de tiza líquida</option>
+		<option value="Estuche de bolígrafos">Estuche de bolígrafos</option>
+		<option value="Rotuladores para tela">Rotuladores para tela</option>
+		<option value="Cartuchos de tinta">Cartuchos de tinta</option>
+		<option value="Papel pergamino">Papel pergamino</option>
+	</optgroup>
+	<optgroup label="Ropa y Calzado">
+		<option value="Ropa de Hombre">Ropa de Hombre</option>
+		<option value="Ropa de Mujer">Ropa de Mujer</option>
+		<option value="Ropa de Niños">Ropa de Niños</option>
+		<option value="Calzado de Hombre">Calzado de Hombre</option>
+		<option value="Calzado de Mujer">Calzado de Mujer</option>
+		<option value="Calzado de Niños">Calzado de Niños</option>
+	</optgroup>
+	<optgroup label="Accesorios">
+		<option value="Bolsos y Carteras">Bolsos y Carteras</option>
+		<option value="Lentes de Sol">Lentes de Sol</option>
+		<option value="Relojes">Relojes</option>
+		<option value="Cinturones">Cinturones</option>
+		<option value="Bufandas y Pañuelos">Bufandas y Pañuelos</option>
+		<option value="Gorros, Sombreros y Boinas">Gorros, Sombreros y Boinas</option>
+	</optgroup>
+	<optgroup label="Indumentaria Especializada">
+		<option value="Uniformes">Uniformes</option>
+		<option value="Disfraces">Disfraces</option>
+		<option value="Ropa Deportiva">Ropa Deportiva</option>
+		<option value="Trajes y Sacos">Trajes y Sacos</option>
+		<option value="Vestidos de Fiesta">Vestidos de Fiesta</option>
+		<option value="Ropa Íntima y de Dormir">Ropa Íntima y de Dormir</option>
+	</optgroup>
+	<optgroup label="Otros">
+		<option value="Ropa de Maternidad">Ropa de Maternidad</option>
+		<option value="Tallas Grandes">Tallas Grandes</option>
+		<option value="Ropa Vintage">Ropa Vintage</option>
+		<option value="Ropa de Trabajo">Ropa de Trabajo</option>
+		<option value="Accesorios para la Lluvia">Accesorios para la Lluvia</option>
+		<option value="Artículos de Limpieza y Cuidado de Ropa">Artículos de Limpieza y Cuidado de Ropa</option>
+	</optgroup>
+	<optgroup label="Lencería">
+		<option value="Sujetadores">Sujetadores</option>
+		<option value="Brasieres">Brasieres</option>
+		<option value="Panties">Panties</option>
+		<option value="Tangas">Tangas</option>
+		<option value="Culottes">Culottes</option>
+		<option value="Corpiños">Corpiños</option>
+		<option value="Camisones">Camisones</option>
+		<option value="Pijamas">Pijamas</option>
+		<option value="Batolas">Batolas</option>
+		<option value="Medias">Medias</option>
+		<option value="Ligueros">Ligueros</option>
+		<option value="Fajas">Fajas</option>
+		<option value="Conjuntos de lencería">Conjuntos de lencería</option>
+		<option value="Accesorios de lencería">Accesorios de lencería</option>
+	</optgroup>
+	<optgroup label="Trajes de baño y ropa de playa">
+		<option value="Bikinis">Bikinis</option>
+		<option value="Trajes de baño de una pieza">Trajes de baño de una pieza</option>
+		<option value="Trikinis">Trikinis</option>
+		<option value="Tankinis">Tankinis</option>
+		<option value="Bañadores">Bañadores</option>
+		<option value="Shorts de baño">Shorts de baño</option>
+		<option value="Pareos">Pareos</option>
+		<option value="Vestidos de playa">Vestidos de playa</option>
+		<option value="Faldas de playa">Faldas de playa</option>
+		<option value="Camisetas de playa">Camisetas de playa</option>
+		<option value="Sombreros de playa">Sombreros de playa</option>
+		<option value="Gafas de sol">Gafas de sol</option>
+		<option value="Sandalias de playa">Sandalias de playa</option>
+		<option value="Accesorios de playa">Accesorios de playa</option>
+	</optgroup>
+	<optgroup label="Perfumería y cuidado personal">
+		<option value="Perfumes">Perfumes</option>
+		<option value="Colonias">Colonias</option>
+		<option value="Fragancias">Fragancias</option>
+		<option value="Lociones">Lociones</option>
+		<option value="Desodorantes">Desodorantes</option>
+		<option value="Antitranspirantes">Antitranspirantes</option>
+		<option value="Cremas hidratantes">Cremas hidratantes</option>
+		<option value="Cremas antiarrugas">Cremas antiarrugas</option>
+		<option value="Cremas para el cuerpo">Cremas para el cuerpo</option>
+		<option value="Cremas para el rostro">Cremas para el rostro</option>
+		<option value="Cremas para manos y pies">Cremas para manos y pies</option>
+		<option value="Protector solar">Protector solar</option>
+		<option value="Maquillaje">Maquillaje</option>
+		<option value="Brochas y aplicadores de maquillaje">Brochas y aplicadores de maquillaje</option>
+		<option value="Productos para el cuidado del cabello">Productos para el cuidado del cabello</option>
+		<option value="Productos para el cuidado de la barba">Productos para el cuidado de la barba</option>
+		<option value="Productos para el cuidado bucal">Productos para el cuidado bucal</option>
+		<option value="Suplementos vitamínicos">Suplementos vitamínicos</option>
+		<option value="Productos para el cuidado de la piel">Productos para el cuidado de la piel</option>
+	</optgroup>
+	<optgroup label="Farmacia">
+		<option value="Medicamentos sin receta">Medicamentos sin receta</option>
+		<option value="Analgésicos">Analgésicos</option>
+		<option value="Antipiréticos">Antipiréticos</option>
+		<option value="Antisépticos">Antisépticos</option>
+		<option value="Antihistamínicos">Antihistamínicos</option>
+		<option value="Antidiarreicos">Antidiarreicos</option>
+		<option value="Antieméticos">Antieméticos</option>
+		<option value="Antiácidos">Antiácidos</option>
+		<option value="Antiinflamatorios">Antiinflamatorios</option>
+		<option value="Antibióticos">Antibióticos</option>
+		<option value="Antivirales">Antivirales</option>
+		<option value="Antifúngicos">Antifúngicos</option>
+		<option value="Antiparasitarios">Antiparasitarios</option>
+		<option value="Anticoagulantes">Anticoagulantes</option>
+		<option value="Ansiolíticos">Ansiolíticos</option>
+		<option value="Antidepresivos">Antidepresivos</option>
+		<option value="Anticonceptivos">Anticonceptivos</option>
+		<option value="Bronceador">Bronceador</option>
+		<option value="Protector Solar">Protector Solar</option>
+		<option value="Condones">Condones</option>
+		<option value="Hidratador post Solar">Hidratador post Solar</option>
+		<option value="Productos para la salud femenina">Productos para la salud femenina</option>
+		<option value="Productos para la salud masculina">Productos para la salud masculina</option>
+		<option value="Productos para la salud infantil">Productos para la salud infantil</option>
+		<option value="Suplementos alimenticios">Suplementos alimenticios</option>
+		<option value="Productos para el cuidado de la piel">Productos para el cuidado de la piel</option>
+		<option value="Productos para el cuidado del cabello">Productos para el cuidado del cabello</option>
+		<option value="Productos para el cuidado bucal">Productos para el cuidado bucal</option>
+		<option value="Productos para el cuidado de los ojos">Productos para el cuidado de los ojos</option>
+		<option value="Pruebas de diagnóstico">Pruebas de diagnóstico</option>
+		<option value="Material de curación">Material de curación</option>
+		<option value="Vendajes">Vendajes</option>
+		<option value="Insumos médicos">Insumos médicos</option>
+		<option value="Productos para la higiene personal">Productos para la higiene personal</option>
+	</optgroup>
+	<optgroup label="Productos de sex shops">
+		<option value="Vibradores">Vibradores</option>
+		<option value="Consoladores">Consoladores</option>
+		<option value="Dildos">Dildos</option>
+		<option value="Bolas chinas">Bolas chinas</option>
+		<option value="Anillos vibradores">Anillos vibradores</option>
+		<option value="Estimuladores de clítoris">Estimuladores de clítoris</option>
+		<option value="Lubricantes íntimos">Lubricantes íntimos</option>
+		<option value="Aceites de masaje">Aceites de masaje</option>
+		<option value="Juegos eróticos">Juegos eróticos</option>
+		<option value="Lencería erótica">Lencería erótica</option>
+		<option value="Cremas y geles estimulantes">Cremas y geles estimulantes</option>
+		<option value="Fetiches y bondage">Fetiches y bondage</option>
+		<option value="Mascaras y antifaces">Mascaras y antifaces</option>
+		<option value="Esposas y ataduras">Esposas y ataduras</option>
+		<option value="Plumas y látigos">Plumas y látigos</option>
+		<option value="Masturbadores masculinos">Masturbadores masculinos</option>
+		<option value="Muñecas inflables">Muñecas inflables</option>
+		<option value="Estimuladores prostáticos">Estimuladores prostáticos</option>
+		<option value="Bombas de vacío">Bombas de vacío</option>
+		<option value="Juguetes anales">Juguetes anales</option>
+		<!-- Aquí van más opciones -->
+	</optgroup>
+	<optgroup label="Productos de tatuajes">
+		<option value="Tintas para tatuajes">Tintas para tatuajes</option>
+		<option value="Agujas para tatuajes">Agujas para tatuajes</option>
+		<option value="Máquinas para tatuar">Máquinas para tatuar</option>
+		<option value="Kits de tatuaje">Kits de tatuaje</option>
+		<option value="Pedales y fuentes de alimentación">Pedales y fuentes de alimentación</option>
+		<option value="Grips y tubos para tatuajes">Grips y tubos para tatuajes</option>
+		<option value="Papel transfer para tatuajes">Papel transfer para tatuajes</option>
+		<option value="Cremas para el cuidado de tatuajes">Cremas para el cuidado de tatuajes</option>
+		<option value="Stencil para tatuajes">Stencil para tatuajes</option>
+		<option value="Accesorios para tatuadores">Accesorios para tatuadores</option>
+		<option value="Libros y revistas de tatuajes">Libros y revistas de tatuajes</option>
+		<option value="Agendas y cuadernos de diseños">Agendas y cuadernos de diseños</option>
+		<option value="Productos de higiene para tatuadores">Productos de higiene para tatuadores</option>
+		<option value="Guantes y protectores">Guantes y protectores</option>
+		<option value="Máscaras y gafas de protección">Máscaras y gafas de protección</option>
+		<option value="Mobiliario para estudios de tatuaje">Mobiliario para estudios de tatuaje</option>
+		<option value="Organización de eventos de tatuajes">Organización de eventos de tatuajes</option>
+		<option value="Maquillaje para cubrir tatuajes">Maquillaje para cubrir tatuajes</option>
+		<option value="Piercing y joyería corporal">Piercing y joyería corporal</option>
+		<option value="Productos para el cuidado de la piel">Productos para el cuidado de la piel</option>
+		<option value="Material de aprendizaje de tatuajes">Material de aprendizaje de tatuajes</option>
+		<option value="Vestimenta para tatuadores">Vestimenta para tatuadores</option>
+		<option value="Estuches y fundas para equipos de tatuaje">Estuches y fundas para equipos de tatuaje</option>
+		<option value="Láminas de diseños de tatuajes">Láminas de diseños de tatuajes</option>
+		<option value="Productos de iluminación para estudios">Productos de iluminación para estudios</option>
+		<option value="Cubiertas para sillas y camillas">Cubiertas para sillas y camillas</option>
+		<option value="Batas y delantales para tatuadores">Batas y delantales para tatuadores</option>
+		<option value="Bandejas y soportes para tatuajes">Bandejas y soportes para tatuajes</option>
+		<option value="Packs de limpieza e higiene">Packs de limpieza e higiene</option>
+		<option value="Protectores solares para tatuajes">Protectores solares para tatuajes</option>
+		<option value="Productos de cicatrización para tatuajes">Productos de cicatrización para tatuajes</option>
+		<option value="Piercing y tatuajes temporales">Piercing y tatuajes temporales</option>
+		<option value="Productos de limpieza de materiales">Productos de limpieza de materiales</option>
+		<option value="Pegatinas y decoraciones para tatuajes">Pegatinas y decoraciones para tatuajes</option>
+		<option value="Productos para el cuidado del equipo de tatuaje">Productos para el cuidado del equipo de tatuaje</option>
+		<option value="Láminas de calcomanías para tatuajes">Láminas de calcomanías para tatuajes</option>
+		<option value="Accesorios para el transporte de equipos">Accesorios para el transporte de equipos</option>
+	</optgroup>
+	<optgroup label="Hobbies">
+		<option value="Arte y Manualidades">Arte y Manualidades</option>
+		<option value="Pintura">Pintura</option>
+		<option value="Dibujo">Dibujo</option>
+		<option value="Escultura">Escultura</option>
+		<option value="Cerámica">Cerámica</option>
+		<option value="Tejido y Costura">Tejido y Costura</option>
+		<option value="Punto y Ganchillo">Punto y Ganchillo</option>
+		<option value="Bordado">Bordado</option>
+		<option value="Quilting">Quilting</option>
+		<option value="Modelismo">Modelismo</option>
+		<option value="Modelismo Ferroviario">Modelismo Ferroviario</option>
+		<option value="Modelismo Naval">Modelismo Naval</option>
+		<option value="Modelismo de Aviones">Modelismo de Aviones</option>
+		<option value="Modelismo de Coches">Modelismo de Coches</option>
+		<option value="Modelismo de Tanques">Modelismo de Tanques</option>
+		<option value="Modelismo Espacial">Modelismo Espacial</option>
+		<option value="Modelismo a Escala">Modelismo a Escala</option>
+		<option value="Coleccionismo">Coleccionismo</option>
+		<option value="Numismática">Numismática</option>
+		<option value="Filatelia">Filatelia</option>
+		<option value="Cromos">Cromos</option>
+		<option value="Álbumes">Álbumes</option>
+		<option value="Juegos de Mesa">Juegos de Mesa</option>
+		<option value="Juegos de Rol">Juegos de Rol</option>
+		<option value="Juegos de Estrategia">Juegos de Estrategia</option>
+		<option value="Puzzles">Puzzles</option>
+		<option value="Deportes y Actividades al Aire Libre">Deportes y Actividades al Aire Libre</option>
+		<option value="Camping y Senderismo">Camping y Senderismo</option>
+		<option value="Pesca">Pesca</option>
+		<option value="Caza">Caza</option>
+		<option value="Bicicletas y Ciclismo">Bicicletas y Ciclismo</option>
+		<option value="Skateboarding">Skateboarding</option>
+		<option value="Patines">Patines</option>
+		<option value="Natación">Natación</option>
+		<option value="Surf">Surf</option>
+		<option value="Kitesurf">Kitesurf</option>
+		<option value="Windsurf">Windsurf</option>
+		<option value="Vela">Vela</option>
+		<option value="Escalada">Escalada</option>
+		<option value="Golf">Golf</option>
+		<option value="Tenis">Tenis</option>
+		<option value="Bádminton">Bádminton</option>
+		<option value="Béisbol">Béisbol</option>
+		<option value="Baloncesto">Baloncesto</option>
+		<option value="Fútbol">Fútbol</option>
+		<option value="Rugby">Rugby</option>
+		<option value="Hockey">Hockey</option>
+		<option value="Equitación">Equitación</option>
+		<option value="Arquería">Arquería</option>
+		<option value="Tiro con Arco">Tiro con Arco</option>
+	</optgroup>
+	<optgroup label="Herramientas y Equipamiento">
+		<option value="Herramientas y Mejoras para el Hogar">Herramientas y Mejoras para el Hogar</option>
+		<option value="Equipamiento de Jardinería">Equipamiento de Jardinería</option>
+		<option value="Equipamiento para Pintura Corporal">Equipamiento para Pintura Corporal</option>
+		<option value="Equipamiento para Caza y Tiro">Equipamiento para Caza y Tiro</option>
+	</optgroup>
+	<optgroup label="Juguetes y Juegos">
+		<option value="Juegos de Mesa">Juegos de Mesa</option>
+		<option value="Juguetes Educativos">Juguetes Educativos</option>
+		<option value="Juguetes para Bebés">Juguetes para Bebés</option>
+		<option value="Muñecas y Accesorios">Muñecas y Accesorios</option>
+		<option value="Figuras de Acción">Figuras de Acción</option>
+		<option value="Rompecabezas">Rompecabezas</option>
+	</optgroup>
+	<optgroup label="Alimentos y Bebidas">
+		<option value="Bebidas Gaseosas">Bebidas Gaseosas</option>
+		<option value="Agua">Agua</option>
+		<option value="Alimentos Secos">Alimentos Secos</option>
+		<option value="Bebidas (general)">Bebidas (general)</option>
+		<option value="Frutas y Verduras">Frutas y Verduras</option>
+		<option value="Carnes y Aves">Carnes y Aves</option>
+		<option value="Pescados y Mariscos">Pescados y Mariscos</option>
+		<option value="Productos Lácteos">Productos Lácteos</option>
+		<option value="Panadería y Repostería">Panadería y Repostería</option>
+		<option value="Bebidas Alcohólicas">Bebidas Alcohólicas</option>
+	</optgroup>
+	<optgroup label="Herramientas y Equipamiento">
+		<option value="Herramientas y Mejoras para el Hogar">Herramientas y Mejoras para el Hogar</option>
+		<option value="Equipamiento de Jardinería">Equipamiento de Jardinería</option>
+		<option value="Equipamiento para Pintura Corporal">Equipamiento para Pintura Corporal</option>
+		<option value="Equipamiento para Caza y Tiro">Equipamiento para Caza y Tiro</option>
+	</optgroup>
+	<optgroup label="Juguetes y Juegos">
+		<option value="Juegos de Mesa">Juegos de Mesa</option>
+		<option value="Juguetes Educativos">Juguetes Educativos</option>
+		<option value="Juguetes para Bebés">Juguetes para Bebés</option>
+		<option value="Muñecas y Accesorios">Muñecas y Accesorios</option>
+		<option value="Figuras de Acción">Figuras de Acción</option>
+		<option value="Rompecabezas">Rompecabezas</option>
+	</optgroup>
+	<optgroup label="Libros y Medios">
+		<option value="Libros de Ficción">Libros de Ficción</option>
+		<option value="Libros de No Ficción">Libros de No Ficción</option>
+		<option value="Revistas">Revistas</option>
+		<option value="Audiolibros">Audiolibros</option>
+		<option value="Películas">Películas</option>
+		<option value="Series de TV">Series de TV</option>
+	</optgroup>
+	<optgroup label="Electrodomésticos">
+		<option value="Cocina">Cocina</option>
+		<option value="Refrigeración y Congelación">Refrigeración y Congelación</option>
+		<option value="Lavado y Secado">Lavado y Secado</option>
+		<option value="Cuidado del Hogar">Cuidado del Hogar</option>
+		<option value="Climatización">Climatización</option>
+		<option value="Pequeños Electrodomésticos">Pequeños Electrodomésticos</option>
+	</optgroup>
+	<optgroup label="Muebles y Decoración">
+		<option value="Muebles para la Sala">Muebles para la Sala</option>
+		<option value="Muebles para el Dormitorio">Muebles para el Dormitorio</option>
+		<option value="Muebles para el Comedor">Muebles para el Comedor</option>
+		<option value="Decoración del Hogar">Decoración del Hogar</option>
+		<option value="Iluminación">Iluminación</option>
+		<option value="Alfombras y Tapetes">Alfombras y Tapetes</option>
+	</optgroup>
+	<optgroup label="Repuestos para Automóviles">
+		<option value="Accesorios para Autos">Accesorios para Autos</option>
+		<option value="Repuestos para Motor">Repuestos para Motor</option>
+		<option value="Suspensión y Dirección">Suspensión y Dirección</option>
+		<option value="Sistemas de Escape">Sistemas de Escape</option>
+		<option value="Frenos">Frenos</option>
+		<option value="Iluminación para Autos">Iluminación para Autos</option>
+		<option value="Bujías">Bujías</option>
+		<option value="Llantas y Ruedas">Llantas y Ruedas</option>
+		<option value="Cámaras para Neumáticos">Cámaras para Neumáticos</option>
+		<option value="Amortiguadores">Amortiguadores</option>
+		<option value="Cables de Bujía">Cables de Bujía</option>
+		<option value="Alternadores">Alternadores</option>
+		<option value="Baterías para Autos">Baterías para Autos</option>
+		<option value="Bombas de Agua">Bombas de Agua</option>
+		<option value="Correas de Distribución">Correas de Distribución</option>
+		<option value="Filtros de Aire">Filtros de Aire</option>
+		<option value="Filtros de Aceite">Filtros de Aceite</option>
+		<option value="Filtros de Combustible">Filtros de Combustible</option>
+		<option value="Radiadores">Radiadores</option>
+		<option value="Termostatos">Termostatos</option>
+		<option value="Refrigerantes">Refrigerantes</option>
+		<option value="Embragues">Embragues</option>
+		<option value="Discos de Freno">Discos de Freno</option>
+		<option value="Pastillas de Freno">Pastillas de Freno</option>
+		<option value="Tambores de Freno">Tambores de Freno</option>
+		<option value="Bombines de Freno">Bombines de Freno</option>
+		<option value="Calipers de Freno">Calipers de Freno</option>
+		<option value="Sensores de ABS">Sensores de ABS</option>
+		<option value="Bombas de Freno">Bombas de Freno</option>
+		<option value="Rotores de Freno">Rotores de Freno</option>
+		<option value="Sistemas de Dirección Asistida">Sistemas de Dirección Asistida</option>
+		<option value="Barras Estabilizadoras">Barras Estabilizadoras</option>
+		<option value="Trenes delanteros">Trenes delanteros</option>
+		<option value="Trenes traseros">Trenes traseros</option>
+		<option value="Discos de Embrague">Discos de Embrague</option>
+		<option value="Kits de Embrague">Kits de Embrague</option>
+		<option value="Cilindros de Embrague">Cilindros de Embrague</option>
+		<option value="Collarines de Embrague">Collarines de Embrague</option>
+		<option value="Sensores de Embrague">Sensores de Embrague</option>
+		<option value="Kits de Distribución">Kits de Distribución</option>
+		<option value="Bielas">Bielas</option>
+		<option value="Pistones">Pistones</option>
+		<option value="Anillos de Pistón">Anillos de Pistón</option>
+		<option value="Cojinetes de Biela">Cojinetes de Biela</option>
+		<option value="Cojinetes de Bancada">Cojinetes de Bancada</option>
+		<option value="Cigüeñales">Cigüeñales</option>
+		<option value="Árboles de Levas">Árboles de Levas</option>
+		<option value="Tensores de Correa">Tensores de Correa</option>
+		<option value="Rodamientos de Rueda">Rodamientos de Rueda</option>
+		<option value="Sensores de Temperatura">Sensores de Temperatura</option>
+		<option value="Sensores de Presión de Aceite">Sensores de Presión de Aceite</option>
+		<option value="Sensores de Oxígeno">Sensores de Oxígeno</option>
+		<option value="Sensores de Cigüeñal">Sensores de Cigüeñal</option>
+		<option value="Sensores de Posición de Acelerador">Sensores de Posición de Acelerador</option>
+		<option value="Sensores de Presión de Combustible">Sensores de Presión de Combustible</option>
+		<option value="Sensores de Velocidad de Vehículo">Sensores de Velocidad de Vehículo</option>
+		<option value="Sensores de Nivel de Combustible">Sensores de Nivel de Combustible</option>
+		<option value="Sensores de Marcha Atrás">Sensores de Marcha Atrás</option>
+		<option value="Sensores de Fase">Sensores de Fase</option>
+		<option value="Sensores de Detonación">Sensores de Detonación</option>
+		<option value="Sensores de Vibración">Sensores de Vibración</option>
+		<option value="Sensores de Aceleración Lateral">Sensores de Aceleración Lateral</option>
+		<option value="Sensores de Movimiento">Sensores de Movimiento</option>
+		<option value="Sensores de Inclinación">Sensores de Inclinación</option>
+		<option value="Sensores de Ángulo de Dirección">Sensores de Ángulo de Dirección</option>
+		<option value="Sensores de Giro">Sensores de Giro</option>
+		<option value="Sensores de Detonación">Sensores de Detonación</option>
+		<option value="Sensores de Posición de Árbol de Levas">Sensores de Posición de Árbol de Levas</option>
+		<option value="Sensores de Posición de Cigüeñal">Sensores de Posición de Cigüeñal</option>
+		<option value="Sensores de Posición de Mariposa">Sensores de Posición de Mariposa</option>
+		<option value="Sensores de Presión de Aceite">Sensores de Presión de Aceite</option>
+		<option value="Sensores de Temperatura del Refrigerante">Sensores de Temperatura del Refrigerante</option>
+		<option value="Sensores de Temperatura de Aire">Sensores de Temperatura de Aire</option>
+		<option value="Sensores de Nivel de Refrigerante">Sensores de Nivel de Refrigerante</option>
+		<option value="Sensores de Nivel de Aceite">Sensores de Nivel de Aceite</option>
+		<option value="Sensores de Nivel de Combustible">Sensores de Nivel de Combustible</option>
+		<option value="Sensores de Posición de Rueda">Sensores de Posición de Rueda</option>
+		<option value="Sensores de Velocidad de Rueda">Sensores de Velocidad de Rueda</option>
+		<option value="Sensores de Aire Acondicionado">Sensores de Aire Acondicionado</option>
+		<option value="Sensores de Oxígeno">Sensores de Oxígeno</option>
+		<option value="Sensores de Dirección Asistida">Sensores de Dirección Asistida</option>
+		<option value="Sensores de Aire del Motor">Sensores de Aire del Motor</option>
+		<option value="Sensores de Combustible">Sensores de Combustible</option>
+		<option value="Sensores de Escape">Sensores de Escape</option>
+		<option value="Sensores de Posición de Pedal del Acelerador">Sensores de Posición de Pedal del Acelerador</option>
+		<option value="Sensores de Posición de Pedal de Freno">Sensores de Posición de Pedal de Freno</option>
+		<option value="Sensores de Posición de Pedal de Embrague">Sensores de Posición de Pedal de Embrague</option>
+		<option value="Sensores de Control de Emisiones">Sensores de Control de Emisiones</option>
+		<option value="Sensores de Encendido">Sensores de Encendido</option>
+		<option value="Sensores de Aceleración">Sensores de Aceleración</option>
+		<option value="Sensores de Desaceleración">Sensores de Desaceleración</option>
+		<option value="Sensores de Posición de Mariposa">Sensores de Posición de Mariposa</option>
+		<option value="Sensores de Flujo de Aire">Sensores de Flujo de Aire</option>
+		<option value="Sensores de Flujo de Combustible">Sensores de Flujo de Combustible</option>
+		<option value="Sensores de Humedad">Sensores de Humedad</option>
+		<option value="Sensores de Oxígeno">Sensores de Oxígeno</option>
+		<option value="Sensores de Sonido">Sensores de Sonido</option>
+		<option value="Sensores de Vibración">Sensores de Vibración</option>
+		<option value="Sensores de Presión Atmosférica">Sensores de Presión Atmosférica</option>
+		<option value="Sensores de Presión Barométrica">Sensores de Presión Barométrica</option>
+		<option value="Sensores de Presión Diferencial">Sensores de Presión Diferencial</option>
+		<option value="Sensores de Presión Manométrica">Sensores de Presión Manométrica</option>
+		<option value="Sensores de Presión Hidrostática">Sensores de Presión Hidrostática</option>
+		<option value="Sensores de Presión Piezométrica">Sensores de Presión Piezométrica</option>
+		<option value="Sensores de Presión de Agua">Sensores de Presión de Agua</option>
+		<option value="Sensores de Presión de Aceite">Sensores de Presión de Aceite</option>
+		<option value="Sensores de Presión de Gas">Sensores de Presión de Gas</option>
+		<option value="Sensores de Presión de Vapor">Sensores de Presión de Vapor</option>
+		<option value="Sensores de Presión de Refrigerante">Sensores de Presión de Refrigerante</option>
+		<option value="Sensores de Presión de Freno">Sensores de Presión de Freno</option>
+		<option value="Sensores de Presión de Neumáticos">Sensores de Presión de Neumáticos</option>
+		<option value="Sensores de Temperatura del Refrigerante">Sensores de Temperatura del Refrigerante</option>
+		<option value="Sensores de Temperatura del Aceite">Sensores de Temperatura del Aceite</option>
+		<option value="Sensores de Temperatura del Aire">Sensores de Temperatura del Aire</option>
+		<option value="Sensores de Temperatura del Gas">Sensores de Temperatura del Gas</option>
+	</optgroup>
+	<optgroup label="Repuestos para Aviones">
+		<option value="Componentes del Motor">Componentes del Motor</option>
+		<option value="Instrumentos y Paneles">Instrumentos y Paneles</option>
+		<option value="Sistemas de Control">Sistemas de Control</option>
+		<option value="Hélices y Motores">Hélices y Motores</option>
+		<option value="Equipamiento de Cabina">Equipamiento de Cabina</option>
+		<option value="Repuestos de Aviónica">Repuestos de Aviónica</option>
+	</optgroup>
+	<optgroup label="Repuestos para Embarcaciones">
+		<option value="Motores y Propulsión">Motores y Propulsión</option>
+		<option value="Electrónica Marina">Electrónica Marina</option>
+		<option value="Anclas, Cadenas y Cabos">Anclas, Cadenas y Cabos</option>
+		<option value="Sistemas de Navegación">Sistemas de Navegación</option>
+		<option value="Asientos y Tapicería">Asientos y Tapicería</option>
+		<option value="Equipamiento de Seguridad">Equipamiento de Seguridad</option>
+	</optgroup>
+	<optgroup label="Productos de motocicletas">
+		<option value="Cascos para motocicleta">Cascos para motocicleta</option>
+		<option value="Chaquetas para motocicleta">Chaquetas para motocicleta</option>
+		<option value="Guantes para motocicleta">Guantes para motocicleta</option>
+		<option value="Botas para motocicleta">Botas para motocicleta</option>
+		<option value="Pantalones para motocicleta">Pantalones para motocicleta</option>
+		<option value="Trajes de cuero para motocicleta">Trajes de cuero para motocicleta</option>
+		<option value="Maletas y bolsas para motocicleta">Maletas y bolsas para motocicleta</option>
+		<option value="Accesorios de iluminación para motocicleta">Accesorios de iluminación para motocicleta</option>
+		<option value="Asientos y fundas para motocicleta">Asientos y fundas para motocicleta</option>
+		<option value="Espejos para motocicleta">Espejos para motocicleta</option>
+		<option value="Parabrisas y deflectores para motocicleta">Parabrisas y deflectores para motocicleta</option>
+		<option value="Sistemas de escape para motocicleta">Sistemas de escape para motocicleta</option>
+		<option value="Filtros de aire para motocicleta">Filtros de aire para motocicleta</option>
+		<option value="Pastillas de freno para motocicleta">Pastillas de freno para motocicleta</option>
+		<option value="Discos de freno para motocicleta">Discos de freno para motocicleta</option>
+		<option value="Neumáticos para motocicleta">Neumáticos para motocicleta</option>
+		<option value="Cámaras para neumáticos de motocicleta">Cámaras para neumáticos de motocicleta</option>
+		<option value="Baterías para motocicleta">Baterías para motocicleta</option>
+		<option value="Frenos y embragues para motocicleta">Frenos y embragues para motocicleta</option>
+		<option value="Manillares y contrapesos para motocicleta">Manillares y contrapesos para motocicleta</option>
+		<option value="Aceites y lubricantes para motocicleta">Aceites y lubricantes para motocicleta</option>
+		<option value="Herramientas para motocicleta">Herramientas para motocicleta</option>
+		<option value="Soportes y caballetes para motocicleta">Soportes y caballetes para motocicleta</option>
+		<option value="Alerones y spoilers para motocicleta">Alerones y spoilers para motocicleta</option>
+		<option value="Sistemas de audio para motocicleta">Sistemas de audio para motocicleta</option>
+		<option value="Sistemas de navegación para motocicleta">Sistemas de navegación para motocicleta</option>
+		<option value="Sistemas de seguridad para motocicleta">Sistemas de seguridad para motocicleta</option>
+		<option value="Accesorios de personalización para motocicleta">Accesorios de personalización para motocicleta</option>
+		<option value="Guardabarros para motocicleta">Guardabarros para motocicleta</option>
+		<option value="Rejillas y defensas para motocicleta">Rejillas y defensas para motocicleta</option>
+		<option value="Depósitos de combustible para motocicleta">Depósitos de combustible para motocicleta</option>
+		<option value="Filtros de combustible para motocicleta">Filtros de combustible para motocicleta</option>
+		<option value="Intercomunicadores para motocicleta">Intercomunicadores para motocicleta</option>
+		<option value="Asientos para pasajeros de motocicleta">Asientos para pasajeros de motocicleta</option>
+		<option value="Bolsas y alforjas para motocicleta">Bolsas y alforjas para motocicleta</option>
+		<option value="Candados y sistemas antirrobo para motocicleta">Candados y sistemas antirrobo para motocicleta</option>
+		<option value="Carburadores para motocicleta">Carburadores para motocicleta</option>
+		<option value="Carrocería y chasis para motocicleta">Carrocería y chasis para motocicleta</option>
+		<option value="Centros de rueda para motocicleta">Centros de rueda para motocicleta</option>
+		<option value="Correas de transmisión para motocicleta">Correas de transmisión para motocicleta</option>
+		<option value="Cubiertas para motocicleta">Cubiertas para motocicleta</option>
+		<option value="Embragues para motocicleta">Embragues para motocicleta</option>
+		<option value="Escape y sistemas de escape para motocicleta">Escape y sistemas de escape para motocicleta</option>
+		<option value="Frenos para motocicleta">Frenos para motocicleta</option>
+		<option value="Iluminación para motocicleta">Iluminación para motocicleta</option>
+	</optgroup>
+</select>
+
+
+
+
+
+
+
+
+
+
+
+<div class="col cardV p-0 m-2 g-0" style="min-height:400px; position: relative;" id="coloreateputo${producto._id}">
+	<!-- Contenedor para la imagen como fondo -->
+	<div class="p-1 w-100 m-0" style="min-height:400px; transition: transform 0.2s; background: transparent; position: relative;">
+	  <!-- Usar la imagen como fondo del contenedor -->
+	  <div class="product-image" style="
+		background-image: url('${producto.rutaSimpleImg[0]}'); /* Fondo dinámico */
+		background-position: center;
+		background-size: contain;
+		background-repeat: no-repeat;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1; /* Imagen detrás del card */
+	  "></div>
+  
+	  <!-- Card que se superpone sobre la imagen -->
+	  <div class="card" style="
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		z-index: 2; /* Card sobre la imagen */
+		background-color: transparent
+	  ">
+		<div class="card-header text-center">
+		  <p id="${producto.nombreProducto}">
+			<strong>${producto.nombreProducto}</strong>
+		  </p>
+		</div>
+  
+		<div class="card-body">
+		  <div class="row">
+			<div class="col-6 text-center">
+			  <strong>Cantidad<br>${producto.cantidad}</strong>
+			</div>
+			<div class="col-6 text-center">
+			  <p>
+				$<span class="price">${formatoMoneda(producto.precio)}</span>
+			  </p>
+			</div>
+		  </div>
+  
+		  <div class="d-flex justify-content-center align-items-center">
+			<button class="btn btn-outline-secondary decrement" type="button" data-id="${producto._id}" style="height: 30px;">-</button>
+			<input 
+			  type="number" 
+			  data-cantidad-id="${producto._id}" 
+			  name="cantidad"
+			  value="1" 
+			  id="infoInput${producto._id}" 
+			  min="1" 
+			  max="${producto.cantidad}" 
+			  required
+			  class="form-control text-center" 
+			  style="width: 48px; height: 30px; padding: 0; margin: 0;"
+			/>
+			<button class="btn btn-outline-secondary increment" type="button" data-id="${producto._id}" style="height: 30px;">+</button>
+		  </div>
+  
+		  <div class="text-center">
+			<button type="button" class="add-to-cart" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}" style="margin: 0.5rem auto;">
+			  <span style="color:white !important;" class="fas fa-shopping-cart"></span>
+			</button>
+		  </div>
+		</div>
+  
+		<div class="card-footer p-1">
+		  <button type="button" class="btn btn-outline-info description-toggle" data-bs-toggle="collapse" 
+			data-bs-target="#descriptionContainer${producto._id}" aria-expanded="false" 
+			aria-controls="descriptionContainer${producto._id}"
+			style="height: 35px; margin: 0.5rem; padding: 0.5">
+			Ver descripción del producto
+		  </button>
+		  <div class="collapse" id="descriptionContainer${producto._id}">
+			<p>${producto.descripcion}</p>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
