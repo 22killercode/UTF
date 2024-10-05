@@ -120,8 +120,16 @@ html, body {
         /* Ocultar el botón del menú en pantallas horizontales */
         @media (min-width: 987px) {
             html{
-                width: 96% !important;
-                padding: 0em;
+                width: 97% !important;
+                padding: 0em!important;
+                margin: 0!important;
+                align-items: center!important;
+                justify-content: center!important;
+            }
+            
+            header {
+                width: 100% !important;  /* El header ocupará el 100% del ancho de la pantalla */
+                margin: 0 auto;          /* Centrado automático si es necesario */
             }
             #btnMenuCel {
                 display: none;
@@ -173,15 +181,15 @@ html, body {
     <header id="header" class="fijoAbajo " style="position: fixed; top: 0; width: 100%; z-index: 999999999 !important;">
         <nav id="top" class="p-1 navbar navbar-expand-lg navbar-light" style="background-color: yellow;">
             <div class="container-fluid">
-                <img id="imgLogo" src="/images/logomtf.jpg" alt="Imagen al 20%" id="logoUTF" style="width: 9%; height: 70%; border-radius: 0.51rem;">
+                <img class="ml-1" id="imgLogo" src="/images/logomtf.jpg" alt="Imagen al 20%" id="logoUTF" style="width: 9%; height: 70%; border-radius: 0.51rem;">
                 <p id="iutf" class="navbar-brand" href="" style="margin-left:-20rem"> Usa Tienda Fácil</p>
-                <button class="navbar-toggler" type="button" id="btnMenuCel">
+                <button class="navbar-toggler mr-4" type="button" id="btnMenuCel">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <!-- menu solo visible en pantallas de celulares -->
-                <div id="menuCelu">
+                <div id="menuCelu" class="">
                     <span class="close-btn" id="closeMenu">&times;</span>
-                    <ul class="navbar-nav me-auto my-2 my-lg-0 " style="">
+                    <ul class="navbar-nav me-auto m-2 m-lg-0 " style="">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Home</a>
                         </li>
@@ -1608,7 +1616,6 @@ html, body {
                     <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
                 </div>
         </footer>
-
         <!-- Js de contacto -->
         <script>
             document.getElementById('submitBtn48521').addEventListener('click', async function(event) {
