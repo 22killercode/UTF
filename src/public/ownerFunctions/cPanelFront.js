@@ -34,9 +34,7 @@ async function mapas() {
 }
 mapas()
 
-
-let urlServer = ""
-
+urlServer = ""
 
 document.addEventListener('DOMContentLoaded', async function () {
     //datos generales
@@ -51,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     urlServer = basicData.urlServer
 
     // Desestructurar el objeto de datos del cliente
-    let { nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal,  retiros, cheqDocument, cheqDataFaltante } = dataOwner;
+    let { nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal,  retiros, cheqDocument, cheqDataFaltante, dominio } = dataOwner;
 
     const idOwner = dataOwner._id 
 
@@ -1376,7 +1374,7 @@ if (cantidadIngresada % 1 === 0) {
         if (dataOwner) {
                 // Renderizar la plantilla con los datos del cliente
                 const nombreOwner = `
-                <h5 class="modal-title" id="modalActiveLabel">Hola, ${nombre} estos son tus datos generales.</h5>
+                <h3 class="modal-title" id="modalActiveLabel">Hola, ${nombre} estos son tus datos generales.</h3>
                 `
                 const completaTusDatos = `
                 <h5 align="center" class="modal-title" id="modalActiveLabel">
@@ -2188,18 +2186,18 @@ if (cantidadIngresada % 1 === 0) {
 
         //re envia al dominio del cliente o al de UTF Cpanel
         async function dominioURLCpanel() {
-            const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
-            console.log("Entro a buscar el domioURL")
+            // const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
+            console.log("Entro a buscar el domioURL",urlServer, dominio)
             let dominio
             if (dataOwner.dominio) {
                 dominio = dataOwner.dominio;
                 // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-                //console.log("Entro por tiene dominio", dominio)
+                console.log("Es un owner premium con domnio propio y tiene dominio", dominio)
                 return dominio;
             } else {
-                dominio = dataOwner.urlServer + urlOwner;
+                dominio = urlServer + urlOwner;
                 // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-                //console.log("Entro por NO tiene dominio", dominio)
+                console.log("Entro por NO tiene dominio", dominio)
                 return dominio;
             }
         }

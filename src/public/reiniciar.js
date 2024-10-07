@@ -12,21 +12,21 @@ const dataOwner     = JSON.parse(sessionStorage.getItem('ownerData')) || [];
 
 //console.log("Que datos basicos grl encontro??", basicData )
 
-const urlOwner = dataOwner.urlOwner || basicData.urlOwner
 
-let _id, nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, password, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal, urlServer, fondoPantalla, clientes, retiros, cheqDocument,  apiKeyMap, lastInfo;
+let _id, nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, password, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal, fondoPantalla, clientes, retiros, cheqDocument,  apiKeyMap, lastInfo;
 
 //let ventasOwner = Ventas
 apiKeyMap = basicData.apiKeyMap
 let tranposterUser = {}
 const comisionBasic = basicData.comisionBasic
+let urlServer =  basicData.urlServer
 
 // Si existe `dataOwner`, asignamos los valores correspondientes
 if (dataOwner) {
     tranposterUser = dataOwner.tranposterEmailUser || basicData.transportGmail ;
 
     ({
-        _id, nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, password, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal, urlServer, fondoPantalla, clientes, retiros, cheqDocument, urlOwner, lastInfo
+        _id, nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, password, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal, fondoPantalla, clientes, retiros, cheqDocument, urlOwner, lastInfo
     } = dataOwner);
 }
 

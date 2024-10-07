@@ -990,9 +990,10 @@ document.body.insertAdjacentHTML('beforeend', `
                     </div>
                 </div>
                 <!-- Configuraciones -->
-                <div id="home" class="tab-pane container-xxl w-100 m-0 p-0" style="" align="center">
-                    <!-- Sub Nav Tabs --><br>
-                    <h4 align="center">Configura tu tienda</h4>
+                <div id="home" class="tab-pane container-xxl w-100 m-0 p-1" style="" align="center">
+                    <!-- Sub Nav Tabs --><br><br>
+                    <h2 align="center">Configura tu tienda</h2>
+                    <br>
                     <ul id="ulConfig" class="nav nav-tabs container-xxl w-100 m-0 p-0" style="">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#generalSettings">1 Datos generales</a>
@@ -2699,7 +2700,7 @@ if (imgCount === 0) {
                                 <div id="insertarQuienesSomos"></div>
                                 <div class="qs-container animate__animated animate__fadeIn">
                                     <br>
-                                    <h2 class="qs-title">Agrega/Edita ¿Quiénes Somos?</h2>
+                                    <h3 class="qs-title">Agrega/Edita ¿Quiénes Somos?</h3>
                                     <br>
                                     <form id="aboutUsForm">
                                         <div class="form mb-3">
@@ -3093,7 +3094,7 @@ if (imgCount === 0) {
                         <div id="securitySettings" class="container tab-pane fade">
                             <div align="center">
                                 <br>
-                                <h4>Redes sociales</h4>
+                                <h3>Redes sociales</h3>
                                 <script>
                                     const socialLinks = dataOwner.linksredesSociales;
                                     if (socialLinks) {
@@ -4322,38 +4323,49 @@ if (imgCount === 0) {
                 </div>                
                 <!-- Marketing --> 
                 <div id="Marketing" class=" tab-pane fade" align="center" style="padding-top: 2rem;">
-                    <h4 id="ponerDomURl">Planifica tus campañas de marketing & comunicación.</h4>
+                    <h2 id="ponerDomURl">Planifica tus campañas de marketing & comunicación.</h2>
                     <script>
                         if (dataOwner) {
-                            function dominioURLCpanel() {
-    console.log("Entro a buscar el domioURL")
-    let dominio
-    if (dataOwner.dominio) {
-        dominio = dataOwner.dominio;
-        // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-        //console.log("Entro por tiene dominio", dominio)
-        return dominio;
-    } else {
-        dominio = dataOwner.urlServer + urlOwner;
-        // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-        //console.log("Entro por NO tiene dominio", dominio)
-        return dominio;
-    }
-}
-                            const ponerla = document.getElementById("ponerDomURl")
-                            let dominio = dominioURLCpanel()
-                            ponerla.innerHTML = `<h5 id="ponerDomURl">Planifica tus campañas de marketing & comunicación.</h5>
-    <div class="alert alert-light" role="alert">
-        <h5 class="">
-            Este es el link de tu tienda online: <br> 
-            <a href="${dominio}">${dominio}</a>; <br> 
-            Cópialo y pégalo diariamente en tus redes sociales.
-        </h5>
-    </div>
-`;
-
+                            // Función asíncrona para obtener el dominio
+                            async function dominioURLCpanel() {
+                                const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
+                                const basicData = JSON.parse(sessionStorage.getItem('basicData')) || null;
+                                console.log("Entro a buscar el dominio URL", basicData.urlServer, dataOwner.dominio);
+                                let dominio;
+                    
+                                if (dataOwner.dominio) {
+                                    dominio = dataOwner.dominio;
+                                    console.log("Es un owner premium con dominio propio y tiene dominio", dominio);
+                                    return dominio;
+                                } else {
+                                    dominio = basicData.urlServer + urlOwner;
+                                    console.log("Entro por NO tiene dominio", dominio);
+                                    return dominio;
+                                }
+                            }
+                    
+                            // Función asíncrona que llama a dominioURLCpanel
+                            async function inicializar() {
+                                const ponerla = document.getElementById("ponerDomURl");
+                                let dominio = await dominioURLCpanel();
+                                ponerla.innerHTML = `
+                                <h2 id="ponerDomURl">Planifica tus campañas de marketing & comunicación.</h2>
+                                <br>
+                                    <div class="alert alert-light" role="alert">
+                                        <h5 class="">
+                                            Este es el link de tu tienda online: <br> 
+                                            <a href="${dominio}">${dominio}</a>; <br> 
+                                            Cópialo y pégalo diariamente en tus redes sociales.
+                                        </h5>
+                                    </div>
+                                `;
+                            }
+                    
+                            // Llamar a la función inicializar
+                            inicializar();
                         }
                     </script>
+                    
                     <!-- Sub Nav Tabs -->
                     <ul id="ulMark" class="nav nav-tabs w-100" style="background:transparent; margin-top:0rem">
                         <li class="nav-item">
@@ -6111,8 +6123,9 @@ card7.appendChild(cardFooterEnv);
                 </div>
                 <!-- Mis clientes -->
                 <div id="clients" class="w-100 tab-pane fade" style="padding-top: 1rem;">
-                    <div class="w-100" align="center">
-                        <h3>Mis clientes</h3>
+                    <div class="w-100 " align="center">
+                        <br>
+                        <h2>Mis clientes</h2>
                         <div class=" w-100" align="center">
                             <!-- Mensaje de cantidad de clientes -->
                             <h4 id="cantClientesA1B2C3">
@@ -6384,319 +6397,190 @@ card7.appendChild(cardFooterEnv);
                         renderClientesA1B2C3(misClientes)
                     </script>
                 </div>
-                <!-- TODO revisar no funciona el filtro -->
-                <!-- Mensajeria -->
-                <div id="mess" class="w-100 tab-pane fade" style="padding-top: 1rem;">
-                    <div class=" w-100" align="center">
-                        <h3>Mis Mensajes</h3>
-                        <div class=" w-100" align="center">
-                            <!-- Mensaje de cantidad de clientes -->
-                            <h4 id="cantMensajesA1B2C3">Actualmente NO tienes mensajes.</h4>
-                            <script>
-                                let misMensajes = {}
-                                // Datos simulados para prueba
-                                if (ownerMensajes.length >= 1) {
-                                    let misMensa = ownerMensajes.filter(m => m.idOwner == idOwner && !m.nwePromoOk && !m.
-                                    nweNoticias);
-                                    misMensajes = misMensa
-                                    function actualizarCantidadMensajesA1B2C3() {
-                                        const cantMensajes = document.getElementById("cantMensajesA1B2C3");
-                                        if (misMensajes.length >= 1) {
-                                            cantMensajes.innerHTML = `<h4>Tienes ${misMensajes.length} mensajes.</h4>`;
-                                        } else {
-                                            cantMensajes.innerHTML = `<h4>
-                                                Actualmente NO tienes mensajes. 
-                                                <br>
-                                                Comienza a vender y recibirás algunos.</h4>`;
-                                        }
-                                    }
-                                    actualizarCantidadMensajesA1B2C3();
-                                }
-                            </script>
-                            <br>
-                            <div id="hideFil" style="margin-left: 4rem" class="d-flex justify-content-center align-items-center" align="center">
-                                <!-- Buscador -->
-                                <div class="align-items-center" align="center">
-                                    <p>Buscar cliente por nombre</p>
-                                    <div class="d-flex align-items-center">
-                                        <input placeholder="Buscar cliente" type="text" id="inputBuscarMensajeA1B2C3" oninput="filtrarPorNombreMensajeA1B2C3()" class="form-control" style="width:150px;">
-                                        <a class="fas fa-search" onclick="filtrarPorNombreMensajeA1B2C3()" style="font-size:1.5rem; margin: 1rem;"></a>
-                                    </div>
-                                    <select id="selectMensajesEncontradosA1B2C3" size="5" onchange="seleccionarMensajeA1B2C3()" class="form-select" style="width:150px; display:none; position: absolute; z-index: 999999;"></select>
-                                </div>
-                                <!-- reiniciador -->
-                                <div class="col-auto" style="margin: auto 2rem auto 6rem;">
-                                    <button class="btn btn-outline-secondary" onclick="reiniciarFiltroFechasA1B2C3()">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
-                                </div>
-                                <!-- Filtro por fechas -->
-                                <div>
-                                    <p>Filtrar y ordenar por fechas</p>
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <label for="fechaDesdeA1B2C3">Desde:</label>
-                                            <input type="date" id="fechaDesdeA1B2C3" class="form-control" onchange="setTimeout(filtrarPorFechasA1B2C3, 2000)">
-                                        </div>
-                                        <div class="col">
-                                            <label for="fechaHastaA1B2C3">Hasta:</label>
-                                            <input type="date" id="fechaHastaA1B2C3" class="form-control" onchange="setTimeout(filtrarPorFechasA1B2C3, 2000)">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div id="contenedorMensajesA1B2C3" class="card-container"></div>
-                        <br><br><br>
-                        <div class="card-footer fixed-bottom bg-white opacity-8" style="z-index: 9999999; padding: 1rem; margin-top: 1rem">
-                            <button class="btn btn-primary" onclick="exportarMensajesAExcelB85485(misMensajes)">Descargar en Excel</button>
-                        </div>
-                        <style>
-                            .custom-cardA1B2C3 {
-                                border: 1px solid #ddd;
-                                border-radius: 8px;
-                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                                padding: 7px 10% !important;
-                                width: calc(100% - 20px); /* Tarjetas adaptadas al tamaño de pantalla */
-                                height: auto;
-                                margin: 10px !important;
-                                transition: box-shadow 0.3s, transform 0.3s;
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                            }
 
-                            .custom-cardA1B2C3:hover {
-                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                                transform: scale(1.02);
-                            }
 
-                            .custom-card-headerA1B2C3 {
-                                font-size: 1.25rem;
-                                font-weight: bold;
-                                margin-bottom: 0.5rem;
-                                text-align: center;
-                            }
 
-                            .custom-card-bodyA1B2C3 {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                            }
 
-                            .custom-card-bodyA1B2C3 img {
-                                width: 180px; /* 20px más ancho que la imagen */
-                                height: 100px;
-                                margin-bottom: 1rem;
-                            }
-
-                            .custom-card-bodyA1B2C3 p {
-                                margin: 0;
-                            }
-
-                            .custom-buttonA1B2C3 {
-                                margin-top: 1rem;
-                            }
-
-                            .cantidadA1B2C3 {
-                                display: flex;
-                                align-items: center;
-                                margin-top: 1rem;
-                            }
-
-                            .cantidadA1B2C3 p {
-                                margin: 0 10px;
-                                font-size: 1.25rem;
-                                font-weight: bold;
-                            }
-
-                            .cantidadA1B2C3 input {
-                                width: 60px;
-                                text-align: center;
-                            }
-
-                            .cantidadA1B2C3 .btn {
-                                font-size: 1.25rem;
-                            }
-
-                            .estado-cantidadA1B2C3 {
-                                margin-top: 1rem;
-                                font-weight: bold;
-                            }
-
-                            @media (max-width: 768px) {
-                                .custom-cardA1B2C3 {
-                                    width: calc(100% - 20px); /* 1 tarjeta por fila en pantallas medianas */
-                                }
-                            }
-
-                            @media (max-width: 480px) {
-                                .custom-cardA1B2C3 {
-                                    width: calc(100% - 20px); /* 1 tarjeta por fila en pantallas pequeñas */
-                                }
-                            }
-                        </style>
-                    </div>
-                    <script>
-                        // Función para renderizar mensajes
-                        function renderMensajesA1B2C3(misMensajes) {
-                            const contenedor = document.getElementById('contenedorMensajesA1B2C3');
-                            contenedor.innerHTML = ''; // Limpiar el contenedor
-
-                            // Ordenar los mensajes de más reciente a más viejo
-                            misMensajes.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                            misMensajes.forEach(mensaje => {
-                                const card55 = document.createElement('div');
-                                card55.className = 'custom-cardA1B2C3';
-                                card55.style.width = "333px"; // Define el ancho del contenedor de la tarjeta
-                                card55.style.padding = '10px'; // Asegura que el contenido no se desborde
-                                card55.style.overflow = 'hidden'; // Asegura que el contenido no se desborde
-
-                                // Obtener los valores de emailCliente y numCelCliente
-                                const emails = Array.isArray(mensaje.emailCliente) && mensaje.emailCliente.length > 0 
-                                    ? mensaje.emailCliente.map(emailObj => emailObj.emailCliente).join('<br>') 
-                                    : 'No disponible';
-
-                                const telefonos = Array.isArray(mensaje.numCelCliente) && mensaje.numCelCliente.length > 0 
-                                    ? mensaje.numCelCliente.map(telObj => telObj.numCelCliente).join('<br>') 
-                                    : 'No disponible';
-
-                                // Formatear la fecha a dd/mm/yyyy
-                                const formattedDate = new Date(mensaje.date).toLocaleDateString('es-ES');
-
-                                card55.innerHTML = `
-                                    <div class="custom-card-bodyA1B2C3" style="padding: 10px !important; word-wrap: break-word;">
-                                        <div align="left" style="word-wrap: break-word;">
-                                            <div class="custom-card-headerA1B2C3" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                                ${mensaje.nombreCliente} ${mensaje.apellidoCliente}
-                                            </div>
-                                            <p style="padding: 5px ;"><strong>Fecha:</strong><br> <span style="word-wrap: break-word;">${formattedDate}</span></p>
-                                            <p style="padding: 5px ;"><strong>Mensaje:</strong><br> <span style="word-wrap: break-word;">${mensaje.messageOwner}</span></p>
-                                        </div>
-                                        <button class="btn btn-danger custom-buttonA1B2C3" onclick="eliminarMensajeA1B2C3('${mensaje._id}')">Eliminar</button>
-                                    </div>
-                                `;
-                                contenedor.appendChild(card55);
-                            });
-                        }
-
-                        // Función para eliminar mensaje con confirmación
-                        function eliminarMensajeA1B2C3(idMensaje) {
-                            if (confirm('¿Estás seguro de que deseas eliminar este mensaje?')) {
-                                fetch(`/eliminar-mensaje/${idMensaje}`, {
-                                    method: 'DELETE'
-                                })
-                                .then(response => {
-                                    if (response.ok) {
-                                        mostrarExito('Mensaje eliminado exitosamente.');
-                                        // Vuelve a renderizar los mensajes después de eliminar uno
-                                        renderMensajesA1B2C3(misMensajes);
-                                        actualizarData()
-                                    } else {
-                                        mostrarAlerta('Hubo un error al eliminar el mensaje.');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error al eliminar el mensaje:', error);
-                                    alert('Hubo un error al eliminar el mensaje.');
-                                });
-                            }
-                        }
-
-                        // Función para filtrar por nombre
-                        function filtrarPorNombreMensajeA1B2C3() {
-                            const inputBuscar = document.getElementById('inputBuscarMensajeA1B2C3').value.toLowerCase();
-                            const mensajesFiltrados = misMensajes.filter(mensaje =>
-                                mensaje.nombreCliente.toLowerCase().includes(inputBuscar)
-                            );
-
-                            // Actualizar el select con los mensajes encontrados
-                            const selectMensajesEncontrados = document.getElementById('selectMensajesEncontradosA1B2C3');
-                            selectMensajesEncontrados.innerHTML = ''; // Limpiar el select
-
-                            if (mensajesFiltrados.length > 0) {
-                                mensajesFiltrados.forEach(mensaje => {
-                                    const option = document.createElement('option');
-                                    option.value = mensaje._id;
-                                    option.textContent = mensaje.nombre + ' ' + mensaje.apellido;
-                                    selectMensajesEncontrados.appendChild(option);
-                                });
-
-                                // Mostrar el select
-                                selectMensajesEncontrados.style.display = 'block';
-                            } else {
-                                // Ocultar el select si no hay resultados
-                                selectMensajesEncontrados.style.display = 'none';
-                            }
-
-                            renderMensajesA1B2C3(mensajesFiltrados);
-                        }
-
-                        // Función para seleccionar mensaje del select
-                        function seleccionarMensajeA1B2C3() {
-                            const selectMensajesEncontrados = document.getElementById('selectMensajesEncontradosA1B2C3');
-                            const mensajeSeleccionado = misMensajes.find(mensaje => mensaje._id === selectMensajesEncontrados.value);
-                            renderMensajesA1B2C3([mensajeSeleccionado]);
-                        }
-
-                        // Función para filtrar por fechas
-                        function filtrarPorFechasA1B2C3() {
-                            const fechaDesde = document.getElementById('fechaDesdeA1B2C3').value;
-                            const fechaHasta = document.getElementById('fechaHastaA1B2C3').value;
-
-                            const mensajesFiltrados = misMensajes.filter(mensaje => {
-                                const fechaMensaje = new Date(mensaje.date);
-                                return (!fechaDesde || fechaMensaje >= new Date(fechaDesde)) &&
-                                    (!fechaHasta || fechaMensaje <= new Date(fechaHasta));
-                            });
-
-                            renderMensajesA1B2C3(mensajesFiltrados);
-                        }
-
-                        // Función para reiniciar el filtro de fechas
-                        function reiniciarFiltroFechasA1B2C3() {
-                            document.getElementById('fechaDesdeA1B2C3').value = '';
-                            document.getElementById('fechaHastaA1B2C3').value = '';
-                            renderMensajesA1B2C3(misMensajes);
-                        }
-
-                        // Llamar a la función para renderizar los mensajes al cargar la página
-                        
+<!-- Mensajeria -->
+<div id="mess" class="w-100 tab-pane fade" style="padding-top: 1rem;">
+    <div class="w-100" align="center">
+        <br>
+        <h2>Mis Mensajes</h2>
+        <div class="w-100" align="center">
+            <!-- Mensaje de cantidad de clientes -->
+            <h4 id="cantMensajesA1B2C3">Actualmente NO tienes mensajes.</h4>
+            <script>
+                let misMensajes = [];
+                if (ownerMensajes.length >= 1) {
+                    let misMensa = ownerMensajes.filter(m => m.idOwner == idOwner && !m.nwePromoOk && !m.nweNoticias);
+                    misMensajes = misMensa;
+                    function actualizarCantidadMensajesA1B2C3() {
+                        const cantMensajes = document.getElementById("cantMensajesA1B2C3");
                         if (misMensajes.length >= 1) {
-                            renderMensajesA1B2C3(misMensajes);
+                            cantMensajes.innerHTML = `<h4>Tienes ${misMensajes.length} mensajes.</h4>`;
+                        } else {
+                            cantMensajes.innerHTML = `<h4>
+                                Actualmente NO tienes mensajes. 
+                                <br>
+                                Comienza a vender y recibirás algunos.</h4>`;
                         }
-
-                        function exportarMensajesAExcelB85485(clientes) {
-                            try {
-                                // Crear una nueva hoja de trabajo
-                                const worksheet = XLSX.utils.json_to_sheet(clientes);
-
-                                // Crear un nuevo libro de trabajo
-                                const workbook = XLSX.utils.book_new();
-                                XLSX.utils.book_append_sheet(workbook, worksheet, "Mensajes");
-
-                                // Generar un archivo Excel
-                                XLSX.writeFile(workbook, 'MisMensajes.xlsx');
-                                
-                                // Mostrar alerta de éxito
-                                mostrarExito("El archivo Excel se ha descargado correctamente.");
-                                setTimeout(async () => {
-                                    await actualizarData()
-                                }, 1000);
-
-                            } catch (error) {
-                                // Mostrar alerta de error
-                                mostrarAlerta("Hubo un error al intentar descargar el archivo. Por favor, intenta nuevamente más tarde.");
-                                setTimeout(async () => {
-                                    await actualizarData()
-                                }, 1000);
-                            }
-                        }
-
-                    </script>
+                    }
+                    actualizarCantidadMensajesA1B2C3();
+                }
+            </script>
+            <br>
+            <div id="hideFil" style="margin-left: 4rem" class="d-flex justify-content-center align-items-center" align="center">
+                <!-- Buscador -->
+                <div class="align-items-center" align="center">
+                    <p>Buscar cliente por nombre</p>
+                    <div class="d-flex align-items-center">
+                        <input placeholder="Buscar cliente" type="text" id="inputBuscarMensajeA1B2C3" oninput="filtrarPorNombreMensajeA1B2C3()" class="form-control" style="width:150px;">
+                        <a class="fas fa-search" onclick="filtrarPorNombreMensajeA1B2C3()" style="font-size:1.5rem; margin: 1rem;"></a>
+                    </div>
+                    <select id="selectMensajesEncontradosA1B2C3" size="5" onchange="seleccionarMensajeA1B2C3()" class="form-select" style="width:150px; display:none; position: absolute; z-index: 999999;"></select>
                 </div>
+                <!-- reiniciador -->
+                <div class="col-auto" style="margin: auto 2rem auto 6rem;">
+                    <button class="btn btn-outline-secondary" onclick="reiniciarFiltroFechasA1B2C3()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <!-- Filtro por fechas -->
+                <div>
+                    <p>Filtrar y ordenar por fechas</p>
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="fechaDesdeA1B2C3">Desde:</label>
+                            <input type="date" id="fechaDesdeA1B2C3" class="form-control" onchange="setTimeout(filtrarPorFechasA1B2C3, 2000)">
+                        </div>
+                        <div class="col">
+                            <label for="fechaHastaA1B2C3">Hasta:</label>
+                            <input type="date" id="fechaHastaA1B2C3" class="form-control" onchange="setTimeout(filtrarPorFechasA1B2C3, 2000)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="contenedorMensajesA1B2C3" class="card-container"></div>
+        <br><br><br>
+        <div class="card-footer fixed-bottom bg-white opacity-8" style="z-index: 9999999; padding: 1rem; margin-top: 1rem">
+            <button class="btn btn-primary" onclick="exportarMensajesAExcelB85485(misMensajes)">Descargar en Excel</button>
+        </div>
+    </div>
+    <script>
+        // Función para renderizar mensajes
+        function renderMensajesA1B2C3(misMensajes) {
+            const contenedor = document.getElementById('contenedorMensajesA1B2C3');
+            contenedor.innerHTML = ''; // Limpiar el contenedor
+
+            // Ordenar los mensajes de más reciente a más viejo
+            misMensajes.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            misMensajes.forEach(mensaje => {
+                const card55 = document.createElement('div');
+                card55.className = 'custom-cardA1B2C3';
+                card55.style.width = "333px"; // Define el ancho del contenedor de la tarjeta
+                card55.style.padding = '10px'; // Asegura que el contenido no se desborde
+                card55.style.overflow = 'hidden'; // Asegura que el contenido no se desborde
+
+                // Obtener los valores de emailCliente y numCelCliente
+                const emails = Array.isArray(mensaje.emailCliente) && mensaje.emailCliente.length > 0 
+                    ? mensaje.emailCliente.map(emailObj => emailObj.emailCliente).join('<br>') 
+                    : 'No disponible';
+
+                const telefonos = Array.isArray(mensaje.numCelCliente) && mensaje.numCelCliente.length > 0 
+                    ? mensaje.numCelCliente.map(telObj => telObj.numCelCliente).join('<br>') 
+                    : 'No disponible';
+
+                // Formatear la fecha a dd/mm/yyyy
+                const formattedDate = new Date(mensaje.date).toLocaleDateString('es-ES');
+
+                card55.innerHTML = `
+                    <div class="custom-card-bodyA1B2C3" style="padding: 10px !important; word-wrap: break-word;">
+                        <div align="left" style="word-wrap: break-word;">
+                            <div class="custom-card-headerA1B2C3" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                ${mensaje.nombreCliente}
+                            </div>
+                            <p style="padding: 5px ;"><strong>Fecha:</strong><br> <span style="word-wrap: break-word;">${formattedDate}</span></p>
+                            <p style="padding: 5px ;"><strong>Mensaje:</strong><br> <span style="word-wrap: break-word;">${mensaje.messageOwner}</span></p>
+                        </div>
+                        <button class="btn btn-danger custom-buttonA1B2C3" onclick="eliminarMensajeA1B2C3('${mensaje._id}')">Eliminar</button>
+                    </div>
+                `;
+                contenedor.appendChild(card55);
+            });
+        }
+
+        // Función para eliminar mensaje
+        async function eliminarMensajeA1B2C3(idMensaje) {
+            try {
+                if (confirm('¿Estás seguro de que deseas eliminar este mensaje?')) {
+                    const formData = new FormData();
+                    formData.append('idMensaje', idMensaje);
+
+                    const response = await fetch(`${endpoints[47]}`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Authorization': `Bearer ${jwToken}` }
+                    });
+
+                    if (response.ok) {
+                        mostrarExito('Mensaje eliminado exitosamente.');
+                        renderMensajesA1B2C3(misMensajes);
+                        await actualizarData();
+                    } else {
+                        mostrarAlerta('Hubo un error al eliminar el mensaje.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarAlerta('Ocurrió un error: ' + error.message);
+                setTimeout(async () => await actualizarData(), 1000);
+            }
+        }
+
+        // Filtro por nombre
+        function filtrarPorNombreMensajeA1B2C3() {
+            const inputBuscar = document.getElementById('inputBuscarMensajeA1B2C3').value.toLowerCase();
+            const mensajesFiltrados = misMensajes.filter(mensaje =>
+                mensaje.nombreCliente.toLowerCase().includes(inputBuscar)
+            );
+
+            renderMensajesA1B2C3(mensajesFiltrados);
+        }
+
+        // Filtro por fechas
+        function filtrarPorFechasA1B2C3() {
+            const fechaDesde = new Date(document.getElementById('fechaDesdeA1B2C3').value);
+            const fechaHasta = new Date(document.getElementById('fechaHastaA1B2C3').value);
+            const mensajesFiltrados = misMensajes.filter(mensaje => {
+                const mensajeFecha = new Date(mensaje.date);
+                return mensajeFecha >= fechaDesde && mensajeFecha <= fechaHasta;
+            });
+
+            renderMensajesA1B2C3(mensajesFiltrados);
+        }
+
+        // Reiniciar filtro
+        function reiniciarFiltroFechasA1B2C3() {
+            document.getElementById('fechaDesdeA1B2C3').value = '';
+            document.getElementById('fechaHastaA1B2C3').value = '';
+            renderMensajesA1B2C3(misMensajes);
+        }
+
+        renderMensajesA1B2C3(misMensajes)
+
+    </script>
+</div>
+
+
+
+
+
+
+
+                
                 <!-- Mis Finanzas -->
                 <div id="finans" class="w-100 tab-pane fade" align="center" style="">
                     <br><br>
@@ -6782,7 +6666,7 @@ card7.appendChild(cardFooterEnv);
                                 // Obtener los 5 primeros clientes con más facturación
                                 const clientesFacturacion = Ventas2.reduce((acc, venta) => {
                                     const totalCompra = venta.TotalCompra ? parseFloat(venta.TotalCompra) : 0;
-                                    const nombreCliente = venta.nombreCli || 'Sin nombre Cliente';
+                                    const nombreCliente = venta.nombreCli || '';
                                     acc[nombreCliente] = (acc[nombreCliente] || 0) + totalCompra;
                                     return acc;
                                 }, {});

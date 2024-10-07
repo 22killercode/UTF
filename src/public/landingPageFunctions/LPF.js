@@ -107,7 +107,7 @@
                     
                     const email = document.getElementById('emailSignIn').value;
                     const password = document.getElementById('passwordSignIN').value;
-                    ////const endpoints = JSON.parse(sessionStorage.getItem('endPointsIdTokens'));
+
                     //console.log("Hizo click en el boton para ingresar al Cpanel", endpoints[22])
 
                     try {
@@ -129,16 +129,17 @@
                             sessionStorage.setItem('ownerProducts', JSON.stringify(result.data.ownerProducts));
                             sessionStorage.setItem('ownerPromos', JSON.stringify(result.data.ownerPromos)); 
                             sessionStorage.setItem('ownerMensajes', JSON.stringify(result.data.ownerMensajes));  
-                            //console.log("Que datos trajo del server DESDE EL SIGN IN??",result.data.dataOwner)
                             //window.location.href = `http://localhost:3020/cPanel.html?token=${jwToken}`;
-                            window.location.href = `${urlServer}cPanel.html?token=${jwToken}`;
+                            const diretionsss = `${urlServer}cPanel.html?token=${jwToken}`;
+                            console.log("Que datos trajo del server DESDE EL SIGN IN??",diretionsss, result.data.dataOwner)
+                            window.location.href = diretionsss
                         } else {
                             ocultarModalLoading()
                             mostrarAlertaSigIn(`${result.message}`);
                         }
                     } catch (error) {
                         console.error('Error:', error);
-                        console.error('Error:', error.message);
+                        console.log('Error:', error.message);
                         ocultarModalLoading()
                         mostrarAlertaSigIn(`Revisa tu conexión a internet e inténtelo de nuevo más tarde.${error}`);
                         setTimeout(async () => {

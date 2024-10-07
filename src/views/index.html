@@ -54,6 +54,10 @@
 	</head>
     <style> 
         @media (max-width: 700px) {
+            .sep{
+                margin: 2rem 0 !important
+            }
+
             html{
                 width: 100% !important;
                 margin: 0rem;
@@ -77,6 +81,10 @@
         }
 
         @media (max-width: 450px) {
+            #separador1{
+                margin: 2rem 0 !important
+            }
+
 /* Estilos generales para todos los tamaños de pantalla */
 html, body {
     padding: 0;
@@ -166,6 +174,11 @@ html, body {
             #menuCelu .close-btn {
                 display: none;
             }
+
+            #separa1{
+                margin: 5rem 0 0 0 !important
+            }
+
             #menuHorizontal{
                 display: none;
             }
@@ -208,6 +221,7 @@ html, body {
                         <li class="nav-item">
                             <a class="nav-link" href="#4ta" tabindex="-1">Precios</a>
                         </li>
+                        <br>
                         <li>
                             <form class="">
                                 <div>
@@ -452,17 +466,26 @@ html, body {
         <!-- 1er pantalla -->
         <div class="m-4 p-2 container-xxl full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
             <div class="row w-100">
-                <div class="col-md-6 left-section" style="margin-top: 2rem; text-align: center;">
-                    <h1 style="font-size: 3.8vw;">
-                        <span class="highlight">Tu tienda gratis <br> en un par de clicks.</span>
+                <div class="col-md-6 left-section mt-4" style="padding: 2rem 1.5rem 0 1.5rem; text-align: center;">
+                    <h1 style="font-size: 3.5vw;">
+                        <span class="highlight">Usa tienda fácil <br> Tu tienda online gratis y en un par de clicks.</span>
                         <br>
-                        !Abrí tu tienda fácil, <br> publicas fácil, <br> vendes fácil...!</h1>
+                    </h1>
+                    <span id="separa1"></span>
+                    <p style="font-size: 1.5rem;" align="center">
+                        <i  class="fas fa-check-circle" style="color: green;"></i> Abrí tu tienda fácil.
+                        <br> 
+                        <i class="fas fa-check-circle" style="color: green;"></i> Publicas fácil.
+                        <br> 
+                        <i class="fas fa-check-circle" style="color: green;"></i> Vendes fácil.
+                    </p>
+                    
                     <br>
                     <h4 >¡Inscribete sin cargo y empezá a vender hoy mismo!</h4>
                     <br>
                     <a class="btn btn-success" href="#4ta" tabindex="-1" style="margin: 0 0.5rem; font-size: 1.5rem;">Crea tu tienda gratis</a>
                 </div>
-                <div class="col-md-6 p-0">
+                <div class="col-md-6 p-0" style="display: relative !important">
                     <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="10000">
                         <ol class="carousel-indicators" >
                             <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
@@ -471,17 +494,17 @@ html, body {
                             <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></li>
                         </ol>
                         <div class="carousel-inner h-100">
-                            <div class="carousel-item active" style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img src="/imagen/block/dispositivos" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                            <div class="carousel-item active" style="margin-top:6rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img class="img-fluid" src="/imagen/block/dispositivos" alt="Descripción de la imagen" style="max-height: 450px; height: auto;">
                             </div>
                             <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img src="/imagen/block/rubros" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                                <img src="/imagen/block/rubros" alt="Descripción de la imagen" style="max-height: 100%; height: auto;">
                             </div>
                             <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img src="/imagen/block/pasos" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                                <img src="/imagen/block/pasos" alt="Descripción de la imagen" style="max-height: 100%; height: auto;">
                             </div>
                             <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img src="/imagen/block/incluye" alt="Descripción de la imagen" style="max-width: 100%; height: auto;">
+                                <img src="/imagen/block/incluye" alt="Descripción de la imagen" style="max-height: 100%; height: auto;">
                             </div>
                         </div>
                         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" hidden>

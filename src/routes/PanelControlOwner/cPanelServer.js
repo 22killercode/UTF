@@ -145,45 +145,45 @@ router.get(`/dataInfoTokensEtc`,  async (req, res) => {
 });
 
 
-// Ruta para confirmar la inscripción desde el email de comprobacion hay que meterle seguridad
-router.get('/confirmaInscripcion', async (req, res) => {
-    try {
-        const id = req.query.id; // Accede al parámetro 'id' de la consulta
-        console.log(`ID recibido en la consulta: ${id}`);
-        const usuarioBloqueado = false
-        const dataUser = await User.findByIdAndUpdate(id, {usuarioBloqueado: usuarioBloqueado}, {new:true} );
-        const configGrl = await ConfigGrl.findOne();
-        //console.log("Que urlOwwners encontro??????", configGrl)
+    // Ruta para confirmar la inscripción desde el email de comprobacion hay que meterle seguridad
+    router.get('/confirmaInscripcion', async (req, res) => {
+        try {
+            const id = req.query.id; // Accede al parámetro 'id' de la consulta
+            console.log(`ID recibido en la consulta: ${id}`);
+            const usuarioBloqueado = false
+            const dataUser = await User.findByIdAndUpdate(id, {usuarioBloqueado: usuarioBloqueado}, {new:true} );
+            const configGrl = await ConfigGrl.findOne();
+            //console.log("Que urlOwwners encontro??????", configGrl)
 
-        const urlServer = configGrl.urlServer
-        
-        if (dataUser) {
-            // El usuario fue encontrado
-            return res.status(200).send(`
+            const urlServer = configGrl.urlServer
+            
+            if (dataUser) {
+                // El usuario fue encontrado
+                return res.status(200).send(`
+                    <script>
+                        window.location.href = '${urlServer}';
+                        mostrarExito('Usuario aprobado.');
+                    </script>
+                `);
+            } else {
+                // El usuario no fue encontrado
+                return res.status(404).send(`
+                    <script>
+                        window.location.href = '${urlServer}';
+                        mostrarAlerta('Usuario no aprobado.');
+                    </script>
+                `);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return res.status(500).send(`
                 <script>
                     window.location.href = '${urlServer}';
-                    mostrarExito('Usuario aprobado.');
-                </script>
-            `);
-        } else {
-            // El usuario no fue encontrado
-            return res.status(404).send(`
-                <script>
-                    window.location.href = '${urlServer}';
-                    mostrarAlerta('Usuario no aprobado.');
+                    alert('Error en el servidor.');
                 </script>
             `);
         }
-    } catch (error) {
-        console.error('Error:', error);
-        return res.status(500).send(`
-            <script>
-                window.location.href = '${urlServer}';
-                alert('Error en el servidor.');
-            </script>
-        `);
-    }
-});
+    });
 
     // Arma las rutas de los urlOwners
     async function urls(configGrl) {
@@ -297,7 +297,7 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
 
         let endPointsIdTokens = GenIEndpoints(urlServer)
 
-        console.log("Que enpoints esta recargadno desde 96?????????", endPointsIdTokens.length)
+        //console.log("Que enpoints esta recargadno desde 96?????????", endPointsIdTokens.length)
 
         const jwToken = jwt.sign({ email: dataOwner.email }, 'Sebatoken223', { expiresIn: '60m' });
         
@@ -2404,7 +2404,33 @@ if (serverPathImg && Array.isArray(serverPathImg)) {
     
     
 
-    //console.log("Qque urlpoint armo???", cunatos.length, cunatos)
+     //23 Elmina mensajes desde cPanel
+    router.post(urlPoint(47), [verificarToken], async (req, res) => {
+        console.log(`Que Mensaje quiere eliminar en el server`, req.body);
+        try {
+
+            const idEraser = req.body.idMensaje
+
+            //console.log(`Que Noticia quiere eliminar en el idEraser`, idEraser);
+            if (!idEraser) {
+                return res.status(400).json({ success: false, message: "ID de eliminar Noticia no proporcionado" });
+            }
+
+            // Eliminar la Noticia y obtener el documento eliminado
+            const deletedMess = await Mensajes.findByIdAndDelete(idEraser);
+
+            if (!deletedMess) {
+                console.log("No eliminó el mensaje cPanel", req.body);
+                return res.status(404).json({ success: false, message: "Noticia no encontrada ni eliminada" });
+            }
+
+            res.status(200).json({ success: true, message: `Noticia eliminada exitosamente.`, newsList:deletedMess  });
+    
+        } catch (error) {
+            console.error("Error al eliminar la Noticia:", error);
+            return res.status(500).json({ success: false, message: "Error al eliminar la Noticia", error });
+        }
+    });
 
 
 };

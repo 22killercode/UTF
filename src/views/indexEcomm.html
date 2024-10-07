@@ -49,11 +49,9 @@
 		<script src="https://sdk.mercadopago.com/js/v2"></script>
 
 		<script src="/alertas.js"></script>    
+
 		<!-- <script src="/reiniciar.js"></script>     -->
-
-		<link rel="manifest" href="manifests/manifest.json">
-		
-
+		<!-- <link rel="manifest" href="manifests/manifest.json"> -->
 	</head> 
 
 	<header id="barraMenuArriba" style="z-index:9999999 !important;display:none !important; margin: 0 !important; opacity: 0; height: 3.5rem !important; position: sticky !important; width: 100vw; justify-content: space-between; align-items: center;">
@@ -65,7 +63,7 @@
 			<div id="duenoEcom22" style="flex: 1; max-width: 300px !important; text-align: center;">Nombre del Comercio</div>
 			
 			<!-- aquí va el logo del comercio -->
-			<div id="logoOwner222" style="flex: 0 0 50px; text-align: center; margin: 0rem;">
+			<div id="logoOwner222" style="flex: 0 0 50px; text-align: center; margin: 0rem 2rem 0 0;">
 				<img src="logo.png" alt="Logo" style="max-width: 100%; height: auto;">
 			</div>
 			
@@ -82,7 +80,11 @@
 				<a class="fas fa-user icon-hover" data-bs-toggle="modal" data-bs-target="#usuario"></a>
 			</i>
 			
-			<button id="butonMenu9898" style="background:transparent; margin: 0 0 0 -1rem !important;" class="fas fa-bars blanco icon-hover" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></button>
+			<button id="butonMenu9898" style="background: transparent; border: none; margin: 0 0 0 -1rem !important;" 
+			class="none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+		<i class="fas fa-bars blanco icon-hover" style="color:white"></i>
+	</button>
+	
 			
 			<style>
 				.icon-hover {
@@ -98,7 +100,10 @@
 		</div>
 		<style>
 			/* Media query para dispositivos con un ancho máximo de 600px (celulares) */
-			@media screen and (max-width: 1000px) {
+			@media screen and (max-width: 1120px) {
+				#menuContainer{
+					width: 300px !important;;
+				}
 				#logo{
 				margin: auto !important;
 				height: 70% !important;;
@@ -113,8 +118,9 @@
 				padding: 0 0 0 0!important;
 				}
 				#nombreUserArriba{
-				margin: 0 !important;
-				padding: 0 !important;
+					width: 250px !important;;
+					margin: 0 !important;
+					padding: 0 !important;
 				}
 				#buscador5445{
 				margin: 0 1rem !important;
@@ -122,11 +128,14 @@
 				}
 			}
 			@media screen and (max-width: 830px) {
+				#menuLogos{
+					margin-right: 2rem;
+				}
 				#nombreUserArriba {
 					display: none; /* Oculta el elemento en dispositivos móviles */
 				}
 				#logo{
-				margin: 0 0 0 4rem !important;
+				margin: 0 0 0 8rem !important;
 				height: 70%;
 				width: auto;
 				}
@@ -156,7 +165,16 @@
 				}
 
 			}
+			@media screen and (max-width: 861px) {
+				#duenoEcom22 {
+				display: none; /* Oculta el elemento en dispositivos móviles */
+				}
+
+			}
 			@media (max-width: 450px) {
+				#pestanasProdPRom{
+					margin: -6rem 0 2rem 0 !important;
+				}
 				html{
 					width: 430px !important;
 					margin: 0rem;
@@ -365,7 +383,7 @@
 					}
 				
 				</style>
-				<a align="center" href="#lunita" class="moon-link">
+				<a align="center" href="#lunitaAqui" class="moon-link">
 					<span class="moon" align="center">
 						<i class="fas fa-arrow-down" align="center" hidden></i>
 					</span>
@@ -411,8 +429,9 @@
 					margin-left: 0rem;
 				}
 			</style>
+			<div id="lunitaAqui"></div>
 			<!-- menu productos y promos --> 
-			<ul class="nav nav-tabs w-100" style="z-index: 8;">
+			<ul id="pestanasProdPRom" class="nav nav-tabs w-100" style="z-index: 8;">
 				<li class="nav-item">
 					<a class="nav-link active" data-bs-toggle="tab" href="#produc" id="colorBtnProdProm">
 						<h6 class="tab-text">Productos & servicios</h6>
@@ -1155,7 +1174,7 @@
 	</div>
 
 	<!-- SIGNUP inscribir a nuevos usuarios clientes ecommerce -->
-	<div id="signUp" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999;" data-bs-target="#staticBackdrop">
+	<div id="signUp" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 999999999;" data-bs-target="#staticBackdrop">
 		<div class="modal-dialog modal-lg modal-dialog-centered" >
 			<div class="modal-content" id="colorElsign">
 				<div class="modal-header">
@@ -1437,8 +1456,8 @@
 
 										</script>
 									</div>
-									<div class="card-header" style="margin:-1rem 0 0rem 0;">
-										<a href="" data-bs-toggle="modal" data-bs-target="#signUp" style="margin:-1rem 0 1rem 0;">Registrarse</a>
+									<div class="card-header" style="margin:auto">
+										<a href="" data-bs-toggle="modal" data-bs-target="#signUp" style="margin:auto;">Registrarse</a>
 										<br><br>
 										<a href="" hidden> Inicia sesión con Google </a>
 									</div>
@@ -1668,11 +1687,15 @@
 									const dataPedidoConf = {dataCliente, dataPedido, direccion, token}
 									console.log('*****Intenta guardar la dire y pasa a cobrar los productos',dataPedidoConf);
 									await cobrarProductos(dataPedidoConf)
+									$('#exampleModalToggleDir').modal('hide');
+
 								}
 								else{
 									console.log('//////////////////////////////////////Entro a guardar nueva direccion');
 									const direccion = {lat:lat, lng:lng, pais:pais, estado:estado, localidad:localidad, calle:calle, numeroPuerta:numeroPuerta, CP:CP}
 									await guardarNuevaDireccion(direccion)
+									$('#exampleModalToggleDir').modal('hide');
+
 								}
 							});
 					</script>
@@ -1854,6 +1877,8 @@
 									const dataPedidoConf = {dataCliente, dataPedido, direccion, token}
 									console.log('Que datos se encontraron para enviar al backend y cobrar',direccion);
 									await cobrarProductos(dataPedidoConf)
+									$('#exampleModalToggleDir').modal('hide');
+									$('#exampleModalToggle2').modal('hide');
 								}
 									else{
 									const direccion = {lat:latitud, lng:longitud, pais:pais, estado:estado, localidad:localidad, calle:calle, numeroPuerta:numeroPuerta, CP:CP}
@@ -1862,6 +1887,8 @@
 										return
 									}
 									await guardarNuevaDireccion(direccion)
+									$('#exampleModalToggleDir').modal('hide');
+									$('#exampleModalToggle2').modal('hide');
 									console.log('Entro a guardar nueva direccion');
 								}
 							});
@@ -2862,7 +2889,6 @@
 									mostrarModalLoading()
 									const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
 									fetch(`${endpoints[18]}`, { 
-									//fetch('http://localhost:3020/enviar/reclamo', {
 										method: 'POST',
 										headers: {
 											'Content-Type': 'application/json'
@@ -2900,6 +2926,10 @@
 			
 		</div>
 	</div>
+
+
+
+
 
 	<!-- Modal para cambiar direccion de entrega-->
 	<div class="modal fade" id="exampleModalToggleDirChange" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1" style="background-color: lightslategray !important;">
@@ -3219,6 +3249,10 @@
 		</div>
 	</div>
 
+
+
+
+
 	<!-- Instrucicones de uso de los update de email y celus-->
 	<div class="modal fade" id="instruccionesUdpated" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
@@ -3297,7 +3331,7 @@
 	</div>
 
 
-	<!-- Modal para mostrar las imágenes GGIANTES de las Promos -->
+	<!-- Modal para mostrar las imágenes GIGANTES de las Promos -->
 	<div class="modal fade" id="modalPromos" tabindex="-1" aria-labelledby="modalHomeLabel" aria-hidden="true" data-bs-backdrop="static" style="z-index: 9999999999999999999999 !important;">
 		<div class="modal-dialog modal-dialog-centered" style="max-width: 800px;" align="center"> <!-- Cambiado a un ancho personalizado -->
 			<div class="modal-content" style="padding:0; margin:0;" id="designPromos" align="center">

@@ -126,7 +126,7 @@ configsss();
             const messageCliente = mensaje.messageCliente;
             const nombreComercio = dataOwner.nombreEcommerce;
             const idOwner = dataOwner._id
-            const nombreCliente = dataCliente.nombre + "" + dataCliente.apellido
+            const nombreCliente = `${dataCliente.nombre} ${dataCliente.apellido}`;
             const idCliente = dataCliente._id
 
             if (subjectOwner) {
