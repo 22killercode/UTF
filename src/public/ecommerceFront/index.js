@@ -137,7 +137,8 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 		function obtenerProductosYPromociones() {
 			const urlOwner2 = {urlOwner : urlOwner}
 			//console.log("Entro a buscar los productos usando el orlOwner:", urlOwner2)
-			fetch('http://localhost:3020/buscandoPruductosEcommerce', {
+			// fetch('http://localhost:3020/buscandoPruductosEcommerce', {
+			fetch(`${urlOwner}buscandoPruductosEcommerce`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

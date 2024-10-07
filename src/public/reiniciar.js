@@ -12,7 +12,9 @@ const dataOwner     = JSON.parse(sessionStorage.getItem('ownerData')) || [];
 
 //console.log("Que datos basicos grl encontro??", basicData )
 
-let _id, nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, password, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal, urlServer, fondoPantalla, clientes, retiros, cheqDocument, urlOwner, apiKeyMap, lastInfo;
+const urlOwner = dataOwner.urlOwner || basicData.urlOwner
+
+let _id, nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, password, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal, urlServer, fondoPantalla, clientes, retiros, cheqDocument,  apiKeyMap, lastInfo;
 
 //let ventasOwner = Ventas
 apiKeyMap = basicData.apiKeyMap

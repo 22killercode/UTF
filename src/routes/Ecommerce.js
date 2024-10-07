@@ -39,6 +39,8 @@ const bodyParser = require('body-parser');
 
 router.use(bodyParser.text());
 
+let urlOwner = ""
+
 //const endpointTokensArray = []
 
 const {guardarImagenCli, endpointTokensArray2, verificarToken, sendMail, guardarMensajes,} = require('./funcionesymas');
@@ -57,6 +59,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             const ConfigsOne = configs
             const jwToken = jwt.sign({ email: "email" }, 'Sebatoken22', { expiresIn: '60m' });
             //console.log("Le entrooooooooooooo a busacar los datos basicos",ConfigsOne)
+            urlOwner = configs.urlOwner
             // arma el paquete de datos iniciales
             const datosBasicos = {endpointTokensArray2, ConfigsOne, jwToken, jwToken}
             // Si todo sale bien, responder con los datos y un código 200 (success)
@@ -104,7 +107,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //02 revisa de forma automatica los datos del Owner el ecommerce
         const endpointTokensArrayString0 = endpointTokensArray[0]
         const endpointTokensArray0 = endpointTokensArrayString0.split(',');
-        const endpoint0 = (typeof endpointTokensArray0 === 'string') ? endpointTokensArray0 : endpointTokensArray0.toString().replace("http://localhost:3020/", "");
+        const endpoint0 = (typeof endpointTokensArray0 === 'string') ? endpointTokensArray0 : endpointTokensArray0.toString().replace(`${urlOwner}`, "");
         //console.log("Que enpoint es el num 0 de ecommerce server??????", endpoint0)
         router.post(`/${endpoint0}`, async (req, res) => { 
             const urlOwner = req.body.urlOwner
@@ -133,7 +136,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //03 revisa si es cliente y llega el IP de forma automatica cuando se abre a pagina
         const endpointTokensArrayString3 = endpointTokensArray[55]
         const endpointTokensArray33 = endpointTokensArrayString3.split(',');
-        const endpoint2 = (typeof endpointTokensArray33 === 'string') ? endpointTokensArray33 : endpointTokensArray33.toString().replace("http://localhost:3020/", "");
+        const endpoint2 = (typeof endpointTokensArray33 === 'string') ? endpointTokensArray33 : endpointTokensArray33.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint2}`, [verificarToken], async (req, res) => {
             //const ipCliente = req.ip || req.connection.remoteAddress;
             //console.log("llega algo de FORMA AUTOMATICA Ecommerce para enconrar AUTOMATICAMENTE a slo cleintes", req.body)
@@ -163,7 +166,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //04 SIGNIN desde el signIn MANUAL busca el usuario cliente del ecommerce de forma MANUAL
         const endpointTokensArrayString4 = endpointTokensArray[10]
         const endpointTokensArray4 = endpointTokensArrayString4.split(',');
-        const endpoint4 = (typeof endpointTokensArray4 === 'string') ? endpointTokensArray4 : endpointTokensArray4.toString().replace("http://localhost:3020/", "");
+        const endpoint4 = (typeof endpointTokensArray4 === 'string') ? endpointTokensArray4 : endpointTokensArray4.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint4}`, [], async (req, res) => {
             const ipCliente = req.ip || req.connection.remoteAddress;
             console.log("Ingresas SIGNIN ecommerce", req.body);
@@ -226,7 +229,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //05 SingUP de clientes en forma manual
         const endpointTokensArrayString5 = endpointTokensArray[27]
         const endpointTokensArray5 = endpointTokensArrayString5.split(',');
-        const endpoint5 = (typeof endpointTokensArray5 === 'string') ? endpointTokensArray5 : endpointTokensArray5.toString().replace("http://localhost:3020/", "");
+        const endpoint5 = (typeof endpointTokensArray5 === 'string') ? endpointTokensArray5 : endpointTokensArray5.toString().replace(`${urlOwner}`, "");
         //console.log("que idPoint encontro ",endpoint5)
         router.post(`/${endpoint5}`, [], async (req, res) => {
             const ipCliente = req.ip || req.connection.remoteAddress;
@@ -295,7 +298,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //06 cofirmar la compra por cualquier metodo de pago 
         const endpointTokensArrayString6 = endpointTokensArray[23]
         const endpointTokensArray6 = endpointTokensArrayString6.split(',');
-        const endpoint6 = (typeof endpointTokensArray6 === 'string') ? endpointTokensArray6 : endpointTokensArray6.toString().replace("http://localhost:3020/", "");
+        const endpoint6 = (typeof endpointTokensArray6 === 'string') ? endpointTokensArray6 : endpointTokensArray6.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint6}`, [verificarToken], async (req, res) => {
             //console.log("*Llega DESDE el fronen ecommerce para procsar el pedido y cobrarlo??????????", req.body);
             const codigoPedido = shortid.generate()
@@ -623,7 +626,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         // 07 revisa las direcciones del userEcomm
         const endpointTokensArrayString7 = endpointTokensArray[41]
         const endpointTokensArray7 = endpointTokensArrayString7.split(',');
-        const endpoint7 = (typeof endpointTokensArray7 === 'string') ? endpointTokensArray7 : endpointTokensArray7.toString().replace("http://localhost:3020/", "");
+        const endpoint7 = (typeof endpointTokensArray7 === 'string') ? endpointTokensArray7 : endpointTokensArray7.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint7}`, [verificarToken], async (req, res) => {
         const clientIP = req.ip || req.connection.remoteAddress;
             //console.log("llega algo del Ecommerce para revisar las direcciones de envio de los productos", clientIP, req.body)
@@ -659,7 +662,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //08 se actualizan los datos del ususario del ecommerce
         const endpointTokensArrayString8 = endpointTokensArray[14]
         const endpointTokensArray8 = endpointTokensArrayString8.split(',');
-        const endpoint8 = (typeof endpointTokensArray8 === 'string') ? endpointTokensArray8 : endpointTokensArray8.toString().replace("http://localhost:3020/", "");
+        const endpoint8 = (typeof endpointTokensArray8 === 'string') ? endpointTokensArray8 : endpointTokensArray8.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint8}`, [verificarToken], async (req, res) => {
             console.log("llega algo del Ecommerce paa updatear clientes", req.body)
             console.log("llega algo del Ecommerce paa updatear clientes", req.files)
@@ -867,7 +870,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //09 Actualizar nueva direccion
         const endpointTokensArrayString9 = endpointTokensArray[76]
         const endpointTokensArray9 = endpointTokensArrayString9.split(',');
-        const endpoint9 = (typeof endpointTokensArray9 === 'string') ? endpointTokensArray9 : endpointTokensArray9.toString().replace("http://localhost:3020/", "");
+        const endpoint9 = (typeof endpointTokensArray9 === 'string') ? endpointTokensArray9 : endpointTokensArray9.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint9}`, [verificarToken], async (req, res) => {
             console.log("Recibe la solicitud de agregar la direccion", req.body);
             const { lat, lng, pais, estado, localidad, calle, numeroPuerta, CP, Token, idCliente } = req.body;
@@ -935,7 +938,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //10 descargar todos los pedidos en excell
         const endpointTokensArrayString10 = endpointTokensArray[56]
         const endpointTokensArray10 = endpointTokensArrayString10.split(',');
-        const endpoint10 = (typeof endpointTokensArray10 === 'string') ? endpointTokensArray10 : endpointTokensArray10.toString().replace("http://localhost:3020/", "");
+        const endpoint10 = (typeof endpointTokensArray10 === 'string') ? endpointTokensArray10 : endpointTokensArray10.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint10}`, [verificarToken], async (req, res) => {    
         //router.post('/bajando/aExcell/los/datos2365', async (req, res) => {
             let filePath2 = {}
@@ -1096,7 +1099,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //11 Envia un reclamo al owner
         const endpointTokensArrayString11 = endpointTokensArray[18]
         const endpointTokensArray11 = endpointTokensArrayString11.split(',');
-        const endpoint11 = (typeof endpointTokensArray11 === 'string') ? endpointTokensArray11 : endpointTokensArray11.toString().replace("http://localhost:3020/", "");
+        const endpoint11 = (typeof endpointTokensArray11 === 'string') ? endpointTokensArray11 : endpointTokensArray11.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint11}`, [verificarToken], async (req, res) => {
         //router.post('/enviar/reclamo', async (req, res) => {
             const reclamo = true
@@ -1170,7 +1173,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //12 Envia un reclamo al owner
         const endpointTokensArrayString12 = endpointTokensArray[88]
         const endpointTokensArray12 = endpointTokensArrayString12.split(',');
-        const endpoint12 = (typeof endpointTokensArray12 === 'string') ? endpointTokensArray12 : endpointTokensArray12.toString().replace("http://localhost:3020/", "");
+        const endpoint12 = (typeof endpointTokensArray12 === 'string') ? endpointTokensArray12 : endpointTokensArray12.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint12}`, [verificarToken], async (req, res) => {
         //router.post('/cancelar/envio/pedido', async (req, res) => {
             const { codPedi, idCliente, idOwner} = req.body;
@@ -1228,7 +1231,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //13 cambio de direccion del envio del pedido
         const endpointTokensArrayString13 = endpointTokensArray[97]
         const endpointTokensArray13 = endpointTokensArrayString13.split(',');
-        const endpoint13 = (typeof endpointTokensArray13 === 'string') ? endpointTokensArray13 : endpointTokensArray13.toString().replace("http://localhost:3020/", "");
+        const endpoint13 = (typeof endpointTokensArray13 === 'string') ? endpointTokensArray13 : endpointTokensArray13.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint13}`, [verificarToken], async (req, res) => {
         //router.post('/actualizar/cambioDeDireccionDelPedido', async (req, res) => {
             //console.log("Datos recibidos en req.body:", req.body);
@@ -1345,7 +1348,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         //14 elimina los mensajes push
         const endpointTokensArrayString77 = endpointTokensArray[77]
         const endpointTokensArray77 = endpointTokensArrayString77.split(',');
-        const endpoint77 = (typeof endpointTokensArray77 === 'string') ? endpointTokensArray77 : endpointTokensArray77.toString().replace("http://localhost:3020/", "");
+        const endpoint77 = (typeof endpointTokensArray77 === 'string') ? endpointTokensArray77 : endpointTokensArray77.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint77}`, [verificarToken], async (req, res) => {
             try {
                 console.log("Datos recibidos para eliminar pushMensajes:", req.body);
@@ -1374,7 +1377,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         // 15 Envia mensaje desde contacto
         const endpointTokensArrayString15 = endpointTokensArray[33]
         const endpointTokensArray15 = endpointTokensArrayString15.split(',');
-        const endpoint15 = (typeof endpointTokensArray15 === 'string') ? endpointTokensArray15 : endpointTokensArray15.toString().replace("http://localhost:3020/", "");
+        const endpoint15 = (typeof endpointTokensArray15 === 'string') ? endpointTokensArray15 : endpointTokensArray15.toString().replace(`${urlOwner}`, "");
         router.post(`/${endpoint15}`, [verificarToken], async (req, res) => {
         //router.post('/recibiendoMensajeDesdeContacto', async (req, res) => {
             try {

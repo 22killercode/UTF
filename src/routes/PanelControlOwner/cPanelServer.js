@@ -346,7 +346,6 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
             const emails = []
             const fondoPantalla = "No tiene"
             const urlOwner = "sebastian.paysse@tbs-it.net"
-            const urlServer = "http://localhost:3020/"
             const dominioOwner = "No tiene"
             emails.push({emailOwner:email})
             const direcciones = []
@@ -369,7 +368,7 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
                     <p style="font-size: 16px; color: #333; line-height: 1.6;">Gracias por inscribirte enusatiendafacil.com donde vendes más rápido.</p>
                     <p style="font-size: 16px; color: #333; line-height: 1.6;">Haz clic en el botón de abajo y activaremos tu cuenta.</p>
                     <p style="font-size: 16px; color: #333; line-height: 1.6;">Volverás a la pagina de TiendaFacily deberás logearte <br> Gracias!</p>
-                    <a href="http://localhost:3020/confirmaInscripcion?id=${id}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; margin-top: 20px; transition: background-color 0.3s ease;">Activar cuenta</a>
+                    <a href="${urlServer}confirmaInscripcion?id=${id}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; margin-top: 20px; transition: background-color 0.3s ease;">Activar cuenta</a>
                 </div>
             `;
             const subjectOwner = `Bienvenido a usatiendafacil.com, completa tu inscripción`;
@@ -1595,7 +1594,7 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
                         </head>
                         <body>
                             <div class="header">
-                                <img src="http://localhost:3020/img/uploads/El sebas/logo/IMG-20231114-WA0015-66d1e138856594337e174bc2.jpg" alt="Logo" width="50%">
+                                <img src="${urlServer}img/uploads/El sebas/logo/IMG-20231114-WA0015-66d1e138856594337e174bc2.jpg" alt="Logo" width="50%">
                                 <h1>¡Nueva Notcia Recibida!</h1>
                             </div>
                             <div class="container">
@@ -1607,7 +1606,7 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
                                     <div style="text-align: left; margin-top: 10px;">
                                         <p style="line-height: 1.5; color: #555;">${body}</p>
                                         <div style="text-align: center; margin-top: 20px;">
-                                            <a href="http://localhost:3020/elsebas/" class="cta-button">
+                                            <a href="${urlServer}elsebas/" class="cta-button">
                                                 <i class="fas fa-shopping-cart"></i> ir a la tienda
                                             </a>
                                         </div>
@@ -1889,7 +1888,7 @@ if (serverPathImg && Array.isArray(serverPathImg)) {
                     </head>
                     <body>
                         <div class="header">
-                            <img src="http://localhost:3020/img/uploads/El sebas/logo/IMG-20231114-WA0015-66d1e138856594337e174bc2.jpg" alt="Logo" width="50%">
+                            <img src="${urlServer}img/uploads/El sebas/logo/IMG-20231114-WA0015-66d1e138856594337e174bc2.jpg" alt="Logo" width="50%">
                             <h1>ATENCION <br> ¡El estado de su pedido cambio!</h1>
                         </div>
                         <div class="container">
@@ -1905,7 +1904,7 @@ if (serverPathImg && Array.isArray(serverPathImg)) {
                                         ha cambiado a: ${statusEnvio} 
                                     </h3>
                                     <div style="text-align: center; margin-top: 20px;">
-                                        <a href="http://localhost:3020/elsebas/" class="cta-button">
+                                        <a href="${urlServer}elsebas/" class="cta-button">
                                             <i class="fas fa-shopping-cart"></i> ir a la tienda
                                         </a>
                                     </div>
@@ -2181,7 +2180,7 @@ if (serverPathImg && Array.isArray(serverPathImg)) {
                     </head>
                     <body>
                         <div class="header">
-                            <img src="http://localhost:3020/img/uploads/El sebas/logo/IMG-20231114-WA0015-66d1e138856594337e174bc2.jpg" alt="Logo" width="50%">
+                            <img src="${urlServer}img/uploads/El sebas/logo/IMG-20231114-WA0015-66d1e138856594337e174bc2.jpg" alt="Logo" width="50%">
                             <h1>ATENCION <br> ¡El estado de su pedido cambio!</h1>
                         </div>
                         <div class="container">
@@ -2201,7 +2200,7 @@ if (serverPathImg && Array.isArray(serverPathImg)) {
                                         Datos Extra: ${descripcion}
                                     </h3>
                                     <div style="text-align: center; margin-top: 20px;">
-                                        <a href="http://localhost:3020/elsebas/" class="cta-button">
+                                        <a href="${urlServer}elsebas/" class="cta-button">
                                             <i class="fas fa-shopping-cart"></i> ir a la tienda
                                         </a>
                                     </div>

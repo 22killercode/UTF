@@ -31,6 +31,7 @@ const { Script } = require('vm');
 
 const {saveOrUpdateConfig}= require('./configGlrs');
 
+let urlServer = ""
 
 let ConfigG = {}
 async function configsss() {
@@ -38,6 +39,7 @@ async function configsss() {
         ConfigG = await saveOrUpdateConfig()
         //console.log('111111111FUNCIONESYMAS11111111111Cual es la Configuración global obtenida:', ConfigG);
         // Puedes hacer algo con ConfigG aquí
+        urlServer =  ConfigG.urlServer
     } catch (error) {
         console.error('Error al obtener la configuración global:', error);
     }
@@ -55,7 +57,7 @@ configsss();
             const generateRandomString = (length = 333) => Array.from(crypto.getRandomValues(new Uint8Array(length)), byte => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[byte % 62]).join('');
             for (let i = 0; i < 200; i++) {
                 const formEndpoint = (generateRandomString().toString());
-                const endpointTokenMasUrlServer = `http://localhost:3020/${formEndpoint}`
+                const endpointTokenMasUrlServer = `${urlServer}${formEndpoint}`
                 endpointTokensArray2.push(endpointTokenMasUrlServer);
             }
         }
@@ -1359,7 +1361,7 @@ configsss();
             return endpointTokensArray
         }
 
-        async function SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal) {
+        async function SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal, urlServer) {
             try {
                 const password = passwordXYZ123
                 console.log("Entro a la funcion de SignUp99999999999999999999999999999999999999999",emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
@@ -1397,7 +1399,7 @@ configsss();
                 const email = emailXYZ123;
 
                 const newUser = new usuario({cheqDocument:false, cheqDataFaltante:false,
-                    desingShop: "No tiene", usuarioBloqueado: true, tyc: true, email, password, statusInscrip: "Incompleto", transportEmail, emails: [{ emailOwner: email }], clientes: [], numCel: [], Ventas: [], linksredesSociales: {}, mediasDPagoCobro: {}, realPass: password, pathLogo: "/images/usuario.png", tipoMembresia: tipoM, urlOwner: "", urlServer: "http://localhost:3020/", direcciones: [], quienesSomos: {}, dominioOwner: "No tiene", fondoPantalla: "No tiene", mostrarPromoPPrin: true, renovarMem: false, misProductos: [], fechaVencMem:fechaVencimientoCantProd, TotalProdCOntratados:cantPRODO,cantContratosMemRealizados
+                    desingShop: "No tiene", usuarioBloqueado: true, tyc: true, email, password, statusInscrip: "Incompleto", transportEmail, emails: [{ emailOwner: email }], clientes: [], numCel: [], Ventas: [], linksredesSociales: {}, mediasDPagoCobro: {}, realPass: password, pathLogo: "/images/usuario.png", tipoMembresia: tipoM, urlOwner: "", urlServer, direcciones: [], quienesSomos: {}, dominioOwner: "No tiene", fondoPantalla: "No tiene", mostrarPromoPPrin: true, renovarMem: false, misProductos: [], fechaVencMem:fechaVencimientoCantProd, TotalProdCOntratados:cantPRODO,cantContratosMemRealizados
                 });
                 
                 newUser.password = await newUser.encryptPassword(password);
@@ -1559,12 +1561,6 @@ configsss();
             };
         }
         
-                
-        
-
-        
-
-
 
 
 
