@@ -131,7 +131,7 @@
                             sessionStorage.setItem('ownerMensajes', JSON.stringify(result.data.ownerMensajes));  
                             //console.log("Que datos trajo del server DESDE EL SIGN IN??",result.data.dataOwner)
                             //window.location.href = `http://localhost:3020/cPanel.html?token=${jwToken}`;
-                            window.location.href = `${urlOwner}cPanel.html?token=${jwToken}`;
+                            window.location.href = `${urlServer}cPanel.html?token=${jwToken}`;
                         } else {
                             ocultarModalLoading()
                             mostrarAlertaSigIn(`${result.message}`);

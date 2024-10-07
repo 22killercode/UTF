@@ -45,7 +45,7 @@ if (endpointTokensArray.length === 0) {
   throw new Error("No tienen endpoints");
 }
 
-console.log("Que comñosd te pasa???????????????", endpointTokensArray)
+//console.log("Que comñosd te pasa???????????????", endpointTokensArray)
 
 
   // para activar boton pago con TC en MP tienda Online

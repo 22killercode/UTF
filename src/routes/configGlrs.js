@@ -54,8 +54,8 @@ const config = {
     discount          : 0.5, // Descuento del 50%
     codeDiscount      : 0.1,  // 10% de descuento adicional
     idConfig: 'sebaalfiEduNatyTere',
-    //urlServer: 'http://localhost:3020/',
-    urlServer: 'https://utf-odfm.onrender.com/',
+    urlServer: 'http://localhost:3020/',
+    //urlServer: 'https://utf-odfm.onrender.com/',
     // alfi token vendedor
     ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'APP_USR-8737d261-a71e-43fe-addd-03c0c056d282',
     ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-80741225863147-082714-acfe2d6b40dd4673cbeaafbc1b61c586-1781639407',

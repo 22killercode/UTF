@@ -391,7 +391,7 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
     //console.log("que enpoint token del signIn encontro en el server?? endpoint22",endpointTokensArray22, );
     router.post(urlPoint(22), [], async (req, res) => {
         const ipCliente = req.ip || req.connection.remoteAddress;
-        console.log("Llega algo desde ingresar de forma MANUAL ", req.body);
+        console.log("Se intenta ingresar de forma MANUAL desde la landing page ", req.body);
             try {
                 const { email, password, ip } = req.body;
 
@@ -414,7 +414,6 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
                 // const { password: _, realPass: __, ...cleanedData } = dataOwner.toObject();
                 const { password: _,  ...cleanedData } = dataOwner.toObject();
                 //console.log("Salio real y pass SIGNIN???????", cleanedData); // Aquí tienes el objeto sin password y realPass
-                
 
                 //console.log("Llega algo desde dataOwner de forma MANUAL ", dataOwner);
                 const idOwner    = dataOwner._id
