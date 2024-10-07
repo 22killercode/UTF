@@ -849,6 +849,8 @@ async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
     //09 Cambiar la imagen del fondo de pantalla
     router.post(urlPoint(20), [verificarToken], async (req, res) => {
         console.log("que viene de cambiar el estilo del ecommerce req.files", req.files)
+        if (req.files === null) { throw new Error('No se han subido archivos')};
+        
         //console.log(`que datos obtiene para editar el logo`, req.body);
         //const data = JSON.parse(req.body.datos)
         const {idOwner, ecommerceName, urlServer} = JSON.parse(req.body.datos)
