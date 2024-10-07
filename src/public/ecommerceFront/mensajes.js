@@ -124,37 +124,39 @@
 		// Obtener el elemento con el id "modalAlert"
 		const modalAlert = document.getElementById('muestraAlerta');
 		modalAlert.style.display = 'block';
-		modalAlert.style.position = 'relative'; // Asegurar que el contenedor tenga contexto de posicionamiento
-		modalAlert.style.zIndex = '2147483647'; // Máximo valor posible para asegurar que esté al frente
-
+		modalAlert.style.position = 'fixed'; // Para que siempre esté visible en la pantalla
+		modalAlert.style.zIndex = '2147483647'; // Asegurar que esté al frente
+	
 		// Crear un nuevo elemento div para el modal
 		const div = document.createElement('div');
 		div.className = 'modal fade';
 		div.id = 'muestraAlertaModal'; // ID único para evitar conflictos
-		div.style.zIndex = '2147483647 !important'; // Asegurar que esté al frente de cualquier otro elemento
-
+		div.style.zIndex = '2147483647'; // Asegurar que esté al frente de cualquier otro elemento
+		div.style.position = 'fixed'; // Asegurar que se posicione sobre la pantalla completa
+	
 		// Asignar el contenido HTML al nuevo div
 		div.innerHTML = `
-			<div class="modal-dialog modal-dialog-centered" data-bs-target="#staticBackdrop" style="z-index: 2147483647 !important">
-				<div class="modal-content" style="border: 1px solid red; background-color: rgb(144, 97, 97); color: white; z-index: 2147483647 !important">
-					<div class="modal-header text-center" style="z-index: 2147483647 !important">
+			<div class="modal-dialog modal-dialog-centered" style="z-index: 2147483647">
+				<div class="modal-content" style="border: 1px solid red; background-color: rgb(144, 97, 97); color: white; z-index: 2147483647">
+					<div class="modal-header text-center" style="z-index: 2147483647">
 						<h5 class="modal-title">¡Atención!</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="z-index: 2147483647 !important"></button>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<div class="modal-body" style="z-index: 2147483647 !important">
+					<div class="modal-body" style="z-index: 2147483647">
 						<h5>${mensajeAlert}</h5>
 					</div>
 				</div>
 			</div>
 		`;
-
+	
 		// Agregar el nuevo div al cuerpo del documento
 		document.body.appendChild(div);
-
+	
 		// Mostrar el modal
 		const myModal = new bootstrap.Modal(div);
 		myModal.show();
 	}
+	
 
 
 	function mostrarExito(mensajeExito) {

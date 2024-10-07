@@ -91,7 +91,10 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 
 
 		// agrega el logo al body
-		document.getElementById("insertLogo").innerHTML = '<div class="d-flex justify-content-center align-items-center vh-100">    <img src="images/logomtf.jpg" class="img-fluid" alt="Logo"></div>';
+		document.getElementById("insertLogo").innerHTML = `<div id="coloratepapa" class="m-4 d-flex justify-content-center align-items-center vh-100">
+    <img src="images/logomtf.jpg" class="img-fluid rounded" alt="Logo">
+</div>
+`;
 
 
 
@@ -100,7 +103,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 			//console.log("Entro a colorear el diseño",desing)
 			if (desing) {
 				// Obtener los elementos por sus IDs y agregarles la clase
-				var elementosIds = ["muestraChau",
+				var elementosIds = ["coloratepapa", "muestraChau",
 					"coloreamePAgos","color23BigImg", "colorCpanelCli2587",
 					"coloredDir", "loadingModal", "colorElsign", "sigIngColor", 
 					"noticiasColor", "coloreame", "coloreame2", "designPromos", 

@@ -260,6 +260,7 @@
 	</header>
 
 	<body style="overflow-x: hidden; width: 99vw; max-width: 100%;  " id="intenertOK">
+		<div id="insertLogo" class=""></div>
 		<!-- pagina inicial -->
 		<section id="banner2233" align="center">
 			<di align="center" class="inner" style="color: white !important;">
@@ -391,7 +392,7 @@
 			</di>
 			<div  id="lunita" style="margin-top: -110px !important;"></div>
 		</section>
-		<div id="insertLogo"></div>
+
 		<!-- Contenedor de productos y categorías y promociones -->
 		<div  align="center" style="padding-bottom: 1rem;">
 			<style>
@@ -680,11 +681,10 @@
 								sessionStorage.setItem("pedidoCarritoPendientePago", stringylistaPedido);
 
 								//console.log("que listado de pedidos guarda desde pagar",stringylistaPedido )
-								const clienteDataString  = sessionStorage.getItem('clienteEcomm');
-								const ownerDataString    = sessionStorage.getItem('ownerEcom');
-								const dataCliente        = JSON.parse(clienteDataString)  
-								//const dataOwner          = JSON.parse(ownerDataString)
-								//console.log("Oprimio el boton de pago id=btnPagar007", dataCliente,dataOwner)
+								const dataCliente      = JSON.parse(sessionStorage.getItem('clienteEcomm'))
+								const ownerDataString  = sessionStorage.getItem('ownerEcom');
+								//const dataOwner      = JSON.parse(ownerDataString)
+								console.log("Oprimio el boton de pago id=btnPagar007", dataCliente)
 								// si no hay ningun pedido te avisa y reinicia la pagina
 								if ( listaPedido.length == 0  ) {
 									mostrarAlerta("Agrega algún producto al carrito")
@@ -692,25 +692,26 @@
 									setTimeout(() => {
 										// Recargar la página
 										window.location.reload();
-									}, 1500);
-								}
-								if ( !dataCliente  ) {
-									// si no hay nadie logeado debe inscribirse o logerse
-									// Recargar la página
-									setTimeout(() => {
-										// Recargar la página
-										window.location.reload();
-									}, 1500);
-								}
-								if (dataCliente && listaPedido.length >= 1) {
-									// envia el boton de mercado pago al modal de la selección de medios de pago
-									await mpWallet(dataCliente, dataOwner) 
+									}, 2500);
 								}else{
-									// se el cliente no esta logeado se llama al modal sigIng/UP para que lo haga
-								 	// Abrir el modal
-									$('#usuario').modal('show');
+									if (!dataCliente || Object.keys(dataCliente).length === 0) {
+										// si no hay nadie logeado debe inscribirse o logerse
+										// Recargar la página
+										$('#usuario').modal('show');
+										// setTimeout(() => {
+										// 	// Recargar la página
+										// 	window.location.reload();
+										// }, 1500);
+									}
+									if (dataCliente && listaPedido.length >= 1) {
+										// envia el boton de mercado pago al modal de la selección de medios de pago
+										await mpWallet(dataCliente, dataOwner) 
+									}else{
+										// se el cliente no esta logeado se llama al modal sigIng/UP para que lo haga
+										// Abrir el modal
+										$('#usuario').modal('show');
+									}
 								}
-								
 							});
 
 					</script>
@@ -898,7 +899,7 @@
 	<!--******** modales ******y modulos***************************** -->
 
 	<!-- aqui van los datos de las alertas -->
-	<div id="muestraAlerta" class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
+	<div id="muestraAlerta" class="" style="z-index: 2147483647 !important; position: fixed;"></div>
 	<div id="muestraChau"  class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
 	<div id="muestraExito"  class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
 	<div id="exitoVenta"   data-bs-backdrop="static"  class="" data-bs-backdrop="static" style="z-index: 999999999999999 !important; position: absolute;"></div>
@@ -906,7 +907,7 @@
 	<div id="pagoWallet"    class="" style="z-index: 999999999999999 !important; position: absolute;"></div>
 
 	<!-- Modal medios de cobro-->
-	<div class="modal fade" id="staticBackdropMediosPago" data-bs-target="#staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 9999999999 !important">
+	<div class="modal fade" id="staticBackdropMediosPago" data-bs-target="#staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 999999999 !important">
 		<div  class="modal-dialog modal-dialog-centered modal-lg" style="overflow: hidden;">
 			<div id="coloreamePAgos" class="modal-content">
 				<div class="modal-header">
