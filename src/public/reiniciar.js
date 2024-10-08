@@ -141,6 +141,7 @@ async function actualizarData() {
 }
 
 async function RefreshactualizarData() {
+    
     console.log("Hizo click para RefreshactualizarData la data session storage");
 
     // Define las opciones de la solicitud
@@ -155,7 +156,7 @@ async function RefreshactualizarData() {
     };
     try {
         // Realiza la solicitud fetch usando await
-        //console.log("Qué endpoint tiene RefreshactualizarData:", endpoints[96]);
+        console.log("Qué endpoint tiene RefreshactualizarData:", endpoints[96]);
         const response = await fetch(endpoints[96], options);
 
         if (!response.ok) {
@@ -331,7 +332,7 @@ function cerrarModalPorId(idModal) {
 
 
 // esta funcion sire para borrar el local storage cuando salis de la aplicasion
-function borrarsessionStorage(exit) {
+async function borrarsessionStorage(exit) {
     console.log("eeeeeeeeeeeeeeeeeeeEEEEEEEEEEEEEEEEEEEEEEEEentro a borrar todo")
     // Verifica si se debe mostrar el mensaje de éxito
 
@@ -458,8 +459,8 @@ async function consultaInfoDiario(idOwner) {
     }
 }
 async function renderizarInfoDiario(idOwner) {
+    await mostrarModalLoading()
     //console.log("consulta 11111111 Entro el idOwner???",idOwner)
-    //mostrarModalLoading()
     setTimeout(async() => {
         // revisa si tiene alguuna cofiguracion faltante y si NO tiene promociones emitidas
         /******************************************************************************** */
@@ -483,10 +484,12 @@ async function renderizarInfoDiario(idOwner) {
             `);
         }
         /********************************************************************************************* */
-    const infoDiario = await consultaInfoDiario(idOwner) || 0
-    // lo guarda en el seesion
-    const informeDiario = infoDiario
-    sessionStorage.getItem('informeDiario', JSON.stringify(informeDiario));
+        const infoDiario = await consultaInfoDiario(idOwner) || 0
+        // lo guarda en el seesion
+        const informeDiario = infoDiario
+        sessionStorage.getItem('informeDiario', JSON.stringify(informeDiario));
+
+        ocultarModalLoading()
 
         if (infoDiario.length >= 1) {
             // Ordenar la información por fecha, de más reciente a más antigua
@@ -543,7 +546,8 @@ async function renderizarInfoDiario(idOwner) {
             mostrarInfo(SinInfo);
             return false
         }
-    }, 1000); // Espera de 2 segundos
+
+    }, 500); // Espera de 2 segundos
 }
 
 
@@ -669,7 +673,7 @@ function detectConsol() {
                 //console.log("Entro por tiene dominio", dominio)
                 return dominio;
             } else {
-                dominio = dataOwner.urlServer + urlOwner;
+                dominio = urlServer + urlOwner;
                 // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
                 //console.log("Entro por NO tiene dominio", dominio)
                 return dominio;

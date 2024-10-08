@@ -859,7 +859,7 @@
 							const jwToken = dataBasic.data.jwToken;
 							
 							try {
-								const idEnpointCheq = dataBasic.data.endpointTokensArray2;
+								const idEnpointCheq = dataBasic.data.endpointTokensArray2.endpointsFronen;
 								const idEnpointCheq101 = idEnpointCheq[101];
 								// Envía los datos CUSTOM al servidor usando fetch
 								console.log("Hizo click en el form de CONSULTAS",idEnpointCheq101, );
@@ -1396,6 +1396,7 @@
 													mostrarModalLoading()
 													const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
 													const jwToken = sessionStorage.getItem('jwtToken');
+													//console.log("WEWWWWWWWWWWWWWWWWWWWW",endpoints[10])
 													const response = await fetch(`${endpoints[10]}`, {
 														method: 'POST',
 														headers: {

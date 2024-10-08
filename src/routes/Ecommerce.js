@@ -61,7 +61,8 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             //console.log("Le entrooooooooooooo a busacar los datos basicos",ConfigsOne)
             urlOwner = configs.urlOwner
             // arma el paquete de datos iniciales
-            const datosBasicos = {endpointTokensArray2, ConfigsOne, jwToken, jwToken}
+            const endpointTokensArr = endpointTokensArray2()
+            const datosBasicos = {endpointTokensArr, ConfigsOne, jwToken, jwToken}
             // Si todo sale bien, responder con los datos y un código 200 (success)
             res.status(200).json({ success: true, data: datosBasicos });
         } catch (error) {
@@ -75,26 +76,30 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
     });
 
     //01 solicita todos los productos y servicios y tambien los idEndpoints
-    router.post('/buscandoPruductosEcommerce', async (req, res) => {
+    router.post('/buscandoDataEcommerceInicial', async (req, res) => {
             // primero arma los enpointsTokens 
             try {
                 // accesos de seguridad
-                //console.log("*******/buscandoPruductosEcommerce*********que hay en el req.body",req.body);
+                console.log("*******/buscandoDataEcommerceInicial*********que hay en el req.body",req.body);
                 //const urlOwner = req.body.urlOwner.substring(1); // Eliminar el '/' inicial
                 const urlOwner = req.body.urlOwner
                 // Buscar al usuario que tenga el urlOwner especificado
                 const dataDueno = await User.findOne({ urlOwner: urlOwner });
-                //console.log("****************que dataDueno genero en el server ecommerce????",urlOwner, dataDueno);
+                //console.log("****************que dataDueno genero en el server ecommerce????",urlOwner, dataDueno._id);
                 const idOwner = dataDueno._id
                 // busca los datos de la BD de los productos
                 const dataProductos = await Productos.find({ idCliente: idOwner }).sort({ date: -1 });
                 const dataPromociones = await Promociones.find({ idOwner: idOwner }).sort({ date: -1 });
                 //console.log("que encuentra desde la pagina web /dataDueno",dataProductos.length, dataPromociones)
                 dataProductos.nombreEcommerce = dataDueno.nombreEcommerce
-
-                res.status(200).json({ success: true, endPointsIdTokens:endpointTokensArray2, dataProd: dataProductos, dataProm:dataPromociones });
+                const Config = await Configs.find()
+                const endPointsIdTokens = endpointTokensArray2()
+                const endPointsFronen = endPointsIdTokens.endpointsFronen 
+                const endPointsBackend = endPointsIdTokens.endpointsBackend 
+                console.log("buscandoDataEcommerceInicial", endPointsFronen[0], endPointsBackend[0] )
+                res.status(200).json({ success: true, endPointsFronen,  basicData:Config[0] });
                 
-                await registerEndpoints2(endpointTokensArray2, verificarToken)
+                await registerEndpoints2(endPointsBackend, verificarToken)
 
             } catch (error) {
                 console.error('Error handling the request:', error);
@@ -108,10 +113,10 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         const endpointTokensArrayString0 = endpointTokensArray[0]
         const endpointTokensArray0 = endpointTokensArrayString0.split(',');
         const endpoint0 = (typeof endpointTokensArray0 === 'string') ? endpointTokensArray0 : endpointTokensArray0.toString().replace(`${urlOwner}`, "");
-        //console.log("Que enpoint es el num 0 de ecommerce server??????", endpoint0)
-        router.post(`/${endpoint0}`, async (req, res) => { 
+        //console.log("Que enpoint es el num 0 de ecommerce server??????", endpointTokensArrayString0)
+        router.post(`/${endpointTokensArrayString0}`, async (req, res) => { 
             const urlOwner = req.body.urlOwner
-            //console.log("Respuesta  Desde el frontend codigo IDendPoint creado en el backend ", urlOwner)
+            console.log("Respuesta  Desde el frontend codigo IDendPoint creado en el backend ", urlOwner)
             //revisar con los datos que me tira si este ip o los datos del local storage me hayan un cliente
             try {
                 const dataOwner      = await User.findOne({ urlOwner: urlOwner });

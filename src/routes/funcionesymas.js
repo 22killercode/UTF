@@ -51,18 +51,21 @@ configsss();
 
 
         //Arma los endpoints del ecommerce y l alanding page
-        const endpointTokensArray2 = []
-        const enPoints300 = async() => {
+        function endpointTokensArray2() {
+            console.log("Entro a armar las rutas para el ecommerce")
+            const endpointsFronen  = []
+            const endpointsBackend = []
             // aqui se generan los distintos enpoints
             const generateRandomString = (length = 333) => Array.from(crypto.getRandomValues(new Uint8Array(length)), byte => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[byte % 62]).join('');
             for (let i = 0; i < 200; i++) {
                 const formEndpoint = (generateRandomString().toString());
-                const endpointTokenMasUrlServer = `${urlServer}${formEndpoint}`
-                endpointTokensArray2.push(endpointTokenMasUrlServer);
+                const endpointTokenFronen = `${urlServer}${formEndpoint}`
+                const endpointTokenBackend = `${formEndpoint}`
+                endpointsFronen.push(endpointTokenFronen);
+                endpointsBackend.push(endpointTokenBackend);
             }
+            return {endpointsFronen, endpointsBackend }
         }
-        enPoints300()
-
 
         // Middleware para verificar el token JWT
         const verificarToken = (req, res, next) => {

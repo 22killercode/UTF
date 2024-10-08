@@ -1,0 +1,624 @@
+
+.card, .card1 {
+    transition: background-color 2s !important; /* Efecto de transición en el color de fondo */
+}
+
+.card:hover, .card1:hover {
+    background-color: white; /* Cambiar a blanco al hacer hover */
+}
+/* Estilos generales */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.form-floating {
+    overflow: hidden !important;
+    padding:0.51rem;
+}
+.header, .footer {
+    overflow: hidden !important;
+    padding:0.51rem;
+    text-align: center;
+}
+
+input, label{
+    overflow: hidden !important;
+}
+
+/* memebresias*/
+.membership-box, .upgrade-box {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 0.5rem;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.containerMem {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.boxMem {
+    margin: 5px;
+    flex: 1; /* Permite que los divs crezcan y se reduzcan para llenar el espacio disponible */
+    min-width: 200px; /* Tamaño mínimo para los divs */
+    border: 0.5px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}                
+.cardMem {
+    transition: height 1.5s ease-out;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.includes-hidden {
+    display: none;
+}
+
+.includes-active {
+    display: block;
+}
+
+.form-select, .form-control {
+    font-size: 0.9rem;
+    border-radius: 5px;
+}
+
+.input-group button {
+    width: 40px;
+}
+
+.input-group input {
+    text-align: center;
+}
+
+#includes {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1.5s ease-out, padding 1.5s ease-out;
+    padding: 0;
+}
+
+#includes.active {
+    max-height: 1500px;
+    padding: 10px;
+}
+    .RenMemCont {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+    .message {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    .button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 15px 25px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #0056b3;
+    }
+
+
+
+/* Estilos responsivos */
+@media (max-width: 1200px) {
+    #bajarEstatsRespo{
+        margin: 4rem 1rem 2rem 1rem !important;
+    }
+    #bajarMensaRespo{
+        margin: 5rem 1rem 2rem 1rem !important;
+    }
+    #responBajaCLientes{
+        margin: 5rem 1rem 2rem 1rem !important;
+    }
+    #responsiveBajarEstats {
+        margin: 4rem 1rem 2rem 1rem !important;
+    }
+    #responBajarStock {
+        margin: 6rem 1rem 2rem 1rem !important;
+    }
+    #bajarEnviosResoponsive {
+        margin: 6rem 1rem 2rem 1rem !important;
+    }
+    #ponerDomURl {
+        margin: 4rem 1rem 2rem 1rem !important;
+    }
+    #RenovarMEmAuto {
+        margin: 4rem 1rem 2rem 1rem !important;
+    }
+    #bajarTituConfig{
+        margin: 4rem 2rem -3rem 2rem !important;
+    }
+    #ulConfig {
+        padding: -0rem 0 0 0 !important;
+        margin: 0 !important;
+        text-align: center; /* Centrar el texto de los elementos del ul */
+        list-style: none; /* Elimina los puntos de la lista si es necesario */
+    }
+    #home{
+        padding-top: 0rem !important;
+    }
+    .nav, .nav-tabs {
+        position: relative;
+    background-color: #80c0ff !important;
+    height: auto !important;
+    margin: 0 0 4rem 0 !important;
+    padding: 4 0 0 0 !important;
+    width: 100% !important;
+    border: 0.51rem solid #2994ff !important; /* Borde corregido */
+}
+
+
+    html, body {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #manual{
+        margin: 2rem 0 !important;
+    }
+
+    #ulConfig {
+        max-width: 1200px !important;
+        margin: 4rem 0rem 2rem 0rem !important;
+        padding:1rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    .responsive-image {
+        margin: 4rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
+
+
+@media (max-width: 700px) {
+    html, body {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* barra del menú principal */
+    #aparecerMenu {
+        display: block !important; /* Muestra el botón en pantallas pequeñas */
+    }
+
+    #desaparece1, #desaparece2, #desaparece3, #Desaparece4, #desaparece5 {
+        display: none !important; /* Oculta elementos en pantallas pequeñas */
+    }
+
+    .offcanvas {
+        width: 100% !important; /* Menú siempre visible en pantallas pequeñas */
+        left: 0 !important; /* Alineación del menú */
+    }
+
+    .offcanvas img {
+        width: 30%;
+        margin-bottom: 10px;
+    }
+
+    .offcanvas .nav-link, .store-button, .logout-button {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .offcanvas .nav-item {
+        margin-bottom: 5px;
+    }
+
+    #logoUTF {
+        width: 20% !important;
+    }
+
+    #btnMenu256 {
+        height: 10% !important;
+    }
+
+    /* Manual operativo */
+    .responsive-image {
+        width: 90% !important;
+        margin: 0 1rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #titMO {
+        margin: 1rem !important;
+        width: 100% !important;
+        font-size: 2rem !important;
+        font-weight: bold !important;
+    }
+
+    .menuA1B2C3 {
+        width: 100% !important;
+        max-width: 400px !important;
+        text-align: center !important;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        background-color: transparent;
+        border-radius: 8px;
+        padding: 15px;
+        font-size: 1rem !important;
+    }
+
+    .menuItemA1B2C3 {
+        background-color: transparent;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+
+
+    #ulConfig {
+        width: 100% !important;
+        margin: 1rem 0.51rem 5rem 0.51rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    #tabConfig {
+        width: 100% !important;
+        margin: 1rem 0.51rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    /* productos */
+    #productos {
+        padding-top: 2rem !important;
+    }
+
+    /* Marketing */
+    #Marketing {
+        padding-top: 0 !important;
+        width: 100% !important;
+        margin: 1.5rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    #ulMark {
+        width: 100% !important;
+        margin: auto !important;
+    }
+
+    #ulMark li {
+        font-size: 0.9rem; /* Disminuye el tamaño del texto en pantallas pequeñas */
+    }
+
+    #busquedaMarke {
+        margin: 1.5rem 0.51rem !important;
+    }
+}
+
+@media (max-width: 500px) {
+    /* Barra del menú principal */
+    #aparecerMenu {
+        display: block !important; /* Muestra el botón en pantallas pequeñas */
+    }
+
+    #desaparece1, #desaparece2, #desaparece3, #Desaparece4, #desaparece5 {
+        display: none !important; /* Oculta elementos en pantallas pequeñas */
+    }
+
+    .offcanvas {
+        width: 100% !important; /* Menú siempre visible en pantallas pequeñas */
+        left: 0 !important; /* Alineación del menú */
+    }
+
+    .offcanvas img {
+        width: 30%;
+        margin-bottom: 10px;
+    }
+
+    .offcanvas .nav-link, .store-button, .logout-button {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .offcanvas .nav-item {
+        margin-bottom: 5px;
+    }
+
+    /* Manual operativo */
+    .responsive-image {
+        width: 90% !important;
+        margin: -1rem 1rem 1rem 1rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #titMO {
+        margin: 0 !important;
+        width: 100% !important;
+        font-size: 2rem !important;
+        font-weight: bold !important;
+    }
+
+    .menuA1B2C3 {
+        width: 100% !important;
+        max-width: 400px !important;
+        text-align: center !important;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        background-color: transparent;
+        border-radius: 8px;
+        padding: 15px;
+        font-size: 1rem !important;
+    }
+
+    .menuItemA1B2C3 {
+        background-color: transparent;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Configuraciones */
+
+
+    #ulConfig {
+        width: 100% !important;
+        margin: 1rem 0.51rem 5rem 0.51rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    #tabConfig {
+        width: 100% !important;
+        margin: 1rem 0.51rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    /* productos */
+    #productos {
+        padding-top: 2rem !important;
+    }
+
+    /* Marketing */
+    #Marketing {
+        padding-top: 0 !important;
+        width: 100% !important;
+        margin: 1rem 0.51rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    #ulMark {
+        margin: 1.5rem 0.51rem !important;
+    }
+
+    #busquedaMarke {
+        margin: 1.5rem 0.51rem !important;
+    }
+}
+
+
+@media (max-width: 450px) {
+    html, body, header, footer, .tab-content, .tab-pane, .nav  {
+        max-width: 450px !important;
+        margin: 0 !important;
+        padding: 0 !important
+    }
+
+    .contenedor-limite .container, 
+    .contenedor-limite .row, 
+    .contenedor-limite .col, 
+    .contenedor-limite .card, 
+    .contenedor-limite .ul, 
+    .contenedor-limite .li {
+        max-width: 450px !important;
+        margin: 0 auto; /* Centrar los elementos */
+    }
+
+
+    .card, .card1, .card-body, .card-header, .card-footer, .container, .col, .row, .ul, .li, .offcanvas{
+        max-width: 450px !important;
+    }
+
+
+    .card1{
+        margin:0 !important;
+        padding:0 !important
+    }
+
+    /* Barra del menú principal */
+    #aparecerMenu {
+        display: block !important; /* Muestra el botón en pantallas pequeñas */
+    }
+
+    #desaparece1, #desaparece2, #desaparece3, #Desaparece4, #desaparece5, #logoUSTF {
+        display: none !important; /* Oculta elementos en pantallas pequeñas */
+    }
+
+    .offcanvas {
+        width: 100% !important; /* Menú siempre visible en pantallas pequeñas */
+        left: 0 !important; /* Alineación del menú */
+    }
+
+    .offcanvas img {
+        width: 30%;
+        margin-bottom: 10px;
+    }
+
+    .offcanvas .nav-link, .store-button, .logout-button {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .offcanvas .nav-item {
+        margin-bottom: 5px;
+    }
+
+    /* Manual operativo */
+    .responsive-image {
+        width: 90% !important;
+        margin: -1rem 1rem 1rem 1rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #titMO {
+        margin: 1.5rem auto !important;
+        width: 100% !important;
+        font-size: 2rem !important;
+        font-weight: bold !important;
+    }
+
+    .menuA1B2C3 {
+        width: 100% !important;
+        max-width: 400px !important;
+        text-align: center !important;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        background-color: transparent;
+        border-radius: 8px;
+        padding: 15px;
+        font-size: 1rem !important;
+    }
+
+    .menuItemA1B2C3 {
+        background-color: transparent;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Configuraciones */
+
+
+    #ulConfig {
+        width: 100% !important;
+        margin: 2rem 0 2rem 0 !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    #tabConfig {
+        width: 100% !important;
+        margin: 1rem 0.51rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    /* productos */
+    #productos {
+        padding-top: 2rem !important;
+    }
+
+    /* Marketing */
+    #Marketing {
+        padding-top: 0 !important;
+        width: 100% !important;
+        margin: 1rem 0.51rem !important;
+        justify-content: left !important;
+        align-items: left !important;
+    }
+
+    #ulMark {
+        margin: 1.5rem 0.51rem !important;
+    }
+
+    #busquedaMarke {
+        margin: 1.5rem 0.51rem !important;
+    }
+}
+
+
+
+                .button-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background-color: #007bff; /* Fondo azul */
+                    padding: 10px;
+                    height: 85px
+                }
+                .button-container button {
+                    padding: 10px 15px;
+                    font-size: 12px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    color: white;
+                }
+                .button-container .store-button {
+                    background-color: #0056b3;
+                }
+                .button-container .store-button:hover {
+                    background-color: #004494;
+                }
+                .button-container .logout-button {
+                    font-size: 4px;
+                    background-color: #dc3545;
+                    display: flex;
+                    align-items: right;
+                    justify-content: center;
+                    padding: 7px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    position: relative; /* Posición relativa para alinear la X */
+                }
+                .button-container .logout-button i {
+                    margin-right: 2px;
+                }
+                .button-container .logout-button:hover {
+                    background-color: #c82333;
+                }
+                .mobile-logout {
+                    display: none; /* Ocultar por defecto en pantallas grandes */
+                    position: absolute;
+                    top: 1px !important;
+                    right: 2px !important;
+                    font-size: 1.5rem;
+                    background: none;
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                }

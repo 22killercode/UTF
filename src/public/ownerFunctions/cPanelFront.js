@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             }
                             let descriptionEdit = stripHTMLEdit(producto.descripcion);
                         // Objeto que contiene la opción seleccionada
-                        let tipoTarjeta = {
+                        let tipoTarjetaEdit = {
                             cardProdHor: false,
                             cardProdVert: false,
                             cardProdTra: false
@@ -215,65 +215,75 @@ document.addEventListener('DOMContentLoaded', async function () {
         </div>
     </div>
 </div>
-                                                    <div class="container-xxl w-100 mt-3">
-                                                        <h5>Elija el formato de la tarjeta donde se presentará tu producto.</h5>
-                                                        <p>Atención: si el producto en su categoría es único, elija "Tarjeta horizontal Vintage" para que ocupe el máximo ancho de  a pantalla.</p>
-                                                        <div class="container-xxl mt-2 w-100">
-                                                            <div class="row w-100">
-                                                                <!-- Tarjeta 1 -->
-                                                                <div class="col-lg-4 col-md-4 mb-2">
-                                                                    <div class="card">
-                                                                        <div class="card-header">
-                                                                            Tarjeta horizontal Vintage
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 1" style="max-width: 300px; max-height: 300px;">
-                                                                        </div>
-                                                                        <div class="card-footer d-flex justify-content-between align-items-center">
-                                                                            <label class="form-check-label" for="switch1">On/Off</label>
-                                                                            <div class="form-check form-switch">
-                                                                <input class="form-check-input" type="checkbox" role="switch" id="switch1" onchange="${handleSwitch('cardProdHor', this)}">
-                                                                            </div>
+
+
+
+
+
+
+                                                    <!-- elije el diseño de las tarjetas de los productos -->
+                                                    <div class="container-xxl mt-2 w-100">
+                                                        <div class="row w-100">
+                                                            <!-- Tarjeta 1 -->
+                                                            <div class="col-lg-4 col-md-4 mb-2">
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        Tarjeta horizontal Vintage
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 1" style="max-width: 300px; max-height: 300px;">
+                                                                    </div>
+                                                                    <div class="card-footer d-flex justify-content-between align-items-center">
+                                                                        <label class="form-check-label" for="switch1ABCedit">On/Off</label>
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input" type="checkbox" role="switch" id="switch1ABCedit" onchange="handleSwitchABCedit('cardProdHor', this)">
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- Tarjeta 2 -->
-                                                                <div class="col-lg-4 col-md-4 mb-2">
-                                                                    <div class="card">
-                                                                        <div class="card-header">
-                                                                            Tarjeta Vertical Vintage
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 2" style="max-width: 300px; max-height: 300px;">
-                                                                        </div>
-                                                                        <div class="card-footer d-flex justify-content-between align-items-center">
-                                                                            <label class="form-check-label" for="switch2">On/Off</label>
-                                                                            <div class="form-check form-switch">
-                                                                                <input class="form-check-input" type="checkbox" role="switch" id="switch2" onchange="${handleSwitch('cardProdVer', this)}">
-                                                                            </div>
+                                                            </div>
+                                                            <!-- Tarjeta 2 -->
+                                                            <div class="col-lg-4 col-md-4 mb-2">
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        Tarjeta Vertical Vintage
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 2" style="max-width: 300px; max-height: 300px;">
+                                                                    </div>
+                                                                    <div class="card-footer d-flex justify-content-between align-items-center">
+                                                                        <label class="form-check-label" for="switch2ABCedit">On/Off</label>
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input" type="checkbox" role="switch" id="switch2ABCedit" onchange="handleSwitchABCedit('cardProdVert', this)">
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- Tarjeta 3 -->
-                                                                <div class="col-lg-4 col-md-4 my-2">
-                                                                    <div class="card">
-                                                                        <div class="card-header">
-                                                                            Tarjeta Cristal Edition
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 3" style="max-width: 300px; max-height: 300px;">
-                                                                        </div>
-                                                                        <div class="card-footer d-flex justify-content-between align-items-center">
-                                                                            <label class="form-check-label" for="switch3">On/Off</label>
-                                                                            <div class="form-check form-switch">
-                                                                                <input class="form-check-input" type="checkbox" role="switch" id="switch3" onchange="${handleSwitch('cardProdTra', this)}">
-                                                                            </div>
+                                                            </div>
+                                                            <!-- Tarjeta 3 -->
+                                                            <div class="col-lg-4 col-md-4 my-2">
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        Tarjeta Cristal Edition
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 3" style="max-width: 300px; max-height: 300px;">
+                                                                    </div>
+                                                                    <div class="card-footer d-flex justify-content-between align-items-center">
+                                                                        <label class="form-check-label" for="switch3ABCedit">On/Off</label>
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input" type="checkbox" role="switch" id="switch3ABCedit" onchange="handleSwitchABCedit('cardProdTra', this)">
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
+
+
+
+
+
+
 <div class="product-description-container mt-3" align="left">
     <h6><strong>Descripción del producto.</strong></h6>
     <textarea 
@@ -306,29 +316,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                         `;
                         insertProd.innerHTML = cardHtmlEdit
                        // Función para manejar el switch
-                        function handleSwitch(tipo, element) {
-                            console.log("lkfgmelkrgvnkelnrfgkojnteokjgnjoktrhngjko", tipo, element)
-                            // Apagar todos los switches
-                            document.getElementById('switch1').checked = false;
-                            document.getElementById('switch2').checked = false;
-                            document.getElementById('switch3').checked = false;
-                    
-                            // Encender el switch seleccionado
-                            element.checked = true;
-                    
-                            // Resetear el objeto tipoTarjeta a false
-                            tipoTarjeta = {
-                                cardProdHor: false,
-                                cardProdVert: false,
-                                cardProdTra: false
-                            };
-                    
-                            // Establecer el valor booleano según la tarjeta seleccionada
-                            tipoTarjeta[tipo] = true;
-                    
-                            // Mostrar el resultado en la consola
-                            console.log("Tipo de tarjeta seleccionada:", tipoTarjeta);
-                        }
 
                         // Función para crear el editor
                         let editorInstanceEdit = null

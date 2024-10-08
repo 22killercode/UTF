@@ -18,7 +18,7 @@ const {saveOrUpdateConfig}= require('./configGlrs');
 const {sendMail, guardarFondo, consultarEstadoPago, guardarMensajes, SingUp, UpDateUpGrade, endpointTokensArray2, verificarToken} = require('./funcionesymas');
 
 
-let urlOwner = ""
+let urlServer = ""
 
 let ConfigG = {}
 async function configss() {
@@ -26,7 +26,7 @@ async function configss() {
       ConfigG = await saveOrUpdateConfig()
       //console.log('MPPPPPPPPPPP111111111mp11111111111111Cual es la Configuración global obtenida:', ConfigG);
       // Puedes hacer algo con ConfigG aquí
-      urlOwner = ConfigG.urlOwner
+      urlServer = ConfigG.urlServer
   } catch (error) {
       console.error('Error al obtener la configuración global:', error);
   }
@@ -38,7 +38,7 @@ const bodyParser = require('body-parser');
 
 router.use(bodyParser.text());
 
-const endpointTokensArray = endpointTokensArray2
+const endpointTokensArray = endpointTokensArray2().endpointsBackend
 
 
 if (endpointTokensArray.length === 0) {
@@ -51,7 +51,7 @@ if (endpointTokensArray.length === 0) {
   // para activar boton pago con TC en MP tienda Online
   const endpointTokensArrayString127 = endpointTokensArray[127]
   const endpointTokensArray127 = endpointTokensArrayString127.split(',');
-  const endpoint127 = (typeof endpointTokensArray127 === 'string') ? endpointTokensArray127 : endpointTokensArray127.toString().replace(`${urlOwner}`, "");
+  const endpoint127 = (typeof endpointTokensArray127 === 'string') ? endpointTokensArray127 : endpointTokensArray127.toString().replace(`${urlServer}`, "");
   //console.log("que idPoint encontro ",endpoint5)
   router.post(`/${endpoint127}`, [verificarToken], async (req, res) => {
   //router.post('/create_preference3', async (req, res) => {
@@ -118,7 +118,7 @@ if (endpointTokensArray.length === 0) {
   // para pagar/cobrar con tarjetas de credito debito tienda Online
   const endpointTokensArrayString128 = endpointTokensArray[128]
   const endpointTokensArray128 = endpointTokensArrayString128.split(',');
-  const endpoint128 = (typeof endpointTokensArray128 === 'string') ? endpointTokensArray128 : endpointTokensArray128.toString().replace(`${urlOwner}`, "");
+  const endpoint128 = (typeof endpointTokensArray128 === 'string') ? endpointTokensArray128 : endpointTokensArray128.toString().replace(`${urlServer}`, "");
   //console.log("que idPoint encontro ",endpoint5)
   router.post(`/${endpoint128}`, [verificarToken], async (req, res) => {
   //router.post('/process_payment', async (req, res) => {
@@ -153,7 +153,7 @@ if (endpointTokensArray.length === 0) {
   /*para pago con wallets tienda Online*/
   const endpointTokensArrayString125 = endpointTokensArray[125]
   const endpointTokensArray125 = endpointTokensArrayString125.split(',');
-  const endpoint125 = (typeof endpointTokensArray125 === 'string') ? endpointTokensArray125 : endpointTokensArray125.toString().replace(`${urlOwner}`, "");
+  const endpoint125 = (typeof endpointTokensArray125 === 'string') ? endpointTokensArray125 : endpointTokensArray125.toString().replace(`${urlServer}`, "");
   router.post(`/${endpoint125}`, [verificarToken], async (req, res) => {
   console.log("1111111111111111111111111111111 MP que idPoint encontro ",req.body)
 
@@ -213,9 +213,9 @@ if (endpointTokensArray.length === 0) {
           items: pedidosItems,
           purpose: 'wallet_purchase',
           back_urls: {
-          success: `${dataOwner.urlServer}resultado/del/cobro/enMP`,
-          failure: `${dataOwner.urlServer}resultado/del/cobro/enMP`,
-          pending: `${dataOwner.urlServer}resultado/del/cobro/enMP`,
+          success: `${urlServer}resultado/del/cobro/enMP`,
+          failure: `${urlServer}resultado/del/cobro/enMP`,
+          pending: `${urlServer}resultado/del/cobro/enMP`,
           },
           payer: req.body.dataCliente.payer,
           purpose: "wallet_purchase",
@@ -244,10 +244,9 @@ if (endpointTokensArray.length === 0) {
 
 
 
-
-
   // devolucciones del cobro MP wallets
-  router.get('/resultado/del/cobro/enMP', async (req, res) => {
+  // router.get(`${urlServer}/resultado/del/cobro/enMP`, async (req, res) => {
+  router.get(`/resultado/del/cobro/enMP`, async (req, res) => {
     try {
         console.log("/resultado/del/cobro/enMP que devuelve desde MP:", req.query);
         
@@ -260,7 +259,7 @@ if (endpointTokensArray.length === 0) {
           const { idCliente, idOwner } = externalReferenceObj;
   
           const dataOwner = await User.findById(idOwner);
-          const dominio = dataOwner.dominio || `${dataOwner.urlServer}${dataOwner.urlOwner}`;
+          const dominio = dataOwner.dominio || `${urlServer}${dataOwner.urlOwner}`;
 
         // Verificar que payment_id y collection_id no sean 'null' como cadena o undefined
         if (payment_id !== 'null' && payment_id && collection_id !== 'null' && collection_id) {
@@ -298,7 +297,7 @@ if (endpointTokensArray.length === 0) {
    //141 Ruta para abonar la Membresia Premium por FORMA MANUAL 
   const endpointTokensArrayString141 = endpointTokensArray[141]
   const endpointTokensArray141 = endpointTokensArrayString141.split(',');
-  const endpoint141 = (typeof endpointTokensArray141 === 'string') ? endpointTokensArray141 : endpointTokensArray141.toString().replace(`${urlOwner}`, "");
+  const endpoint141 = (typeof endpointTokensArray141 === 'string') ? endpointTokensArray141 : endpointTokensArray141.toString().replace(`${urlServer}`, "");
   //console.log("Le endpointTokensArray101 a guardar CUSTOM ",endpoint101)
   router.post(`/${endpoint141}`, [verificarToken], async (req, res) => {        
       try { 
@@ -443,7 +442,7 @@ if (endpointTokensArray.length === 0) {
    //142 UPDATED USUARIO YA EXISTENTE WALLET DESDE CPANEL PARa Membresia Premium por FORMA MANUAL UPGRADE desde Cpanel
   const endpointTokensArrayString142 = endpointTokensArray[142]
   const endpointTokensArray142 = endpointTokensArrayString142.split(',');
-  const endpoint142 = (typeof endpointTokensArray142 === 'string') ? endpointTokensArray142 : endpointTokensArray142.toString().replace(`${urlOwner}`, "");
+  const endpoint142 = (typeof endpointTokensArray142 === 'string') ? endpointTokensArray142 : endpointTokensArray142.toString().replace(`${urlServer}`, "");
   router.post(`/${endpoint142}`, [verificarToken], async (req, res) => {        
       try { 
           console.log("142 Request Body:", req.body);
@@ -634,7 +633,7 @@ if (endpointTokensArray.length === 0) {
   //142 UPDATED USUARIO YA EXISTENTE WALLET DESDE CPANEL PARa Membresia Premium y FORMA MANUAL UPGRADE desde Cpanel
   const endpointTokensArrayString172 = endpointTokensArray[172]
   const endpointTokensArray172 = endpointTokensArrayString172.split(',');
-  const endpoint172 = (typeof endpointTokensArray172 === 'string') ? endpointTokensArray172 : endpointTokensArray172.toString().replace(`${urlOwner}`, "");
+  const endpoint172 = (typeof endpointTokensArray172 === 'string') ? endpointTokensArray172 : endpointTokensArray172.toString().replace(`${urlServer}`, "");
   router.post(`/${endpoint172}`, [verificarToken], async (req, res) => {        
       try { 
         // primero verificamos la veracidad del cobro:
@@ -800,7 +799,7 @@ if (endpointTokensArray.length === 0) {
   // muestra los botones MP y TC desde Wallet de la landing page
   const endpointTokensArrayString129 = endpointTokensArray[129]
   const endpointTokensArray129 = endpointTokensArrayString129.split(',');
-  const endpoint129 = (typeof endpointTokensArray129 === 'string') ? endpointTokensArray129 : endpointTokensArray129.toString().replace(`${urlOwner}`, "");
+  const endpoint129 = (typeof endpointTokensArray129 === 'string') ? endpointTokensArray129 : endpointTokensArray129.toString().replace(`${urlServer}`, "");
   //console.log("que idPoint encontro ",endpoint129)
   router.post(`/${endpoint129}`, [verificarToken], async (req, res) => {
     // Agrega credenciales
@@ -879,7 +878,7 @@ if (endpointTokensArray.length === 0) {
   // TC TC TC para activar boton pago con TC en MP tienda Online y acrditar el PAGO
   const endpointTokensArrayString131 = endpointTokensArray[131]
   const endpointTokensArray131 = endpointTokensArrayString131.split(',');
-  const endpoint131 = (typeof endpointTokensArray131 === 'string') ? endpointTokensArray131 : endpointTokensArray131.toString().replace(`${urlOwner}`, "");
+  const endpoint131 = (typeof endpointTokensArray131 === 'string') ? endpointTokensArray131 : endpointTokensArray131.toString().replace(`${urlServer}`, "");
   //console.log("que idPoint encontro ",endpoint5)
   router.post(`/${endpoint131}`, [verificarToken], async (req, res) => {
       try {
@@ -941,7 +940,7 @@ if (endpointTokensArray.length === 0) {
   // para pagar/cobrar con tarjetas de credito debito tienda Online
   const endpointTokensArrayString132 = endpointTokensArray[132]
   const endpointTokensArray132 = endpointTokensArrayString132.split(',');
-  const endpoint132 = (typeof endpointTokensArray132 === 'string') ? endpointTokensArray132 : endpointTokensArray132.toString().replace(`${urlOwner}`, "");
+  const endpoint132 = (typeof endpointTokensArray132 === 'string') ? endpointTokensArray132 : endpointTokensArray132.toString().replace(`${urlServer}`, "");
   //console.log("que idPoint encontro ",endpoint5)
   router.post(`/${endpoint132}`, [verificarToken], async (req, res) => {
     console.log("Qué datos obtiene MP para pagar/cobrar con tarjetas de credito debito", req.body);
@@ -978,7 +977,7 @@ if (endpointTokensArray.length === 0) {
   // para pagar/cobrar con tarjetas de credito debito tienda Online
   const endpointTokensArrayString169 = endpointTokensArray[169]
   const endpointTokensArray169 = endpointTokensArrayString169.split(',');
-  const endpoint169 = (typeof endpointTokensArray169 === 'string') ? endpointTokensArray169 : endpointTokensArray169.toString().replace(`${urlOwner}`, "");
+  const endpoint169 = (typeof endpointTokensArray169 === 'string') ? endpointTokensArray169 : endpointTokensArray169.toString().replace(`${urlServer}`, "");
   //console.log("que idPoint encontro ",endpoint5)
   router.post(`/${endpoint169}`, [verificarToken], async (req, res) => {
     try {
@@ -1143,7 +1142,7 @@ Estos datos puedes verlos en tu panel de control.
 
 const endpointTokensArrayString179 = endpointTokensArray[179]
 const endpointTokensArray179 = endpointTokensArrayString179.split(',');
-const endpoint179 = (typeof endpointTokensArray169 === 'string') ? endpointTokensArray179 : endpointTokensArray179.toString().replace(`${urlOwner}`, "");
+const endpoint179 = (typeof endpointTokensArray169 === 'string') ? endpointTokensArray179 : endpointTokensArray179.toString().replace(`${urlServer}`, "");
 //console.log("que idPoint encontro ",endpoint5)
 router.post(`/${endpoint179}`, [verificarToken], async (req, res) => {
 
@@ -1216,7 +1215,7 @@ router.post(`/${endpoint179}`, [verificarToken], async (req, res) => {
   //101 Guarda el formulario CUSTOM y CONTACTOS
   const endpointTokensArrayString101 = endpointTokensArray[101]
   const endpointTokensArray101 = endpointTokensArrayString101.split(',');
-  const endpoint101 = (typeof endpointTokensArray101 === 'string') ? endpointTokensArray101 : endpointTokensArray101.toString().replace(`${urlOwner}`, "");
+  const endpoint101 = (typeof endpointTokensArray101 === 'string') ? endpointTokensArray101 : endpointTokensArray101.toString().replace(`${urlServer}`, "");
   //console.log("Le endpointTokensArray101 a guardar CUSTOM ",endpoint101)
   router.post(`/${endpoint101}`, [verificarToken], async (req, res) => {
   //router.post('/datos/custom/cliente', [verificarToken], async (req, res) => {

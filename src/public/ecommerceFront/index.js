@@ -23,7 +23,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 
 	let urlOwner = window.location.pathname.split('/')[1];
 
-	//("Que urlOwner encontro desde el path fronen", urlOwner)
+	console.log("Que urlOwner encontro desde el path fronen", urlOwner)
 	// reproducir sonido de Exito
 	function reproducirSonidoE(velocidad, volumen) {
 		var audio = new Audio('sounds/dingDong.wav');
@@ -63,11 +63,14 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 	mapas()
 
 
+	let urlServer = ""
+
+
 	let  ownerMensajes, ownerPromos, ownerProducts, basicData	
 
 
 	// esta funcion sire para borrar el local storage cuando salis de la aplicasion
-	function borrarsessionStorage() {
+	async function borrarsessionStorage() {
 		sessionStorage.removeItem("ownerEcom");
         sessionStorage.removeItem("dataOwner");
         sessionStorage.removeItem("basicData");
@@ -91,10 +94,11 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 
 
 		// agrega el logo al body
-		document.getElementById("insertLogo").innerHTML = `<div id="coloratepapa" class="m-4 d-flex justify-content-center align-items-center vh-100">
-    <img src="images/logomtf.jpg" class="img-fluid rounded" alt="Logo">
-</div>
-`;
+		document.getElementById("insertLogo").innerHTML = `
+		<div id="coloratepapa" class="m-4 d-flex justify-content-center align-items-center vh-100">
+			<img src="images/logomtf.jpg" class="img-fluid rounded" alt="Logo">
+		</div>
+		`;
 
 
 
@@ -140,7 +144,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 		function obtenerProductosYPromociones() {
 			const urlOwner2 = {urlOwner : urlOwner}
 			//console.log("Entro a buscar los productos usando el orlOwner:", urlOwner2)
-			fetch('http://localhost:3020/buscandoPruductosEcommerce', {
+			fetch('http://localhost:3020/buscandoDataEcommerceInicial', {
 			//fetch(`${urlServer}buscandoPruductosEcommerce`, {
 				method: 'POST',
 				headers: {
@@ -150,52 +154,14 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 			})
 			.then(response => response.json())
 			.then(async data => {
-				if (data.success && Array.isArray(data.dataProd)) {
+				if (data.success) {
 					// Guarda los enpoints en el sessionStorage
-					const idEnpoints = data.endPointsIdTokens
-					const idEnpointsString = JSON.stringify(idEnpoints);
-					sessionStorage.setItem("idEndpoints", idEnpointsString);
-					
-					await automatismo(idEnpoints)
-					
-					let Promociones = data.dataProm || JSON.parse(sessionStorage.getItem("ownerPromos")) 
-					let Productos   = data.dataProd || JSON.parse(sessionStorage.getItem("ownerProducts")) 
+					sessionStorage.setItem("idEndpoints", JSON.stringify(data.endPointsFronen));
+					sessionStorage.setItem("basicData", JSON.stringify(data.basicData));
+					console.log("Cuantos data.Configsdata.Configs encontro??????????")
 
-					// guarda en la session los productos y promociones
-					sessionStorage.setItem("ownerPromos", JSON.stringify(Promociones));
-					sessionStorage.setItem("ownerProducts", JSON.stringify(Productos));
-					
-					//console.log("Cuantos productos y promociones encontro??????????",Promociones.length, Productos.length)
-
-					// re ORdena los preoductos
-					Productos.forEach((producto) => {
-						// sube al localHost los enpoints
-						const categoria = producto.categoria;
-						// Agrupar productos por categoría
-						if (!categorias[categoria]) {
-							categorias[categoria] = [];
-						}
-						categorias[categoria].push(producto);
-					});
-					// Renderizar productos y categorías
-					renderizarProductosYCategorias(categorias);
-					// Inicializar todos los carruseles de Bootstrap
-					$('.carousel').carousel();
-
-					// re ORdena las promociones
-					Promociones.forEach((producto) => {
-						const categoria = producto.categoria;
-						// Agrupar productos por categoría
-						if (!categoriasProm[categoria]) {
-							categoriasProm[categoria] = [];
-						}
-						categoriasProm[categoria].push(producto);
-					});
-
-					// Renderizar productos y categorías
-					renderizarPromociones(categoriasProm);
-					// Inicializar todos los carruseles de Bootstrap
-					$('.carousel').carousel();
+					await buscarProductosYPromos(data.endPointsFronen)
+					await automatismo(data.endPointsFronen)
 
 				} else {
 					console.error('Error al obtener datos de /buscandoPostdeEcommerce');
@@ -204,6 +170,44 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 			})
 			.catch(error => console.error('Error de solicitud:', error),
 			);
+		}
+
+
+		async function buscarProductosYPromos(enpoints) {
+
+			
+			const { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData } = await rescueData(urlOwner)
+			console.log("Entro a al funcion... buscarProductosYPromos", ownerPromos.length, ownerProducts.length)
+
+			// re ORdena los preoductos
+			ownerProducts.forEach((producto) => {
+				// sube al localHost los enpoints
+				const categoria = producto.categoria;
+				// Agrupar productos por categoría
+				if (!categorias[categoria]) {
+					categorias[categoria] = [];
+				}
+				categorias[categoria].push(producto);
+			});
+			// Renderizar productos y categorías
+			renderizarProductosYCategorias(categorias);
+			// Inicializar todos los carruseles de Bootstrap
+			$('.carousel').carousel();
+			
+			// re ORdena las promociones
+			ownerPromos.forEach((producto) => {
+				const categoria = producto.categoria;
+				// Agrupar productos por categoría
+				if (!categoriasProm[categoria]) {
+					categoriasProm[categoria] = [];
+				}
+				categoriasProm[categoria].push(producto);
+			});
+
+			// Renderizar productos y categorías
+			renderizarPromociones(categoriasProm);
+			// Inicializar todos los carruseles de Bootstrap
+			$('.carousel').carousel();
 		}
 
 		let acum = []
@@ -1025,7 +1029,7 @@ imgGiga.forEach((img, index) => {
 		async function automatismo(idEnpoints22) {
 			const jwToken = sessionStorage.getItem('jwtToken');
 			// busca os datos en la esion y i no estan los pide al server
-			const dataInit = await dataSession() || await rescueData();
+			const dataInit = await dataSession(urlOwner) || await rescueData(urlOwner);
 			//console.log("Que hay dataInit",dataInit)
 			ownerProducts = dataInit.ownerProducts
 			ownerPromos   = dataInit.ownerPromos
@@ -1037,7 +1041,7 @@ imgGiga.forEach((img, index) => {
 			menuOn.style.display = 'none'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
 			menuOn.style.opacity = '0'; // Invisible al principio
 
-			const checkDataOwner = setInterval(() => {
+			const checkDataOwner = setInterval(async () => {
 				if (dataOwner) {
 					menuOn.style.display = 'flex'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
 					clearInterval(checkDataOwner); // Detenemos el intervalo cuando encontramos dataOwner
@@ -1077,7 +1081,7 @@ imgGiga.forEach((img, index) => {
 					// Agregar la imagen al bannerSection
 					bannerSection.insertBefore(img, bannerSection.firstChild);
 					// agrega el diseño del ecomerce elegido
-					agregarClase(dataOwner.desingShop)
+					await agregarClase(dataOwner.desingShop)
 					// Agrega el logo del ownerEcom
 					if (dataOwner.pathLogo) {
 						const logoEcomm = document.getElementById("logoSigUp");
@@ -1351,7 +1355,7 @@ imgGiga.forEach((img, index) => {
 
 						const innerEnvioElement = document.getElementById("CostoEnvio123");
 						const innerCostoDel = document.getElementById("delivery6546");	
-						console.log("8888888888Este es el costo del envio costEnvioNumber", costoDelEnvio)
+						console.log("COSTO ENVIO   8888888888Este es el costo del envio costEnvioNumber", costoDelEnvio)
 						if (costoDelEnvio.length >= 1) {
 							innerCostoDel.textContent = `${costoDelEnvio[0]}`
 							innerEnvioElement.textContent = `${costoDelEnvio[0]}`
@@ -1373,7 +1377,7 @@ imgGiga.forEach((img, index) => {
 							Si deseas eliminar todos los productos del carrito, haz clic en <strong>"Cancelar"</strong> <br>
 							<br>
 							También puedes presionar la <strong>"X"</strong> en la esquina superior derecha si deseas seguir agregando productos.
-						</p>`;
+								</p>`;
 						
 
 							// modal de opcion que avisa que tienes un pedido pendiente de procesar
@@ -1428,7 +1432,7 @@ imgGiga.forEach((img, index) => {
 							const rechaza = function rechaza() {
 								sessionStorage.removeItem('pedidoCarritoPendientePago');
 							}
-							confirmOptions(mensaje, confirma, rechaza);
+							await confirmOptions(mensaje, confirma, rechaza);
 						}
 						if (statusCobro === "failed") {
 							//console.log("se devolvio desde MP sin pagar o viene de Wallet MP",statusCobro)
@@ -3265,20 +3269,21 @@ imgGiga.forEach((img, index) => {
 			//console.log("Entro por tiene dominio", dominio)
 			return dominio;
 		} else {
-			dominio = dataOwner.urlServer + urlOwner;
+			dominio = urlServer + urlOwner;
 			// Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-			//console.log("Entro por NO tiene dominio", dominio)
+			console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominio)
 			return dominio;
 		}
 	}
 
 	// rescata los datos desde el server
-	async function rescueData() {
+	async function rescueData(urlOwner) {
 		try {
 			// Busca los datos del dueño del ecommerce para configurar el sitio web
 			const idEnpoints = JSON.parse(sessionStorage.getItem("idEndpoints"));
 			const idleruleru = idEnpoints[0];
-			console.log("***automatismo****¿Qué endpoints encontró en el local storage?", idleruleru);
+			let urlOwner = window.location.pathname.split('/')[1];
+			console.log("***rescueData****¿Qué endpoints encontró en el local storage?", idleruleru, urlOwner, idleruleru);
 	
 			const response = await fetch(`${idleruleru}`, {
 				method: 'POST',
@@ -3324,23 +3329,26 @@ imgGiga.forEach((img, index) => {
 			return await rescueData(); // Vuelve a llamar la función
 		}
 	}
-	
 
 	// rescata lso datos desde el session
-	async function dataSession() {
+	async function dataSession(urlOwner) {
 		// Obtener los datos almacenados en sessionStorage
 		const dataOwner     = JSON.parse(sessionStorage.getItem("ownerData") || sessionStorage.getItem("DataOwnerEcom") || '{}');
 		const ownerProducts = JSON.parse(sessionStorage.getItem("ownerProducts") || '[]');
 		const ownerPromos   = JSON.parse(sessionStorage.getItem("ownerPromos") || '[]');
-		const basicData     = JSON.parse(sessionStorage.getItem("basicData") || '[]');
 		const ownerMensajes = JSON.parse(sessionStorage.getItem("ownerMensajes") || '[]');
+		const basicData     = JSON.parse(sessionStorage.getItem("basicData")) || JSON.parse(sessionStorage.getItem("datosBasicos") || [])
+
+		urlServer = basicData.urlServer
+		urlOwner  = dataOwner.urlOwner
+
 		if (dataOwner._id && ownerProducts && basicData) {
 			console.log("Desde dataSession que datos enconro en session????????", {dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData})
 			return { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData };
 		} else {
 			console.log("Desde nul null")
-			return false
-			const data = await rescueData()
+			// return false
+			const data = await rescueData(urlOwner)
 			return data
 		}
 		

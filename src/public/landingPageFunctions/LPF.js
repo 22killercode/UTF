@@ -1,38 +1,34 @@
         // let endpoints = {}
 
         // busca la info inicial del server PROTEGER RUTA
-        window.addEventListener('load', () => {
-            //console.log("se cargo la pagina")
-            // Cuando la página se carga completamente, se ejecuta esta función
-            // Realizar una solicitud fetch al servidor
-            // setTimeout(() => {
-                // Realizar una solicitud fetch al servidor para buscar la informacion inicial de los enpoints codificados
-                fetch('/dataInfoTokensEtc')
-                    .then(response => {
-                        // Verificar si la respuesta del servidor fue exitosa
-                        if (!response.ok) {
-                            // Si la respuesta no fue exitosa, lanzar un error
-                            mostrarAlerta('Revisa tu conexión a Internet')
-                            throw new Error('Revisa tu conexión a Internet');
-                        }
-                        // Si la respuesta fue exitosa, devolver los datos JSON
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Manejar los datos recibidos del servidor (éxito)
-                        console.log('Datos recibidos dewsde el server dataInfoTokensEtc:', data);
-                        // Guardar la información en el almacenamiento local
-                        endpoints = data.endPointsIdTokens
-                        sessionStorage.setItem('endPointsIdTokensCpanel', JSON.stringify(data.endPointsIdTokens));
-                        //alert('Solicitud exitosa');
-                    })
-                    .catch(error => {
-                        // Manejar cualquier error ocurrido durante la solicitud (fracaso)
-                        console.error('Error:', error);
-                        alert(`Error en la solicitud ${error}`);
-                    });
-            // }, 1000); // 3000 milisegundos = 3 segundos
+        window.addEventListener('load', async () => {
+            try {
+                // Realizar la solicitud fetch usando async/await
+                const response = await fetch('/dataInfoTokensEtc');
+        
+                // Verificar si la respuesta fue exitosa
+                if (!response.ok) {
+                    mostrarAlerta('Revisa tu conexión a Internet');
+                    throw new Error('Revisa tu conexión a Internet');
+                }
+        
+                // Si la respuesta fue exitosa, obtener los datos JSON
+                const data = await response.json();
+        
+                // Manejar los datos recibidos del servidor
+                console.log('Datos recibidos desde el server dataInfoTokensEtc:', data);
+                
+                // Guardar la información en el almacenamiento local
+                endpoints = data.endPointsIdTokens;
+                sessionStorage.setItem('endPointsIdTokensCpanel', JSON.stringify(data.endPointsIdTokens));
+        
+            } catch (error) {
+                // Manejar cualquier error ocurrido durante la solicitud
+                console.error('Error:', error);
+                mostrarAlerta(`Error en la solicitud desde LPF linea 28 ${error}`);
+            }
         });
+        
 
 
         // SignUP inscribir dueños de Ecommerce
