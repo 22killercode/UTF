@@ -23,7 +23,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 
 	let urlOwner = window.location.pathname.split('/')[1];
 
-	console.log("Que urlOwner encontro desde el path fronen", urlOwner)
+	//console.log("Que urlOwner encontro desde el path fronen", urlOwner)
 	// reproducir sonido de Exito
 	function reproducirSonidoE(velocidad, volumen) {
 		var audio = new Audio('sounds/dingDong.wav');
@@ -61,13 +61,8 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 		// }).addTo(map88);
 	}
 	mapas()
-
-
 	let urlServer = ""
-
-
 	let  ownerMensajes, ownerPromos, ownerProducts, basicData	
-
 
 	// esta funcion sire para borrar el local storage cuando salis de la aplicasion
 	async function borrarsessionStorage() {
@@ -92,15 +87,18 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 	//Envia todos los prodcutos y el carrito al frontend
 	document.addEventListener('DOMContentLoaded', async function () {
 
-
 		// agrega el logo al body
 		document.getElementById("insertLogo").innerHTML = `
-		<div id="coloratepapa" class="m-4 d-flex justify-content-center align-items-center vh-100">
-			<img src="images/logomtf.jpg" class="img-fluid rounded" alt="Logo">
-		</div>
+<div id="coloratepapa" class="m-4 d-flex flex-column justify-content-center align-items-center vh-100">
+    <div>
+        <img src="images/logomtf.jpg" class="img-fluid rounded mb-4" alt="Logo">
+    </div>
+    <div style="font-size: 4rem;" class="spinner-border text-primary" role="status">
+        <span class="visually-hidden" >Loading...</span>
+    </div>
+</div>
+
 		`;
-
-
 
 		// agrega el diseño al ecommerce y obtiene que diseño eligio el owner
 		function agregarClase(desing) {
@@ -152,14 +150,15 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 				},
 				body: JSON.stringify(urlOwner2)
 			})
-			.then(response => response.json())
+			.then(response => response.json()) 
 			.then(async data => {
 				if (data.success) {
+					//console.log("777777777777", data)
 					// Guarda los enpoints en el sessionStorage
 					sessionStorage.setItem("idEndpoints", JSON.stringify(data.endPointsFronen));
 					sessionStorage.setItem("basicData", JSON.stringify(data.basicData));
-					console.log("Cuantos data.Configsdata.Configs encontro??????????")
-
+					//console.log("Cuantos data.Configsdata.Configs encontro??????????")
+					urlServer = data.basicData.urlServer
 					await buscarProductosYPromos(data.endPointsFronen)
 					await automatismo(data.endPointsFronen)
 
@@ -174,10 +173,8 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 
 
 		async function buscarProductosYPromos(enpoints) {
-
-			
 			const { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData } = await rescueData(urlOwner)
-			console.log("Entro a al funcion... buscarProductosYPromos", ownerPromos.length, ownerProducts.length)
+			//console.log("Entro a al funcion... buscarProductosYPromos", ownerPromos.length, ownerProducts.length)
 
 			// re ORdena los preoductos
 			ownerProducts.forEach((producto) => {
@@ -264,119 +261,127 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 							contenedorProds.appendChild(CatProductos);
 							todosLosProductos.push(producto.nombreProducto);
 							const cardProdHorizontal = `
-								<div style="display:inline-flex !important" class="point cardH col-md m-3 p-2 d-flex justify-content-center" id="coloreateputo${producto._id}">
-									<div class="card w-100" style="transition: transform 0.2s; background-color: transparent;" 
-										onmouseover="this.style.transform='scale(1.005)'" 
-										onmouseout="this.style.transform='scale(1)'">
-										<div class="card-header text-center" style="background-color: transparent;">
-											<h4 class="product-name" id="${producto.nombreProducto}">
-												<strong>${producto.nombreProducto}</strong>
-											</h4>
-										</div>
-										<div class="row m-2">
-											<div class="col carousel-container">
-												<div id="carousel${producto._id}" class="carousel slide" data-bs-ride="carousel">
-													<div class="carousel-inner">
-														${producto.rutaSimpleImg.map((img, index) => `
-															<div class="carousel-item ${index === 0 ? 'active' : ''}">
-																<img id="${producto._id}" src="${img}" alt="Producto" class="img-fluid rounded" 
-																	style="min-height: 450px !important;cursor:pointer;" />
-															</div>`).join('')}
-													</div>
-													<a class="carousel-control-prev" href="#carousel${producto._id}" role="button" data-bs-slide="prev">
-														<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-														<span class="visually-hidden">Previous</span>
-													</a>
-													<a class="carousel-control-next" href="#carousel${producto._id}" role="button" data-bs-slide="next">
-														<span class="carousel-control-next-icon" aria-hidden="true"></span>
-														<span class="visually-hidden">Next</span>
-													</a>
-												</div>
-											</div>
-											<div class="col text-center" align="center">
-												<h5 class="price-info text-success">
-													<strong>Precio:</strong> $<span class="price">${formatoMoneda(producto.precio)} pesos.</span>
-												</h5>
-												<br>
-												<div align="center">
-												${producto.animOK ?
-													producto.cantidad <= 3 ?
-													`
-													<div class="corazon">
-														<div class="textoC">
-															<strong>Quedan<br>${producto.cantidad}</strong> 
-														</div>
-													</div>
-													` : `
-														<div class="escarapela">
-															<div class="capa capa1"></div>
-															<div class="capa capa2"></div>
-															<div class="capa capa3"></div>
-															<div class="textoE">
-																<strong>Quedan<br>${producto.cantidad}</strong> 
-															</div>
-														</div>
-													`
-													: `
-														<div class="">
-															<h5>
-																<strong>Quedan<br>${producto.cantidad}</strong> 
-															</h5>
-														</div>
-													`
-												}
-<br>
-													<p><strong>Elige cantidad:</strong></p>
-										<div class="d-flex justify-content-center align-items-center px-auto">
-											<div class="p-0 d-flex justify-content-between align-items-center btn btn-primary">
-												<button class="m-0 btn btn-outline-secondary decrement${producto._id}" type="button" data-id="${producto._id}" 
-												style="width: 20px; border:none; height: 30px; color: green; font-weight: bold; display: flex; justify-content: center; align-items: center; font-size:1.5rem">
-												-
-												</button>
-										
-												<input 
-												type="number" 
-												data-cantidad-id="${producto._id}" 
-												name="cantidad"
-												value="1" 
-												id="infoInput${producto._id}" 
-												min="1" 
-												max="${producto.cantidad}" 
-												required
-												class="form-control text-center m-0" 
-												style="border:none; background: transparent !important; width: 40px !important; height: 30px; padding: 0; margin: 0; color: white"
-												/>
-										
-												<button class="m-0 btn btn-outline-secondary increment${producto._id}" type="button" data-id="${producto._id}" 
-												style="width: 20px; height: 30px; border:none; font-weight: bold; display: flex; justify-content: center; align-items: center; font-size:1.5rem">
-												+
-												</button>
-											</div>
-												</div>
-												<br>
-												<button type="button" class="btn btn-success add-to-cart mt-2" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}">
-													Agregar al Carrito
-													<span class="fas fa-shopping-cart"></span>
-												</button>
-												<br><br>
-												<button type="button" class="btn btn-outline-info description-toggle" data-bs-toggle="collapse" 
-													data-bs-target="#descriptionContainer${producto._id}" aria-expanded="false" 
-													aria-controls="descriptionContainer${producto._id}">
-													Descripción del producto
-												</button>
-												<div align="left" class="collapse" id="descriptionContainer${producto._id}">
-													<p class="mt-2">${producto.descripcion}</p>
-												</div>
+<div style=" min-height: 600px !important; display:inline-flex !important" class=" border-0 point cardH col-md m-3 p-2 d-flex justify-content-center" id="coloreateputo${producto._id}">
+    <div class="card w-100" style="transition: transform 0.2s; background-color: transparent;" 
+        onmouseover="this.style.transform='scale(1.005)'" 
+        onmouseout="this.style.transform='scale(1)'">
+        <div class="card-header text-center" style="background-color: transparent;">
+            <h4 class="product-name" id="${producto.nombreProducto}">
+                <strong>${producto.nombreProducto}</strong>
+            </h4>
+        </div>
+        <div class="card-body  border-0">
+            <div class="row">
+                <!-- Primera columna: Carrusel de imágenes -->
+                <div class="col-12 col-md-6 d-flex justify-content-center">
+                    <div carousel-container>
+                        <div id="carousel${producto._id}" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                ${producto.rutaSimpleImg.map((img, index) => `
+                                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                        <img id="${producto._id}" src="${img}" alt="Producto" class="img-fluid rounded m-0 p-0" 
+                                            style="min-height: 400px; min-width: 270px; cursor:pointer;" />
+                                    </div>`).join('')}
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel${producto._id}" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel${producto._id}" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Segunda columna: Información del producto -->
+                <div class="col-12 col-md-6 text-center" align="center">
+                    <h5 class="price-info text-success">
+                        <strong>Precio:</strong> $<span class="price">${formatoMoneda(producto.precio)} pesos.</span>
+                    </h5>
+                    <br>
+                    <div align="center">
+                        ${producto.animOK ?
+                            producto.cantidad <= 3 ?
+                            `
+                            <div class="corazon">
+                                <div class="textoC">
+                                    <strong>Quedan<br>${producto.cantidad}</strong> 
+                                </div>
+                            </div>
+                            ` : `
+                                <div class="escarapela">
+                                    <div class="capa capa1"></div>
+                                    <div class="capa capa2"></div>
+                                    <div class="capa capa3"></div>
+                                    <div class="textoE">
+                                        <strong>Quedan<br>${producto.cantidad}</strong> 
+                                    </div>
+                                </div>
+                            `
+                            : `
+                                <div class="">
+                                    <h5>
+                                        <strong>Quedan<br>${producto.cantidad}</strong> 
+                                    </h5>
+                                </div>
+                            `
+                        }
+                        <br>
+                        <p><strong>Elige cantidad:</strong></p>
+                        <div class="d-flex justify-content-center align-items-center px-auto">
+                            <div class="p-0 d-flex justify-content-between align-items-center btn btn-primary">
+                                <button class="m-0 btn btn-outline-secondary decrement${producto._id}" type="button" data-id="${producto._id}" 
+                                style="width: 20px; border:none; height: 30px; color: green; font-weight: bold; display: flex; justify-content: center; align-items: center; font-size:1.5rem">
+                                -
+                                </button>
+                        
+                                <input 
+                                type="number" 
+                                data-cantidad-id="${producto._id}" 
+                                name="cantidad"
+                                value="1" 
+                                id="infoInput${producto._id}" 
+                                min="1" 
+                                max="${producto.cantidad}" 
+                                required
+                                class="form-control text-center m-0" 
+                                style="border:none; background: transparent !important; width: 40px !important; height: 30px; padding: 0; margin: 0; color: white"
+                                />
+                        
+                                <button class="m-0 btn btn-outline-secondary increment${producto._id}" type="button" data-id="${producto._id}" 
+                                style="width: 20px; height: 30px; border:none; font-weight: bold; display: flex; justify-content: center; align-items: center; font-size:1.5rem">
+                                +
+                                </button>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="button" class="btn btn-success add-to-cart mt-2" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}">
+                            Agregar al Carrito
+                            <span class="fas fa-shopping-cart"></span>
+                        </button>
+                        <br><br>
+                        <button type="button" class="btn btn-outline-info description-toggle" data-bs-toggle="collapse" 
+                            data-bs-target="#descriptionContainer${producto._id}" aria-expanded="false" 
+                            aria-controls="descriptionContainer${producto._id}">
+                            Descripción del producto
+                        </button>
+                        <div align="left" class="collapse" id="descriptionContainer${producto._id}">
+                            <p class="mt-2">${producto.descripcion}</p>
+                        </div>
 
-											</div>
-										</div>
-										<div class="card-footer mt-0" style="background-color: transparent;">
-										</div>
-									</div>
-								</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer mt-0  border-0" style="background-color: transparent;">
+        </div>
+    </div>
+</div>
+
 							`;
 							const cardProdVertical = `
-							<div class="point col cardV p-0 m-2 g-0" style="min-height:280px" id="coloreateputo${producto._id}">
+							<div class="point col cardV p-0 m-2 g-0" style="min-height: 600px !important;" id="coloreateputo${producto._id}">
 								<div class="card p-1 w-100 m-0" style="min-height:100%; transition: transform 0.2s; background-color: transparent;">
 									<div class="card-header">
 										<h5 style="text-align:center; margin: 0;" id="${producto.nombreProducto}">
@@ -489,7 +494,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 							</div>
 							`;
 							const cardHtmlTransparente = `
-							<div class="point col-12 col-sm-6 col-md-4 cardV p-0 m-2 g-0" style="padding:0;margin:0;min-height: 350px; position: relative;" id="coloreateputo${producto._id}">
+							<div class="point col-12 col-sm-6 col-md-4 cardV p-0 m-2 g-0" style="min-height: 600px !important; padding:0;margin:0;min-height: 350px; position: relative;" id="coloreateputo${producto._id}">
 								<!-- Contenedor del carrusel como fondo -->
 								<div class="p-0 w-100 m-0" style="position: relative; ">
 								<!-- Carrusel de imágenes como fondo -->
@@ -889,53 +894,6 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 		// busca, revisa y renderiza todos los productos que se venden en el ecommerce
 		obtenerProductosYPromociones();
 
-		function armarListaDelCarritoProm(idProducto, cantidades, ok) {
-			// busca el producto seleccionado para el carrito de todos los productos en el array Categorias
-			function encontrarProductoPorIdEnCategorias(categorias, idProducto) {
-				for (const categoria in categorias) {
-					const productosEnCategoria = categorias[categoria];
-					const productoEncontrado = productosEnCategoria.find(producto => producto._id === idProducto);
-					if (productoEncontrado) {
-						return {
-							categoria,
-							producto: productoEncontrado
-						};
-					}
-				}
-				return null; // Retorna null si el producto no se encuentra en ninguna categoría
-			}
-	
-			const product = encontrarProductoPorIdEnCategorias(categoriasProm, idProducto);
-			const producto = product.producto;
-	
-			// Obtener información del producto seleccionado
-			const nombreProducto = `${producto.nombreProducto}`;
-			const cantidad = parseInt(cantidades, 10);
-			const precio = parseFloat(`${producto.precio}`);
-			const imagen = `${producto.rutaSimpleImg[0]}`;
-			const descripcion = `${producto.descripcion}`;
-			const idCliente = "";
-	
-			// Crear un objeto del pedido con la información del producto solicitado
-			const pedido = { idCliente, descripcion, imagen, nombreProducto, cantidad, precio, idProducto };
-			//console.log("Contenido del pedido :", pedido);
-	
-			// Clonar la lista de pedidos para evitar afectar el estado anterior
-			pedido.subTotal = cantidad * precio;
-	
-			// Compara el pedido con lo que está guardado en listaPedido y lo diferente lo incluye
-			//console.log("Que lista de pedido llega a armar listaPedido", listaPedido);
-	
-			const cheIngresado = listaPedido.find(e => e.idProducto === idProducto);
-	
-			// Si no está ya en listaPedidos, se añade la lista de pedidos
-			if (!cheIngresado) {
-				listaPedido.push(pedido);
-			}
-	
-			let listaPedidoClone = [...listaPedido];
-			armarCarrito(listaPedidoClone, ok);
-		}
 
 		//funcion que pone los producto dentor del carrito de compras
 		function armarListaDePedido(idProducto, cantidades, ok ) {
@@ -1056,12 +1014,14 @@ imgGiga.forEach((img, index) => {
 					}, 100); // Cada 100 milisegundos
 
 					// imprime el fondo de pantalla del ecommerce
-					const fondoPantalla = dataOwner.fondoPantalla
+					const fondoPantalla = dataOwner.fondoPantalla;
 					const bannerSection = document.getElementById('banner2233');
 					bannerSection.style.position = 'relative';
-					bannerSection.style.overflow = 'hidden'; // Para asegurar que la imagen no se salga del contenedor
+					bannerSection.style.overflow = 'hidden'; // Asegurar que la imagen no se salga del contenedor
 					bannerSection.style.width = '100%'; // Asegurar que el contenedor ocupe el 100% del ancho
-					bannerSection.style.height = '100vh'; // Ajustar el contenedor para que ocupe el 100% de la altura de la ventana
+					bannerSection.style.height = '100vh'; // Asegurar que el contenedor ocupe el 100% de la altura de la ventana
+					
+					// Crear la imagen
 					const img = new Image();
 					img.src = fondoPantalla;
 					img.alt = 'Fondo de pantalla';
@@ -1077,9 +1037,33 @@ imgGiga.forEach((img, index) => {
 					img.classList.add('fade-in');
 					img.onload = function() {
 						img.style.opacity = '1';
+						spinner.style.display = 'none'; // Ocultar el spinner cuando la imagen cargue
 					};
-					// Agregar la imagen al bannerSection
+					
+					// Crear el spinner
+					const spinner = document.createElement('div');
+					spinner.className = 'spinner-border text-primary';
+					spinner.setAttribute('role', 'status');
+					spinner.innerHTML = '<span class="visually-hidden">Loading...</span>';
+					spinner.style.marginTop = '1rem'; // 1 rem debajo de la imagen
+					spinner.style.display = 'flex'; // Asegurar que el spinner sea visible
+					spinner.style.justifyContent = 'center'; // Centrar horizontalmente
+					spinner.style.zIndex = '1'; // Asegurarse de que esté encima de la imagen
+					
+					// Crear un contenedor para el spinner debajo de la imagen
+					const spinnerContainer = document.createElement('div');
+					spinnerContainer.style.position = 'absolute';
+					spinnerContainer.style.bottom = '0'; // Coloca el contenedor en la parte inferior del banner
+					spinnerContainer.style.width = '100%'; // Asegura que ocupe todo el ancho
+					spinnerContainer.style.display = 'flex';
+					spinnerContainer.style.justifyContent = 'center';
+					spinnerContainer.appendChild(spinner);
+					
+					// Agregar la imagen y el contenedor del spinner al bannerSection
 					bannerSection.insertBefore(img, bannerSection.firstChild);
+					bannerSection.appendChild(spinnerContainer); // Agregar el contenedor del spinner
+					
+					
 					// agrega el diseño del ecomerce elegido
 					await agregarClase(dataOwner.desingShop)
 					// Agrega el logo del ownerEcom
@@ -1088,8 +1072,24 @@ imgGiga.forEach((img, index) => {
 						logoEcomm.innerHTML = `<img src="${dataOwner.pathLogo}" style="width: auto; height: 250px; border-radius: 50%;">`;
 						//inserta el logo en el menu principal
 						const logoEcomm2 = document.getElementById("logoOwner222");
-						logoEcomm2.innerHTML = `<img src="${dataOwner.pathLogo}" style="width: auto; height: 80px; border-radius: 50%; margin-top:1rem ">`;
+						logoEcomm2.innerHTML = `<img src="${dataOwner.pathLogo}" style="width: 100px; height: 100px; border-radius: 50%; margin-top:1rem ">`;
 					}
+
+					// agrega el color al, icono noticias si hay noticias nuevas
+					const cheqNewsC = dataOwner.flagNews
+					if (cheqNewsC) {
+						sessionStorage.setItem("flagNews", JSON.stringify({ flagNews: true }));
+					}
+					const cheqNewsColor = JSON.parse(sessionStorage.getItem("flagNews"));
+					const cheqNewsCerrado = JSON.parse(sessionStorage.getItem("flagNewsCerrado"));
+					console.log("LLEgo hasta qui y cambio el color de la corneta news", cheqNewsCerrado)
+					// Verifica si hay noticias nuevas
+					if (cheqNewsColor.flagNews && cheqNewsCerrado === null || cheqNewsCerrado.flagNewsCerrado === false) {
+						const iconCorneta = document.getElementById("corneta");
+						iconCorneta.style.color = "green"; 
+						console.log("LLEgo hasta qui y cambio el color de la corneta news", cheqNewsColor)
+					}
+
 
 					// Inserta el nombre del comercio en el signIn y la barra del menú principal
 					const nombreDueno = document.getElementById("duenoEcom22");
@@ -1097,7 +1097,6 @@ imgGiga.forEach((img, index) => {
 					nombreDueno.innerHTML = "";
 
 					const nombreComercio = dataOwner.ecommerceName;
-					const mostrarPromoPPrin = dataOwner.mostrarPromoPPrin
 
 					const nombreTitulo = document.getElementById("titulo");
 					nombreTitulo.innerHTML = `${nombreComercio}`;
@@ -1157,7 +1156,7 @@ imgGiga.forEach((img, index) => {
 					const newsModal = document.getElementById('newsMmodal');
 					const carouselItems741 = document.getElementById('promosincertings2345');
 
-					console.log("que tiene mensajes", ownerMensajes.length)
+					//console.log("que tiene mensajes", ownerMensajes.length)
 					// Ordenar las noticias del más reciente al más antiguo
 					ownerMensajes.sort((a, b) => new Date(b.date) - new Date(a.date));
 					// guarda todos los mensajes en el sessionStorage
@@ -1169,7 +1168,7 @@ imgGiga.forEach((img, index) => {
 
 					// Variables para verificar la existencia
 					let hasNoticias = false;
-					let hasPromos = false;
+					let hasPromos = true;
 
 					// Filtrar noticias
 					const noticiasHTML = ownerMensajes.filter(news => news.nweNoticias).map(news => {
@@ -1226,14 +1225,14 @@ imgGiga.forEach((img, index) => {
 					}).join('');
 
 					// Renderizar contenido de las noticias
-					//console.log("kjfkjbjfbjfbvjfvjfvnjvjvjnbvjghorijhfio",promosHTML )
 					if (hasNoticias ) {
 						newsModal.innerHTML = noticiasHTML;
 						//newsModal.innerHTML = promosHTML;
 					}
-
+					
+					console.log("dataOwner.mostrarPromoPPrin", dataOwner.mostrarPromoPPrin)
 					// Renderiza las promos en la pagina principal
-					if (hasPromos && mostrarPromoPPrin) {
+					if (hasPromos && dataOwner.mostrarPromoPPrin) {
 						carouselItems741.innerHTML = promosHTML;
 					}
 
@@ -1285,7 +1284,6 @@ imgGiga.forEach((img, index) => {
 					});
 
 					document.getElementById('insertLogo').innerHTML = "";
-
 
 				}else{
 					menuOn.style.display = 'flex'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
@@ -1355,7 +1353,7 @@ imgGiga.forEach((img, index) => {
 
 						const innerEnvioElement = document.getElementById("CostoEnvio123");
 						const innerCostoDel = document.getElementById("delivery6546");	
-						console.log("COSTO ENVIO   8888888888Este es el costo del envio costEnvioNumber", costoDelEnvio)
+						//console.log("COSTO ENVIO   8888888888Este es el costo del envio costEnvioNumber", costoDelEnvio)
 						if (costoDelEnvio.length >= 1) {
 							innerCostoDel.textContent = `${costoDelEnvio[0]}`
 							innerEnvioElement.textContent = `${costoDelEnvio[0]}`
@@ -1472,7 +1470,7 @@ imgGiga.forEach((img, index) => {
 				// busca los mensaje del cliente y los renderiza
 				const ownerMensajes = JSON.parse((sessionStorage.getItem('ownerMensajes')));
 				const mensajesCliente = ownerMensajes.filter(id => id.idCliente === clienteEcomm._id) 
-				console.log("que mensajes del cliente encontro??????", mensajesCliente)
+				//console.log("que mensajes del cliente encontro??????", mensajesCliente)
 				// Iterar sobre los mensajes y mostrarlos
 				mensajesCliente.forEach(async mensaje => {
 					// mostrarMensajePush(titulo, cuerpo, codigoPedido)
@@ -1685,220 +1683,7 @@ imgGiga.forEach((img, index) => {
 			} 
 		}
 
-		//console.log("Entro al identificador para ver si tiene el /Promo")
-		$(document).ready(function() {
-			// Obtiene la URL actual
-			const currentUrl2 = window.location.href;
-			if (currentUrl2.includes("/Promo/")) {
-				// Obtiene el idProm desde la URL después de "/Promo/"
-				const idProm = currentUrl2.split("/Promo/")[1]; // Elimina los primeros 3 caracteres
-				//console.log("Que dato es idProm:", idProm);
-		
-				// Función para encontrar el producto en todas las categorías
-				const arrayPromociones = JSON.parse(sessionStorage.getItem("ownerPromos")) || [];
-				//console.log("Que dato es arrayPromociones:", arrayPromociones);
-				
-				// Normalizar idProm a String (para asegurar consistencia)
-				const idPromStr = String(idProm);
-				
-				// Buscar el producto con el idProm correspondiente
-				const producto = arrayPromociones.find(e => e._id === idPromStr);
-		
-				//console.log("Que dato es producto encontrado:", producto);
-				// Función para formatear la fecha
-				function formatoFecha(fecha) {
-					const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
-					return new Date(fecha).toLocaleDateString('es-ES', opciones);
-				}
-
-				// Función para calcular los días restantes
-				function calcularDiasRestantes(fechaFin) {
-					const hoy = new Date();
-					const fechaFinal = new Date(fechaFin);
-					const diferencia = fechaFinal - hoy;
-					return Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertir milisegundos a días
-				}
-				if (producto) {
-					// Aquí puedes proceder con la lógica para mostrar el producto encontrado
-					const inyectaPromo = document.getElementById("promoExpuesta");
-					const promosCard = `
-					<div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 900px !important; margin: 1rem;" align="center">
-						<div class="" id="${producto._id}" style="width: 100%; height: 900px !important; margin: 1rem 5rem;">
-							<div class="cube" id="${producto._id}" style="margin: 1rem; width: 400px; height: 400px;">
-								<div class="face front">
-									<img src="${producto.rutaSimpleImg[0]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
-								</div>
-								<div class="face back">
-									<img src="${producto.rutaSimpleImg[1]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
-								</div>
-								<div class="face left">
-									<img src="${producto.rutaSimpleImg[2]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
-								</div>
-								<div class="face right">
-									<img src="${producto.rutaSimpleImg[3]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
-								</div>
-								<div class="face top">
-									<img src="${producto.rutaSimpleImg[4]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
-								</div>
-								<div class="face bottom">
-									<img src="${producto.rutaSimpleImg[5]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
-								</div>
-							</div>
-							<style>
-								.cube {
-									position: relative;
-									width: 400px;
-									height: 400px;
-									transform-style: preserve-3d;
-									transform: rotateY(0deg);
-									animation: rotate 10s infinite linear;
-									margin: 0 auto; /* Centrando el cubo */
-								}
-					
-								.face {
-									position: absolute;
-									width: 400px;
-									height: 400px;
-									border: 2px solid #000;
-									border-radius: 15px;
-									overflow: hidden;
-								}
-					
-								.front  { transform: rotateY(0deg) translateZ(200px); }
-								.back   { transform: rotateY(180deg) translateZ(200px); }
-								.left   { transform: rotateY(-90deg) translateZ(200px); }
-								.right  { transform: rotateY(90deg) translateZ(200px); }
-								.top    { transform: rotateX(90deg) translateZ(200px); }
-								.bottom { transform: rotateX(-90deg) translateZ(200px); }
-								@keyframes rotate {
-									from { transform: rotateY(0deg); }
-									to { transform: rotateY(360deg); }
-								}
-							</style>
-							<div align="center" class="card d-flex flex-column" style="background:transparent;overflow-y: auto; font-size:1rem !important">
-								<div class="card-header">
-									<h3 class="card-title"><strong>${producto.nombrePromocion}</strong></h3>
-								</div>
-								<div class="card-body" align="center">
-									<div class="d-flex align-items-center justify-content-center" style="">
-										<p style="margin:auto important">
-											<strong>Precio:</strong> $${formatoMoneda(producto.precioInicial)}
-										</p>
-										<p class="mx-4"></p>
-										<p style="margin:auto important">
-											<strong>Descuento:</strong> ${producto.descuento}%
-										</p>
-									</div>
-									${producto.precio ? `<p class="text-center mt-2" style="font-size: 2.2rem; color: red;"><strong>Precio Final:</strong> $${formatoMoneda(producto.precio)}</p>` : ''}
-									<div>
-										${producto.cantLlevar && producto.cantPagar ? `
-											<p><strong>Aprovecha, lo llevas en promoción por cantidad:</strong></p>
-											<div class="d-flex align-items-center justify-content-center" style="">
-												<p><strong>Lleva:</strong> ${producto.cantLlevar}</p>
-												<p class="mx-4"><strong>y</strong></p>
-												<p><strong>Pagas:</strong> ${producto.cantPagar}</p>
-											</div>
-										` : `
-											<p><strong>Sin promo por cantidades</strong></p>
-											<br>
-										`}
-									</div>
-									<div>
-										<p><strong>Quedan: ${producto.cantidadDisponible - producto.cantidadPromoVendidas} promos disponibles.</strong></p>
-										<p><strong>Días que restan de la promosion: ${calcularDiasRestantes(producto.fechaFin)}</strong></p>
-									</div>
-									<div class="" align="center">
-										<p class="m-0"><strong>Agregar cantidad:</strong></p>
-										<br>
-										<div align="center" class="d-flex align-items-center mb-3">
-											<button type="button" class="btn btn-outline-secondary ms-2" id="decrementar-${producto._id}">
-												-
-											</button>
-											<input type="number" data-cantidad-id="${producto._id}" name="cantidad" value="1" id="in2387foInputPrmo${producto._id}" min="1" max="${producto.cantidadDisponible - producto.cantidadPromoVendidas}" class="form-control mx-2" style="width: 60px;" required>
-											<button type="button" class="btn btn-outline-secondary" id="incrementar-${producto._id}">
-												+
-											</button>
-										</div>
-									</div>
-									<div class="mb-3">
-										<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#descripcion${producto._id}" aria-expanded="false" aria-controls="descripcion${producto._id}">
-											<strong>Ver descripción</strong>
-										</button>
-										<div align="left" class="collapse" id="descripcion${producto._id}">
-											<p>${producto.descripcionPromocion}</p>
-										</div>
-									</div>
-								</div>
-								<div class="card-footer">
-									<button type="button" class="btn btn-success w-80 add-to-cart" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}">
-										Agregar al Carrito
-										<span class="fas fa-shopping-cart"></span>
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					`;
-					// Asignar eventos después de renderizar el HTML
-					setTimeout(() => {
-						const incrementarBtn = document.getElementById(`incrementar-${producto._id}`);
-						const decrementarBtn = document.getElementById(`decrementar-${producto._id}`);
-						
-						incrementarBtn.addEventListener('click', () => incrementarCantidad(producto._id));
-						decrementarBtn.addEventListener('click', () => decrementarCantidad(producto._id));
-
-						const addToCartBtn = document.getElementById(`BTNCarrito${producto._id}`);
-    
-						addToCartBtn.addEventListener('click', () => {
-							const input = document.getElementById(`in2387foInputPrmo${producto._id}`);
-							const cantidad = input.value; // Obtener la cantidad del input
-							const idProducto = producto._id
-							const inputCantidad = cantidad
-							const ok = true
-							armarListaDelCarritoProm(idProducto, inputCantidad, ok);
-							// alert(`ID del producto: ${producto._id}, Cantidad: ${cantidad}`);
-						});
-
-					}, 0);
-					function incrementarCantidad(id) {
-						console.log("funcionna +")
-						const input = document.getElementById(`in2387foInputPrmo${id}`);
-						let cantidad = parseInt(input.value);
-						if (cantidad < parseInt(input.max)) {
-							input.value = cantidad + 1;
-						}
-					}
-					function decrementarCantidad(id) {
-						console.log("funcionna -")
-						const input = document.getElementById(`in2387foInputPrmo${id}`);
-						let cantidad = parseInt(input.value);
-						if (cantidad > parseInt(input.min)) {
-							input.value = cantidad - 1;
-						}
-					}
-
-
-					document.getElementById('promoExpuesta').innerHTML = promosCard;
-					if (inyectaPromo) {
-						inyectaPromo.innerHTML = promosCard;
-						var myModal = new bootstrap.Modal(document.getElementById('modalPromos'));
-						myModal.show();
-					} else {
-						console.error("Element with ID 'promoExpuesta' not found.");
-					}
-
-
-
-
-				} else {
-					console.error("No se encontró ningún producto con idProm:", idProm);
-				}
-
-			} else {
-				//console.log("La URL actual no incluye '/Promo/'.");
-			}
-		})
-
+		await detectPromosparams()
 
 	}); //fin DOMContentLoaded
 
@@ -2461,6 +2246,7 @@ imgGiga.forEach((img, index) => {
 				`;
 			}
 			const dominio = await dominioUrl();
+			console.log("Que dominio encontro al final de la compra en ecommerce?????", dominio)
 			mostrarExitoVentaEcom(message, dominio);
 		} else {
 			// cierra todos los modales
@@ -3123,13 +2909,13 @@ imgGiga.forEach((img, index) => {
 	}
 
 	async function costoEnvio(cienteEcomm, dataOwner ) {
-		console.log("***************Entro a la funcion costoEnvio", cienteEcomm, dataOwner)
+		//console.log("***************Entro a la funcion costoEnvio", cienteEcomm, dataOwner)
 		// verificar si tiene empresa de envio
 		// const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'))
 		// const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'))
 		if (dataOwner.deliveryCompany.length >= 1 && cienteEcomm.direcciones.length >= 1 ) {
 			const latLngClient = { lat: cienteEcomm.direcciones[0].lat, lng: cienteEcomm.direcciones[0].lng };
-			console.log("que direccion tiene el cliente?",latLngClient)
+			//console.log("que direccion tiene el cliente?",latLngClient)
 			if (latLngClient.lat === "") {
 				mostrarAlerta("Debes corregir tu dreccion no tiene latitud ni longitud", latLngClient)
 				return
@@ -3138,13 +2924,13 @@ imgGiga.forEach((img, index) => {
 			const latLngOwner  = { lat: dataOwner.direcciones[0].lat, lng: dataOwner.direcciones[0].lng };
 			//console.log("Entro a averiguar el precio del envio", latLngClient, latLngOwner)
 			const distanciaEnKm = getDistanceInKm(latLngOwner, latLngClient);
-			console.log('Distancia en kilómetros:', distanciaEnKm);
+			//console.log('Distancia en kilómetros:', distanciaEnKm);
 			// calcular el costo del envio
 			const deliveryCompany12 = dataOwner.deliveryCompany
 			const costoEnvio2 = obtenerCostoEnvio(distanciaEnKm, deliveryCompany12[0]);
 			costoDelivery.push(`El costo de envío para ${distanciaEnKm} km hasta tu direccion es: $${costoEnvio2}`, costoEnvio2)
 			sessionStorage.setItem("costoDelivery", JSON.stringify(costoDelivery));
-			console.log(`El costo de envío para ${distanciaEnKm} km hasta tu direccion es: $${costoEnvio2}`);
+			//console.log(`El costo de envío para ${distanciaEnKm} km hasta tu direccion es: $${costoEnvio2}`);
 			return `El costo de envío para ${distanciaEnKm} km hasta tu direccion es: $${costoEnvio2}`
 		}
 		else{
@@ -3171,7 +2957,7 @@ imgGiga.forEach((img, index) => {
 			(1 - Math.cos(dLng))/2;
 	
 		const distance = R * 2 * Math.asin(Math.sqrt(a));
-		console.log("Que distancia tenemos en getDistanceInKm?????", distance)
+		//console.log("Que distancia tenemos en getDistanceInKm?????", distance)
 		return distance.toFixed(2); // Redondear a dos decimales
 	}
 
@@ -3185,17 +2971,17 @@ imgGiga.forEach((img, index) => {
 		const longDistance = parseFloat(deliveryCompany.longDistance);
 		const extraLongDistance = parseFloat(deliveryCompany.extraLongDistance);
 
-		console.log("Iniciando cálculo de envío, distancia:", distanciaEnKm, "Distancia gratis:", distanceFree);
+		//console.log("Iniciando cálculo de envío, distancia:", distanciaEnKm, "Distancia gratis:", distanceFree);
 
 		// Si la distancia es menor o igual a la distancia gratis
 		if (distanciaEnKm <= distanceFree) {
-			console.log("Caso: Envío gratis");
+			//console.log("Caso: Envío gratis");
 			return 0; // Envío gratis
 		}
 
 		// Si la distancia está entre el rango distanceFree y 15 km
 		else if (distanciaEnKm > distanceFree && distanciaEnKm <= 15) {
-			console.log("Caso: Entre distanceFree y 15 km. Costo mínimo:", minDistance);
+			//console.log("Caso: Entre distanceFree y 15 km. Costo mínimo:", minDistance);
 			return minDistance;
 		}
 
@@ -3203,7 +2989,7 @@ imgGiga.forEach((img, index) => {
 		else if (distanciaEnKm > 15 && distanciaEnKm <= 35) {
 			const proporción = (distanciaEnKm - 15) / (35 - 15);
 			const costo = minDistance + (midDistance - minDistance) * proporción;
-			console.log(`Caso: Entre 15 km y 35 km. Proporción: ${proporción}, Costo calculado: ${costo}`);
+			//console.log(`Caso: Entre 15 km y 35 km. Proporción: ${proporción}, Costo calculado: ${costo}`);
 			return costo;
 		}
 
@@ -3211,7 +2997,7 @@ imgGiga.forEach((img, index) => {
 		else if (distanciaEnKm > 35 && distanciaEnKm <= 55) {
 			const proporción = (distanciaEnKm - 35) / (55 - 35);
 			const costo = midDistance + (longDistance - midDistance) * proporción;
-			console.log(`Caso: Entre 35 km y 55 km. Proporción: ${proporción}, Costo calculado: ${costo}`);
+			//console.log(`Caso: Entre 35 km y 55 km. Proporción: ${proporción}, Costo calculado: ${costo}`);
 			return costo;
 		}
 
@@ -3219,7 +3005,7 @@ imgGiga.forEach((img, index) => {
 		else {
 			const proporción = (distanciaEnKm - 55) / (100 - 55); // Suponiendo que extraLongDistance cubre hasta 100 km, ajusta este valor si es necesario.
 			const costo = longDistance + (extraLongDistance - longDistance) * proporción;
-			console.log(`Caso: Más de 55 km. Proporción: ${proporción}, Costo calculado: ${costo}`);
+			//console.log(`Caso: Más de 55 km. Proporción: ${proporción}, Costo calculado: ${costo}`);
 			return costo;
 		}
 	}
@@ -3261,7 +3047,8 @@ imgGiga.forEach((img, index) => {
 	// sirve para re enviar a al direccion del dominio del ecommerce
 	async function dominioUrl() {
 		const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
-		console.log("Entro a buscar el domioURL")
+		const basicdata = JSON.parse(sessionStorage.getItem('datosBasicos')) || null;
+		console.log("Entro a buscar el domioURL en index Ecommerce")
 		let dominio
 		if (dataOwner.dominio) {
 			dominio = dataOwner.dominio;
@@ -3269,7 +3056,7 @@ imgGiga.forEach((img, index) => {
 			//console.log("Entro por tiene dominio", dominio)
 			return dominio;
 		} else {
-			dominio = urlServer + urlOwner;
+			dominio = basicdata.data.ConfigsOne[0].urlServer + dataOwner.urlOwner;
 			// Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
 			console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominio)
 			return dominio;
@@ -3283,7 +3070,7 @@ imgGiga.forEach((img, index) => {
 			const idEnpoints = JSON.parse(sessionStorage.getItem("idEndpoints"));
 			const idleruleru = idEnpoints[0];
 			let urlOwner = window.location.pathname.split('/')[1];
-			console.log("***rescueData****¿Qué endpoints encontró en el local storage?", idleruleru, urlOwner, idleruleru);
+			//console.log("***rescueData****¿Qué endpoints encontró en el local storage?", idleruleru, urlOwner, idleruleru);
 	
 			const response = await fetch(`${idleruleru}`, {
 				method: 'POST',
@@ -3316,7 +3103,7 @@ imgGiga.forEach((img, index) => {
 			sessionStorage.setItem("basicData", JSON.stringify(basicData));
 			sessionStorage.setItem("ownerMensajes", JSON.stringify(ownerMensajes));
 	
-			console.log("Desde RESCUESESSION: ¿Qué datos encontró en session?", { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData });
+			//console.log("Desde RESCUESESSION: ¿Qué datos encontró en session?", { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData });
 	
 			return { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData };
 		} catch (error) {
@@ -3332,6 +3119,7 @@ imgGiga.forEach((img, index) => {
 
 	// rescata lso datos desde el session
 	async function dataSession(urlOwner) {
+		await rescueData(urlOwner)
 		// Obtener los datos almacenados en sessionStorage
 		const dataOwner     = JSON.parse(sessionStorage.getItem("ownerData") || sessionStorage.getItem("DataOwnerEcom") || '{}');
 		const ownerProducts = JSON.parse(sessionStorage.getItem("ownerProducts") || '[]');
@@ -3343,13 +3131,273 @@ imgGiga.forEach((img, index) => {
 		urlOwner  = dataOwner.urlOwner
 
 		if (dataOwner._id && ownerProducts && basicData) {
-			console.log("Desde dataSession que datos enconro en session????????", {dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData})
+			//console.log("Desde dataSession que datos enconro en session????????", {dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData})
 			return { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData };
 		} else {
-			console.log("Desde nul null")
+			//console.log("Desde nul null")
 			// return false
 			const data = await rescueData(urlOwner)
 			return data
 		}
 		
+	}
+
+
+	//console.log("Entro al identificador para ver si tiene el /Promo")
+	async function detectPromosparams() {
+		$(document).ready(function() {
+			
+		function armarListaDelCarritoProm(idProducto, cantidades, ok) {
+			// busca el producto seleccionado para el carrito de todos los productos en el array Categorias
+			function encontrarProductoPorIdEnCategorias(categorias, idProducto) {
+				for (const categoria in categorias) {
+					const productosEnCategoria = categorias[categoria];
+					const productoEncontrado = productosEnCategoria.find(producto => producto._id === idProducto);
+					if (productoEncontrado) {
+						return {
+							categoria,
+							producto: productoEncontrado
+						};
+					}
+				}
+				return null; // Retorna null si el producto no se encuentra en ninguna categoría
+			}
+	
+			const product = encontrarProductoPorIdEnCategorias(categoriasProm, idProducto);
+			const producto = product.producto;
+	
+			// Obtener información del producto seleccionado
+			const nombreProducto = `${producto.nombreProducto}`;
+			const cantidad = parseInt(cantidades, 10);
+			const precio = parseFloat(`${producto.precio}`);
+			const imagen = `${producto.rutaSimpleImg[0]}`;
+			const descripcion = `${producto.descripcion}`;
+			const idCliente = "";
+	
+			// Crear un objeto del pedido con la información del producto solicitado
+			const pedido = { idCliente, descripcion, imagen, nombreProducto, cantidad, precio, idProducto };
+			//console.log("Contenido del pedido :", pedido);
+	
+			// Clonar la lista de pedidos para evitar afectar el estado anterior
+			pedido.subTotal = cantidad * precio;
+	
+			// Compara el pedido con lo que está guardado en listaPedido y lo diferente lo incluye
+			//console.log("Que lista de pedido llega a armar listaPedido", listaPedido);
+	
+			const cheIngresado = listaPedido.find(e => e.idProducto === idProducto);
+	
+			// Si no está ya en listaPedidos, se añade la lista de pedidos
+			if (!cheIngresado) {
+				listaPedido.push(pedido);
+			}
+	
+			let listaPedidoClone = [...listaPedido];
+			armarCarrito(listaPedidoClone, ok);
+		}
+			// Obtiene la URL actual
+			const currentUrl2 = window.location.href;
+			if (currentUrl2.includes("/Promo/")) {
+				// Obtiene el idProm desde la URL después de "/Promo/"
+				const idProm = currentUrl2.split("/Promo/")[1]; // Elimina los primeros 3 caracteres
+				//console.log("Que dato es idProm:", idProm);
+		
+				// Función para encontrar el producto en todas las categorías
+				const arrayPromociones = JSON.parse(sessionStorage.getItem("ownerPromos")) || [];
+				//console.log("Que dato es arrayPromociones:", arrayPromociones);
+				
+				// Normalizar idProm a String (para asegurar consistencia)
+				const idPromStr = String(idProm);
+				
+				// Buscar el producto con el idProm correspondiente
+				const producto = arrayPromociones.find(e => e._id === idPromStr);
+		
+				//console.log("Que dato es producto encontrado:", producto);
+				// Función para formatear la fecha
+				function formatoFecha(fecha) {
+					const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
+					return new Date(fecha).toLocaleDateString('es-ES', opciones);
+				}
+
+				// Función para calcular los días restantes
+				function calcularDiasRestantes(fechaFin) {
+					const hoy = new Date();
+					const fechaFinal = new Date(fechaFin);
+					const diferencia = fechaFinal - hoy;
+					return Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertir milisegundos a días
+				}
+				if (producto) {
+					// Aquí puedes proceder con la lógica para mostrar el producto encontrado
+					const inyectaPromo = document.getElementById("promoExpuesta");
+					const promosCard = `
+<div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 900px !important; margin: 1rem;">
+    <div class="text-center" id="${producto._id}" style="width: 100%; height: 900px !important; margin: 1rem 5rem;">
+        <div class="cube mx-auto" id="${producto._id}" style="margin: 1rem; width: 400px; height: 400px;">
+            <div class="face front">
+                <img src="${producto.rutaSimpleImg[0]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
+            </div>
+            <div class="face back">
+                <img src="${producto.rutaSimpleImg[1]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
+            </div>
+            <div class="face left">
+                <img src="${producto.rutaSimpleImg[2]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
+            </div>
+            <div class="face right">
+                <img src="${producto.rutaSimpleImg[3]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
+            </div>
+            <div class="face top">
+                <img src="${producto.rutaSimpleImg[4]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
+            </div>
+            <div class="face bottom">
+                <img src="${producto.rutaSimpleImg[5]}" alt="" class="card-img" style="height: 400px; border-radius: 15px; box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.3);">
+            </div>
+        </div>
+        <style>
+            .cube {
+                position: relative;
+                width: 400px;
+                height: 400px;
+                transform-style: preserve-3d;
+                transform: rotateY(0deg);
+                animation: rotate 10s infinite linear;
+                margin: 0 auto; /* Centrando el cubo */
+            }
+
+            .face {
+                position: absolute;
+                width: 400px;
+                height: 400px;
+                border: 2px solid #000;
+                border-radius: 15px;
+                overflow: hidden;
+            }
+
+            .front  { transform: rotateY(0deg) translateZ(200px); }
+            .back   { transform: rotateY(180deg) translateZ(200px); }
+            .left   { transform: rotateY(-90deg) translateZ(200px); }
+            .right  { transform: rotateY(90deg) translateZ(200px); }
+            .top    { transform: rotateX(90deg) translateZ(200px); }
+            .bottom { transform: rotateX(-90deg) translateZ(200px); }
+
+            @keyframes rotate {
+                from { transform: rotateY(0deg); }
+                to { transform: rotateY(360deg); }
+            }
+        </style>
+        <div class="card d-flex flex-column align-items-center" style="background: transparent; overflow-y: auto; font-size: 1rem !important">
+            <div class="card-header text-center">
+                <h3 class="card-title"><strong>${producto.nombrePromocion}</strong></h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    <p class="m-0"><strong>Precio:</strong> $${formatoMoneda(producto.precioInicial)}</p>
+                    <p class="mx-4"></p>
+                    <p class="m-0"><strong>Descuento:</strong> ${producto.descuento}%</p>
+                </div>
+                ${producto.precio ? `<p class="text-center mt-2" style="font-size: 2.2rem; color: red;"><strong>Precio Final:</strong> $${formatoMoneda(producto.precio)}</p>` : ''}
+                <div>
+                    ${producto.cantLlevar && producto.cantPagar ? `
+                        <p><strong>Aprovecha, lo llevas en promoción por cantidad:</strong></p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <p><strong>Lleva:</strong> ${producto.cantLlevar}</p>
+                            <p class="mx-4"><strong>y</strong></p>
+                            <p><strong>Pagas:</strong> ${producto.cantPagar}</p>
+                        </div>
+                    ` : `
+                        <p><strong>Sin promo por cantidades</strong></p>
+                        <br>
+                    `}
+                </div>
+                <div>
+                    <p><strong>Quedan: ${producto.cantidadDisponible - producto.cantidadPromoVendidas} promos disponibles.</strong></p>
+                    <p><strong>Días que restan de la promoción: ${calcularDiasRestantes(producto.fechaFin)}</strong></p>
+                </div>
+                <div class="text-center">
+                    <p class="m-0"><strong>Agregar cantidad:</strong></p>
+                    <br>
+                    <div class="d-flex align-items-center mb-3 justify-content-center">
+                        <button type="button" class="btn btn-outline-secondary ms-2" id="decrementar-${producto._id}">
+                            -
+                        </button>
+                        <input type="number" data-cantidad-id="${producto._id}" name="cantidad" value="1" id="in2387foInputPrmo${producto._id}" min="1" max="${producto.cantidadDisponible - producto.cantidadPromoVendidas}" class="form-control mx-2" style="width: 60px;" required>
+                        <button type="button" class="btn btn-outline-secondary" id="incrementar-${producto._id}">
+                            +
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3 text-center">
+                    <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#descripcion${producto._id}" aria-expanded="false" aria-controls="descripcion${producto._id}">
+                        <strong>Ver descripción</strong>
+                    </button>
+                    <div class="collapse" id="descripcion${producto._id}">
+                        <p>${producto.descripcionPromocion}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-success w-80 add-to-cart" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}">
+                    Agregar al Carrito
+                    <span class="fas fa-shopping-cart"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+					`;
+					// Asignar eventos después de renderizar el HTML
+					setTimeout(() => {
+						const incrementarBtn = document.getElementById(`incrementar-${producto._id}`);
+						const decrementarBtn = document.getElementById(`decrementar-${producto._id}`);
+						
+						incrementarBtn.addEventListener('click', () => incrementarCantidad(producto._id));
+						decrementarBtn.addEventListener('click', () => decrementarCantidad(producto._id));
+
+						const addToCartBtn = document.getElementById(`BTNCarrito${producto._id}`);
+	
+						addToCartBtn.addEventListener('click', () => {
+							const input = document.getElementById(`in2387foInputPrmo${producto._id}`);
+							const cantidad = input.value; // Obtener la cantidad del input
+							const idProducto = producto._id
+							const inputCantidad = cantidad
+							const ok = true
+							$('#modalPromos').modal('hide');
+							armarListaDelCarritoProm(idProducto, inputCantidad, ok);
+							// alert(`ID del producto: ${producto._id}, Cantidad: ${cantidad}`);
+						});
+
+					}, 0);
+					function incrementarCantidad(id) {
+						console.log("funcionna +")
+						const input = document.getElementById(`in2387foInputPrmo${id}`);
+						let cantidad = parseInt(input.value);
+						if (cantidad < parseInt(input.max)) {
+							input.value = cantidad + 1;
+						}
+					}
+					function decrementarCantidad(id) {
+						console.log("funcionna -")
+						const input = document.getElementById(`in2387foInputPrmo${id}`);
+						let cantidad = parseInt(input.value);
+						if (cantidad > parseInt(input.min)) {
+							input.value = cantidad - 1;
+						}
+					}
+
+
+					document.getElementById('promoExpuesta').innerHTML = promosCard;
+					if (inyectaPromo) {
+						inyectaPromo.innerHTML = promosCard;
+						var myModal = new bootstrap.Modal(document.getElementById('modalPromos'));
+						myModal.show();
+					} else {
+						console.error("Element with ID 'promoExpuesta' not found.");
+					}
+				} else {
+					console.error("No se encontró ningún producto con idProm:", idProm);
+				}
+
+			} else {
+				//console.log("La URL actual no incluye '/Promo/'.");
+			}
+		})
 	}

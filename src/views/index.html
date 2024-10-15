@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" > 
+<html lang="es" id="protectLanding"> 
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +28,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></script>
 			<!-- Bootstrap JS y Popper.js NO MOVER DE AQUI-->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- <script>src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 			<!-- Incluye la biblioteca Slick Carousel -->
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
@@ -40,11 +41,12 @@
 		<!--REVISAR //config toast -->
 		<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-		<title id="titulo">Usa Tienda Facil</title>
+		<title id="titulo">Usa Tienda Fácil</title>
 		
 		<!-- Mercado Pago -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="https://sdk.mercadopago.com/js/v2"></script>
+
         <!-- reiniciar  -->
         <script src="/reiniciar.js"></script>
 
@@ -53,6 +55,18 @@
 		
 	</head>
     <style> 
+    /* Eliminar los spinners en WebKit (Chrome, Safari, etc.) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Eliminar los spinners en Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
         @media (max-width: 700px) {
             .sep{
                 margin: 2rem 0 !important
@@ -270,7 +284,17 @@ html, body {
         </nav>
     </header>
     <script>
-        //56209242
+        function reloadPage() {
+    // Cerrar todos los modales abiertos (ajusta el selector según tu implementación)
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        const instance = bootstrap.Modal.getInstance(modal); // Si estás usando Bootstrap
+        if (instance) {
+            instance.hide();
+            window.location.reload();
+        }
+    });
+}
         document.addEventListener('DOMContentLoaded', function () {
             const btnMenuCel = document.getElementById('btnMenuCel');
             const menuCelu = document.getElementById('menuCelu');
@@ -721,16 +745,19 @@ html, body {
                 let cotizacionDolar = {};
                 (async () => {
                     try {
-                        cotizacionDolar = await cotizacionesDolaresPaises();
+                        setTimeout(async () => {
+                            cotizacionDolar = await cotizacionesDolaresPaises(basicData);
+                            console.log('Cotización del dólar:', cotizacionDolar);
+                        }, 2000);
                         console.log('Cotización del dólar:', cotizacionDolar);
                     } catch (error) {
                         console.error('Error al obtener la cotización del dólar:', error);
                     }
                 })();
-                const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
-                const idEnpointCheq = dataBasic.data.endpointTokensArray2
+                // const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+                const idEnpointCheq = basicData.data.endpointTokensArray2
                 //const jwToken = dataBasic.data.jwToken
-                if (!dataBasic) {
+                if (!basicData) {
                     reloadPage()
                 }
                 function collectData() {
@@ -775,9 +802,9 @@ html, body {
                 }
                 // Se agrega botones de pago Wallet y con tC
                 document.getElementById('signupFormXYZ123651465165').addEventListener('click', async function (e) {
-                    //console.log("1111111111111111Apreto el boton de pagar con wallet")
+                    console.log("1111111111111111Apreto el boton de pagar con wallet")
                     mostrarModalLoading()
-                    e.preventDefault();
+                    e.preventDefault(); 
                     collectData()
                     await LPmpWallet(dataPay, dataOwner2);
                 });
@@ -1062,7 +1089,7 @@ html, body {
                                 </ul>
                             </div>
                         </div>
-                        <div class="card-footer text-center" style="z-index: 9999999999999; margin-top:-1.2rem;">
+                        <div class="card-footer text-center" style="margin-top:-1.2rem;">
                             <button id="sendDataPremium" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#signupModalPremiumXYZ123">
                                 Adquirir
                             </button>
@@ -1150,7 +1177,7 @@ html, body {
                         let quantity = 10
                         let tiempoContratoO = 0
                         const dataBasic0 = JSON.parse(sessionStorage.getItem('datosBasicos'));
-                        const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice } = dataBasic0.data.ConfigsOne[0]
+                        const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice } = dataBasic0.data.ConfigsOne[0] ||  dataBasic0
 
                         const inserPrecioyCant = document.getElementById('cantyPrecio54')
                         const validDiscountCodes = Vendedores; // Ejemplos de códigos válidos
@@ -1207,7 +1234,7 @@ html, body {
                             // Inicialización para mostrar 10 productos
                             if (quantity <= 10) {
                                 // Obtén la cotización del dólar
-                                const cotizacionDolar = await cotizacionesDolaresPaises();
+                                const cotizacionDolar = await cotizacionesDolaresPaises(basicData);
                                 //console.log("Tiene menos de 10 productos", quantity)
                                 // inserto en membresia Premium
                                 //console.log("fkdvnefjkvjkefnvg", basePrice, duration, cotizacionDolar)
@@ -1318,11 +1345,11 @@ html, body {
                             if (quantity <= 10) {
                                 precioFinal = (basePrice * cotizacionDolar) || (basePrice * cotizacionDolar)
                                 dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO}
-                                //console.log("Apreto el boton dataMP menos 10 productos",dataMP)
+                                console.log("Apreto el boton dataMP menos 10 productos",dataMP)
                             }else{
                                 precioFinal = ((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
                                 dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO}
-                                //console.log("Apreto el boton dataMP",dataMP)
+                                console.log("Apreto el boton dataMP",dataMP)
                             }
                         })
 
@@ -1460,7 +1487,7 @@ html, body {
                                 }
                         
                                 // Si no hay campos vacíos, procede con la solicitud
-                                const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+                                const dataBasic = await JSON.parse(sessionStorage.getItem('datosBasicos')) || null;
                                 const jwToken = dataBasic.data.jwToken;
                                 
                                 try {
@@ -1837,7 +1864,7 @@ html, body {
                 const urlServer = dataCliente.urlServer
 
                 // Enviar formulario
-                const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))							
+                // const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))							
                 fetch(`${endpoints[33]}`, { 
                 //fetch(`${urlServer}/recibiendoMensajeDesdeContacto`, {
                     method: 'POST',
@@ -1862,14 +1889,14 @@ html, body {
     </script>
 
 
-<script src="/alertas.js"></script>
-<script src="/landingPageFunctions/LPF.js"></script>
-<script src="/landingPageFunctions/LPmpWallet.js"></script>
-<script src="/landingPageFunctions/LPmpTCDEf.js"></script>
+    <script src="/alertas.js"></script>
+    <script src="/landingPageFunctions/LPF.js"></script>
+    <script src="/landingPageFunctions/LPmpWallet.js"></script>
+    <script src="/landingPageFunctions/LPmpTCDEf.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 
 </html>

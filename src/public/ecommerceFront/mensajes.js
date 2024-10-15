@@ -13,15 +13,13 @@
 	}
 
 	async function mostrarExitoVentaEcom(mensajeExito, dominio) {
-		console.log("Entro a mostros exito venta")
+		console.log("Entro a mostrarExitoVentaEcom desde mensajes para ecommerce")
 		// Ocultar el offcanvas si ya existe la instancia, o crearla si no existe
 		// Para un Offcanvas, usa la API de Offcanvas, no la de Modal
 
 		// Ejecuta la función para cerrar todos los modales menues etc
 		ocultarModalLoading()
 		cerrarTodo();
-
-		console.log("desdpuesssssssssssssss")
 
 		const modalAlert = document.getElementById('exitoVenta');
 		modalAlert.innerHTML = ""; // Limpiar el contenido existente
@@ -60,6 +58,7 @@
 			console.log("El boton hizo click", botoner)
 			modalAlert.innerHTML = ""; // Limpiar el contenido
 			myModal.hide(); // Cerrar el modal
+			location.href = dominio;
 		});
 
 		if (dominio) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es" id="protectCpanel"> 
     <head> 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,7 +96,7 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('panelTitle').innerHTML = `
-                    <h4 class="navbar-brand" style="color: white !important">Panel de control <br> ${ecommerceName}</h4>
+                    <h4 class="navbar-brand" style="color: white !important">Panel de control <br> ${dataOwner.ecommerceName}</h4>
                     `
                     ecommerceName
                     // Inyectar el botón del menú cuando la página cargue
@@ -374,12 +374,12 @@
                         await renderizarInfoDiario(idOwner)
                     })();
                 </script>
-                <!-- manual de operaciones -->
+                <!-- Manual de Operaciones -->
                 <div id="manual" class="tab-pane active" align="center">
                     <div align="center">
                         <div align="center" style="display: flex; flex-direction: column; align-items: center;">
                             <img src="/images/logomtf.jpg" class="mb-0 responsive-image" id="logoImage" alt="Logo">
-                            <button class="mt-2 mb-6 btn btn-outline-light" onclick="renderizarInfoDiario(idOwner)">Ver informe</button>
+                            <button class="mt-4 mb-6 btn btn-outline-light" onclick="renderizarInfoDiario(idOwner, {mostrarInfo:true})">Ver informe</button>
                             <br>
                             <div id="titMO">
                                 <p style="margin-top: -2rem !important;">Manual operativo</p>
@@ -981,7 +981,7 @@
                                                                         Tarjeta horizontal Vintage
                                                                     </div>
                                                                     <div class="card-body">
-                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 1" style="max-width: 300px; max-height: 300px;">
+                                                                        <img src="/images/ejemploHorizontal.jpg" class="card-img-top" alt="Imagen del producto 1" style="max-width: 300px; height: 300px;">
                                                                     </div>
                                                                     <div class="card-footer d-flex justify-content-between align-items-center">
                                                                         <label class="form-check-label" for="switch1ABC">On/Off</label>
@@ -998,7 +998,7 @@
                                                                         Tarjeta Vertical Vintage
                                                                     </div>
                                                                     <div class="card-body">
-                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 2" style="max-width: 300px; max-height: 300px;">
+                                                                        <img src="/images/ejemploVertical.jpg" class="card-img-top" alt="Imagen del producto 2" style="max-width: 300px; height: 300px;">
                                                                     </div>
                                                                     <div class="card-footer d-flex justify-content-between align-items-center">
                                                                         <label class="form-check-label" for="switch2ABC">On/Off</label>
@@ -1009,13 +1009,13 @@
                                                                 </div>
                                                             </div>
                                                             <!-- Tarjeta 3 -->
-                                                            <div class="col-lg-4 col-md-4 my-2">
+                                                            <div class="col-lg-4 col-md-4 my-2" style="margin-top:-0.5rem !important">
                                                                 <div class="card">
                                                                     <div class="card-header">
                                                                         Tarjeta Cristal Edition
                                                                     </div>
                                                                     <div class="card-body">
-                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 3" style="max-width: 300px; max-height: 300px;">
+                                                                        <img src="/images/ejemploCristal.jpg" class="card-img-top" alt="Imagen del producto 3" style="max-width: 300px; height: 300px;">
                                                                     </div>
                                                                     <div class="card-footer d-flex justify-content-between align-items-center">
                                                                         <label class="form-check-label" for="switch3ABC">On/Off</label>
@@ -3244,29 +3244,26 @@ if (imgCount === 0) {
                 </div>
                 <!-- Membresias -->
                 <div id="membresias" class="tab-pane" align="center">
-                    <style>
- 
-                    </style>
                     <br>
                     <div id="RenovarMEmAuto" class=""> </div>
-                    <div class="containerMem">
+                    <div class="row p-0 m-0">
                         <!-- Contenedor de la membresía actual -->
-                        <div class="boxMem">
-                            <div class="container">
-                                <div id="membresia-actual" class="membership-box p-0">
-                                    <div id="membresia-nombre" class="card-header">
-                                        <h3>Tu membresía actual es:</h3>
-                                    </div>
-                                    <br>
-                                    <div id="membresia-Data" class="m-2 p-2"></div>
-                                    <img src="../images/logoUTF2.jpg" alt="" srcset="" style="width:60%; height:auto; border-radius: 2rem;">
-                                    <div class="card-footer p-4">
-                                    </div>
+                        <div class="col-6 p-0 m-0">
+                            <div align="center" id="membresia-actual" class="card w-100 membership-box m-0 p-0 d-flex flex-column align-items-center">
+                                <div id="membresia-nombre" class="card-header w-100">
+                                    <h3>Tu membresía actual es:</h3>
                                 </div>
-                            </div>                                
+                                <br>
+                                <div id="membresia-Data" class="m-2 p-2"></div>
+                                <br>
+                                <img src="../images/logomtf.jpg" alt="" srcset="" style="width:60%; height:auto; border-radius: 2rem;" class="mb-1">
+                                <br><br>
+                                <div class="card-footer p-4" hidden>
+                                </div>
+                            </div>
                         </div>
                         <!-- Contenedor de las opciones de upgrade -->
-                        <div class="boxMem">
+                        <div class="col-6">
                             <div class="container">
                                 <!-- Membresía Premium -->
                                 <div class="" style="">
@@ -3322,7 +3319,7 @@ if (imgCount === 0) {
                                 const fechaVencMem = ownerData.fechaVencMem
                                 const renovarMem   = ownerData.renovarMem
 
-                                const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice, preciosDolar} = dataBasic0.data.ConfigsOne[0]
+                                const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice, preciosDolar, comisionBasic} = dataBasic0.data.ConfigsOne[0]
 
                                 const totalProductos = ownerData.TotalProdCOntratados;
                                 function calcularMesesRestantes(fechaVencMem) {
@@ -3397,7 +3394,7 @@ if (imgCount === 0) {
 
                                 
                                 // Llamar a la función obtener coizacion
-                                const cotiDolar = await cotizacionesDolaresPaises();
+                                const cotiDolar = await cotizacionesDolaresPaises(basicData);
 
                                 const membresiaNombreHtml = document.getElementById('membresia-nombre');
                                 const membresiaDataHtml = document.getElementById('membresia-Data');
@@ -3743,7 +3740,7 @@ if (imgCount === 0) {
                     </div>
                 </div>                
                 <!-- Marketing --> 
-                <div id="Marketing" class=" tab-pane fade" align="center" style="padding-top: 2rem;">
+                <div id="Marketing" class="container-xxl tab-pane fade" align="center" style="padding-top: 2rem;">
                     <h2 id="ponerDomURl">Planifica tus campañas de marketing & comunicación.</h2>
                     <script>
                         if (dataOwner) {
@@ -3751,16 +3748,16 @@ if (imgCount === 0) {
                             async function dominioURLCpanel() {
                                 const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
                                 const basicData = JSON.parse(sessionStorage.getItem('basicData')) || null;
-                                console.log("Entro a buscar el dominio URL", basicData.urlServer, dataOwner.dominio);
+                                //console.log("Entro a buscar el dominio URL", basicData.urlServer, dataOwner.dominio);
                                 let dominio;
                     
                                 if (dataOwner.dominio) {
                                     dominio = dataOwner.dominio;
-                                    console.log("Es un owner premium con dominio propio y tiene dominio", dominio);
+                                    //console.log("Es un owner premium con dominio propio y tiene dominio", dominio);
                                     return dominio;
                                 } else {
-                                    dominio = basicData.urlServer + urlOwner;
-                                    console.log("Entro por NO tiene dominio", dominio);
+                                    dominio = basicData.urlServer + dataOwner.urlOwner;
+                                    //console.log("Entro por NO tiene dominio", dominio);
                                     return dominio;
                                 }
                             }
@@ -3786,9 +3783,8 @@ if (imgCount === 0) {
                             inicializar();
                         }
                     </script>
-                    
                     <!-- Sub Nav Tabs -->
-                    <ul id="ulMark" class="nav nav-tabs w-100" style="background:transparent; margin-top:0rem">
+                    <ul id="ulMark" class="container-xxl nav nav-tabs w-100" style="background:transparent; margin-top:0rem">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#promos">Promociones & Descuentos</a>
                         </li>
@@ -3803,7 +3799,7 @@ if (imgCount === 0) {
                         </li>
                     </ul> 
                     <!-- Sub Tab Content -->
-                    <div class="tab-content m-3" style="position: relative !important;">
+                    <div class="container-xxl tab-content m-3" style="position: relative !important;">
                         <!-- tus productos para promocionar -->
                         <div id="promos" class="container-xxl tab-pane active mt-2">
                             <div align="center">
@@ -3816,11 +3812,10 @@ if (imgCount === 0) {
                             <script>
                                 //const tipoMembresia = dataOwner.tipoMembresia;
                                 const promoXmem = document.getElementById('promoXmem');
-                                promoXmem.textContent = tipoMembresia === 'basic'
+                                promoXmem.textContent = dataOwner.tipoMembresia === 'basic'
                                     ? 'Tu Membresía Basic te permite poner en promoción hasta 5 productos.'
                                     : 'Tu Membresía Premium te permite poner en promoción todos tus productos.';
                             </script>
-                                                        
                             <div id="busquedaMarke" class="container-xxl tab-pane active" >
                                 <!-- Input y elementos para la búsqueda -->
                                 <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
@@ -3870,7 +3865,6 @@ if (imgCount === 0) {
                                     </div>
                                     <!-- Función para filtrar los productos desde el buscador -->
                                     <script>
-                                    
                                         // Función para mostrar los productos filtrados
                                         function displayFilteredProducts() {
                                             const inputValue = document.getElementById('searchProductInputXYZ').value.toLowerCase();
@@ -4002,102 +3996,103 @@ if (imgCount === 0) {
                             </div>
                         </div>
                         <!-- estado de las promos -->
-                        <div id="statusPromos" class="container-xxl tab-pane fade">
-                                    <div class="mt-3">
-                                        <h4>Estado de tus promociones</h4>
-                                    </div>
-                                    <div id="infoPromociones" class="row w100 m-0 p-0"></div>
-                                    <!-- todo lo del suitch -->
-                                    <div class="form-check form-switch btn-sm btn-success p-4 rounded-4" style="width: 550px;">
-                                        <label id="changeBLa" class="form-check-label mr-3" for="promoSwitch"></label>
-                                        <input class="form-check-input ml-3" type="checkbox" id="promoSwitch" style="transform: scale(2);">
-                                    </div>
-                                    <!-- es para activar o no el switch  -->
-                                    <script>
-                                        const promoSwitch = document.getElementById('promoSwitch');
-                                        const label = document.getElementById('changeBLa');
-                                        const activeText = "Tus promociones se ven en la pantalla principal de tu tienda.";
-                                        const inactiveText = "Agregar las promos a la pantalla principal de tu tienda.";
-                                    
-                                        // Inicializar el switch
-                                        const initSwitch = () => {
-                                            promoSwitch.checked = dataOwner.mostrarPromoPPrin;
-                                            label.textContent = promoSwitch.checked ? activeText : inactiveText;
-                                        };
-                                    
-                                        // Enviar estado al servidor
-                                        const sendSwitchState = async () => {
-                                            try {
-                                                const res = await fetch(`${endpoints[104]}`, {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
-                                                        'Authorization': `Bearer ${jwToken}`
-                                                    },
-                                                    body: JSON.stringify({ switchActivo: promoSwitch.checked, userId: idOwner })
-                                                });
-                                                const data = await res.json();
-                                                if (data.success) mostrarExito(data.message);
-                                                else mostrarAlerta(data.message);
-                                            } catch (error) {
-                                                console.error('Error:', error);
-                                                mostrarAlerta('Error al enviar los datos al servidor.');
-                                            }
-                                        };
-                                    
-                                        // Inicializar el switch y manejar cambios
-                                        initSwitch();
-                                        promoSwitch.addEventListener('change', () => {
-                                            label.textContent = promoSwitch.checked ? activeText : inactiveText;
-                                            sendSwitchState();
+                        <div id="statusPromos" class="container-xxl w-100 tab-pane fade p-0">
+                            <div class="mt-3">
+                                <h4>Estado de tus promociones</h4>
+                            </div>
+                            <!-- informacion grl de las porrmos -->
+                            <div id="infoPromociones" class="container-xxl w-100 m-0 p-0"></div>
+                            <!-- todo lo del suitch -->
+                            <div class="form-check form-switch btn-sm btn-success p-4 rounded-4" style="width:550px">
+                                <label id="changeBLa" class="form-check-label mr-3" for="promoSwitch"></label>
+                                <input class="form-check-input ml-3" type="checkbox" id="promoSwitch" style="transform: scale(2);">
+                            </div>
+                            <!-- es para activar o no el switch  -->
+                            <script>
+                                const promoSwitch = document.getElementById('promoSwitch');
+                                const label = document.getElementById('changeBLa');
+                                const activeText = "Tus promociones se ven en la pantalla principal de tu tienda.";
+                                const inactiveText = "Agregar las promos a la pantalla principal de tu tienda.";
+                            
+                                // Inicializar el switch
+                                const initSwitch = () => {
+                                    promoSwitch.checked = dataOwner.mostrarPromoPPrin;
+                                    label.textContent = promoSwitch.checked ? activeText : inactiveText;
+                                };
+                            
+                                // Enviar estado al servidor
+                                const sendSwitchState = async () => {
+                                    try {
+                                        const res = await fetch(`${endpoints[104]}`, {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${jwToken}`
+                                            },
+                                            body: JSON.stringify({ switchActivo: promoSwitch.checked, userId: idOwner })
                                         });
-                                    </script>
-                                    <script>
-                                        function mostrarPromociones() {
-                                            const totalPromos = ownerPromos.length;
-                                            const promocionesVencidas = ownerPromos.filter(promo => promo.promoVencida).length;
-                                            const mensaje = `
-                                                <h4 style="color: #4a90e2; font-weight: bold;">
-                                                    Actualmente cuentas con <span style="color: #27ae60;">${totalPromos}</span> promociones activas.
-                                                </h4>
-                                                <p style="font-size: 1.1rem; color: #333;">
-                                                    De ellas, <span style="color: #e74c3c;">${promocionesVencidas}</span> han vencido.
-                                                    Revisa las vencidas para mantener tus ofertas actualizadas.
-                                                </p>`;
-                                            document.getElementById('infoPromociones').innerHTML = mensaje;
-                                        }
-                                        
-                                        if (Object.keys(ownerPromos).length !== 0) {
-                                            mostrarPromociones();
-                                        }
-                                    </script>
-                                    <style>
-                                        .alerta-vencida {
-                                            position: absolute;
-                                            top: 0;
-                                            left: 0;
-                                            width: 100%;
-                                            height: 95%;
-                                            background-color: rgba(236, 122, 122, 0.7); /* Color de fondo con opacidad */
-                                            color: white;
-                                            display: flex;
-                                            justify-content: center;
-                                            align-items: center;
-                                            font-size: 1.5rem;
-                                            font-weight: bold;
-                                            border-radius: 0.25rem; /* Ajustar según el diseño de la tarjeta */
-                                            z-index: 10; /* Asegúrate de que esté por encima del contenido de la tarjeta */
-                                        }
-                                    </style>
+                                        const data = await res.json();
+                                        if (data.success) mostrarExito(data.message);
+                                        else mostrarAlerta(data.message);
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        mostrarAlerta('Error al enviar los datos al servidor.');
+                                    }
+                                };
+                            
+                                // Inicializar el switch y manejar cambios
+                                initSwitch();
+                                promoSwitch.addEventListener('change', () => {
+                                    label.textContent = promoSwitch.checked ? activeText : inactiveText;
+                                    sendSwitchState();
+                                });
+                            </script>
+                            <script>
+                                function mostrarPromociones() {
+                                    const totalPromos = ownerPromos.length;
+                                    const promocionesVencidas = ownerPromos.filter(promo => promo.promoVencida).length;
+                                    const mensaje = `
+                                        <h4 style="color: #4a90e2; font-weight: bold;">
+                                            Actualmente cuentas con <span style="color: #27ae60;">${totalPromos}</span> promociones activas.
+                                        </h4>
+                                        <p style="font-size: 1.1rem; color: #333;">
+                                            De ellas, <span style="color: #e74c3c;">${promocionesVencidas}</span> han vencido.
+                                            Revisa las vencidas para mantener tus ofertas actualizadas.
+                                        </p>`;
+                                    document.getElementById('infoPromociones').innerHTML = mensaje;
+                                }
+                                
+                                if (Object.keys(ownerPromos).length !== 0) {
+                                    mostrarPromociones();
+                                }
+                            </script>
+                            <style>
+                                .alerta-vencida {
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 95%;
+                                    background-color: rgba(236, 122, 122, 0.7); /* Color de fondo con opacidad */
+                                    color: white;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    font-size: 1.5rem;
+                                    font-weight: bold;
+                                    border-radius: 0.25rem; /* Ajustar según el diseño de la tarjeta */
+                                    z-index: 10; /* Asegúrate de que esté por encima del contenido de la tarjeta */
+                                }
+                            </style>
+                            <br>
+                            <div id="estadosPromos23" align="center" class="container-xxl w-100 m-0 p-0" style="">
+                                <h4>
                                     <br>
-                                <div id="estadosPromos23" align="center" class="" style="">
-                                    <br>
-                                    <h4>
-                                        Actualmente no tienes ningún producto en promoción. 
-                                        <br> 
-                                        Ve a la solapa "Promociones & Descuentos" y promociona un producto. 
-                                    </h4>
-                                </div>
+                                    Actualmente no tienes ningún producto en promoción. 
+                                    <br> 
+                                    Ve a la solapa "Promociones & Descuentos" y promociona un producto. 
+                                </h4>
+                            </div>
                         </div>
                         <!-- agregar y enviar noticias -->
                         <div id="news" class="container-xxl tab-pane fade"><br>
@@ -4213,7 +4208,6 @@ if (imgCount === 0) {
                                         //console.log("Noticias para renderizar: ", newsList);
                                         const newsContainer = document.getElementById('newsContainer');
                                         newsContainer.innerHTML = '';
-
                                         newsList.forEach((news) => {
                                             if (news.nweNoticias) {
                                                 const id9874 = news._id;
@@ -4232,10 +4226,6 @@ if (imgCount === 0) {
                                     }
 
                                     async function addNews() {
-
-                                        
-
-
                                         // Obtener la fecha de hoy en el formato adecuado
 const hoy = new Date();
 const hoyStr = hoy.toISOString().split('T')[0]; // Formato YYYY-MM-DD
@@ -4250,12 +4240,6 @@ if (existeMensajeHoy && dataOwner.tipoMembresia == "basic") {
     mostrarAlerta("Ya has enviado una noticia a tus clientes hoy. <br> Evita saturarlos con información.");
     return
 }
-
-
-
-
-
-
 
                                         if (ownerMensajess.length >= 10 ) {
                                             mostrarAlerta("Ya tiene 10 noticias activas, elimina una para enviar una nueva.")
@@ -4302,8 +4286,13 @@ if (existeMensajeHoy && dataOwner.tipoMembresia == "basic") {
                                         formData.append('urlServer', urlServer);
                                         formData.append('tipoMembresia', tipoMembresia);
                                         formData.append('clientes', JSON.stringify(clientes)); // Convertir a JSON
+                                        formData.append('flagNews', true );
 
                                         try {
+                                            // agrega el flag en sessionSt
+                                            // sessionStorage.setItem("flagNews", JSON.stringify({ flagNews: true }));
+
+                                            console.log("Llego hasta aqui")
                                             const response = await fetch(`${endpoints[29]}`, {
                                                 method: 'POST',
                                                 headers: {
@@ -4733,9 +4722,9 @@ card7.appendChild(cardFooterEnv);
                     </script>
                 </div>
                 <!-- Control de stock -->
-                <div id="stock" class="tab-pane fade w-100" style="padding-top: 1rem;">
+                <div id="stock" class="container-xxl tab-pane fade w-100" style="padding-top: 1rem;">
                     <div class="w-100">
-                        <div class="w-100 card-header" align="center">
+                        <div class="w-100" align="center">
                             <!-- Buscador y filtro por fechas -->
                             <h3 id="responBajarStock">Estado de tus productos</h3><br>
                             <h4 id="cantdeProdA1B2C3">No tienes productos en stock</h4>
@@ -5075,11 +5064,11 @@ card7.appendChild(cardFooterEnv);
                         // Función para enviar los cambios de stock al servidor
                         function enviarCambiosAlServidorA1B2C3(productId) {
                             const producto = ownerProducts.find(p => p._id === productId);
-                            console.log("Que producto debe sr cambiado su stck?", endpoints[129])
+                            console.log("Que producto debe sr cambiado su stck?", endpoints[195])
                             // endpoints2     = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel')) || [];
                             // console.log("Que produ999999999999999999999", endpoints2[129])
                             if (producto) {
-                                fetch(`${endpoints[129]}`, {
+                                fetch(`${endpoints[105]}`, {
                                     method: 'POST',
                                     headers: {
                                         'Authorization': `Bearer ${jwToken}`,
@@ -5354,7 +5343,7 @@ card7.appendChild(cardFooterEnv);
                                 const formData = new FormData();
                                 formData.append('data', JSON.stringify(data));
                                 mostrarModalLoading();
-                                const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"));
+                                // const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"));
                                 const jwToken = sessionStorage.getItem('jwtToken');
                                 fetch(`${endpoints[56]}`, {
                                     method: 'POST',
@@ -6013,7 +6002,7 @@ card7.appendChild(cardFooterEnv);
                         // Obtener el elemento de la lista
                         const retirosNavItem = document.getElementById('disapRetMem');
                         // Verificar si tipoMembresia es "basic"
-                        if (tipoMembresia !== 'basic') {
+                        if (dataOwner.tipoMembresia !== 'basic') {
                             // Ocultar el elemento si el tipo de membresía no es "basic"
                             retirosNavItem.style.display = 'none';
                         }
@@ -6576,14 +6565,14 @@ card7.appendChild(cardFooterEnv);
                             //console.log("0000000000000000Que hay en financias", totalIngresos)
                             // Calcular comisiones (16.5% del total de ingresos)
                             //const comisiones = totalIngresos * 0.165;
-                            const comisiones = comisionBasic  * 0.01 * totalIngresos;
+                            const comisiones = basicData.data.ConfigsOne[0].comisionBasic  * 0.01 * totalIngresos;
 
                             //console.log("11111111Que hay en financias", ventas)
 
                             // Definir otros egresos (puedes modificar el valor aquí)
                             
                             // Sumar todos los montos en el array de retiros
-                            const otrosEgresos = retiros.reduce((total, retiro) => total + retiro.monto, 0);
+                            const otrosEgresos = dataOwner.retiros.reduce((total, retiro) => total + retiro.monto, 0);
                             //console.log("22222222Que hay en otrosEgresos", otrosEgresos)
 
                             // calcular el monto que esta en espera de parking
@@ -7126,7 +7115,7 @@ card7.appendChild(cardFooterEnv);
                                 // Función para obtener información de dirección basada en coordenadas utilizando la API de OpenCage
 
                                 async function obtenerDireccion(latitud, longitud, callback) {
-    var apiKey = apiKeyMap; // Reemplaza con tu propia API key
+    let apiKey = basicData.data.ConfigsOne[0].apiKeyMap; // Reemplaza con tu propia API key
     var url = `https://api.opencagedata.com/geocode/v1/json?q=${latitud}+${longitud}&key=${apiKey}`;
 
     fetch(url)
@@ -7311,7 +7300,7 @@ card7.appendChild(cardFooterEnv);
                                     // Llamar a la función para obtener la dirección
                                     obtenerDireccion(direccion);
                                     function obtenerDireccion(direccion) {
-                                        var apiKey = apiKeyMap; // Recuerda reemplazar con tu propia API key
+                                        var apiKey = basicData.data.ConfigsOne[0].apiKeyMap; // Recuerda reemplazar con tu propia API key
                                         const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(direccion)}&key=${apiKey}`;
                                         fetch(url)
                                             .then(response => response.json())
@@ -7522,10 +7511,11 @@ card7.appendChild(cardFooterEnv);
             </div>
         </div>
         <script>
+  
             let dataMP = {}
-            const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
-            const idEnpointCheq = dataBasic.data.endpointTokensArray2
-            if (!dataBasic) {
+            // const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+            const idEnpointCheq = basicData.data.endpointTokensArray2
+            if (!basicData) {
                 reloadPage()
                 //location.reload();
             }
@@ -7689,20 +7679,18 @@ card7.appendChild(cardFooterEnv);
 
     </div>
 
+    <!-- CDN de Bootstrap JS y Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-
-<!-- CDN de Bootstrap JS y Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-<script src="/ownerFunctions/cPanelFront.js"></script>
-<script src="/alertas.js"></script>
-<script src="/landingPageFunctions/LPmpWallet.js"></script>
-<script src="/landingPageFunctions/LPmpTCDEf.js"></script>
-
+    <script src="/ownerFunctions/cPanelFront.js"></script>
+    <script src="/alertas.js"></script>
+    <script src="/landingPageFunctions/LPmpWallet.js"></script>
+    <script src="/landingPageFunctions/LPmpTCDEf.js"></script>
+    <script src="/reiniciar.js"></script>
 
 </html>

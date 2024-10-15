@@ -3,7 +3,7 @@ const GrlConfig = require('../models/configsGrl');
 // Asegúrate de que `config` y las variables sensibles estén definidas antes de usar
 const config = {
     apiKeyMap: '88c66a70b2324b81a65c9059116e088c',
-    tiempoParking: 1,
+    tiempoParking: 3,
     comisionBasic : 16.5,
     preciosDolar:{
         precioDolarAr: 1350,
@@ -60,8 +60,8 @@ const config = {
     ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'APP_USR-8737d261-a71e-43fe-addd-03c0c056d282',
     ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-80741225863147-082714-acfe2d6b40dd4673cbeaafbc1b61c586-1781639407',
     //seba token vendedor
-    //ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'TEST-cd8d4068-bde9-4779-bded-b0054a0bc51c',
-    //ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'TEST-634616371095007-042315-22557fa3618160d8feb06b9824adcd37-540933245',
+    // ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'TEST-cd8d4068-bde9-4779-bded-b0054a0bc51c',
+    // ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'TEST-634616371095007-042315-22557fa3618160d8feb06b9824adcd37-540933245',
     transportEmail: {
         auth: {
             pass: process.env.EMAIL_PASS || 'Sebatbs@22', // Ajusta el valor predeterminado si es necesario

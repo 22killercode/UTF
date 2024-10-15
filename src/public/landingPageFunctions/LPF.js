@@ -1,36 +1,3 @@
-        // let endpoints = {}
-
-        // busca la info inicial del server PROTEGER RUTA
-        window.addEventListener('load', async () => {
-            try {
-                // Realizar la solicitud fetch usando async/await
-                const response = await fetch('/dataInfoTokensEtc');
-        
-                // Verificar si la respuesta fue exitosa
-                if (!response.ok) {
-                    mostrarAlerta('Revisa tu conexión a Internet');
-                    throw new Error('Revisa tu conexión a Internet');
-                }
-        
-                // Si la respuesta fue exitosa, obtener los datos JSON
-                const data = await response.json();
-        
-                // Manejar los datos recibidos del servidor
-                console.log('Datos recibidos desde el server dataInfoTokensEtc:', data);
-                
-                // Guardar la información en el almacenamiento local
-                endpoints = data.endPointsIdTokens;
-                sessionStorage.setItem('endPointsIdTokensCpanel', JSON.stringify(data.endPointsIdTokens));
-        
-            } catch (error) {
-                // Manejar cualquier error ocurrido durante la solicitud
-                console.error('Error:', error);
-                mostrarAlerta(`Error en la solicitud desde LPF linea 28 ${error}`);
-            }
-        });
-        
-
-
         // SignUP inscribir dueños de Ecommerce
         const sigUp = document.getElementById('botonSignUp09870');
         if (sigUp) {
@@ -94,18 +61,17 @@
                     }
             });
         }
-
         //SignIn
+        //console.log("Hizo click en el boton para ingresar al Cpanel", endpoints[22])
         const signinCheq = document.getElementById('btnSignIn1598563');
         if (signinCheq) {
+            endpoints = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel')) || [];
             signinCheq.addEventListener('click', async function() {
                     //console.log("Hizo click en el boton para ingresar al Cpanel")
                     
                     const email = document.getElementById('emailSignIn').value;
                     const password = document.getElementById('passwordSignIN').value;
-
-                    //console.log("Hizo click en el boton para ingresar al Cpanel", endpoints[22])
-
+                    console.log("Hizo click en el boton para ingresar al Cpanel", endpoints[22])
                     try {
                         mostrarModalLoading()
                         const response = await fetch(`${endpoints[22]}`, {
@@ -140,7 +106,7 @@
                         mostrarAlertaSigIn(`Revisa tu conexión a internet e inténtelo de nuevo más tarde.${error}`);
                         setTimeout(async () => {
                             await actualizarData()
-                        }, 1000); // 3000 milisegundos = 3 segundos
+                        }, 100000); // 3000 milisegundos = 3 segundos
                     }
             });
         }

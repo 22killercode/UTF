@@ -1,5 +1,3 @@
-
-
 	// funciones de modal de espera loading
 	function mostrarModalLoading() {
 		//console.log("Entro a MOSTRAR modal loading")
@@ -100,11 +98,22 @@
 				<div class="modal-body text-center text-white p-4" style="max-height: calc(90vh - 150px); overflow:hidden;overflow-y: auto;">  
 					<h5>${mensajeInfo}</h5>  
 				</div>
-				<div class="modal-footer justify-content-center" style="margin:0.5rem">  
-					<button style="margin: auto;" class="btn btn-primary" id="btnCerrarInfo159">
-						cerrar
-					</button>
-				</div>  
+<div class="modal-footer justify-content-center" style="margin:0.5rem; display: flex; gap: 1rem;">  
+	<div class="">
+		<div class="form-check form-switch">
+			<input class="form-check-input" type="checkbox" id="switch2">
+			<label class="form-check-label" for="switch2">No mostrar informe nuevamente.</label>
+		</div>
+		<div class="form-check form-switch">
+			<input class="form-check-input" type="checkbox" id="switch1">
+			<label class="form-check-label" for="switch1">Eliminar todos los informes</label>
+		</div>
+    </div>
+    <button style="margin: auto;" class="btn btn-primary" id="btnCerrarInfo159">
+        Cerrar/Activar
+    </button>
+	<p>Puedes volver a ver el informe presionando "Ver Informe"</p>
+</div>  
 			</div>  
 		</div>
 		`;
@@ -115,6 +124,38 @@
 		const myModal = new bootstrap.Modal(div);
 		myModal.show();
 	
+
+
+
+    // Switch 1
+    document.getElementById('switch1').addEventListener('change', function() {
+        if (this.checked) {
+            let confirmation = confirm("¿Estás seguro de que deseas eliminar todos los informes?");
+            if (!confirmation) {
+                this.checked = true;
+            } else {
+                // Acciones para eliminar mensajes
+                console.log("Todos los mensajes eliminados.");
+            }
+        }
+    });
+
+    // Switch 2
+    document.getElementById('switch2').addEventListener('change', function() {
+        if (this.checked) {
+            let confirmation = confirm("¿Estás seguro de que no deseas volver los informes en esta sesión?");
+            if (!confirmation) {
+                this.checked = true;
+            } else {
+                // Acciones para no volver a mostrar la información
+                console.log("No volver a mostrar esta información activado.");
+            }
+        }
+    });
+
+
+
+
 		// Añadir evento de eliminación a cada elemento
 		const cantDel = document.querySelectorAll('.delete-info').forEach((deleteBtn) => {
 			deleteBtn.addEventListener('click', (event) => {
@@ -141,6 +182,19 @@
 		const botoner = div.querySelector('#btnCerrarInfo159'); // Selecciona el botón correcto
 		botoner.addEventListener("click", () => {
 			myModal.hide(); // Cerrar el modal
+			//SI ESTANA CTIVADOS LSO SWTICHES EN TRUE ENVIA LA INFO AL SERVER
+			const cheqElimnar = document.getElementById('switch1').value
+			const cheqNover   = document.getElementById('switch2').value
+			console.log("Que valor inicial tiene cheqNover",cheqNover )
+			if (cheqNover === "on") {
+				sessionStorage.setItem("okInfo", JSON.stringify(cheqNover));
+				console.log("Entro a no volver a mostrar", cheqElimnar)
+			}
+			if (cheqElimnar === "on") {
+				// se va al servr a eliminar todos los mensajes
+				console.log("Entro a eliminar toda la info", cheqElimnar)
+			}
+
 		});
 	}
 	

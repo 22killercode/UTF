@@ -9,15 +9,11 @@ const cors      = require('cors')
 const passport  = require('passport'); 
 const ExcelJS   = require('exceljs');
 
-const nodemailer = require('nodemailer');
-
 // codificador
 const bcrypt    = require('bcrypt');
 
 //auntenticador
 const jwt       = require('jsonwebtoken');
-//pasarela de pagos
-const mercadopago    = require('mercadopago');
 
 const shortid = require('shortid');
 
@@ -37,13 +33,31 @@ const Configs      = require('../models/configsGrl');
 
 const bodyParser = require('body-parser');
 
-router.use(bodyParser.text());
+let urlServer = ""
+
+let ConfigGrl = {}
+async function getConfig() {
+    try {
+        ConfigGrl = await Configs.findOne();
+        //console.log(ConfigGrl);
+        urlServer = ConfigGrl.urlServer
+        return ConfigGrl;
+    } catch (error) {
+        console.error('Error fetching configuration:', error);
+    }
+}
+
+getConfig()
+
+
+    router.use(bodyParser.text());
 
 let urlOwner = ""
 
+
 //const endpointTokensArray = []
 
-const {guardarImagenCli, endpointTokensArray2, verificarToken, sendMail, guardarMensajes,} = require('./funcionesymas');
+const {guardarImagenCli, endpointTokensArray2, verificarToken, sendMail, guardarMensajes, consultarEstadoPago} = require('./funcionesymas');
 
 //pasarela de pagos
 const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
@@ -55,14 +69,16 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             // Obtener los datos básicos
             // Eliminar el campo ArTokenPrivateMP de cada configuración obtenida
             const configs = await Configs.find({}, { ArTokenPrivateMP: 0 }).exec();
+            
             //console.log('Datos obtenidos:', configs);
             const ConfigsOne = configs
             const jwToken = jwt.sign({ email: "email" }, 'Sebatoken22', { expiresIn: '60m' });
             //console.log("Le entrooooooooooooo a busacar los datos basicos",ConfigsOne)
             urlOwner = configs.urlOwner
             // arma el paquete de datos iniciales
-            const endpointTokensArr = endpointTokensArray2()
-            const datosBasicos = {endpointTokensArr, ConfigsOne, jwToken, jwToken}
+            const endpointTokensArr = endpointTokensArray2() 
+            //console.log("Que endpoints armo desde endpointTokensArray2", endpointTokensArr)
+            const datosBasicos = {endpointTokensArr, ConfigsOne, jwToken }
             // Si todo sale bien, responder con los datos y un código 200 (success)
             res.status(200).json({ success: true, data: datosBasicos });
         } catch (error) {
@@ -80,7 +96,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             // primero arma los enpointsTokens 
             try {
                 // accesos de seguridad
-                console.log("*******/buscandoDataEcommerceInicial*********que hay en el req.body",req.body);
+                //console.log("*******/buscandoDataEcommerceInicial*********que hay en el req.body",req.body);
                 //const urlOwner = req.body.urlOwner.substring(1); // Eliminar el '/' inicial
                 const urlOwner = req.body.urlOwner
                 // Buscar al usuario que tenga el urlOwner especificado
@@ -96,10 +112,11 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 const endPointsIdTokens = endpointTokensArray2()
                 const endPointsFronen = endPointsIdTokens.endpointsFronen 
                 const endPointsBackend = endPointsIdTokens.endpointsBackend 
-                console.log("buscandoDataEcommerceInicial", endPointsFronen[0], endPointsBackend[0] )
+                //console.log("buscandoDataEcommerceInicial", endPointsFronen[0], endPointsBackend[0] )
                 res.status(200).json({ success: true, endPointsFronen,  basicData:Config[0] });
                 
                 await registerEndpoints2(endPointsBackend, verificarToken)
+                await registerEnpointsMP(endPointsBackend, verificarToken)
 
             } catch (error) {
                 console.error('Error handling the request:', error);
@@ -107,14 +124,12 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             }
     });
 
+    // datos enpoints y funciones del server Ecommerce tienda online
     async function registerEndpoints2(endpointTokensArray, verificarToken) { 
 
         //02 revisa de forma automatica los datos del Owner el ecommerce
-        const endpointTokensArrayString0 = endpointTokensArray[0]
-        const endpointTokensArray0 = endpointTokensArrayString0.split(',');
-        const endpoint0 = (typeof endpointTokensArray0 === 'string') ? endpointTokensArray0 : endpointTokensArray0.toString().replace(`${urlOwner}`, "");
         //console.log("Que enpoint es el num 0 de ecommerce server??????", endpointTokensArrayString0)
-        router.post(`/${endpointTokensArrayString0}`, async (req, res) => { 
+        router.post(`/${endpointTokensArray[0]}`, async (req, res) => { 
             const urlOwner = req.body.urlOwner
             console.log("Respuesta  Desde el frontend codigo IDendPoint creado en el backend ", urlOwner)
             //revisar con los datos que me tira si este ip o los datos del local storage me hayan un cliente
@@ -1425,10 +1440,254 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             }
         });
 
-
-
-
-
     }
+
+    // funciones de mercado pago
+    async function registerEnpointsMP(endPointsBackend, verificarToken) {
+
+        let endpointTokensArray = endPointsBackend
+        // para activar boton pago con TC en MP tienda Online
+        //console.log("que idPoint encontro ",endpoint5)
+        router.post(`/${endpointTokensArray[127]}`, [verificarToken], async (req, res) => {
+        //router.post('/create_preference3', async (req, res) => {
+            try {
+            const {amount, idCliente,idOwner,jwToken, pedidoCarrito, payer, urlServer } = req.body;
+        
+            console.log("11111111111Que datos recibo del fronen con TC????", req.body )
+        
+            const pedidito = JSON.parse(pedidoCarrito);
+        
+        
+            const pedidosItems = pedidito.map(e => ({
+                title: e.nombreProducto,
+                description: e.descripcion,
+                quantity: e.cantidad,
+                unit_price: e.precio,
+            }));
+            
+            pedidosItems[0].unit_price + amount
+        
+            const ArTokenPrivateMP = ConfigG.ArTokenPrivateMP 
+        
+            const client = new MercadoPagoConfig({ accessToken: ArTokenPrivateMP });
+            //console.log("222222222222222Que datos recivo de client MP PAGO CON TC????????", client )
+            
+            const preference = new Preference(client);
+            //console.log("3333333333333Que datos recivo de preference MP PAGO CON TC????????", preference )
+        
+            //console.log("4444444444444Que pedidosItems armo PAGO CON TC????????", pedidosItems )
+        
+            await preference.create({
+                body : {
+                    items: pedidosItems,
+                    payer: payer,
+                    back_urls: {
+                        success: `${urlServer}resultado/del/cobro/enMP`,
+                        failure: `${urlServer}resultado/del/cobro/enMP`,
+                        pending: `${urlServer}resultado/del/cobro/enMP`,
+                    },
+                    auto_return: 'approved', // Retornar automáticamente cuando el pago es aprobado
+                    external_reference : {idCliente,idOwner,Token:jwToken},
+                    binary_mode: true, // Habilita o deshabilita el modo binario (true/false)
+                    statement_descriptor: 'UsaTiendaOnline',
+                }
+            })
+            .then(data => {
+                if (data && data.id) {
+                //console.log("5555555555555Que mierda obteiene aqui PAGO CON TC????????", data.id )
+                res.status(200).json({ idMPUser: data.id });
+        
+                } else {
+                console.log("5555555555Que mierda NOOOOOOOOOOOOOO obteiene aqui PAGO CON TC????????", data )
+                throw new Error('No se pudo crear la preferencia.');
+                }
+        
+            });
+        
+            } catch (error) {
+            console.error('Error al crear la preferencia de pago PAGO CON TC:', error);
+            res.status(500).json({ data: 'Error al crear la preferencia de pago con TC' });
+            }
+        });
+        
+        // para pagar/cobrar con tarjetas de credito debito tienda Online
+        //console.log("que idPoint encontro ",endpoint5)
+        router.post(`/${endpointTokensArray[128]}`, [verificarToken], async (req, res) => {
+        //router.post('/process_payment', async (req, res) => {
+            // Agrega credenciales
+            console.log("Qué datos obtiene MP para pagar/cobrar con tarjetas de credito debito", req.body);
+            const {formData, jwToken} = req.body
+            try {
+        
+            const ArTokenPrivateMP = ConfigGrl.ArTokenPrivateMP 
+        
+            let client = new MercadoPagoConfig({accessToken: ArTokenPrivateMP});
+        
+            // crea el pago para enviar al server de MP
+            const payment = new Payment(client);
+            payment.create({ body: formData })
+        
+            // recibe la respuesta del sever de MP
+            .then(data => {
+                console.log("Que data encontró en process_payment", data);
+                data.idMPUser = data.id
+                //console.log("Qué datos obtiene MPreference", data);
+                res.status(200).json(data);
+            })
+        
+            } catch (error) { 
+            // Enviar una respuesta de error si ocurre algún problema
+            console.error('Error al crear la preferencia de pago endpoint128:', error);
+            res.status(500).json({ error: 'Error al crear la preferencia de pago endpoint128' });
+            }
+        });
+        
+        /*para pago con wallets tienda Online*/
+        //console.log("--------ENPOIBNTS22222222222 125 idPoint encontro ", `/${endpointTokensArray[125]}`)
+        router.post(`/${endpointTokensArray[125]}`, [verificarToken], async (req, res) => {
+            console.log("1111111111111111111111111111111 MP que idPoint encontro ",req.body)
+            try {
+        
+            const idCliente = req.body.dataCliente._id
+            const idOwner   = req.body.dataCliente.idOwner
+            const Token     = req.body.dataCliente.Token
+            const amount    = req.body.amount
+        
+            // Iterar sobre el array de productos 'pedidoPendCobrar'
+            const pedidosItems = [];
+            // Iterar sobre el array de productos 'pedidoPendCobrar'
+            req.body.pedidoPendCobrar.forEach(e => {
+                let title       = e.nombreProducto;
+                let description = e.descripcion;
+                let unit_price  = e.precio;      // Convertir 'precio' a número para asegurar que sea numérico
+                let quantity    = e.cantidad;    // Convertir 'cantidad' a número
+                // Agregar el producto procesado al array 'pedidosItems'
+                pedidosItems.push({ title, description, quantity, unit_price });
+            });
+        
+            //console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA", pedidosItems, amount )
+        
+            // Si 'amount' es un valor numérico, asegúrate de convertirlo antes de sumar
+            const amountNumber = Number(amount);
+            
+            // Actualizar solo el 'unit_price' del primer elemento [0] del array
+            if (pedidosItems.length > 0) {
+                // Asegúrate de que el unit_price sea un número después de la suma
+                let c = pedidosItems[0].unit_price = Number(pedidosItems[0].unit_price) + amountNumber;
+                console.log("qqqqqqqqqqqqqqqqqqqqqqqq", pedidosItems[0].unit_price, c)
+            }
+            
+            // Ahora, el primer elemento de 'pedidosItems' tendrá el 'unit_price' actualizado correctamente.
+            
+            //const dataOwner = await User.findById(idOwner)
+
+
+            console.log("tiene los ConfigGrlConfigGrl??????", ConfigGrl)
+
+            const ArTokenPrivateMP = ConfigGrl.ArTokenPrivateMP;
+        
+            // pedidosItems[0].unit_price + amount
+
+            console.log("tiene los token??????", ArTokenPrivateMP)
+            
+            let client = new MercadoPagoConfig({accessToken: ArTokenPrivateMP});
+            
+            console.log("Que client privado  encuentra  en MPwallets???", client)
+        
+            
+            const preference = new Preference(client);
+            
+            await preference.create({
+            body : {
+                items: pedidosItems,
+                purpose: 'wallet_purchase',
+                back_urls: {
+                success: `${ConfigGrl.urlServer}resultado/del/cobro/enMP`,
+                failure: `${ConfigGrl.urlServer}resultado/del/cobro/enMP`,
+                pending: `${ConfigGrl.urlServer}resultado/del/cobro/enMP`,
+                },
+                payer: req.body.dataCliente.payer,
+                purpose: "wallet_purchase",
+                auto_return: "approved",
+                binary_mode: true,
+                statement_descriptor: "usatienfacil",
+                external_reference : {idCliente,idOwner,Token},
+                init_point:global.init_point
+                },
+            })
+            
+            .then(data => {
+            console.log("Que data encontro del 125 server MP", data);
+            preference.idMPUser = data.id
+            const dataMP = {}
+            dataMP.initPoint = data.init_point
+            dataMP.idMPUser = data.id
+            res.status(200).json({dataMP,preference});
+            })
+            } catch (error) {
+                // Enviar una respuesta de error si ocurre algún problema
+                console.error('Error al crear la preferencia de pago endpoint125:', error);
+                res.status(500).json({ error: 'Error al crear la preferencia de pago endpoint125' });
+            }
+        });
+        
+        
+        
+        // devolucciones del cobro MP wallets
+        // router.get(`${urlServer}/resultado/del/cobro/enMP`, async (req, res) => {
+        router.get(`/resultado/del/cobro/enMP`, async (req, res) => {
+            try {
+                console.log("/resultado/del/cobro/enMP que devuelve desde MP:", req.query);
+                
+                // Desestructurar la información de req.query
+                const { collection_status, external_reference, payment_id, collection_id, Token } = req.query;
+        
+                let okCobroMP = false;
+                // Convertir external_reference a objeto
+                const externalReferenceObj = JSON.parse(external_reference);
+                const { idCliente, idOwner } = externalReferenceObj;
+        
+                const dataOwner = await User.findById(idOwner);
+
+                const dominio = dataOwner.dominio || `${urlServer}${dataOwner.urlOwner}`;
+
+                console.log("Que dominio encuentra ", dominio)
+        
+                // Verificar que payment_id y collection_id no sean 'null' como cadena o undefined
+                if (payment_id !== 'null' && payment_id && collection_id !== 'null' && collection_id) {
+                    const paymentData = await consultarEstadoPago(payment_id);
+                    okCobroMP = paymentData.status === 'approved';
+                    console.log('Datos del pago:', paymentData);
+                    console.log(okCobroMP ? 'Pago Aprobado' : 'Pago No Aprobado');
+                } else {
+                    console.log('Pago rechazado, intente con otro método de pago');
+                    const redirectURL = `${dominio}`;
+                    return res.redirect(redirectURL);
+                }
+        
+                // Verificar si el cobro fue aprobado
+                if (collection_status === 'approved' && okCobroMP) {
+                    const redirectURL = `${dominio}?statusCobro=approved&idCliente=${idCliente}&idOwner=${idOwner}&okCobroMP=${okCobroMP}&Token=${Token}`;
+                    console.log("El cobro SI fue aprobado", redirectURL);
+                    return res.redirect(redirectURL);
+                } else {
+                    console.log("El cobro NO fue aprobado");
+                    const redirectURL = `${dominio}/?statusCobro=failed&ref1=null&ref2=null&Token=${Token}`;
+                    return res.redirect(redirectURL);
+                }
+            } catch (error) {
+                console.error("Error al procesar el cobro en MP:", error);
+                const redirectURL = `${dominio}/?statusCobro=failed&ref1=null&ref2=null&Token=${Token}`;
+                return res.redirect(redirectURL);
+            }
+        });
+        
+        
+        
+
+
+        
+    }
+
 
 module.exports = router

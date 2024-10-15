@@ -16,15 +16,22 @@ const os = require('os');
 // Middleware para analizar cuerpos de solicitud JSON
 router.use(express.json());
 router.use(bodyParser.urlencoded({ extended: true }));
+
 //helpers
 const nodemailer = require('nodemailer');
-const cunatos = []
+
+let cunatos = []
+
+cunatos.length = 0;
+cunatos.splice(0, cunatos.length);
+cunatos = []
 
 // Determinar el sistema operativo
 const isWindows = os.platform() === 'win32';
 
 //auntenticador
 const jwt       = require('jsonwebtoken');
+
 // codificador
 const bcrypt    = require('bcrypt');
 
@@ -40,16 +47,18 @@ const pushMess     = require('../../models/pushMes');
 // aqui se guardan los enpointokens de Cpanel
 //let endpointTokensArrayCpanel = []
 let urlServer = {}
+let configGrl = {}
+//pasarela de pagos
+const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
 
-
-const {compararFechas,eliminarImagenes, sendMail, guardarImagen, guardarImagenNews, guardarFondo, guardarMensajes, enpointsFactory} = require('../funcionesymas');
+const {UpDateUpGrade, consultarEstadoPago,SingUp,compararFechas,eliminarImagenes, sendMail, guardarImagen, guardarImagenNews, guardarFondo, guardarMensajes, enpointsFactory} = require('../funcionesymas');
 const {saveOrUpdateConfig}= require('../configGlrs');
 
 
     // Middleware para verificar el token JWT
-    const verificarToken = (req, res, next) => {
+    const verificarToken = async (req, res, next) => {
         const authHeader = req.headers.authorization || req.query.token;
-        //console.log("Entro a verificar token", authHeader);
+        console.log("Entro a verificar token del Cpanel verificarToken", authHeader);
 
         if (authHeader) {
             let token;
@@ -59,23 +68,23 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                     return cadena.replace(/['"]/g, '');
                 }
                 token = eliminarComillas(token2)
-                //console.log("Que token extrajo?", token);
+                console.log("Que token extrajo?", token);
             } else {
                 token = authHeader; // Usa el token directamente si no tiene el prefijo "Bearer"
             }
 
-            jwt.verify(token, 'Sebatoken223', async (err, decoded) => {
-                //console.log("Que datos encontró en decoded", decoded);
+            await jwt.verify(token, 'Sebatoken223', async (err, decoded) => {
+                console.log("Que datos encontró en decoded", decoded);
                 if (err) {
                     if (err.name === 'TokenExpiredError') {
                         //console.log("Tu sesión ha expirado, logeate nuevamente");
                         return res.status(400).json({ message: `Tu sesión ha expirado, logeate nuevamente ${err}` });
                     }
-                    //console.log("Token inválido");
+                    console.log("Token inválido");
                     return res.status(400).json({ message: `Token inválido ${err}` });
                 }
                 const e = decoded.email
-                //console.log("kelfñjnefjkgnjkefngjioefngjn", e, decoded)
+                console.log("que paso en verified token", e, decoded)
                 const dataOwner = await User.findOne({email:e});
                 const idOwner   = dataOwner._id
                 decoded.idOwner = idOwner
@@ -88,7 +97,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         }
     };
 
-
+    // genera enppoints completos para el Cpanel
     function GenIEndpoints(urlServer) {
         // aqui se generan los distintos enpoints
         const endpointArray = []
@@ -103,16 +112,16 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
     // ruta para enviar la fronen de la landing page los endpoint hay que meterle alguna seguridad
     router.get(`/dataInfoTokensEtc`,  async (req, res) => {
-        console.log("Entro al server a buscar la info de los productos y del owner/dataInfoTokensEtc", req.body);
+        console.log("Entro /dataInfoTokensEtc al server a buscar la info de los productos y del owner/dataInfoTokensEtc", req.body);
         try{
             // BUSCA TODOS LOS URLoWNERS
-            const configGrl = await ConfigGrl.findOne();
-            //console.log("Que urlOwwners encontro??????", configGrl)
+            configGrl = await ConfigGrl.findOne();
+
+            //console.log("1111111111111111111Que urlOwwners encontro??????", configGrl)
             urlServer = configGrl.urlServer
             
             let endpointTokensArrayCpanel = await GenIEndpoints(urlServer)
-
-            console.log("Cuantos enpoints genero",endpointTokensArrayCpanel.length )
+            console.log("Cuantos enpoints genero C PanelServer",endpointTokensArrayCpanel.length )
             const dataDatera = {urlServer}
 
             // dispara las rutas de los urlOwners
@@ -128,11 +137,14 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             //dispara las rutas codificadas
             await registerEndpoints(endpointTokensArrayCpanel, verificarToken)
 
+            const { ArTokenPrivateMP, ...newConfigGrl } = configGrl;
+
             setTimeout(() => {
                 res.status(200).json({
                     success: true, 
                     endPointsIdTokens: endpointTokensArrayCpanel, 
-                    data: dataDatera 
+                    data: dataDatera,
+                    configGrl: newConfigGrl 
                 });
             }, 2000); // 2000 milisegundos = 2 segundos
             
@@ -224,7 +236,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         });
     }
 
-
     async function registerEndpoints(endpointTokensArrayCpanel, verificarToken) {
 
         let enpointTokens = endpointTokensArrayCpanel
@@ -236,9 +247,8 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             const endpointTokensArrayString22 = enpointTokens[numPoint]
             const endpointTokensArray22 = endpointTokensArrayString22.split(urlServer);
             const endpoint22 = `/${endpointTokensArray22[1]}`
-            //console.log("Que numero de Endpoint solicitan????",urlServer, numPoint, endpoint22)
-            cunatos.push(endpoint22)
-
+            //console.log("Que numero de Endpoint solicitan????", numPoint)
+            //cunatos.push(endpoint22)
             return endpoint22
         }
 
@@ -270,7 +280,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
 
         // 001 INICIO OBTENCION DE DATOS 
-        console.log(`que endpoint fabrico en el server para 96 ${urlPoint(96)}`)
+        //console.log(`que endpoint fabrico en el server para 96 ${urlPoint(96)}`)
         router.post(urlPoint(96), [verificarToken], async (req, res) => {
             const {idOwner} = req.body.dataSend
             console.log(`11111111*************Entro a refrescar información data`, req.body)
@@ -388,7 +398,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         });
 
         // 03 SIGNIN ingresar a TiendaFacil
-        //console.log("que enpoint token del signIn encontro en el server?? endpoint22",endpointTokensArray22, );
+        console.log("que enpoint token del signIn encontro en el server?? endpoint22", urlPoint(22) );
         router.post(urlPoint(22), [], async (req, res) => {
             const ipCliente = req.ip || req.connection.remoteAddress;
             console.log("Se intenta ingresar de forma MANUAL desde la landing page ", req.body);
@@ -491,7 +501,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 }
         });
         
-
 
         // 04 para editar los datos del Owner generales
         router.post(urlPoint(55), [verificarToken], async (req, res) => {
@@ -845,7 +854,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //09 Cambiar la imagen del fondo de pantalla
         router.post(urlPoint(20), [verificarToken], async (req, res) => {
             console.log("que viene de cambiar el estilo del ecommerce req.files", req.files)
@@ -875,7 +883,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 res.status(500).json({ success: false, message: "Imagen del fondo no guardada correctamente" });
             }
         });
-
 
         //10 Agregar redes sociales
         router.post(urlPoint(32), [verificarToken], async (req, res) =>{
@@ -952,7 +959,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //12 editar o incluir empresas de delivery
         router.post(urlPoint(8), [verificarToken], async (req, res) =>{
             console.log("que viene de delivery el cobro del ecommerce",  req.body)
@@ -985,7 +991,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //13 eliminar empresa de delivary
         router.post(urlPoint(9), [verificarToken], async (req, res) =>{
             console.log("que viene de delivery ELIMINAR********************* el cobro del ecommerce",  req.body)
@@ -1012,7 +1017,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
             
         });
-
 
         //14 Agregar & Activar empresa de delivary
         router.post(urlPoint(37), [verificarToken], async (req, res) =>{
@@ -1049,7 +1053,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
             
         });
-
 
         //15 Agregar nuevos productos
         router.post(urlPoint(11), [verificarToken], async (req, res) => {
@@ -1170,7 +1173,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             
         });
 
-
         //16 Elimina productos
         router.post(urlPoint(13), [verificarToken], async (req, res) => {
             console.log("De control en el backend lpara eliminar", req.body)
@@ -1214,7 +1216,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //17 Edita productos
         router.post(urlPoint(15), [verificarToken], async (req, res) => {
             console.log("Que llega a editar productos", req.body)
@@ -1245,7 +1246,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 return res.status(500).json({ success: false, message: 'Error al editar el producto' });
             }
         });
-
 
         //18 Agregar nueva PROMOCION
         // Definir la ruta del endpoint desde el frontend
@@ -1307,13 +1307,15 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                     nwePromoOk: true
                 });
 
-                // Generar enlaces para la promoción
-                const urlServer = dataOwner.urlServer;
-                const promoLink = `${urlServer}${dataOwner.urlOwner}/Promo/${nuevaPromocion._id}`;
-                const urlPromo = `/${dataOwner.urlOwner}/Promo/${nuevaPromocion._id}`;
 
                 // Actualizar configuración global con el nuevo enlace de promoción
                 const configGrl = await ConfigGrl.findOne();
+                // Generar enlaces para la promoción
+                const urlServer = configGrl.urlServer;
+                const promoLink = `${urlServer}${dataOwner.urlOwner}/Promo/${nuevaPromocion._id}`;
+                const urlPromo = `/${dataOwner.urlOwner}/Promo/${nuevaPromocion._id}`;
+
+
                 if (configGrl) {
                     configGrl.urlsPromos.push({ urlPromo, idOwner });
                     await configGrl.save();
@@ -1417,7 +1419,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //19 Elimina la promocion
         router.post(urlPoint(19), [verificarToken], async (req, res) => {
             console.log("EElimiina la promocion", req.body)
@@ -1474,13 +1475,12 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //22 Agrega una noticia new´s 
         router.post(urlPoint(29), [verificarToken], async (req, res) => {
             console.log("Request body:", req.body);
         
             try {
-                const { title, body, idOwner, nombreEmrpesa, urlServer, tipoMembresia, clientes } = req.body;
+                const { title, body, idOwner, nombreEmrpesa, urlServer, tipoMembresia, clientes, flagNews } = req.body;
                 const clientess = JSON.parse(clientes)
                 let dataGM = {};
         
@@ -1504,6 +1504,9 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         
                 const newsList = await Mensajes.find({ owner: req.user.id, nweNoticias: true });
         
+                // Actualiza el documento en la base de datos
+                await User.findByIdAndUpdate(idOwner,{ flagNews });
+
                 // Enviar la respuesta HTTP antes de realizar las operaciones adicionales
                 res.status(200).json({ success: true, message: "Su noticia se envió correctamente", newsList });
         
@@ -1700,7 +1703,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //24 Agregar Quienes somos y demas
         router.post(urlPoint(41), [verificarToken], async (req, res) => {
             console.log(`que Datos de quienes somos llegan al server`, req.body)
@@ -1735,35 +1737,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             
             
             
-        });
-
-
-        //25 Cambiar la cantidad de stock de un producto
-        router.post(urlPoint(129), [verificarToken], async (req, res) =>{
-            console.log("que viene de cambiar el estilo del ecommerce", req.body)
-            const requestData = req.body
-            //console.log("que viene de cambiar el estock", requestData)
-            try {
-                const {productId, cantidad, idOwner} = requestData
-
-                const cheqChange = await Productos.findByIdAndUpdate(productId, {cantidad}, {new:true});
-
-                //console.log("que viene de cambiar la cantidad de stock", cheqChange)
-                    // Si no se encontró el usuario para actualizar
-                if (cheqChange.cantidad == cantidad) {
-                    // Si se actualizó correctamente
-                    const message = "El cambio de Stock se realizó correctamente."
-                    res.status(200).send({ success: true, message});
-                } else {
-                    const message = "El cambio de Stock NO pudo realizarse. Intente más tarde.";
-                    res.status(400).send({ success: false, message});
-                    return
-                }
-            } catch (error) {
-                const message = "El cambio de Stock NO pudo realizarse. Intente más tarde.";
-                res.status(400).send({ success: false, message});
-                return
-            }
         });
 
 
@@ -1947,7 +1920,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         });
         
 
-
         //27 ver/Activar la tienda online
         router.post(urlPoint(66), [verificarToken], async (req, res) => {
             console.log(" ver/Activar la tienda online", req)
@@ -1968,7 +1940,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 res.status(500).json({ success: false, error: 'Error en el servidor' });
             }
         });
-
 
         // Endpoint para el switch "mostrarPromoPPrin"
         router.post(urlPoint(104), async (req, res) => {
@@ -1995,7 +1966,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             
         });
 
-
         // Endpoint para marcar la promoción como vencida dataProm=false
         router.post(urlPoint(195), async (req, res) => {
             //console.log("Entro a marcar la promo como vencida", req.body, urlPoint(195))
@@ -2017,7 +1987,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 res.status(500).json({ success:false, message: 'Error en el servidor' });
             }
         });
-
 
         // Endpoint para marcar la promoción como vencida dataProm=false
         router.post(urlPoint(173), async (req, res) => {
@@ -2046,8 +2015,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
             
         });
-
-
 
         //25 Agenda los retiros de dinero
         router.post(urlPoint(189), [verificarToken], async (req, res) => {
@@ -2239,7 +2206,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         // agrega la documentacion para depositar
         router.post(urlPoint(190), [verificarToken], async (req, res) => {
             console.log("Que trae en el req.body?????????????", req.body)
@@ -2301,8 +2267,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 res.status(500).json({ message: 'Error al guardar el documento en la base de datos.' });
             }
         });
-        
-        
 
         // guarda  los ultimos informes de los estados
         router.post(urlPoint(31), [verificarToken], async (req, res) => {
@@ -2356,8 +2320,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 return res.status(500).json({ success: false, message: "Error interno del servidor", error: error.message });
             }
         });
-        
-
 
         // consulta el informe diario
         router.post(urlPoint(33), [verificarToken], async (req, res) => {
@@ -2403,8 +2365,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 return res.status(500).json({ success: false, message: "Error interno del servidor", error: error.message });
             }
         });
-        
-        
 
         //23 Elmina mensajes desde cPanel
         router.post(urlPoint(47), [verificarToken], async (req, res) => {
@@ -2435,8 +2395,951 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         });
 
 
+         //25 Cambiar la cantidad de stock de un producto
+        router.post(urlPoint(105), [verificarToken], async (req, res) =>{
+            console.log("que viene de cambiar el estok del ecommerce", req.body)
+            const requestData = req.body
+            //console.log("que viene de cambiar el estock", requestData)
+            try {
+                const {productId, cantidad, idOwner} = requestData
+
+                const cheqChange = await Productos.findByIdAndUpdate(productId, {cantidad}, {new:true});
+
+                //console.log("que viene de cambiar la cantidad de stock", cheqChange)
+                    // Si no se encontró el usuario para actualizar
+                if (cheqChange.cantidad == cantidad) {
+                    // Si se actualizó correctamente
+                    const message = "El cambio de Stock se realizó correctamente."
+                    res.status(200).send({ success: true, message});
+                } else {
+                    const message = "El cambio de Stock NO pudo realizarse. Intente más tarde.";
+                    res.status(400).send({ success: false, message});
+                    return
+                }
+            } catch (error) {
+                const message = "El cambio de Stock NO pudo realizarse. Intente más tarde.";
+                res.status(400).send({ success: false, message});
+                return
+            }
+        });
+
+
+
+
+
+
+  /****************************************************LANDIGNPAGE****************************************************** */
+
+
+    //141 Ruta para abonar la Membresia Premium por FORMA MANUAL 
+    //console.log("Le endpointTokensArray101 a guardar CUSTOM ",endpoint101)
+    router.post(urlPoint(141), [verificarToken], async (req, res) => {        
+        try { 
+            console.log("Request Body 141 pago manual landingPAge:", req.body);
+            console.log("Request Files 141 pago manual landingPAge:", req.files);
+
+            const { imgTicket } = req.files;
+            const { name, tempFilePath, data } = imgTicket;
+            const { paymentMethod, ticketNumber, extraData, dataOwner, dataPay } = req.body;
+            const { nombre, apellido, emailXYZ123, passwordXYZ123 } = JSON.parse(dataOwner);
+            const { precioFinal, cantPRODO, tiempoContratoO } = JSON.parse(dataPay);
+
+            // Verificar si el email ya está registrado
+            const cheqMail = await User.findOne({ email: emailXYZ123 });
+            if (cheqMail) {
+                throw new Error('Este email ya está registrado');
+            }
+
+            // Verificar si se subió una imagen
+            if (!tempFilePath) {
+                throw new Error('La imagen del ticket es requerida.');
+            }
+
+            const nameTiket = (emailXYZ123 + name )
+            const receiptImagePath = path.join(__dirname, `../public/img/uploads/imgTicketsLP/${nameTiket}`);
+            let singUP = {}
+            // Registrar un nuevo usuario si es necesario
+            if (ticketNumber) {
+                const ticketPath = receiptImagePath
+                const datosExtrasdeMP = null
+
+                console.log("Que se envia a sigUp?????????:", emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
+                singUP = await SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
+
+                if (!singUP.cheqSignUp) {
+                    throw new Error('Debes agregar el numero de ticket y subir la imagen del mismo.');
+                }
+            }
+
+            // Guardar la imagen en el sistema de archivos
+            if (os.platform().startsWith('win')) {
+                // En sistemas Windows, usa mv para mover el archivo
+                req.files.imgTicket.mv(receiptImagePath, err => { 
+                if (err) {
+                    console.error('Error al mover el archivo:', err);
+                } else {
+                    console.log('Archivo movido exitosamente a', receiptImagePath);
+                }
+                });
+            } else {
+                // En otros sistemas, usa fs.renameSync para mover el archivo
+                fs.renameSync(tempFilePath, receiptImagePath);
+                console.log('Archivo movido exitosamente a', receiptImagePath);
+            }
+            
+            
+            res.status(200).json({ success: true, message: 'Datos recibidos y correo enviado.' });
+            
+    /************************************************************************************************************ */          
+            // Guardar los datos en la base de datos
+            const nuevoMensaje = new Mensajes({
+                idOwner:singUP.id,
+                email: emailXYZ123,
+                names: nombre,
+                apellido,
+                pais: "Pago Manual",
+                message: `
+                    Este es el ticket Nro: ${ticketNumber} que comprueba el pago por el método: ${paymentMethod}.
+                    <br>
+                    Pago: ${precioFinal}, Cantidad de productos contratados: ${cantPRODO}, por un tiempo de: ${tiempoContratoO} meses.
+                    <br>
+                    Mensaje: ${extraData}
+                `,
+                date: new Date()
+            });
+            await nuevoMensaje.save();
+
+
+
+            message = `
+                    <br>
+                    ¡Hola ${nombre} Felicitaciones! <br> 
+                    <br>
+                    Tu membresía Premium y su cantidad de productos han sido correctamente actualizados.
+                    <br>
+                    No se te cobraran comisiones.
+                    <br>
+                    Te llamaremos para configurar tu nuevo dominio, ssl, pasarela de pago y demás datos.
+                    <br>
+                    Este proceso puede demorar 72 horas hábiles. 
+                    <br>
+                    Cantidad de productos contratados: ${cantPRODO}.
+                    <br>
+                    Tiempo de contrato de tu membresía y productos:${tiempoContratoO} meses.
+                    <br>
+                    <strong>Pago: ${precioFinal}.</strong> pesos.
+                    <br>
+                    Ticket Nro: ${ticketNumber} del pago por el método: ${paymentMethod}.
+                    <br>
+                    Datos Extra que nos enviaste: ${extraData}
+                    <br><br>
+                    <strong>La imputación del pago esta siendo procesada, te podemos llamar por alguna duda.<br>
+                    ya puedes disfrutar de todas las ventajas de tener la membresía premium.
+                    </strong>
+                    <br>
+                `
+            // Preparar y enviar el correo electrónico
+            const tranportEmail = ConfigG.transportEmail
+            const dataEnviarEmail = {
+                transportEmail:tranportEmail,
+                reclamo: false,
+                enviarExcel: false,
+                emailOwner: 'sebastianpaysse@gmail.com',
+                emailCliente: emailXYZ123,
+                numCelCliente: 'No especificado', // Deberías agregar la variable correcta si está disponible
+                numCelOwner: 'No especificado', // Deberías agregar la variable correcta si está disponible
+                mensaje: message,
+                codigoPedido: ticketNumber,
+                nombreOwner: "Sebas",
+                nombreCliente: nombre,
+                subjectCliente: `Hola ${nombre}, Bienvenido a Usa Tienda Facil, nos llegó tu pago`,
+                subjectOwner: `Se inscribió ${nombre} un nuevo cliente desde la Landing Page`,
+                otraData: null,
+                logoOwner: null,
+                cancelaEnvio: false,
+                pedidoCobrado: false,
+                quedaUno: false,
+                product: false,
+                inscripcion: true,
+                Promo: false,
+                attachments: [{ path: receiptImagePath }]
+            };
+            await sendMail(dataEnviarEmail);
+
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(400).json({ success: false, message: error.message });
+        }
+    });
+
+    //142 UPDATED USUARIO YA EXISTENTE Premium por FORMA MANUAL UPGRADE desde Cpanel
+    router.post(urlPoint(142), [verificarToken], async (req, res) => {        
+        try { 
+            console.log("142 Request Body:", req.body);
+            console.log("142 Request Files:", req.files);
+            okCobroMP = true
+            /* ********************************************************************************************************/
+            if (okCobroMP) {
+
+            const { imgTicket } = req.files;
+            const { name, tempFilePath, data } = imgTicket;
+            const { paymentMethod, ticketNumber, extraData, dataOwner, dataPay, urlServer, fechaVencMem } = req.body;
+
+                        const { nombre, apellido, email, ownerID, cantProdQTiene, cantContratosMemRealizados, tipoMembresia } = JSON.parse(dataOwner);
+
+                        const dataPAyO = JSON.parse(dataPay);
+                        const { precioFinal, cantPRODO, tiempoContratoO } = dataPAyO
+
+                        let tipoDPago = ""
+                        if (imgTicket) {
+                        tipoDPago = "Manual"
+                        }else{
+                        tipoDPago= "Electrónico MP"
+                        }
+                
+                        // Verificar si se subió una imagen
+                        if (!tempFilePath) {
+                            throw new Error('La imagen del ticket es requerida.');
+                        }
+                
+                        const nameTiket = (email + name )
+                        const receiptImagePath = path.join(__dirname, `../public/img/uploads/imgTicketsLP/${nameTiket}`);
+                        let upDateBDOwner =  {}
+                        // Actualiza el usuario que realizo el upgrade a membresia premium
+                        if (ticketNumber) {
+                        const ticketPath = receiptImagePath
+                        const datosExtrasdeMP = extraData
+                        dataPAyO.tipoDPago = tipoDPago
+
+                        const dataSendUpGrade = {ownerID, paymentMethod, ticketNumber, datosExtrasdeMP, ticketPath, dataPAyO, cantProdQTiene, cantContratosMemRealizados, fechaVencMem, tipoMembresia, precioFinal }
+                        upDateBDOwner = await UpDateUpGrade(dataSendUpGrade);
+
+                        if (upDateBDOwner.successUpdated === false) {
+                            res.status(400).json({ success: false, message: "No se pudo Actualizar tu membresía intenta nuevamente mas tarde." });
+                            return
+                        }
+
+                        console.log("Que data le enviamos a upDateBDOwner 142?????????", upDateBDOwner)
+                        }else{
+                        res.status(400).json({ success: false, message: "Agrega el numero de ticket y su imagen" });
+                        }
+                
+                        // Guardar la imagen en el sistema de archivos
+                        if (os.platform().startsWith('win')) {
+                        // En sistemas Windows, usa mv para mover el archivo
+                        req.files.imgTicket.mv(receiptImagePath, err => { 
+                            if (err) {
+                            console.error('Error al mover el archivo:', err);
+                            res.status(400).json({ success: false, message: err.message });
+                            } else {
+                            console.log('Archivo movido exitosamente a', receiptImagePath);
+                            }
+                        });
+                        } else {
+                        // En otros sistemas, usa fs.renameSync para mover el archivo
+                        fs.renameSync(tempFilePath, receiptImagePath);
+                        console.log('Archivo movido exitosamente a', receiptImagePath);
+                        }
+                        
+                        res.status(200).json({ success: true, message: 'Datos recibidos y correo enviado.' });
+
+    /*************Estas actividadesd de regisro se hacen de forma asincronica independiente*******************************/
+
+
+            const formatearFecha = fecha => {
+            const d = new Date(fecha);
+            return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+            };
+            
+            // Ejemplo de uso
+            const fechaFormateada = formatearFecha(fechaVencMem);
+
+
+                        let message = ""
+                        if (tipoMembresia === "basic") {
+                        message = `
+                        <br>
+                        ${nombre} Felicitaciones!!! <br>
+                        Tu membresía Basic fue actualizada a Premium y su cantidad de productos han sido correctamente actualizados.
+                        <br>
+                        No se te cobraran comisiones.
+                        <br>
+                        Te llamaremos para configurar tu nuevo dominio, ssl, pasarela de pago y demás datos.
+                        <br>
+                        Este proceso puede demorar 72 horas hábiles. 
+                        <br>
+                        Cantidad de productos contratados: ${cantPRODO}.
+                        <br>
+                        Fecha de vencimiento de tu membresía y productos:${fechaFormateada}
+                        <br>
+                        Pago: ${precioFinal}.
+                        <br>
+                        Este es el ticket Nro: ${ticketNumber} que comprueba el pago por el método: ${paymentMethod}.
+                        <br>
+                        Fecha de vencimiento de tu membresia ${fechaFormateada}:
+                        <br>
+                        Datos Extra que nos enviaste: ${extraData}
+                        <br>
+                        Estos datos puedes verlos en tu panel de control dentro de: 
+                        <br>
+                        <a href="${urlServer}">${urlServer}</a>
+                        `
+                        } else {
+                        message = `
+                            <br>
+                            ${nombre} tu membresía Premium y su cantidad de productos han sido correctamente actualizados.
+                            <br>
+                            Fecha de vencimiento de tu membresía y productos:${fechaFormateada}
+                            <br>
+                            Pago: ${precioFinal}.
+                            <br>
+                            Este es el ticket Nro: ${ticketNumber} que comprueba el pago por el método: ${paymentMethod}.
+                            <br>
+                            Cantidad de productos contratados: ${cantPRODO}.
+                            <br>
+                            Datos Extra que nos enviaste: ${extraData}
+                            <br>
+                            Estos datos puedes verlos en tu panel de control dentro de: 
+                            <br>
+                            <a href="${urlServer}">${urlServer}</a>
+                        `
+                        }
+                        console.log(message)
+                        // Guardar los datos en la base de datos
+                        const nuevoMensaje = new Mensajes({
+                        idOwner:upDateBDOwner.ownerID,
+                        email,
+                        names: nombre,
+                        apellido,
+                        pais: paymentMethod,
+                        message,
+                        date: new Date()
+                        });
+                        await nuevoMensaje.save();
+
+                        // Preparar y enviar el correo electrónico
+                        const tranportEmail = ConfigG.transportEmail
+                        const dataEnviarEmail = {
+                            transportEmail:tranportEmail,
+                            enviarExcel: false,
+                            emailOwner: 'sebastianpaysse@gmail.com',
+                            emailCliente: email,
+                            numCelCliente: 'No especificado', // Deberías agregar la variable correcta si está disponible
+                            numCelOwner: 'No especificado', // Deberías agregar la variable correcta si está disponible
+                            mensaje: message,
+                            codigoPedido: ticketNumber,
+                            nombreOwner: nombre,
+                            nombreCliente: nombre,
+                            subjectCliente: `Hola ${nombre}, El cambio en tu membresía se actualizo correctamente`,
+                            subjectOwner:  `Hola Sebas el cliente ${nombre}, Agrego productos a su membresía`,
+                            otraData: null,
+                            logoOwner: null,
+                            cancelaEnvio: false,
+                            pedidoCobrado: false,
+                            quedaUno: false,
+                            product: false,
+                            inscripcion: true,
+                            reclamo: false,
+                            Promo: false,
+                            attachments: [{ path: receiptImagePath }]
+                        };
+                        await sendMail(dataEnviarEmail);
+                
+                        
+            } else {
+                console.error('Error:', error);
+                res.status(400).json({ success: false, message: error.message });
+            }
+            
+            } catch (error) {
+                console.error('Error:', error);
+                res.status(400).json({ success: false, message: error.message });
+            }
+    });
+
+
+    //142 UPDATED USUARIO YA EXISTENTE WALLET DESDE CPANEL PARa Membresia Premium y FORMA MANUAL UPGRADE desde Cpanel
+    router.post(urlPoint(172), [], async (req, res) => {        
+        try { 
+            // primero verificamos la veracidad del cobro:
+            console.log("172 urlPoint(172) Request Body:",req.body);
+            const { dataOwner5, paymentId, dataGrlPayload } = req.body;
+            // desestructurar info
+            let {nombre, apellido, email, urlServer, ownerID, cantContratosMemRealizados, tipoMembresia, fechaVencMem } = dataOwner5
+
+            const dataOwner = await User.findById(ownerID)
+            const cantProdQTiene = dataOwner.misProductos.length
+
+            fechaVencMem = fechaVencMem ? new Date(fechaVencMem.replace(/"/g, '')) : new Date();
+            const {precioPEsos, quantity, duration} = dataGrlPayload
+            
+    /* ********************************************************************************************************/
+            // Función asíncrona para consultar el estado de un pago en MercadoPago
+    /* ********************************************************************************************************/
+        let okCobroMP = false
+        const paymentData = await consultarEstadoPago(paymentId);
+        console.log('Datos del pago:', paymentData);
+        console.log('Estado del pago:', paymentData.status); // Ejemplo: 'approved', 'rejected', 'pending'
+        if (paymentData.status === 'approved') {
+        okCobroMP = true, console.log('Pago Aprobado');
+        }
+        else{
+        console.log('Pago rechazado intente con otro método de pago');
+        okCobroMP = false
+        return res.status(400).json({ success: true, false: 'Pago rechazado intente con otro método de pago' });
+        }
+    //       okCobroMP = true
+    /* ********************************************************************************************************/
+
+            if (okCobroMP) {
+            const paymentMethod = paymentData.order.type
+            // Actualiza la BD del usuario que realizo el upgrade a membresia premium
+            let tipoDPago= "Electrónico MP"
+            //const datosExtrasdeMP = paymentData.external_reference
+            const dataPAyO = {tipoDPago, precioPEsos, quantity, duration}
+            const ticketNumber = paymentData.id
+            const ticketPath = null
+            const precioFinal = precioPEsos.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            const dataSendUpGrade = {ownerID, paymentMethod, ticketNumber, ticketPath, dataPAyO, cantProdQTiene, cantContratosMemRealizados, fechaVencMem, tipoMembresia, precioFinal }
+            const upDateBDOwner = await UpDateUpGrade(dataSendUpGrade );
+            console.log("Que data le enviamos al fronen desde la fncion  UpDateUpGrade?????????", upDateBDOwner)
+
+            if (upDateBDOwner.successUpdated) {
+                res.status(200).json({ success: true, message:upDateBDOwner.message});
+            } else {
+                res.status(400).json({ success: false, message:"Ocurrió un error al actualizar la BD. intente mas tarde" });
+                return
+            }
+
+    /*************Estas actividadesd de regisro se hacen de forma asincronica independiente*******************************/
+            const attachments = [{ path: ticketPath }]
+        
+
+            const formatearFecha = fecha => {
+                const d = new Date(fecha);
+                return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+            };
+            
+            // Ejemplo de uso
+            const fechaFormateada = formatearFecha(upDateBDOwner.fechaVencMem);
+
+            let message = ""
+            if (tipoMembresia === "basic") {
+                message = `
+                <br>
+                ${nombre} Felicitaciones!!! <br>
+                Tu membresía Basic fue actualizada a Premium y su cantidad de productos han sido correctamente actualizados.
+                <br>
+                No se te cobraran comisiones.
+                <br>
+                Te llamaremos para configurar tu nuevo dominio, ssl, pasarela de pago y demás datos.
+                <br>
+                Este proceso puede demorar 72 horas hábiles. 
+                <br>
+                Cantidad de productos contratados: ${quantity}.
+                <br>
+                Fecha de vencimiento de tu membresía y productos:${fechaFormateada}
+                <br>
+                Pago: ${precioFinal}.
+                <br>
+                Estos datos puedes verlos en tu panel de control dentro de: 
+                <br>
+                <a href="${urlServer}">${urlServer}</a>
+                `
+            } else {
+                message = `
+                <br>
+                ${nombre} tu membresía Premium y su cantidad de productos han sido correctamente actualizados.
+                <br>
+                Cantidad de productos contratados: ${quantity}.
+                <br>
+                Fecha de vencimiento de tu membresía y productos:${fechaFormateada}
+                <br>
+                Pago: ${precioFinal}.
+                <br>
+                Estos datos puedes verlos en tu panel de control dentro de: 
+                <br>
+                <a href="${urlServer}">${urlServer}</a>
+                `
+            }
+            console.log(message)
+            // Guarda un mensaje en mensajes internos
+            const nuevoMensaje = new Mensajes({
+                idOwner:upDateBDOwner.ownerID,
+                email,
+                names: nombre,
+                apellido,
+                pais: paymentMethod,
+                message,
+                date: new Date()
+            });
+            await nuevoMensaje.save();
+
+            // Preparar y enviar el correo electrónico
+            //TODO poner el email empresarial de usatiendafacil
+            const tranportEmail = configGrl.transportEmail
+            const dataEnviarEmail = {
+                transportEmail:tranportEmail,
+                enviarExcel: false,
+                emailOwner: ['sebastianpaysse@gmail.com'],
+                emailCliente: email,
+                numCelCliente: dataOwner.numCel[0].numCelOwner,
+                numCelOwner: "",
+                mensaje: message,
+                codigoPedido: ticketNumber,
+                nombreOwner: nombre,
+                nombreCliente: nombre,
+                subjectCliente: `Hola ${nombre}, El cambio en tu membresía se actualizo correctamente`,
+                subjectOwner:  `Hola Sebas el cliente ${nombre}, Agrego productos a su membresía`,
+                otraData: null,
+                logoOwner: null,
+                cancelaEnvio: false,
+                pedidoCobrado: false,
+                quedaUno: false,
+                product: false,
+                inscripcion: true,
+                reclamo: false,
+                Promo: false,
+                attachments,
+            };
+            sendMail(dataEnviarEmail);
+            }
+            else{
+            console.error('Error:', error);
+            res.status(400).json({ success: false, message: "El pago NO pudo ser cobrado intente con un nuevo medio de pago" });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(400).json({ success: false, message: error.message });
+        }
+    });
+
+    //***********para mostrar los botones con mercado pago DESDE LA LANDING PAGE wallet y tarjetas aprobadas
+   // muestra los botones MP y TC desde Wallet de la landing page
+    //console.log("QQQQQ endpoint129endpoint encontro ", urlPoint(129))
+    router.post(urlPoint(129),  async (req, res) => {
+        // Agrega credenciales
+        console.log("  mp endpointTokensArray[129]  Qué datos obtiene MP MPwallets desde el fronen", req.body );
+        try {
+        const {dataPay, dataOwner, pedidoPendCobrar, urlServer} = req.body
+        const {precioFinal, cantPRODO, tiempoContratoO} = dataPay
+        const {nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123, payer} = dataOwner
+
+        // 1ero debe revisar si el email ya esta registrado y existe.
+        const dataPIdx = passwordXYZ123
+        const dataEIdx = emailXYZ123
+        const cheqEmail = await User.findOne({email:emailXYZ123})
+
+        if (cheqEmail) {
+            console.log("Entro y encontro un email ya refgistrado CheqEmail", cheqEmail );
+            res.status(400).json({success:false, message:"Este email ya se encuentra registrado", error: 'Este email ya se encuentra registrado' });
+            return
+        }
+        const pedidosItems = []
+        pedidoPendCobrar.forEach(e => {
+            let title       = `Membresía Premium Usa Tienda Fácil por ${e.cantPRODO} productos.`
+            let description = `Incluye SSL, Dominio propio y hasta 5 imágenes por producto y por un tiempo de: ${e.tiempoContratoO}`
+            let quantity    = 1
+            let unit_price  = e.precioFinal
+            let subTotal    = e.precioFinal
+            pedidosItems.push({title, description, quantity, unit_price})
+        });
+
+        const ArTokenPrivateMP = configGrl.ArTokenPrivateMP 
+
+        let client = new MercadoPagoConfig({accessToken: ArTokenPrivateMP});
+
+        const preference = new Preference(client);
+
+        dataPassCompra = pedidosItems[0]
+
+        const dataPayload = {dataEIdx, dataPIdx, tiempoContratoO, cantPRODO, urlServer, nombre}
+
+        await preference.create({
+            body : {
+            items: pedidosItems,
+            purpose: 'wallet_purchase',
+            back_urls: {
+                success: `${dataOwner.urlCompleta}resultado/del/cobro/enMPLandingSignUp`,
+                failure: `${dataOwner.urlCompleta}resultado/del/cobro/enMPLandingSignUp`,
+                pending: `${dataOwner.urlCompleta}resultado/del/cobro/enMPLandingSignUp`,
+            },
+            payer: dataOwner.payer,
+            purpose: "wallet_purchase",
+            auto_return: "approved",
+            binary_mode: true,
+            statement_descriptor: "usatienfacil",
+            external_reference : dataPayload,
+            init_point:global.init_point
+            },
+        })
+        .then(data => {
+            console.log("129 MMMMMMMMMMMMMMQue data aprobo del pago con WALLET en mercado pago????????????????????????", data);
+            preference.idMPUser = data.id
+            const dataMP = {}
+            dataMP.initPoint = data.init_point
+            dataMP.idMPUser = data.id
+            //console.log("Qué datos obtiene MPreference",data, preference);
+            res.status(200).json({success:true, dataMP, preference});
+        })
+
+        } catch (error) {
+        // Enviar una respuesta de error si ocurre algún problema
+        console.error('Error al crear la preferencia de pago:', error);
+        res.status(500).json({ error: 'Error al crear la preferencia de pago' });
+        }
+    });
+
+
+    // TC TC TC para activar boton pago con TC en MP tienda Online y acrditar el PAGO
+   //console.log("que idPoint encontro ",endpoint5)
+    router.post(urlPoint(131), [verificarToken], async (req, res) => {
+        try {
+        const {jwToken, dataPay, payer, urlServer } = req.body;
+        const { precioFinal, cantPRODO, tiempoContratoO } = dataPay
+        
+        //const urlServer = ConfigG.urlServer || urlServer
+        const ArTokenPrivateMP = ConfigG.ArTokenPrivateMP
+        //console.log("777777777777999999999999999999999999999999999999999988888888888888888", ConfigG )
+        //console.log("8888888888888888888888888888888888888", req.body )
+
+        const pedidosItems = []
+        const title       = `Membresía Premium Usa Tienda Fácil.`
+        const description = `Incluye SSL, Dominio propio y hasta 5 imágenes por producto y por una cantidad de ${cantPRODO} y un tiempo de: ${tiempoContratoO}`
+        const quantity    = 1
+        const unit_price  = precioFinal
+        const subTotal    = precioFinal
+        pedidosItems.push({title, description, quantity, unit_price, subTotal })
+        
+        //console.log("ConfigGConfigGArTokenPrivateMPArTokenPrivateMPArTokenPrivateMP??????", urlServer )
+
+        const client = new MercadoPagoConfig({ accessToken: ArTokenPrivateMP });
+        //console.log("222222222222222Que cliente armo MP PAGO CON TC????????", client )
+        
+        const preference = new Preference(client);
+        //console.log("3333333333333Que datos PREFEERENCIA armo MP PAGO CON TC????????", preference )
+
+        //console.log("4444444444444Que pedidosItems armo PAGO CON TC????????", pedidosItems )
+
+        await preference.create({
+            body : {
+            items: pedidosItems,
+            payer: payer,
+            back_urls: {
+                success: `${urlServer}resultado/del/cobro/enMPLandingSignUp`,
+                failure: `${urlServer}resultado/del/cobro/enMPLandingSignUp`,
+                pending: `${urlServer}resultado/del/cobro/enMPLandingSignUp`,
+            },
+            auto_return: 'approved', // Retornar automáticamente cuando el pago es aprobado
+            external_reference : {Token:jwToken, payer},
+            binary_mode: true, // Habilita o deshabilita el modo binario (true/false)
+            statement_descriptor: 'UsaTiendaOnline'
+            }
+        })
+        .then(data => {
+            if (data && data.id) {
+                res.status(200).json({succes:true,  idMPUser: data.id });
+            } else {
+                console.log("5555555555Que mierda NOOOOOOOOOOOOOO obteiene aqui PAGO CON TC????????", data )
+                throw new Error('No se pudo crear la preferencia.');
+            }
+        })
+        } catch (error) {
+            console.error('Error al crear la preferencia de pago PAGO CON TC:', error);
+            res.status(500).json({succes:false, data: 'Error al crear la preferencia de pago' });
+        }
+    });
+
+   // para pagar/cobrar con tarjetas de credito debito tienda Online
+   //console.log("que idPoint encontro ",endpoint5)
+    router.post(urlPoint(132), [verificarToken], async (req, res) => {
+        console.log("Qué datos obtiene MP para pagar/cobrar con tarjetas de credito debito", req.body);
+        
+        const { formData, jwToken } = req.body;
+
+        try {
+        const ArTokenPrivateMP = ConfigG.ArTokenPrivateMP;
+
+        // Crear una instancia de MercadoPagoConfig con el token de acceso
+        let client = new MercadoPagoConfig({ accessToken: ArTokenPrivateMP });
+
+        // Crear el pago
+        const payment = new Payment(client);
+        const data = await payment.create({ body: formData });
+
+        //console.log("MMMMMMMMMMMMMMMMMQué datos responde MP por el pago con TC?????????????", data);
+
+        data.idMPUser = data.id;
+
+        // Enviar la respuesta exitosa
+        res.status(200).json(data);
+        } catch (error) {
+        console.error('Error al crear la preferencia de pago endpoint132:', error);
+
+        // Enviar una respuesta de error al cliente
+        res.status(500).json({ error: 'Error al crear la preferencia de pago endpoint132', message: error.message });
+        }
+    });
+
+   // devolucciones desde MP del cobro o regreso en MP wallets desde la LANDING PAGE donde debe registrarse SINGUP y enviar mail
+   // para pagar/cobrar con tarjetas de credito debito tienda Online
+    //console.log("UUUUUUUurlPoint(169) que idPoint encontro ", urlPoint(169))
+    router.post(urlPoint(169), [], async (req, res) => {
+        try {
+            console.log("Que devuelve desde MP URL????????????????????????????????", req.body)
+            // Desestructurar la información de req.query
+            const { statusCobro, externalData, paymentId, paymentType, siteId } = req.body;
+            const dataExtra = JSON.parse(externalData)
+            const {dataEIdx, dataPIdx, tiempoContratoO, cantPRODO, urlServer, nombre} = dataExtra
+            // const { title, description, quantity, unit_price } = dataPassCompra
+            const datosExtrasdeMP = {paymentType, siteId}
+            const ticketNumber = String(paymentId)
+            const paymentMethod = paymentType
+            const emailXYZ123 = dataEIdx
+            const passwordXYZ123 = dataPIdx
+
+            // Verificar si el cobro fue aprobado
+            if (statusCobro === "approved") {
+                /* ********************************************************************************************************/
+                        // Función asíncrona para consultar el estado de un pago en MercadoPago
+                /* ********************************************************************************************************/
+                let okCobroMP = false
+                const paymentData = await consultarEstadoPago(paymentId);
+                console.log('169......... Datos del pago:', paymentData);
+                console.log('169......... Estado del pago:', paymentData.status); // Ejemplo: 'approved', 'rejected', 'pending'
+                //console.log('169......... Datos del pago:', paymentData);
+                const precioFinal = paymentData.transaction_amount
+                // Formatear el monto en pesos mexicanos
+                const precioFinalFormateado = precioFinal.toLocaleString('es-MX', {style: 'currency',currency: 'MXN' });
+                if (paymentData.status === 'approved') {
+                    okCobroMP = true
+                    console.log('169 Pago Aprobado');
+                }
+                else{
+                    console.log('169 Pago rechazado intente con otro método de pago');
+                    okCobroMP = false
+                    return res.status(400).json({ success: true, false: 'Pago rechazado intente con otro método de pago' });
+                }
+            //       okCobroMP = true
+            /* ********************************************************************************************************/
+                if (okCobroMP) {
+                    // se inscribe el usuario 
+                    const ticketPath = null
+                    const urlOwner = ""
+                    const dataOwner = await SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, urlOwner);
+
+                    console.log("Se agrego el nuevo owner", dataOwner)
+
+                    res.status(200).json({dataOwner, succes:true, message:"Bienvenido a Usa Tienda Fácil"});
+
+            /*******************Sigue con cosas******************************************************************** */
+                    // Calcula la fecha de vencimiento sumando los meses al valor actual
+                    const fechaCompraCantProd = new Date();
+                    const fechaVencimientoCantProd = new Date(fechaCompraCantProd);
+                    // Suma los meses a la fecha actual
+                    fechaVencimientoCantProd.setMonth(fechaVencimientoCantProd.getMonth() + tiempoContratoO);
+                    // Obtener el día, mes y año
+                    const dia = String(fechaVencimientoCantProd.getDate()).padStart(2, '0');
+                    const mes = String(fechaVencimientoCantProd.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+                    const anio = fechaVencimientoCantProd.getFullYear();
+                    // Formatear la fecha
+                    const fechaFormateada = `${dia}/${mes}/${anio}`;
+                    message = `
+            <div align="center" style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px; border-radius: 10px;">
+            <div align="left">
+                    <p style="font-size: 16px; color: #333; line-height: 1.6;">Gracias por inscribirte enusatiendafacil.com donde vendes más rápido.</p>
+                    <br>
+                    ${nombre} tu membresía Premium y su cantidad de productos han sido correctamente aprovada.
+                    <br>
+                    Cantidad de productos contratados: ${cantPRODO}.
+                    <br>
+                    Fecha de vencimiento de tu membresía y productos:${fechaFormateada}
+                    <br>
+                    Pago: ${precioFinalFormateado} pesos.
+                    <br>
+                    Metodo de pago: ${paymentMethod}
+                    <br>
+                    </div>
+                    <br>
+            Estos datos puedes verlos en tu panel de control.
+                <p style="font-size: 16px; color: #333; line-height: 1.6;">Haz clic en el botón de abajo y activaremos tu compra.</p>
+                <p style="font-size: 16px; color: #333; line-height: 1.6;">Volverás a la pagina de TiendaFacily deberás logearte <br> Gracias!</p>
+                <a href="${urlOwner}confirmaInscripcion?id=${dataOwner.id}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; margin-top: 20px; transition: background-color 0.3s ease;">Activar cuenta</a>
+            </div>
+                    `
+                    // se agrega un mensaje de bienvenida
+                    // Guardar los datos en la base de datos
+                    const nuevoMensaje = new Mensajes({
+                    email: emailXYZ123,
+                    names: nombre,
+                    apellido : null,
+                    pais: "Pago Wallet MP",
+                    message,
+                    date: new Date()
+                    });
+                    await nuevoMensaje.save();
+
+                    // se envia el email de bienvenida y activasio
+                    // Preparar y enviar el correo electrónico
+                    // TODO sebastianpaysse@gmail.com cambiar por el email intitucional
+                    const tranportEmail = configGrl.transportEmail
+                    const dataEnviarEmail = {
+                        transportEmail:tranportEmail,
+                        reclamo: false,
+                        enviarExcel: false,
+                        emailOwner: ['sebastianpaysse@gmail.com'],
+                        emailCliente: emailXYZ123,
+                        numCelCliente: 'No especificado', // Deberías agregar la variable correcta si está disponible
+                        numCelOwner: 'No especificado', // Deberías agregar la variable correcta si está disponible
+                        mensaje: message,
+                        codigoPedido: ticketNumber,
+                        nombreOwner: "Sebas",
+                        nombreCliente: nombre,
+                        subjectCliente: `Hola ${nombre}, Bienvenido ausatiendafacil.com`,
+                        subjectOwner: `Nuevo Pago membresia premium landingPage recibido de ${emailXYZ123}`,
+                        otraData: null,
+                        logoOwner: null,
+                        cancelaEnvio: false,
+                        pedidoCobrado: false,
+                        quedaUno: false,
+                        product: false,
+                        inscripcion: true,
+                        Promo: false,
+                    };
+                    await sendMail(dataEnviarEmail);
+                } 
+                else {
+                    // Si el cobro no fue aprobado, devolver un error
+                    console.log("El cobro NO fue aprobado")
+                    const redirectURL = `${dominio}/?statusCobro=failed&ref1=null&ref2=null&Token=${Token}`;
+                    return res.status(400).json({ succes:false, message: "Error al procesar el cobro en MP" });
+                }
+            }
+            else{
+                console.error("Error al procesar el cobro en MP intente con otro medio de pago:", error);
+                return res.status(500).json({ error: "Error al procesar el cobro en MP intente con otro medio de pago" });
+            }
+
+        } catch (error) {
+        console.error("Error al procesar el cobro en MP:", error);
+        return res.status(500).json({ error: "Error al procesar el cobro en MP" });
+        }
+    });
+
+    /*********************Aqui estan los Up Grade de MEmebresias**********************/
+
+    //console.log("urlPoint(179 que idPoint encontro ", urlPoint(179))
+    router.post(urlPoint(179), [], async (req, res) => {
+        console.log("Que llega del fronen al 179 por upgrade membresia?????????????", req.body)
+        const {DataPayO, datosOwnerResume, pedidoPendCobrar, payer } = req.body
+        const  {nombre, apellido, email, urlServer} = datosOwnerResume
+        const  {precioPEsos, quantity, duration} = DataPayO
+
+        const priceXProducto = precioPEsos / quantity
+        try{
+            const pedidosItems = []
+            const title       = `Membresía Premium usatiendafácil.com por ${quantity} productos.`
+            const description = `Incluye SSL, Dominio propio, hasta 5 imágenes por producto y por un tiempo de: ${duration}`
+            const unit_price  = priceXProducto
+            pedidosItems.push({title, description, quantity, unit_price})
+            const ArTokenPrivateMP = configGrl.ArTokenPrivateMP 
+            let client = new MercadoPagoConfig({accessToken: ArTokenPrivateMP});
+            const preference = new Preference(client);
+            const dataEId = email
+            const dataPayload = {dataEId}
+            await preference.create({
+            body : {
+                items: pedidosItems,
+                purpose: 'wallet_purchase',
+                back_urls: {
+                    success: `${configGrl.urlServer}resultado/del/cobro/enMPUpSuccessGradeSignUp`,
+                    failure: `${configGrl.urlServer}resultado/del/cobro/enMPUGradeFalilureSignUp`,
+                    pending: `${configGrl.urlServer}resultado/del/cobro/enMPUpGradePeddingSignUp`,
+                },
+                payer,
+                purpose: "wallet_purchase",
+                auto_return: "approved",
+                binary_mode: true,
+                statement_descriptor: "usatienfacil",
+                external_reference : dataPayload,
+                init_point:global.init_point
+            },
+            })
+            .then(data => {
+                preference.idMPUser = data.id
+                const dataMP = {}
+                dataMP.initPoint = data.init_point
+                dataMP.idMPUser = data.id
+                //console.log("Qué datos obtiene UPGRADE MPreference",data, preference);
+                res.status(200).json({success:true, dataMP, preference});
+            })
+        } catch (error) {
+            // Enviar una respuesta de error si ocurre algún problema
+            console.error('Error al crear la preferencia de pago:', error);
+            res.status(500).json({ error: 'Error al crear la preferencia de pago' });
+        }
+
+
+    });
+
+    /*AQUI SOLO ESTAN LOS CUESTIONARIOS DE CUSTOM Y CONSULTAS DE LA LANDING PAGE*/
+
+    //101 Guarda el formulario CUSTOM y CONTACTOS
+    //console.log("Le endpointTokensArray101 a guardar CUSTOM ",endpoint101)
+    router.post(urlPoint(101), [verificarToken], async (req, res) => {
+    //router.post('/datos/custom/cliente', [verificarToken], async (req, res) => {
+        console.log("Le entrooooooooooooo a guardar CUSTOM ",req.body)
+        try {
+            // Desestructuración del objeto req.body
+            const { nombre, apellido, celular, email, descripcionProyecto, consulta } = req.body;
+
+            // Aquí se guardo el mensaje
+            const guardarMensajes = new Mensajes(
+                {
+                names:nombre, 
+                apellido, 
+                numCel:celular, 
+                email,
+                message:descripcionProyecto
+                })
+                guardarMensajes.save()
+
+                res.status(200).json({ success: true, message: "Su consulta fue recibida con éxito" });
+
+                //const transportEmail = ConfigG.transportEmail
+                const dataUser = await User.findOne()
+                const transportEmail = dataUser.transportEmail
+
+                console.log("Se copio el tranpostrter???" , transportEmail)
+
+                let subjectOwner = ""
+                if (consulta) {
+                subjectOwner = "ATENCIÓN!!! Una consulta entrante"
+                } else {
+                subjectOwner = "ATENCIÓN!!! Un posible cliente CUSTOM"
+                }
+                // enviar por email el mensaje
+                const dataEnviarEmail = {transportEmail, reclamo:true, enviarExcel:false, emailOwner:"sebastianpaysse@gmail.com", emailCliente:email, numCelCliente:celular, numCelOwner:celular, mensaje:`<br> ${descripcionProyecto}, <br> nos comunicaremos a la brevedad posible. <br> Gracias`, codigoPedido:"16165", nombreOwner:"Sebas", nombreCliente:nombre, subjectCliente:`Hola ${nombre}, nos llegó tu consulta`, subjectOwner, otraData:null, logoOwner:null, cancelaEnvio:false, pedidoCobrado:false, quedaUno:false, product:false, inscripcion:false, Promo:false} 
+
+                await sendMail(dataEnviarEmail)
+
+        } catch (error) {
+            // Si ocurre un error, responder con un código 500 (error del servidor) y un mensaje de error
+            console.error('Error al obtener los datos básicos:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Ocurrió un error al obtener los datos básicos.'
+            });
+        }
+    });
+
+    //console.log("7777777777777777777777777", cunatos.length)
+
+    
     };
 
-
+    cunatos.splice(0, cunatos.length);
+    cunatos = []
+    //console.log(cunatos.length); // 0
 
 module.exports = router;

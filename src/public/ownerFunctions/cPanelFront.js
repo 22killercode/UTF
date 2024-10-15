@@ -38,6 +38,7 @@ urlServer = ""
 
 document.addEventListener('DOMContentLoaded', async function () {
     //datos generales
+    endpoints      = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
     const jwToken        = sessionStorage.getItem('jwTokenOwner');
     const dataOwner      = JSON.parse(sessionStorage.getItem('ownerData'));
     const ownerProducts  = JSON.parse(sessionStorage.getItem("ownerProducts")) || [];
@@ -159,9 +160,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (event.target.closest('.btn-primary.add-to-cart[id^="BTNEditar"]')) {
                     const button = event.target.closest('.btn-primary.add-to-cart[id^="BTNEditar"]');
                     const idProd = button.getAttribute('data-producto-id')
-                    const mensajeOptions = "¿Deseas editar este producto?"
-                    const rechaza = function(){}
-                    const confirma = function(){
                         const modalElement = document.getElementById('editarProducto254');
                         const insertProd   = document.getElementById('insertarProducto');
                         const modal = new bootstrap.Modal(modalElement);
@@ -231,7 +229,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                                                         Tarjeta horizontal Vintage
                                                                     </div>
                                                                     <div class="card-body">
-                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 1" style="max-width: 300px; max-height: 300px;">
+                                                                        <img src="/images/ejemploHorizontal.jpg" class="card-img-top" alt="Imagen del producto 1" style="max-width: 300px; height: 300px;">
                                                                     </div>
                                                                     <div class="card-footer d-flex justify-content-between align-items-center">
                                                                         <label class="form-check-label" for="switch1ABCedit">On/Off</label>
@@ -248,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                                                         Tarjeta Vertical Vintage
                                                                     </div>
                                                                     <div class="card-body">
-                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 2" style="max-width: 300px; max-height: 300px;">
+                                                                        <img src="/images/ejemploVertical.jpg" class="card-img-top" alt="Imagen del producto 2" style="max-width: 300px; height: 300px;">
                                                                     </div>
                                                                     <div class="card-footer d-flex justify-content-between align-items-center">
                                                                         <label class="form-check-label" for="switch2ABCedit">On/Off</label>
@@ -265,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                                                         Tarjeta Cristal Edition
                                                                     </div>
                                                                     <div class="card-body">
-                                                                        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Imagen del producto 3" style="max-width: 300px; max-height: 300px;">
+                                                                        <img src="/images/ejemploCristal.jpg" class="card-img-top" alt="Imagen del producto 3" style="max-width: 300px; height: 300px;">
                                                                     </div>
                                                                     <div class="card-footer d-flex justify-content-between align-items-center">
                                                                         <label class="form-check-label" for="switch3ABCedit">On/Off</label>
@@ -337,15 +335,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                         btnConfEdit.addEventListener('click', function() {
                             //console.log('El botón de confirmar edición ha sido clickeado.');
                             //const card = document.getElementById(idProd);
-
                             // Función para obtener el contenido del editor
                             function obtenerContenidoEditor() {
                                 if (editorInstanceEdit) {
                                     const contenidoHTML = editorInstanceEdit.getData();
-                                    console.log("Contenido del editor:", contenidoHTML);
+                                    //console.log("Contenido del editor:", contenidoHTML);
                                     return contenidoHTML;
                                 } else {
-                                    console.log("El editor aún no está inicializado.");
+                                    //console.log("El editor aún no está inicializado.");
                                     return null;
                                 }
                             }
@@ -424,10 +421,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                     console.error('Error en la solicitud Fetch:', error);
                                     mostrarAlerta('Error en la solicitud Fetch en la edición del producto',error); // Mostrar un mensaje genérico de error en un alert
                                 });
-
                         });
-                    }
-                    confirmOptions(mensajeOptions, confirma, rechaza);
                 }
             // ELIMINAR PRODUCTO
                 if (event.target.closest('.btn-primary.add-to-cart[id^="BTNEliminar"]')) {
@@ -964,12 +958,12 @@ if (cantidadIngresada % 1 === 0) {
 
     function renderizarPromociones(categorias3) {
         const contenedorPromos = document.getElementById('estadosPromos23');
-        contenedorPromos.style.maxHeight = '600px';
         contenedorPromos.innerHTML = '';
+        // contenedorPromos.style.maxHeight = '600px';
         Object.keys(categorias3).forEach(categoria => {
             if (categorias3[categoria].length > 0) {
                 const productosRow = document.createElement('div');
-                productosRow.className = 'col-4';
+                productosRow.className = 'container-xxl row w-100 p-0 m-0 d-flex flex-wrap';
                 categorias3[categoria]
                     .sort((a, b) => new Date(b.date) - new Date(a.date))
                     .forEach(producto => {
@@ -989,8 +983,8 @@ if (cantidadIngresada % 1 === 0) {
     
                         const promRestantes = producto.cantidadDisponible - producto.cantidadPromoVendidas;
                         let cardHtmlPromo = {} // no sacar se le aplican efectos
-                        if (promRestantes <= 2) {
-                            const infoMmensagem = `Te queda 2 o menos promociones de: <br> ${producto.nombrePromocion}`
+                        if (promRestantes <= 1) {
+                            const infoMmensagem = `Te queda 1 o menos promociones de: <br> ${producto.nombrePromocion}`
                             //mostrarAlerta(infoMmensagem)
                             const fechaActual = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
                             const datInfo = {
@@ -1001,100 +995,106 @@ if (cantidadIngresada % 1 === 0) {
                             };
                             infoDiario(datInfo)
                         }
+
+
                         // cardP es par buscarlo en el click
                         cardHtmlPromo = `
-                        <div class="card">
-                            <div class="cardP shadow-sm rounded">
-                                <div class="card-header">
-                                    <h4 class="card-title text-center nomPRom">${producto.nombrePromocion}</h4>
-                                </div>
-                                <div id="${productoId}" class="card-body p-3" align="left">
-                                    <div id="carousel${productoId}" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner rounded p-3">
-                                            ${producto.rutaSimpleImg.map((img, index) => `
-                                                <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                                                    <img src="${img}" alt="Producto" class="d-block " style="height: 150px !important; height:auto; object-fit: contain;">
-                                                </div>`).join('')}
+                            <div class="col-12 col-sm-6 col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="cardP shadow-sm rounded">
+                                        <div class="card-header">
+                                            <h4 class="card-title text-center nomPRom">${producto.nombrePromocion}</h4>
                                         </div>
-                                        <a class="carousel-control-prev" href="#carousel${productoId}" role="button" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </a>
-                                        <a class="carousel-control-next" href="#carousel${productoId}" role="button" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </a>
-                                    </div>
-                                    <fieldset class="border rounded p-3">
-                                        <h5 class="w-auto px-2">Descripción de la promo:</h5>
-                                        <fieldset style="height: 150px; overflow-y: auto; overflow-x: hidden;">
-                                            <p class="mb-2">${producto.descripcionPromocion}</p>
-                                        </fieldset>
-
-                                        <h5>Categoria del producto:</h5>
-                                        <p class="mb-2">${producto.categoria}</p>
-
-                                        <h5>Nombre del producto:</h5>
-                                        <p class="mb-2">${producto.nombreProducto}</p>
-
-                                        <h5>Precio:</h5>
-                                        <p class="mb-2 text-success">$${formatoMoneda(producto.precio)}</p>
-
-                                        <h5>Descuento:</h5>
-                                        <p class="mb-2 text-danger">${producto.descuento}%</p>
-
-                                        <h5>Precio Final:</h5>
-                                        <p class="mb-2 text-success">$${formatoMoneda(producto.precio, producto.descuento)}</p>
-
-<h5>Promo en cantidad:</h5>
-<p class="mb-3">
-    ${producto.cantLlevar && producto.cantPagar ? `${producto.cantLlevar} X ${producto.cantPagar}` : "NO tiene promo por cantidades"}
-</p>
-
-
-                                        <h5>Cantidad de promos ofrecidas:</h5>
-                                        <p class="mb-2">${producto.cantidadDisponible}</p>
-
-                                        <h5>Promos vendidas:</h5>
-                                        <p class="mb-2">${producto.cantidadPromoVendidas}</p>
-
-                                        <h5>Restan por vender:</h5>
-                                        <p class="mb-2 promosRestantesID">${promRestantes}</p>
-
-                                        <div class="d-flex justify-content-between mt-3">
-                                            <div>
-                                                <h5>Fecha Inicio:</h5>
-                                                <p>${formatoFecha(producto.fechaInicio)}</p>
+                                        <div id="${productoId}" class="card-body p-3" align="left">
+                                            <div id="carousel${productoId}" class="carousel slide" data-bs-ride="carousel">
+                                                <div class="carousel-inner rounded p-3">
+                                                    ${producto.rutaSimpleImg.map((img, index) => `
+                                                        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                                            <img src="${img}" alt="Producto" class="d-block" style="height: 150px !important; height:auto; object-fit: contain;">
+                                                        </div>`).join('')}
+                                                </div>
+                                                <a class="carousel-control-prev" href="#carousel${productoId}" role="button" data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </a>
+                                                <a class="carousel-control-next" href="#carousel${productoId}" role="button" data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </a>
                                             </div>
-                                            <div>
-                                                <h5>Fecha Fin:</h5>
-                                                <p class="fecha-fin">${formatoFecha(producto.fechaFin)}</p>
+                                            <fieldset class="border rounded p-3">
+                                                <h5 class="w-auto px-2">Descripción de la promo:</h5>
+                                                <fieldset style="height: 150px; overflow-y: auto; overflow-x: hidden;">
+                                                    <p class="mb-2">${producto.descripcionPromocion}</p>
+                                                </fieldset>
+                        
+                                                <h5>Categoria del producto:</h5>
+                                                <p class="mb-2">${producto.categoria}</p>
+                        
+                                                <h5>Nombre del producto:</h5>
+                                                <p class="mb-2">${producto.nombreProducto}</p>
+                        
+                                                <h5>Precio:</h5>
+                                                <p class="mb-2 text-success">$${formatoMoneda(producto.precio)}</p>
+                        
+                                                <h5>Descuento:</h5>
+                                                <p class="mb-2 text-danger">${producto.descuento}%</p>
+                        
+                                                <h5>Precio Final:</h5>
+                                                <p class="mb-2 text-success">$${formatoMoneda(producto.precio, producto.descuento)}</p>
+                        
+                                                <h5>Promo en cantidad:</h5>
+                                                <p class="mb-3">
+                                                    ${producto.cantLlevar && producto.cantPagar ? `${producto.cantLlevar} X ${producto.cantPagar}` : "NO tiene promo por cantidades"}
+                                                </p>
+                        
+                                                <h5>Cantidad de promos ofrecidas:</h5>
+                                                <p class="mb-2">${producto.cantidadDisponible}</p>
+                        
+                                                <h5>Promos vendidas:</h5>
+                                                <p class="mb-2">${producto.cantidadPromoVendidas}</p>
+                        
+                                                <h5>Restan por vender:</h5>
+                                                <p class="mb-2 promosRestantesID">${promRestantes}</p>
+                        
+                                                <div class="d-flex justify-content-between mt-3">
+                                                    <div>
+                                                        <h5>Fecha Inicio:</h5>
+                                                        <p>${formatoFecha(producto.fechaInicio)}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Fecha Fin:</h5>
+                                                        <p class="fecha-fin">${formatoFecha(producto.fechaFin)}</p>
+                                                    </div>
+                                                </div>
+                        
+                                                <h5>Días que restan:</h5>
+                                                <p>${calcularDiasRestantes(producto.fechaFin)}</p>
+                                            </fieldset>
+                        
+                                            <div class="text-center mt-3 p-3 border rounded" style="background-color: #f1f1f1;">
+                                                <h2 class="mb-2">Link a redes sociales</h2>
+                                                <div>
+                                                    <h3 id="socialLink${productoId}" style="word-break: break-all;">
+                                                        <a href="${producto.promoLink}" class="text-decoration-none text-dark">${producto.promoLink}</a>
+                                                    </h3>
+                                                </div>
+                                                <i class="fas fa-copy" id="portaPapers${productoId}" style="cursor: pointer;" data-promo-id="${productoId}"></i>
+                                            </div>
+                        
+                                            <div class="text-center mt-3">
+                                                <button type="button" class="btn btn-danger add-to-cart" id="BTNEliminarPromo${productoId}" data-producto-id="${productoId}">
+                                                    <i class="fas fa-trash-alt" style="font-size: 2rem;"></i>
+                                                </button>
                                             </div>
                                         </div>
-
-                                        <h5>Días que restan:</h5>
-                                        <p>${calcularDiasRestantes(producto.fechaFin)}</p>
-                                    </fieldset>
-
-                                    <div class="text-center mt-3 p-3 border rounded" style="background-color: #f1f1f1;">
-                                        <h2 class="mb-2">Link a redes sociales</h2>
-                                        <div>
-                                            <h3 id="socialLink${productoId}" style="word-break: break-all;">
-                                                <a href="${producto.promoLink}" class="text-decoration-none text-dark">${producto.promoLink}</a>
-                                            </h3>
-                                        </div>
-                                        <i class="fas fa-copy" id="portaPapers${productoId}" style="cursor: pointer;" data-promo-id="${productoId}"></i>
-                                    </div>
-
-                                    <div class="text-center mt-3">
-                                        <button type="button" class="btn btn-danger add-to-cart" id="BTNEliminarPromo${productoId}" data-producto-id="${productoId}">
-                                            <i class="fas fa-trash-alt" style="font-size: 2rem;"></i>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         `;
+
+
+
                         productosRow.innerHTML += cardHtmlPromo;
                     });
                     contenedorPromos.appendChild(productosRow);
@@ -1177,8 +1177,8 @@ if (cantidadIngresada % 1 === 0) {
                 };
 
                 try {
+                    //console.log("Porque no lo encuentraaaas endpoints[195]",endpoints[195])
                     const response = await fetch(`${endpoints[195]}`, options);
-                    console.log("Que idpoint va???", endpoints[195])
                     if (response.ok) {
                         const data = await response.json();
                         if (data.success) {
@@ -2166,9 +2166,6 @@ if (cantidadIngresada % 1 === 0) {
             </div>
         `;
     }
-
-
-    
 }); 
 
         //re envia al dominio del cliente o al de UTF Cpanel

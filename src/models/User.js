@@ -18,6 +18,7 @@ const direccionSchema = new Schema({
 
 // Esquema de Usuario
 const UserSchema = new Schema({
+    flagNews: { type: Boolean },
     lastInfo:[],
     lasDateInfo : { type: Date, default: Date.now },
     // Información básica

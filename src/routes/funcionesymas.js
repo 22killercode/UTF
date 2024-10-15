@@ -50,13 +50,13 @@ configsss();
 
 
 
-        //Arma los endpoints del ecommerce y l alanding page
+        //Arma los endpoints del ecommerce y l alanding page de forma separada
         function endpointTokensArray2() {
             console.log("Entro a armar las rutas para el ecommerce")
             const endpointsFronen  = []
             const endpointsBackend = []
             // aqui se generan los distintos enpoints
-            const generateRandomString = (length = 333) => Array.from(crypto.getRandomValues(new Uint8Array(length)), byte => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[byte % 62]).join('');
+            const generateRandomString = (length = 6) => Array.from(crypto.getRandomValues(new Uint8Array(length)), byte => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[byte % 62]).join('');
             for (let i = 0; i < 200; i++) {
                 const formEndpoint = (generateRandomString().toString());
                 const endpointTokenFronen = `${urlServer}${formEndpoint}`
@@ -1367,7 +1367,7 @@ configsss();
         async function SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal, urlServer) {
             try {
                 const password = passwordXYZ123
-                console.log("Entro a la funcion de SignUp99999999999999999999999999999999999999999",emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
+                console.log("Entro a la funcion de SignUp de funcionesymas 99999",emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
         
                 const transportEmail = ConfigG.transportEmail
                 const cantContratosMemRealizados = [];
@@ -1502,7 +1502,7 @@ configsss();
                 throw new Error(`Error en la consulta: ${response.status} ${response.status}`);
                 }
             
-                const paymentData = await response.json(); // Parsear la respuesta a JSON
+                const paymentData = await response.json(); // Parsear la respuesta a JSON 
                 return paymentData;
             
             } catch (error) {

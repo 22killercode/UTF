@@ -55,12 +55,12 @@
 	</head> 
 
 	<header id="barraMenuArriba" style="z-index:9999999 !important;display:none !important; margin: 0 !important; opacity: 0; height: 3.5rem !important; position: sticky !important; width: 100vw; justify-content: space-between; align-items: center;">
-		<input autocomplete="off" placeholder="Buscar producto" type="text" id="buscarProductoInput" oninput="mostrarProductos()" style="width: 15%; height: 60%;">
+		<input autocomplete="off" placeholder="Buscar producto" type="text" id="buscarProductoInput" oninput="mostrarProductos()" style="width: 16%; height: 70%; border-radius:1rem">
 		<a id="buscador5445" class="fas fa-search" onclick="buscarProducto()"></a>
 		<select id="productosEncontrados" size="5" onchange="seleccionarProducto()" style="width: 25%; height: 100px; color: white;"></select>
 		<div id="menuContainer" style="display: flex; justify-content: space-around; align-items: center; flex: 1;">
 			<!-- aquí va el nombre del comercio -->
-			<div id="duenoEcom22" style="flex: 1; max-width: 300px !important; text-align: center;">Nombre del Comercio</div>
+			<div id="duenoEcom22" class="pb-3" style="flex: 1; max-width: 300px !important; text-align: center;">Nombre del Comercio</div>
 			
 			<!-- aquí va el logo del comercio -->
 			<div id="logoOwner222" style="flex: 0 0 50px; text-align: center; margin: 0rem 2rem 0 0;">
@@ -68,7 +68,7 @@
 			</div>
 			
 			<!-- aquí va el nombre del usuario -->
-			<div id="nombreUserArriba" style="flex: 1; text-align: center; max-width: 300px !important; overflow: hidden;"></div>
+			<div id="nombreUserArriba" class="pb-3" style="flex: 1; text-align: center; max-width: 300px !important; overflow: hidden;"></div>
 		</div>
 		<!-- aquí van los iconos fontAwesome del menú -->
 		<div id="menuLogos">
@@ -1008,12 +1008,12 @@
 	<div class="modal fade" id="modelNews" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index:999999999999999999999999999 !important">
 		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content" id="noticiasColor">
-				<div class="modal-header" style="">
+				<div class="modal-header">
 					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Noticias</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="location.reload();"></button>
 				</div>
 				<div class="modal-body">
-					<p>Las noticias se ordenan de la mas reciente a las mas antigua.</p>
+					<p>Las noticias se ordenan de la más reciente a las más antiguas.</p>
 					<div id="newsMmodal">
 						<h3>No hay nuevas noticias hoy</h3>
 					</div>
@@ -1024,7 +1024,19 @@
 				</div>
 			</div>
 		</div>
+	<!-- sirve para elminar el flag de news del sessionstorage -->
+	<script>
+		// Escuchar el evento de apertura del modal
+		const modelNews = document.getElementById('modelNews');
+		modelNews.addEventListener('show.bs.modal', async function () {
+			console.log("Se abrio el modal newssssssssssssssssssssssssss")
+			// Eliminar el flagNews del sessionStorage
+			sessionStorage.setItem("flagNews", JSON.stringify({ flagNews: true }));
+			sessionStorage.setItem("flagNewsCerrado", JSON.stringify({ flagNewsCerrado: true }));
+		});
+	</script>
 	</div>
+	
 
 	<!-- Modal Icono en tu pantalla-->
 	<div class="modal fade" id="icon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -3356,9 +3368,9 @@
 			document.addEventListener('DOMContentLoaded', (event) => {
 				// Obtener los datos almacenados en sessionStorage
 				// Función para redirigir a la URL base
-				function goToHome() {
+				async function goToHome() {
 					//console.log("apreto botonito", serverDueno);
-					window.location.href = dominioUrl(); // Corregido: uso de template literals
+					window.location.href = await dominioUrl(); // Corregido: uso de template literals
 				}
 		
 				// Asegurarse de que el elemento existe antes de asignar el evento

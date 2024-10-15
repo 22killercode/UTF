@@ -1,8 +1,7 @@
     async function mpWallet(dataCliente, dataOwner) {
       try {
-          //console.log("Oprimió el botón de pago mpWallet id=btnPagar007", dataOwner._id, dataCliente._id)
-          const pedidoCarrito      = sessionStorage.getItem('pedidoCarritoPendientePago');
-          const pedidoPendCobrar   = JSON.parse(pedidoCarrito)
+          console.log("Oprimió el botón de pago mpWallet id=btnPagar007", dataOwner._id, dataCliente._id)
+          const pedidoPendCobrar   = JSON.parse(sessionStorage.getItem('pedidoCarritoPendientePago'))
           const jwToken = sessionStorage.getItem('jwtToken') 
           const payer = {
             firstName: dataCliente.nombre,
@@ -20,7 +19,7 @@
             return
           }
 
-          updatePrice(pedidoPendCobrar);
+          await updatePrice(pedidoPendCobrar);
 
           dataCliente.payer = payer 
           dataCliente.idOwner = dataOwner._id
@@ -28,14 +27,16 @@
           let amount = 0
           const costEnvio = JSON.parse(sessionStorage.getItem("costoDelivery")) || [];
           if (costEnvio.length >= 1) {
-            costEnvio[1]
+            amount = costEnvio[1]
           }
 
           const data = {dataCliente, pedidoPendCobrar, jwToken, amount}
 
           const idEnpointCheq = JSON.parse(sessionStorage.getItem("idEndpoints"))
-          const idEnpointCheq125 = idEnpointCheq[125].split(',');
-          fetch(`${idEnpointCheq125}`, {
+          
+          console.log("Que mpWalletmpWalletmpWalletmpWallet", idEnpointCheq[125])
+
+          fetch(`${idEnpointCheq[125]}`, {
             //fetch(`${urlServer}MPwallets`, {
             method: 'POST',
             headers: {
@@ -50,7 +51,7 @@
           .then(data => {
             ocultarModalLoading()
             if (data.error) {
-              console.log("Error al crear la preferencia de pago", data)
+              console.log("Error al crear la preferencia de pago desde mpWallet", data)
               mostrarAlerta(data.error)
               return
             }
@@ -121,9 +122,9 @@
                 // Manejo del error
                 console.error("Error durante el pago con Wallet:", error);
                 if (error.cause === 'get_preference_details_failed') {
-                  return
-                  alert("Hubo un problema al obtener los detalles de la preferencia. Por favor, inténtalo de nuevo.");
+                  mostrarAlerta("Hubo un problema al obtener los detalles de la preferencia. Por favor, inténtalo de nuevo.");
                   // Aquí puedes intentar volver a solicitar los detalles o redirigir al usuario a una página de error
+                  return
                 }
               },
               onReady: async (data) => {
@@ -183,8 +184,6 @@
       }
     }
 
-
-
     // solo cuanod paga con tarjeta de credito
     function updatePrice(pedidoRender) {
 
@@ -228,10 +227,14 @@
       // Actualiza el total de la compra en el elemento summary-total
       // Sumar todos los elementos del array totalCompra
       const sumaTotalCompra = totalCompra.reduce((a, b) => a + b, 0) + costoDeliveryPush;
+      console.log("Que sumo el sumaTotalCompra", sumaTotalCompra)
       document.getElementById("summary-total").innerHTML = "Total a pagar: " + sumaTotalCompra.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
+
+      return sumaTotalCompra
 
     }
 
     document.getElementById("cerrarModalPagos").addEventListener("click", function () {
       location.reload();
     });
+ 

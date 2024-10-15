@@ -2,6 +2,18 @@
 @import url(font-awesome.min.css);
 @import url("https://fonts.googleapis.com/css?family=Lobster|Open+Sans:300,400,600,700,800");
 
+/* Eliminar los spinners en WebKit (Chrome, Safari, etc.) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Eliminar los spinners en Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 
 	body {
 		-moz-box-sizing: border-box;
