@@ -72,7 +72,6 @@
 			myModal.hide(); // Cerrar el modal
 		});
 	}
-	
 
 	function mostrarInfo(mensajeInfo, idOwner) {
 		// Obtener el elemento con el id "modalAlert"
@@ -197,7 +196,6 @@
 
 		});
 	}
-	
 
 	//Mensajes de advertincia y confirmacion
 	function mostrarAlerta(mensajeAlert) {
@@ -298,7 +296,7 @@
 					<h5 class="modal-title" id="exampleModalLabel" >¡Bien hecho!</h5>
 				</div>
 				<br>
-				<iframe class="justify-content-center align-items-center" style="border-radius: 1rem;" src="https://giphy.com/embed/f3orDrv1hzyMvgI3y6" width="150" height="150" frameborder="0" class="giphy-embed" allowfullscreen></iframe>
+				<iframe class="justify-content-center align-items-center" style="border-radius: 1rem;" width="150" height="150" frameborder="0" class="giphy-embed" allowfullscreen></iframe>
 				<div class="modal-body text-center">
 					<h5>${mensajeExito}</h5>
 				</div>
@@ -542,3 +540,4 @@
 		}
 	}
 	
+

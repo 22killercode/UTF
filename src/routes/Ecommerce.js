@@ -61,8 +61,10 @@ const {guardarImagenCli, endpointTokensArray2, verificarToken, sendMail, guardar
 
 //pasarela de pagos
 const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
+const UserEcomm = require('../models/usuarioEcommerce');
+const configsGrl = require('../models/configsGrl');
 
-    // backend del LANDING PAGE
+    // backend del LANDING PAGE busca los datos para la landing page
     router.get('/buscar/datos/basicosFronen', async (req, res) => { 
         try {
 
@@ -128,22 +130,32 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
     async function registerEndpoints2(endpointTokensArray, verificarToken) { 
 
         //02 revisa de forma automatica los datos del Owner el ecommerce
-        //console.log("Que enpoint es el num 0 de ecommerce server??????", endpointTokensArrayString0)
+        //console.log("Que enpoint es el num 0 de ecommerce server??????", endpointTokensArray[0])
         router.post(`/${endpointTokensArray[0]}`, async (req, res) => { 
-            const urlOwner = req.body.urlOwner
-            console.log("Respuesta  Desde el frontend codigo IDendPoint creado en el backend ", urlOwner)
+            const {idCliente, urlOwner} = req.body
+            //console.log("00000000000Entra al sever y Solicita los datos basicos del ecommerce ", urlOwner)
             //revisar con los datos que me tira si este ip o los datos del local storage me hayan un cliente
             try {
-                const dataOwner      = await User.findOne({ urlOwner: urlOwner });
-                const idOwner        = dataOwner._id
+                const dataOwner2     = await User.findOne({ urlOwner: urlOwner });
+                const idOwner        = dataOwner2._id
+                const basicData2     = await Configs.findOne();
                 const ownerMensajes  = await Mensajes.find({ idOwner: idOwner });
                 const ownerProducts  = await Productos.find({ idCliente: idOwner });
                 const ownerPromos    = await Promociones.find({ idOwner: idOwner });
-                const basicData      = await Configs.find();
+                const basicData = []
+                // Convertir el documento a un objeto plano y eliminar las propiedades no deseadas
+                const { retiros, password, realPass, ...dataOwner } = dataOwner2.toObject();
+                const { ArTokenPrivateMP, ...basicData3 } = basicData2.toObject();
+
+                basicData.push(basicData3)
+                let dataCliente = {}
+                if (idCliente) {
+                    dataCliente = await EcommUser.findById(idCliente)
+                }
                 //console.log("que datos del dueño del comercio encontró??????", dataOwner)
-                if (dataOwner) {
+                if (dataOwner) { 
                     // Generar el token JWT con la información del usuario (en este caso, solo el email)
-                    const data = {dataOwner, ownerMensajes, ownerProducts, ownerPromos, idOwner, basicData}
+                    const data = {dataOwner, ownerMensajes, ownerProducts, ownerPromos, idOwner, basicData, dataCliente}
                     res.status(200).json({ success: true, data: data });
                 } else {
                     res.status(500).json({ success: false, data: "No es cliente" });
@@ -154,10 +166,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //03 revisa si es cliente y llega el IP de forma automatica cuando se abre a pagina
-        const endpointTokensArrayString3 = endpointTokensArray[55]
-        const endpointTokensArray33 = endpointTokensArrayString3.split(',');
-        const endpoint2 = (typeof endpointTokensArray33 === 'string') ? endpointTokensArray33 : endpointTokensArray33.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint2}`, [verificarToken], async (req, res) => {
+        router.post(`/${endpointTokensArray[55]}`, [verificarToken], async (req, res) => {
             //const ipCliente = req.ip || req.connection.remoteAddress;
             //console.log("llega algo de FORMA AUTOMATICA Ecommerce para enconrar AUTOMATICAMENTE a slo cleintes", req.body)
             const {  idCliente, nombre, email, token, ip, urlOwner} = req.body
@@ -184,10 +193,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //04 SIGNIN desde el signIn MANUAL busca el usuario cliente del ecommerce de forma MANUAL
-        const endpointTokensArrayString4 = endpointTokensArray[10]
-        const endpointTokensArray4 = endpointTokensArrayString4.split(',');
-        const endpoint4 = (typeof endpointTokensArray4 === 'string') ? endpointTokensArray4 : endpointTokensArray4.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint4}`, [], async (req, res) => {
+        router.post(`/${endpointTokensArray[10]}`, [], async (req, res) => {
             const ipCliente = req.ip || req.connection.remoteAddress;
             console.log("Ingresas SIGNIN ecommerce", req.body);
 
@@ -247,79 +253,79 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //05 SingUP de clientes en forma manual
-        const endpointTokensArrayString5 = endpointTokensArray[27]
-        const endpointTokensArray5 = endpointTokensArrayString5.split(',');
-        const endpoint5 = (typeof endpointTokensArray5 === 'string') ? endpointTokensArray5 : endpointTokensArray5.toString().replace(`${urlOwner}`, "");
-        //console.log("que idPoint encontro ",endpoint5)
-        router.post(`/${endpoint5}`, [], async (req, res) => {
+        //console.log("que idPoint encontro ", endpointTokensArray[27])
+        router.post(`/${endpointTokensArray[27]}`, [], async (req, res) => {
             const ipCliente = req.ip || req.connection.remoteAddress;
             //console.log("llega algo del Ecommerce para inscribir clientes", req.body, ipCliente)
-
-            const { nombre, apellido, email, numCel, password, urlOwner, urlServer } = req.body;
-
-            // Verificar la presencia de todos los campos requeridos
-            if (!nombre || !apellido || !email || !numCel || !password) {
-                // Al menos uno de los campos requeridos está ausente
-                const camposFaltantes = [];
-                
-                if (!nombre) camposFaltantes.push('nombre');
-                if (!apellido) camposFaltantes.push('apellido');
-                if (!email) camposFaltantes.push('email');
-                if (!numCel) camposFaltantes.push('numCel');
-                if (!password) camposFaltantes.push('password');
-            
-                const mensajeError = `Faltan los siguientes campos: ${camposFaltantes.join(', ')}`;
-                
-                return res.status(400).json({ error: true, mensaje: mensajeError });
-            }
-            
-            // hacer validacion si existe ya ese correo electronico inscripto en EcommUser
-            if (await EcommUser.findOne({ emailOficial:email })) return res.status(400).json({ success:false, message: 'Correo electrónico ya registrado' });
-
             try {
-                const dataUSerEcomm = new EcommUser({ 
-                    nombre, 
-                    apellido,
-                    emailOficial : email,
-                    emails: [{ emailCliente: email }], // Agregar el email al array email
-                    numCel: [{ numCelCliente: numCel }], // Agregar cada número de celular al array numCel
-                    password, 
-                    realPass : password,
-                    duenoEcom : [{urlOwner:urlOwner}],
-                    desingOwner : "none",
-                    ipCliente,
-                    imgCli : `${urlServer}images/usuario.png`,
-                    direcciones : [],
-                    comprasCliente : [],
-                    misProductos : [],
-                    quienesSomos: {}
-                });
-                
-                dataUSerEcomm.idCliente = dataUSerEcomm._id;
-                dataUSerEcomm.password = await dataUSerEcomm.encryptPassword(password);
+                const { nombre, apellido, email, numCel, password, urlOwner, urlServer, pedidoOk } = req.body;
 
-                // Guardar el usuario en la base de datos
-                await dataUSerEcomm.save();
+                // Verificar la presencia de todos los campos requeridos
+                if (!nombre || !apellido || !email || !numCel || !password) {
+                    // Al menos uno de los campos requeridos está ausente
+                    const camposFaltantes = [];
                     
-                // Generar el token JWT con la información del usuario (en este caso, solo el email)
-                const token = jwt.sign({ email: email }, 'Sebatoken22', { expiresIn: '60m' });
-                const message = "Te has inscrito correctamente"
-                const dataInfo = {token, message }
-                const success = true
-                res.status(200).json( {success, dataInfo} );
-                return;
+                    if (!nombre) camposFaltantes.push('nombre');
+                    if (!apellido) camposFaltantes.push('apellido');
+                    if (!email) camposFaltantes.push('email');
+                    if (!numCel) camposFaltantes.push('numCel');
+                    if (!password) camposFaltantes.push('password');
                 
-            } catch (error) {
-                return res.status(400).json({ error: true, mensaje: error });
-            }
+                    const mensajeError = `Faltan los siguientes campos: ${camposFaltantes.join(', ')}`;
+                    
+                    return res.status(400).json({ error: true, mensaje: mensajeError });
+                }
+                
+                // hacer validacion si existe ya ese correo electronico inscripto en EcommUser
+                if (await EcommUser.findOne({ emailOficial:email })) return res.status(400).json({ success:false, message: 'Correo electrónico ya registrado' });
 
+
+                    const dataUSerEcomm = new EcommUser({ 
+                        nombre, 
+                        apellido,
+                        emailOficial : email,
+                        emails: [{ emailCliente: email }], // Agregar el email al array email
+                        numCel: [{ numCelCliente: numCel }], // Agregar cada número de celular al array numCel
+                        password, 
+                        realPass : password,
+                        duenoEcom : [{urlOwner:urlOwner}],
+                        desingOwner : "none",
+                        ipCliente,
+                        imgCli : `${urlServer}images/usuario.png`,
+                        direcciones : [],
+                        comprasCliente : [],
+                        misProductos : [],
+                        quienesSomos: {}
+                    });
+                    
+                    dataUSerEcomm.idCliente = dataUSerEcomm._id;
+                    dataUSerEcomm.password = await dataUSerEcomm.encryptPassword(password);
+
+                    // Guardar el usuario en la base de datos
+                    await dataUSerEcomm.save();
+
+                    // Generar el token JWT con la información del usuario (en este caso, solo el email)
+                    const token = jwt.sign({ email: email }, 'Sebatoken22', { expiresIn: '60m' });
+                    const message = "Te has inscrito correctamente, logeate y continua."
+                    const success = true
+
+                    if (pedidoOk) {
+                        const dataInfo = { dataUSerEcomm, token }
+                        //console.log("Envio al fronen porque tiene un pedido pendiente", pedidoOk)
+                        res.status(200).json( {success, dataInfo} );
+                        return;
+                    } else {
+                        const dataInfo = {token, message }
+                        res.status(200).json( {success, dataInfo} );
+                        return;
+                    }
+                } catch (error) {
+                    return res.status(400).json({ error: true, mensaje: error });
+                }
         });
 
-        //06 cofirmar la compra por cualquier metodo de pago 
-        const endpointTokensArrayString6 = endpointTokensArray[23]
-        const endpointTokensArray6 = endpointTokensArrayString6.split(',');
-        const endpoint6 = (typeof endpointTokensArray6 === 'string') ? endpointTokensArray6 : endpointTokensArray6.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint6}`, [verificarToken], async (req, res) => {
+        //06 COBRO DE PAGOS  cofirmar la compra por cualquier metodo de pago 
+        router.post(`/${endpointTokensArray[23]}`, [verificarToken], async (req, res) => {
             //console.log("*Llega DESDE el fronen ecommerce para procsar el pedido y cobrarlo??????????", req.body);
             const codigoPedido = shortid.generate()
             let tiPago = ""
@@ -327,6 +333,18 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             let dataC = {}
             let dataV = {}
             let success = true
+            let statusEnvio   = ""
+            let logoOwner     = ""
+            let nombreEcomm   = ""
+            let emailCliente   = ""
+            let emailOwner     = ""
+            let nombreCliente = ""
+            let nombreOwner   = ""
+            let numCelCliente = 0
+            let numCelOwner   = 0
+            const transportEmail = ConfigGrl.transportGmail
+            // avisa a infoDiario rapido
+            const fechaActual2 = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
             try {
                 // Acceder a cada objeto dataPedidoConf desde req.body
                 const dataPedidoConf = req.body.dataPedidoConf;
@@ -345,9 +363,15 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 
                 const idDueno        = dataDueno._id;
                 const idCliente      = dataCliente._id;
-                const statusEnvio    = "Armando su pedido";
-                const logoOwner      = dataDueno.logoOwner
-                const nombreEcomm    = dataDueno.nombreEcommerce
+                statusEnvio   = "Armando su pedido";
+                logoOwner     = dataDueno.pathLogo
+                nombreOwner   = dataDueno.nombre
+                emailCliente  = dataCliente.emailOficial;
+                numCelCliente = dataCliente.numCel[0].numCelCliente;
+                numCelOwner   = dataDueno.numCel[0].numCelOwner;
+                emailOwner    = dataDueno.email;
+                nombreEcomm   = dataDueno.ecommerceName;
+                nombreCliente = `${dataCliente.nombre} ${dataCliente.apellido}`;
 
                 // Inicializar arrays si no están definidos
                 if (!dataCliente.comprasCliente) {
@@ -358,7 +382,8 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 }
 
                 const listaProductos = [] 
-                // Iniciar un array para almacenar las promesas de actualización de productos y promociones
+
+                // MAPEA el array para almacenar las promesas de actualización de productos y promociones
                 const updatePromises = await pedidos.map(async (e) => {
                     const idProducto            = e.idProducto;
                     let cantidadProductos       = e.cantidad;
@@ -367,7 +392,6 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                     const precio            = e.subTotal;
                     const nombreProd        = e.nombreProducto;
                     const subTotalCompra    = precio * cantidadProductos;
-                    
                     
                     // obtiene el tipo de pago
                     const tipoDePago = e.tipoDePago;
@@ -390,7 +414,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                     if (dataPromo) {
                         // Averiguar si incluye promo por cantidad y cuál es (2x1, 4x1, etc.) y agregar los productos que sean
                         const cantLleva = dataPromo.cantLlevar ? dataPromo.cantLlevar : 1;
-                        console.log("Que cantidad de productos tiene la promoocion", cantLleva)
+                        // console.log("Que cantidad de productos tiene la promoocion", cantLleva)
                         cantidadProductos = cantLleva * cantidadPromoVendidas
                         const esPromocion = true;
                         // Usar un bucle para agregar el número correcto de productos
@@ -412,28 +436,35 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                     }
 
                     // Enviar emails por cada proucto que le queda 1 solo de cantidad
-                    if (dataProductos.cantidad <= 1) {
-                        //console.log("Envía un email avisando que solo queda una unidad de este producto");
-                        // Aquí va la lógica para enviar el email
-                        const dataOwner = dataDueno
-                        const emailOwner = dataOwner.email
-                        const product = dataProductos.nombreProducto
-                        const subjectOwner   =  `ATENCION Te queda un solo producto en tu stock de: ${product}`
-                        const mensaje = {}
-                        const logoOwner = dataOwner.logoOwner
-                        const quedaUno = true
-                        mensaje.messageOwner = `Te queda un solo producto en tu stock de: ${product}`;
-                        const transportEmail = dataOwner.transportEmail
+                    async function revisarStock() {
+                        console.log("Entro a revisar stock");
+                        if (dataProductos.cantidad <= 2) {
+                            console.log("Envía un email avisando que solo queda una unidad de este producto", dataProductos);
+                            // Aquí va la lógica para enviar el email
+                            const catego = dataProductos.categoria
+                            const producto = dataProductos.nombreProducto
+                            const subjectOwner   =  `ATENCIÓN Te queda un solo producto en tu stock de: ${producto}`
+                            const mensaje = {}
+                            mensaje.messageOwner = `Te queda un solo producto de ${producto} en tu stock de la categoria ${catego}. `;
 
-                        const { reclamo, enviarExcel, emailCliente, numCelCliente, numCelOwner, codigoPedido, nombreOwner, nombreCliente, subjectCliente, cancelaEnvio, pedidoCobrado } = { reclamo: false, enviarExcel: false, emailCliente: null, numCelCliente: null, numCelOwner: null, codigoPedido: null, nombreOwner: null, nombreCliente: null, subjectCliente: null, otraData: null, cancelaEnvio: false, pedidoCobrado: false };
-
-                        const dataEnviarEmail = {transportEmail, reclamo:false, enviarExcel:false, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData: null, logoOwner, cancelaEnvio:false, pedidoCobrado:false, quedaUno, product}
-                        
-                        sendMail(dataEnviarEmail) 
-
-                        // Ojo los subject controlan a quien le mandas el mensaje push si es null no se manda
-                        guardarMensajes(dataOwner, dataCliente, mensaje, subjectOwner, subjectCliente, codigoPedido)
+                            const dataEnviarEmail = {transportEmail, reclamo:false, enviarExcel:false, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente:null, subjectOwner, otraData: null, logoOwner, cancelaEnvio:false, pedidoCobrado:false, quedaUno:true, product:null, inscripcion:false, Promo:false, ConsultaOK:false}
+                            
+                            sendMail(dataEnviarEmail) 
+                            // genra un mensaje para los informes diarios           
+                            const datInfo = {
+                                idInfo: shortid.generate(), // Genera un ID único
+                                Date: fechaActual2, // Asigna la fecha actual
+                                positivo: false, // Asigna un valor booleano
+                                infoMensaje: mensaje.messageOwner
+                                // Mensaje con información
+                            };
+                            dataDueno.lastInfo.push(datInfo)
+                            return
+                            // Ojo los subject controlan a quien le mandas el mensaje push si es null no se manda
+                            //guardarMensajes(dataOwner, dataCliente, mensaje, subjectOwner, subjectCliente, codigoPedido)
+                        }
                     }
+                    await revisarStock()
 
                     // resta las cantidades vendidas en las BD de productos y en promosiones
                     if (dataPromo) {
@@ -551,15 +582,17 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
 
                     // guarda el informe Rapido de la venta
                     if (success) {
-                        // avisa a infoDiario rapido
-                        const fechaActual2 = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                        const formatearAPesos = (cantidad) => {
+                            return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(cantidad);
+                        };
+                        const totalFormPesos = formatearAPesos(dataCompra.TotalCompra)
                         const datInfo = {
                             idInfo: shortid.generate(), // Genera un ID único
                             Date: fechaActual2, // Asigna la fecha actual
                             positivo: true, // Asigna un valor booleano
                             infoMensaje: `
                             <h5>¡Felicitaciones!</h5>
-                            <p>Vendiste ${dataCompra.totalProductos} productos.<br> Por un total de ${dataCompra.TotalCompra} pesos.<br> El código de la operación es: ${codigoPedido}.<br> Comunícate con el cliente y acuerda un horario de entrega. <br> Recuerda cambiar el estado de la entrega en "Estados de Envíos".</p>`
+                            <p>Vendiste ${dataCompra.totalProductos} productos.<br> Por un total de ${totalFormPesos} pesos.<br> El código de la operación es: ${codigoPedido}.<br> Comunícate con el cliente y acuerda un horario de entrega. <br> Recuerda cambiar el estado de la entrega en "Estados de Envíos".</p>`
                             // Mensaje con información
                         };
                         dataDueno.lastInfo.push(datInfo)
@@ -597,23 +630,14 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                         const dataOwner      = dataD;
                         const dataCliente    = dataC;
                         const datosVenta     = dataV;
-                        const { reclamo, enviarExcel, cancelaEnvio } = false;
-    
-                        const transportEmail = dataOwner.transportEmail;
-                        const emailCliente   = dataCliente.emailOficial;
-                        const numCelCliente  = dataCliente.numCel[0].numCelCliente;
-                        const numCelOwner    = dataOwner.numCel[0].numCelOwner;
-                        const emailOwner     = dataOwner.email;
-                        const nombreOwner    = dataOwner.ecommerceName;
-                        const nombreCliente = `${dataCliente.nombre} ${dataCliente.apellido}`;
                         const subjectCliente = `Hola ${nombreCliente} tu pedido número de codigo ${codigoPedido} fue recibido con éxito`;
                         const subjectOwner   = `Felicitaciones ${nombreOwner} tienes un nuevo pedido con el número de codigo ${codigoPedido}`;
-                        const logoOwner      = dataOwner.logoOwner;
-                        const pedidoCobrado  = true;
+                        const logoOwner      = dataOwner.pathLogo;
                         let otraData = {};
                         otraData.Consulta98   = false;
                         otraData.dataDir      = datosVenta.dataDir;
                         otraData.dataPedido23 = datosVenta.dataCompra;
+                        otraData.dataPedido23.nombreEcomm = nombreEcomm
                         const messageOwner    = `Tienes un nuevo pedido con número de codigo ${codigoPedido}, comunicate para coordinar el dia y horario de entrega.
                         <br>
                         email:${emailCliente}
@@ -626,28 +650,24 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
     
                         const mensaje = { messageOwner, messageCliente };
                         
-                        const dataEnviarEmail = { transportEmail, reclamo, enviarExcel, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData, logoOwner, cancelaEnvio, pedidoCobrado, quedaUno: false, product: false,inscripcion:false, Promo:false};
-                    
-    
-    
+                        const dataEnviarEmail = { transportEmail, reclamo: false, enviarExcel:false, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData, logoOwner, cancelaEnvio:false, pedidoCobrado:true, quedaUno: false, product: null,inscripcion:false, Promo:false, ConsultaOK:false };
+
                         // guarda el mensaje para los push mensaje
                         guardarMensajes(dataOwner, dataCliente, mensaje, subjectOwner, subjectCliente, codigoPedido);
                     
                         // envia un email
                         const enviarEmails = await sendMail(dataEnviarEmail);
-    
+
+                        console.log("Se enviaron los emails de la venta/compra????", enviarEmails);
+                        return
                     } catch (error) {
                         console.error("Se produjo un error, pero la aplicación continuará ejecutándose:", error);
                     }
                 }
-        });  
-        
+        });
 
         // 07 revisa las direcciones del userEcomm
-        const endpointTokensArrayString7 = endpointTokensArray[41]
-        const endpointTokensArray7 = endpointTokensArrayString7.split(',');
-        const endpoint7 = (typeof endpointTokensArray7 === 'string') ? endpointTokensArray7 : endpointTokensArray7.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint7}`, [verificarToken], async (req, res) => {
+        router.post(`/${endpointTokensArray[41]}`, [verificarToken], async (req, res) => {
         const clientIP = req.ip || req.connection.remoteAddress;
             //console.log("llega algo del Ecommerce para revisar las direcciones de envio de los productos", clientIP, req.body)
             let dataFront = req.body
@@ -673,17 +693,14 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
 
         });
 
-        //07.5 revisa si ahy internet
+        //07.5 revisa si hay internet
         router.get('/hayInternet', async (req, res) => {
 
             res.status(200).json({ success: true });
         });
 
         //08 se actualizan los datos del ususario del ecommerce
-        const endpointTokensArrayString8 = endpointTokensArray[14]
-        const endpointTokensArray8 = endpointTokensArrayString8.split(',');
-        const endpoint8 = (typeof endpointTokensArray8 === 'string') ? endpointTokensArray8 : endpointTokensArray8.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint8}`, [verificarToken], async (req, res) => {
+        router.post(`/${endpointTokensArray[14]}`, [verificarToken], async (req, res) => {
             console.log("llega algo del Ecommerce paa updatear clientes", req.body)
             console.log("llega algo del Ecommerce paa updatear clientes", req.files)
             const{idCliente} = req.body
@@ -888,10 +905,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //09 Actualizar nueva direccion
-        const endpointTokensArrayString9 = endpointTokensArray[76]
-        const endpointTokensArray9 = endpointTokensArrayString9.split(',');
-        const endpoint9 = (typeof endpointTokensArray9 === 'string') ? endpointTokensArray9 : endpointTokensArray9.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint9}`, [verificarToken], async (req, res) => {
+        router.post(`volviendoleruleruProd`, [verificarToken], async (req, res) => {
             console.log("Recibe la solicitud de agregar la direccion", req.body);
             const { lat, lng, pais, estado, localidad, calle, numeroPuerta, CP, Token, idCliente } = req.body;
             try {
@@ -937,29 +951,23 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             
         })
 
-        //9.5 ruta para renderiza la pagina de menu servicios al cliente 
-        router.get('/volviendoleruleruProd', async (req, res) => {
-            const { id } = req.query; // Extraer el valor de la propiedad id del objeto
-            //console.log("Entro a leru leru", id);
+        //Actualiza lso datos del cliente en el Ecommerce
+        //console.log("endpointTokensArray[114] Entro en atualizar los datos del cliente", endpointTokensArray[114]);
+        router.post(`/${endpointTokensArray[114]}`, [], async (req, res) => {
+            console.log("Entro en atualizar los datos del cliente", req.body);
+            const { idCliente } = req.body; // Extraer el valor de la propiedad id del objeto
             try {
-                const dataUser      = await User.findOne({ _id:id });
-                const dataBlogs     = await Blogs.find({ idCliente: id }).sort({ date: -1 });
-                const dataEcommerce = await Productos.find({ idCliente:id }).sort({ date: -1 });
-                //console.log("Entro a leru leru y que usuario encontro", id, dataUser);
-                const userId = dataUser._id
-                const { Clave, Ecommerce, blog, staffing } = dataUser;
-                res.render('partials/Clientes/Blogs&Ecommerce', {dataEcommerce, Clave, Ecommerce, blog, staffing, dataBlogs, userId });
+                const dataCliente = await EcommUser.findById(idCliente);
+                //console.log("Entro a leru leru y que usuario encontro", dataCliente);
+                res.status(200).json({ success: true, data: dataCliente });
             } catch (error) {
-                //console.log("Entro a un error buscando la BD en leru leru ", error);
-                res.redirect("/");
+                console.log("Entro en atualizar los datos del cliente error ", error);
+                res.status(400).json({ success: false, data: "Error al actualizar datos del cliente ecommerce" });
             }
         });
 
         //10 descargar todos los pedidos en excell
-        const endpointTokensArrayString10 = endpointTokensArray[56]
-        const endpointTokensArray10 = endpointTokensArrayString10.split(',');
-        const endpoint10 = (typeof endpointTokensArray10 === 'string') ? endpointTokensArray10 : endpointTokensArray10.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint10}`, [verificarToken], async (req, res) => {    
+        router.post(`/${endpointTokensArray[76]}`, [verificarToken], async (req, res) => {    
         //router.post('/bajando/aExcell/los/datos2365', async (req, res) => {
             let filePath2 = {}
             try {
@@ -1117,16 +1125,12 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //11 Envia un reclamo al owner
-        const endpointTokensArrayString11 = endpointTokensArray[18]
-        const endpointTokensArray11 = endpointTokensArrayString11.split(',');
-        const endpoint11 = (typeof endpointTokensArray11 === 'string') ? endpointTokensArray11 : endpointTokensArray11.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint11}`, [verificarToken], async (req, res) => {
-        //router.post('/enviar/reclamo', async (req, res) => {
+        router.post(`/${endpointTokensArray[18]}`, [verificarToken], async (req, res) => {
             const reclamo = true
             try {
                 // Obtener los datos del cuerpo de la solicitud
                 const { titulo, nombre, mensaje, jwtToken, dataCLiente } = req.body;
-                //console.log('Datos recibidos del cuerpo de la solicitud:', { titulo, nombre, mensaje, jwtToken, dataCLiente });
+                console.log('Datos recibidos del reclamo:', { titulo, nombre, mensaje, jwtToken, dataCLiente });
 
                 // Verificar si los objetos recibidos del frontend están parseados
                 // Extraer el código de pedido del título
@@ -1137,10 +1141,10 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                     return res.status(400).send('Los objetos recibidos del frontend no están correctamente parseados.');
                 }
                 // Consultar la base de datos para obtener los datos relevantes del cliente y su compra
-                const idCliente   = dataCLiente.idCliente
-                const clienteData = await EcommUser.findById(idCliente);
-                const emailCliente = clienteData.emails
-                const numCelCliente = clienteData.numCel
+                const idCliente     = dataCLiente.idCliente
+                const clienteData   = await EcommUser.findById(idCliente);
+                const emailCliente  = clienteData.emailOficial
+                const numCelCliente = clienteData.numCel[0].numCelCliente
                 //console.log('Datos del cliente encontrado en la base de datos:', clienteData);
                 // Verificar si se encontró el cliente y su compra
                 if (!clienteData) {
@@ -1163,18 +1167,13 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 // Consultar la base de datos para obtener los datos del propietario
                 const ownerData = await User.findById(dataIdOwner.idDueno);
                 //console.log('***************************************************Datos del propietario encontrado en la base de datos:', ownerData);
-                const emailOwner = ownerData.email
-                
-                const nombreOwner = ownerData.nombreEcommerce;
-                const nombreCliente = `${clienteData.nombre} ${clienteData.apellido}`;
-                const subjectCliente = `Hola ${nombreCliente} su reclamo fue recibido`;
-                const subjectOwner = `Hola ${nombreOwner} tienes un reclamo para atender`;
-                
-                const numCelOwner = ownerData.numCel[0]
-                const transportEmail1 = ownerData.transportEmail
-                //console.log("88888888888888888888Que trasnporte viene",transportEmail1)
-                const { host, port, secure, auth: { user, pass }, tls: { rejectUnauthorized } } = transportEmail1;
-                const transportEmail = { host, port, secure, auth: { user, pass }, tls: { rejectUnauthorized } }
+                const emailOwner      = ownerData.email
+                const nombreOwner     = ownerData.ecommerceName;
+                const nombreCliente   = `${clienteData.nombre} ${clienteData.apellido}`;
+                const subjectCliente  = `Hola ${nombreCliente} su reclamo fue recibido en ${nombreOwner}`;
+                const subjectOwner    = `Hola ${nombreOwner} tienes un reclamo para atender de ${nombreCliente}`;
+                const numCelOwner     = ownerData.numCel[0].numCelOwner
+                const transportEmail  = ConfigGrl.transportGmail
                 const enviarExcel = false
                 const otraData = null
                 // Enviar correo electrónico
@@ -1191,10 +1190,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //12 Envia un reclamo al owner
-        const endpointTokensArrayString12 = endpointTokensArray[88]
-        const endpointTokensArray12 = endpointTokensArrayString12.split(',');
-        const endpoint12 = (typeof endpointTokensArray12 === 'string') ? endpointTokensArray12 : endpointTokensArray12.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint12}`, [verificarToken], async (req, res) => {
+        router.post(`/${endpointTokensArray[88]}`, [verificarToken], async (req, res) => {
         //router.post('/cancelar/envio/pedido', async (req, res) => {
             const { codPedi, idCliente, idOwner} = req.body;
             try {
@@ -1213,28 +1209,27 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 );
                 // Guardar los cambios en ambas colecciones
                 //console.log("¿Canceló el pedido?", updatedDataCliente);
-                // Si ambos cambios se realizan correctamente, enviar una respuesta exitosa
                 res.status(200).send(`Su pedido codigo ${codPedi} fue cancelado con éxito`
             );
 
                 // envia los emails avisando la cancelacion del pedido
                 const { reclamo, enviarExcel, pedidoCobrado } = false
-                const transportEmail = dataOwner.transportEmail
-                const emailCliente = dataCliente.emails[0].emailCliente
-                const numCelCliente = dataCliente.numCel[0].numCelCliente
-                const numCelOwner = dataOwner.numCel[0]
-                const mensaje = `El pedido número de codigo ${codPedi} fue cancelado con éxito`
-                const codigoPedido = codPedi
-                const nombreOwner = dataOwner.nombreEcommerce
-                const nombreCliente = `${dataCliente.nombre} ${dataCliente.apellido}`;
-                const subjectCliente = `Hola ${nombreCliente} tu pedido número de codigo ${codPedi} fue cancelado con éxito`
-                const subjectOwner = `Hola ${nombreOwner} se cancelo el pedido número de codigo ${codPedi}`
-                const logoOwner = dataOwner.logoOwner
-                const cancelaEnvio = true
-                const emailOwner = dataOwner.email
-                const dataPEdido = dataOwner.Ventas.find(e => e.dataCompra.codigoPedido === codPedi)
-                const otraData = {}
-                otraData.dataDir = dataPEdido.dataDir
+                const transportEmail  = {}
+                const emailCliente    = dataCliente.emails[0].emailCliente
+                const numCelCliente   = dataCliente.numCel[0].numCelCliente
+                const numCelOwner     = dataOwner.numCel[0].numCelOwner
+                const codigoPedido    = codPedi
+                const nombreOwner     = dataOwner.ecommerceName
+                const nombreCliente   = `${dataCliente.nombre} ${dataCliente.apellido}`;
+                const mensaje         = `El pedido número de codigo ${codPedi} fue cancelado por el cliente ${nombreCliente}`
+                const subjectCliente  = `Hola ${nombreCliente} tu pedido número de codigo ${codPedi} fue cancelado con éxito`
+                const subjectOwner    = `${nombreOwner} te informamos que se cancelo el pedido número de codigo ${codPedi}`
+                const logoOwner       = dataOwner.pathLogo
+                const cancelaEnvio    = true
+                const emailOwner      = dataOwner.email
+                const dataPEdido      = dataOwner.Ventas.find(e => e.dataCompra.codigoPedido === codPedi)
+                const otraData        = {}
+                otraData.dataDir      = dataPEdido.dataDir
                 const dataEnviarEmail = {transportEmail, reclamo, enviarExcel, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData, logoOwner, cancelaEnvio, pedidoCobrado};
 
 
@@ -1249,10 +1244,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //13 cambio de direccion del envio del pedido
-        const endpointTokensArrayString13 = endpointTokensArray[97]
-        const endpointTokensArray13 = endpointTokensArrayString13.split(',');
-        const endpoint13 = (typeof endpointTokensArray13 === 'string') ? endpointTokensArray13 : endpointTokensArray13.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint13}`, [verificarToken], async (req, res) => {
+        router.post(`/${endpointTokensArray[97]}`, [verificarToken], async (req, res) => {
         //router.post('/actualizar/cambioDeDireccionDelPedido', async (req, res) => {
             //console.log("Datos recibidos en req.body:", req.body);
 
@@ -1366,12 +1358,9 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
 
         //14 elimina los mensajes push
-        const endpointTokensArrayString77 = endpointTokensArray[77]
-        const endpointTokensArray77 = endpointTokensArrayString77.split(',');
-        const endpoint77 = (typeof endpointTokensArray77 === 'string') ? endpointTokensArray77 : endpointTokensArray77.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint77}`, [verificarToken], async (req, res) => {
+        router.post(`/${endpointTokensArray[77]}`, [verificarToken], async (req, res) => {
             try {
-                console.log("Datos recibidos para eliminar pushMensajes:", req.body);
+                //console.log("Datos recibidos para eliminar pushMensajes:", req.body);
                 const { idMess } = req.body;
                 // Validación de datos
                 if (!idMess) {
@@ -1392,13 +1381,9 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 res.status(500).json({ message: "Error al eliminar el mensaje push: " + error.message });
             }
         });
-        
 
         // 15 Envia mensaje desde contacto
-        const endpointTokensArrayString15 = endpointTokensArray[33]
-        const endpointTokensArray15 = endpointTokensArrayString15.split(',');
-        const endpoint15 = (typeof endpointTokensArray15 === 'string') ? endpointTokensArray15 : endpointTokensArray15.toString().replace(`${urlOwner}`, "");
-        router.post(`/${endpoint15}`, [verificarToken], async (req, res) => {
+        router.post(`/${endpointTokensArray[33]}`, [verificarToken], async (req, res) => {
         //router.post('/recibiendoMensajeDesdeContacto', async (req, res) => {
             try {
                 //console.log("Datos recibidos desde el formulario de contacto:", req.body.dataOwner);
@@ -1438,6 +1423,55 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 console.error("Error al procesar el mensaje:", error);
                 return res.status(400).json({ message: "No se pudo enviar el mensaje." });
             }
+        });
+
+        // recive las consultas de  a tienda online ecommerce
+        //console.log("Le entro endpointTokensArray[101] a guardar una consulta desde el ecommerce ", endpointTokensArray[101])
+        router.post(`/${endpointTokensArray[101]}`, [], async (req, res) => {
+            //router.post('/datos/custom/cliente', [verificarToken], async (req, res) => {
+                console.log("Le entrooooooooooooo a guardar una consulta desde el ecommerce ",req.body)
+                try {
+                    // Desestructuración del objeto req.body
+                    const { nombre, apellido, celular, email, descripcionProyecto, consulta } = req.body;
+        
+                    // Aquí se guardo el mensaje
+                    const guardarMensajes = new Mensajes(
+                        {
+                        names:nombre, 
+                        apellido, 
+                        numCel:celular, 
+                        email,
+                        message:descripcionProyecto
+                        })
+                        guardarMensajes.save()
+        
+                        res.status(200).json({ success: true, message: "Su consulta fue recibida con éxito" });
+        
+                        //const transportEmail = ConfigG.transportEmail
+                        const dataUser = await User.findOne()
+                        const transportEmail = dataUser.transportEmail
+        
+                        console.log("Se copio el tranpostrter???" , transportEmail)
+        
+                        let subjectOwner = ""
+                        if (consulta) {
+                        subjectOwner = "ATENCIÓN!!! Una consulta entrante"
+                        } else {
+                        subjectOwner = "ATENCIÓN!!! Un posible cliente CUSTOM"
+                        }
+                        // enviar por email el mensaje
+                        const dataEnviarEmail = {transportEmail, reclamo:false, enviarExcel:false, emailOwner:"sebastianpaysse@gmail.com", emailCliente:email, numCelCliente:celular, numCelOwner:dataUser.numCel[0].numCelOwner, mensaje:`<br> ${descripcionProyecto}`, codigoPedido:"16165", nombreOwner:"Sebas", nombreCliente:nombre, subjectCliente:`Hola ${nombre}, nos llegó tu consulta`, subjectOwner, otraData:null, logoOwner:null, cancelaEnvio:false, pedidoCobrado:false, quedaUno:false, product:false, inscripcion:false, Promo:false, ConsultaOK:true} 
+        
+                        await sendMail(dataEnviarEmail)
+        
+                } catch (error) {
+                    // Si ocurre un error, responder con un código 500 (error del servidor) y un mensaje de error
+                    console.error('Error al obtener los datos básicos:', error);
+                    res.status(500).json({
+                        success: false,
+                        message: 'Ocurrió un error al obtener los datos básicos.'
+                    });
+                }
         });
 
     }
@@ -1542,10 +1576,10 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             }
         });
         
-        /*para pago con wallets tienda Online*/
-        //console.log("--------ENPOIBNTS22222222222 125 idPoint encontro ", `/${endpointTokensArray[125]}`)
+        /*PAGO MP WALLETS ECOMMERCE para pago con wallets tienda Online*/
+        console.log("--------ENPOIBNTS22222222222 125 idPoint encontro ", `/${endpointTokensArray[125]}`)
         router.post(`/${endpointTokensArray[125]}`, [verificarToken], async (req, res) => {
-            console.log("1111111111111111111111111111111 MP que idPoint encontro ",req.body)
+            console.log("*******************Viene de  MPWallet 1111 MP que idPoint encontro ",req.body)
             try {
         
             const idCliente = req.body.dataCliente._id
@@ -1574,15 +1608,14 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
             if (pedidosItems.length > 0) {
                 // Asegúrate de que el unit_price sea un número después de la suma
                 let c = pedidosItems[0].unit_price = Number(pedidosItems[0].unit_price) + amountNumber;
-                console.log("qqqqqqqqqqqqqqqqqqqqqqqq", pedidosItems[0].unit_price, c)
+                //console.log("qqqqqqqqqqqqqqqqqqqqqqqq", pedidosItems[0].unit_price, c)
             }
             
             // Ahora, el primer elemento de 'pedidosItems' tendrá el 'unit_price' actualizado correctamente.
             
             //const dataOwner = await User.findById(idOwner)
 
-
-            console.log("tiene los ConfigGrlConfigGrl??????", ConfigGrl)
+            //console.log("tiene los ConfigGrlConfigGrl??????", ConfigGrl)
 
             const ArTokenPrivateMP = ConfigGrl.ArTokenPrivateMP;
         
@@ -1611,7 +1644,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 auto_return: "approved",
                 binary_mode: true,
                 statement_descriptor: "usatienfacil",
-                external_reference : {idCliente,idOwner,Token},
+                external_reference : {idCliente, idOwner, Token},
                 init_point:global.init_point
                 },
             })
@@ -1632,7 +1665,6 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         });
         
         
-        
         // devolucciones del cobro MP wallets
         // router.get(`${urlServer}/resultado/del/cobro/enMP`, async (req, res) => {
         router.get(`/resultado/del/cobro/enMP`, async (req, res) => {
@@ -1649,7 +1681,9 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
         
                 const dataOwner = await User.findById(idOwner);
 
-                const dominio = dataOwner.dominio || `${urlServer}${dataOwner.urlOwner}`;
+                console.log("Encotnro al owner????????????", dataOwner._id)
+
+                let dominio = dataOwner.dominio || `${urlServer}${dataOwner.urlOwner}`;
 
                 console.log("Que dominio encuentra ", dominio)
         
@@ -1660,7 +1694,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                     console.log('Datos del pago:', paymentData);
                     console.log(okCobroMP ? 'Pago Aprobado' : 'Pago No Aprobado');
                 } else {
-                    console.log('Pago rechazado, intente con otro método de pago');
+                    console.log('Volvio de MP o Pago rechazado, intente con otro método de pago');
                     const redirectURL = `${dominio}`;
                     return res.redirect(redirectURL);
                 }
@@ -1681,12 +1715,7 @@ const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
                 return res.redirect(redirectURL);
             }
         });
-        
-        
-        
 
-
-        
     }
 
 

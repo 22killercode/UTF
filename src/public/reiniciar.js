@@ -89,7 +89,7 @@ console.log("Que hay e el primer basicData", basicData)
     ownerPromos   = JSON.parse(sessionStorage.getItem("ownerPromos")) || [];
     ownerMensajes = JSON.parse(sessionStorage.getItem("ownerMensajes")) || [];
     informeDiario = JSON.parse(sessionStorage.getItem("informeDiario")) || [] ;
-    dataOwner     = JSON.parse(sessionStorage.getItem('ownerData')) || [];
+    dataOwner     = JSON.parse(sessionStorage.getItem('dataOwner')) || [];
 
 
     // let {comisionBasic} = basicData.data.ConfigsOne[0]
@@ -177,18 +177,18 @@ tranposterUser = dataOwner ? dataOwner.tranposterEmailUser || basicData.transpor
             }
 
             const data = await response.json();
-            console.log('Datos recibidos en actualizarData:', data);
+            //console.log('Datos recibidos en actualizarData:', data);
 
             // Maneja los datos recibidos
             const { endPointsIdTokens, jwToken, dataOwner, ownerProducts, ownerPromos, ownerMensajes, basicData, informeDiario } = data.data;
 
             if (data.success) {
-                console.log('La renovación de datos fue un éxito:', data.success);
+                //console.log('La renovación de datos fue un éxito:', data.success);
 
                 // Actualiza los datos en sessionStorage
                 endpoints = endPointsIdTokens;
                 sessionStorage.setItem('endPointsIdTokensCpanel', JSON.stringify(endPointsIdTokens));
-                sessionStorage.setItem('ownerData', JSON.stringify(dataOwner));
+                sessionStorage.setItem('dataOwner', JSON.stringify(dataOwner));
                 sessionStorage.setItem('DataOwnerEcom', JSON.stringify(dataOwner));
                 sessionStorage.setItem('ownerProducts', JSON.stringify(ownerProducts));
                 sessionStorage.setItem('ownerPromos', JSON.stringify(ownerPromos));
@@ -245,7 +245,7 @@ tranposterUser = dataOwner ? dataOwner.tranposterEmailUser || basicData.transpor
                 // Actualiza los datos en sessionStorage
                 endpoints = endPointsIdTokens;
                 sessionStorage.setItem('endPointsIdTokensCpanel', JSON.stringify(endPointsIdTokens));
-                sessionStorage.setItem('ownerData', JSON.stringify(dataOwner));
+                sessionStorage.setItem('dataOwner', JSON.stringify(dataOwner));
                 sessionStorage.setItem('DataOwnerEcom', JSON.stringify(dataOwner));
                 sessionStorage.setItem('ownerProducts', JSON.stringify(ownerProducts));
                 sessionStorage.setItem('ownerPromos', JSON.stringify(ownerPromos));
@@ -419,7 +419,7 @@ tranposterUser = dataOwner ? dataOwner.tranposterEmailUser || basicData.transpor
                 "jwtToken",
                 "idEndpoints",
                 "jwTokenOwner",
-                "ownerData",
+                "dataOwner",
                 "ownerMensajes",
                 "ownerProducts",
                 "ownerPromos",
@@ -773,9 +773,10 @@ tranposterUser = dataOwner ? dataOwner.tranposterEmailUser || basicData.transpor
 
 
 	async function dominioUrl() {
-		const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
-		const basicdata = JSON.parse(sessionStorage.getItem('datosBasicos')) || null;
-		console.log("Entro a buscar el domioURL en index Ecommerce")
+		let dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || null;
+        const urlServer = (JSON.parse(sessionStorage.getItem('datosBasicos'))?.data?.ConfigsOne?.[0]?.urlServer) || (JSON.parse(sessionStorage.getItem('basicdata'))?.[0]?.urlServer) || null;
+
+		console.log("Entro a buscar el domioURL en index Ecommerce", urlServer)
 		let dominio
 		if (dataOwner.dominio) {
 			dominio = dataOwner.dominio;
@@ -783,7 +784,7 @@ tranposterUser = dataOwner ? dataOwner.tranposterEmailUser || basicData.transpor
 			//console.log("Entro por tiene dominio", dominio)
 			return dominio;
 		} else {
-			dominio = basicdata.data.ConfigsOne[0].urlServer + dataOwner.urlOwner;
+			dominio = urlServer + dataOwner.urlOwner;
 			// Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
 			console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominio)
 			return dominio;

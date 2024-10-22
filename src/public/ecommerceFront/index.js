@@ -15,12 +15,15 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 	let coordenadas98789   = {}
 	let longitud1          = {}
 	let latitud1           = {}
+	let direccionCompleta  = {}
 	// costo delivery
 	let costoDelivery      = []
 	let categorias         = {};
 	let categoriasProm     = {}
 	let cheqOkComprar      = true
-
+	// es para mostrar las fotos de lso productos de forma gigante
+	let dataGigante = {}
+	let acum = []
 	let urlOwner = window.location.pathname.split('/')[1];
 
 	//console.log("Que urlOwner encontro desde el path fronen", urlOwner)
@@ -50,100 +53,42 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 			zoomOffset: -1
 		}).addTo(map);
 		
-		// map88 = L.map('map88')
-		// 		// Agrega capa de mosaicos OpenStreetMap al mapa
-		// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		// 	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-		// 	maxZoom: 19,
-		// 	id: 'osm_b&w',
-		// 	tileSize: 512,
-		// 	zoomOffset: -1
-		// }).addTo(map88);
+		map88 = L.map('map88')
+				// Agrega capa de mosaicos OpenStreetMap al mapa
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+			maxZoom: 19,
+			id: 'osm_b&w',
+			tileSize: 512,
+			zoomOffset: -1
+		}).addTo(map88);
 	}
 	mapas()
 	let urlServer = ""
-	let  ownerMensajes, ownerPromos, ownerProducts, basicData	
+	let dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData, dataCliente
 
-	// esta funcion sire para borrar el local storage cuando salis de la aplicasion
-	async function borrarsessionStorage() {
-		sessionStorage.removeItem("ownerEcom");
-        sessionStorage.removeItem("dataOwner");
-        sessionStorage.removeItem("basicData");
-		sessionStorage.removeItem('dataPayOSes');
-        sessionStorage.removeItem('datosBasicos');
-        sessionStorage.removeItem('jwtToken');
-        sessionStorage.removeItem('endPointsIdTokens');
-		sessionStorage.removeItem('idEndpoints');
-        sessionStorage.removeItem('jwTokenOwner');
-		sessionStorage.removeItem('ownerData');
-        sessionStorage.removeItem('ownerMensajes');
-        sessionStorage.removeItem('ownerProducts');
-		sessionStorage.removeItem('ownerPromos');
-		return;
-	}
-	
-	// borrarsessionStorage()
 
-	//Envia todos los prodcutos y el carrito al frontend
+	//Envia todos los productos y el carrito al frontend
 	document.addEventListener('DOMContentLoaded', async function () {
 
 		// agrega el logo al body
 		document.getElementById("insertLogo").innerHTML = `
-<div id="coloratepapa" class="m-4 d-flex flex-column justify-content-center align-items-center vh-100">
-    <div>
-        <img src="images/logomtf.jpg" class="img-fluid rounded mb-4" alt="Logo">
-    </div>
-    <div style="font-size: 4rem;" class="spinner-border text-primary" role="status">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-</div>
+	<div id="coloratepapa" class="m-4 d-flex flex-column justify-content-center align-items-center vh-100">
+		<div>
+			<img src="images/logomtf.jpg" class="img-fluid rounded mb-4" alt="Logo">
+		</div>
+		<div style="font-size: 4rem;" class="spinner-border text-primary" role="status">
+			<span class="visually-hidden" >Loading...</span>
+		</div>
+	</div>
 
 		`;
-
-		// agrega el diseño al ecommerce y obtiene que diseño eligio el owner
-		function agregarClase(desing) {
-			//console.log("Entro a colorear el diseño",desing)
-			if (desing) {
-				// Obtener los elementos por sus IDs y agregarles la clase
-				var elementosIds = ["coloratepapa", "muestraChau",
-					"coloreamePAgos","color23BigImg", "colorCpanelCli2587",
-					"coloredDir", "loadingModal", "colorElsign", "sigIngColor", 
-					"noticiasColor", "coloreame", "coloreame2", "designPromos", 
-					"colorBtnProdProm2", "colorBtnProdProm", "footer", "barraMenuArriba", 
-					"intenertOK", "offcanvasExample", "offcanvasRight", "imagenModal", 
-					"instruccionesUdpated", "exampleModalToggle332", "coloredChangeDir", 
-					"modalReclamos", "modalPedido5998", 
-				]; // Agrega aquí los IDs que desees
-		
-				// agrega lis ide para que se coloren las cardde productos y promos
-				ownerProducts && ownerProducts.length && ownerProducts.forEach(product => 
-					elementosIds.push(`coloreateputo${product._id}`)
-				);
-				ownerPromos && ownerPromos.length && ownerPromos.forEach(product => 
-					elementosIds.push(`coloreateProm${product._id}`)
-				);
-
-				elementosIds.forEach(function(id) {
-					var elemento = document.getElementById(id);
-					// Verificar si el elemento existe antes de agregar la clase
-					if (elemento) {
-						elemento.classList.add(desing);
-					} else {
-						console.warn(`El elemento con ID "${id}" no existe en el DOM.`);
-					}
-				});
-			}
-		}
-		
-		// es para mostrar las fotos de lso productos de forma gigante
-		let dataGigante = {}
 
 		// funciones para obtener y renderizar todos los productos y procesar el pedido al carrito
 		function obtenerProductosYPromociones() {
 			const urlOwner2 = {urlOwner : urlOwner}
 			//console.log("Entro a buscar los productos usando el orlOwner:", urlOwner2)
 			fetch('http://localhost:3020/buscandoDataEcommerceInicial', {
-			//fetch(`${urlServer}buscandoPruductosEcommerce`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -157,11 +102,29 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 					// Guarda los enpoints en el sessionStorage
 					sessionStorage.setItem("idEndpoints", JSON.stringify(data.endPointsFronen));
 					sessionStorage.setItem("basicData", JSON.stringify(data.basicData));
-					//console.log("Cuantos data.Configsdata.Configs encontro??????????")
 					urlServer = data.basicData.urlServer
-					await buscarProductosYPromos(data.endPointsFronen)
-					await automatismo(data.endPointsFronen)
+					
+					async function obtenerDatos() {
+						let dataClient = JSON.parse(sessionStorage.getItem('clienteEcomm')) || { _id: false };
+						let idClient2 = dataClient._id;
+						//console.log("que idcliente encontro?????????", idClient2)
+						// Aseguramos que idClient2 está inicializado correctamente
 
+							// Desestructuramos la respuesta de la función rescueData
+							({ dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData, dataCliente } = await rescueData(idClient2));
+							
+							// Guardamos en sessionStorage si existe dataCliente
+							if (dataCliente) {
+								sessionStorage.setItem("clienteEcomm", JSON.stringify(dataCliente));
+							}
+
+					}
+					
+					// Llamada a la función
+					await obtenerDatos();
+					
+					
+					await buscarProductosYPromos(data.endPointsFronen, ownerPromos, ownerProducts)
 				} else {
 					console.error('Error al obtener datos de /buscandoPostdeEcommerce');
 					mostrarAlerta("Verifique su conexión a internet")
@@ -169,13 +132,10 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 			})
 			.catch(error => console.error('Error de solicitud:', error),
 			);
-		}
+		};
 
-
-		async function buscarProductosYPromos(enpoints) {
-			const { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData } = await rescueData(urlOwner)
-			//console.log("Entro a al funcion... buscarProductosYPromos", ownerPromos.length, ownerProducts.length)
-
+		async function buscarProductosYPromos(enpoints, ownerPromos, ownerProducts) {
+			//console.log("buscarProductosYPromos*****************" , dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData)
 			// re ORdena los preoductos
 			ownerProducts.forEach((producto) => {
 				// sube al localHost los enpoints
@@ -190,7 +150,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 			renderizarProductosYCategorias(categorias);
 			// Inicializar todos los carruseles de Bootstrap
 			$('.carousel').carousel();
-			
+
 			// re ORdena las promociones
 			ownerPromos.forEach((producto) => {
 				const categoria = producto.categoria;
@@ -200,14 +160,13 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 				}
 				categoriasProm[categoria].push(producto);
 			});
-
 			// Renderizar productos y categorías
 			renderizarPromociones(categoriasProm);
 			// Inicializar todos los carruseles de Bootstrap
 			$('.carousel').carousel();
-		}
 
-		let acum = []
+			await automatismo(enpoints)
+		}
 
 		// renderiza todos los productos
 		function renderizarProductosYCategorias(categorias) {
@@ -261,7 +220,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 							contenedorProds.appendChild(CatProductos);
 							todosLosProductos.push(producto.nombreProducto);
 							const cardProdHorizontal = `
-<div style=" min-height: 600px !important; display:inline-flex !important" class=" border-0 point cardH col-md m-3 p-2 d-flex justify-content-center" id="coloreateputo${producto._id}">
+<div style=" min-height: 450px !important; display:inline-flex !important" class=" border-0 point cardH col-md m-3 p-2 d-flex justify-content-center" id="coloreateputo${producto._id}">
     <div class="card w-100" style="transition: transform 0.2s; background-color: transparent;" 
         onmouseover="this.style.transform='scale(1.005)'" 
         onmouseout="this.style.transform='scale(1)'">
@@ -274,13 +233,13 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
             <div class="row">
                 <!-- Primera columna: Carrusel de imágenes -->
                 <div class="col-12 col-md-6 d-flex justify-content-center">
-                    <div carousel-container>
-                        <div id="carousel${producto._id}" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
+                    <div class="carousel-container  m-0 p-0">
+                        <div id="carousel${producto._id}" class="carousel slide  m-0 p-0" data-bs-ride="carousel">
+                            <div class="carousel-inner  m-0 p-0">
                                 ${producto.rutaSimpleImg.map((img, index) => `
                                     <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                                        <img id="${producto._id}" src="${img}" alt="Producto" class="img-fluid rounded m-0 p-0" 
-                                            style="min-height: 400px; min-width: 270px; cursor:pointer;" />
+                                        <img id="${producto._id}" src="${img}" alt="Producto" class="img-fluid m-0 p-0" 
+                                            style="min-height: 400px; min-width: auto; cursor:pointer; border-radius:0.51rem" />
                                     </div>`).join('')}
                             </div>
                             <a class="carousel-control-prev" href="#carousel${producto._id}" role="button" data-bs-slide="prev">
@@ -381,7 +340,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 
 							`;
 							const cardProdVertical = `
-							<div class="point col cardV p-0 m-2 g-0" style="min-height: 600px !important;" id="coloreateputo${producto._id}">
+							<div class="point col cardV p-0 m-2 g-0" style="min-height: 550px !important;" id="coloreateputo${producto._id}">
 								<div class="card p-1 w-100 m-0" style="min-height:100%; transition: transform 0.2s; background-color: transparent;">
 									<div class="card-header">
 										<h5 style="text-align:center; margin: 0;" id="${producto.nombreProducto}">
@@ -474,7 +433,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 											</div>							
 										</div>
 										<br>
-										<button type="button" class="w-75 add-to-cart" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}" style="margin: 0.5rem auto;">
+										<button type="button" class="w-50 add-to-cart" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}" style="margin: 0.5rem auto;">
 											Agregar al Carrito
 											<span style="color:white !important;" class="fas fa-shopping-cart"></span>
 										</button>
@@ -494,7 +453,7 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 							</div>
 							`;
 							const cardHtmlTransparente = `
-							<div class="point col-12 col-sm-6 col-md-4 cardV p-0 m-2 g-0" style="min-height: 600px !important; padding:0;margin:0;min-height: 350px; position: relative;" id="coloreateputo${producto._id}">
+							<div class="point col-12 col-sm-6 col-md-4 cardV p-0 m-2 g-0" style="min-height: 550px !important; padding:0;margin:0;min-height: 350px; position: relative;" id="coloreateputo${producto._id}">
 								<!-- Contenedor del carrusel como fondo -->
 								<div class="p-0 w-100 m-0" style="position: relative; ">
 								<!-- Carrusel de imágenes como fondo -->
@@ -966,8 +925,8 @@ imgGiga.forEach((img, index) => {
     }
     
     carouselItemPromo.innerHTML = `
-        <div class="d-flex justify-content-center align-items-center" style="max-height: 800px;min-height: 600px;">
-            <img src="${img}" class="d-block" alt="Imagen del producto" style="max-width: auto; height: 100%; object-fit: contain !important;">
+        <div class="d-flex justify-content-center align-items-center" style="height: 50% !important; ">
+            <img src="${img}" class="d-block" alt="" style="max-width: auto; height: 50% !important; object-fit: contain !important;">
         </div>
 		<div>
 			<h4>${Desscript}</h4>
@@ -984,527 +943,470 @@ imgGiga.forEach((img, index) => {
 		}
 
 		// funciones autoimaticas paraa verificar si hay comrpas en el carrito y si el cliente esta logeado
-		async function automatismo(idEnpoints22) {
-			const jwToken = sessionStorage.getItem('jwtToken');
-			// busca os datos en la esion y i no estan los pide al server
-			const dataInit = await dataSession(urlOwner) || await rescueData(urlOwner);
-			//console.log("Que hay dataInit",dataInit)
-			ownerProducts = dataInit.ownerProducts
-			ownerPromos   = dataInit.ownerPromos
-			//console.log("Que hay dataInit222222",ownerProducts, ownerPromos)
-			let {dataOwner, ownerMensajes, basicData} = dataInit
-			// Función para mostrar el menú barra arriba muy lentamente
-			var menuOn = document.getElementById('barraMenuArriba');
-			let opacity = 0; // Comenzamos desde 0
-			menuOn.style.display = 'none'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
-			menuOn.style.opacity = '0'; // Invisible al principio
+		async function automatismo() {
+			let dataOwner = sessionStorage.getItem("dataOwner") ? JSON.parse(sessionStorage.getItem("dataOwner")) : {};
+			//console.log("Entro a automatismo Que datos obtuvos desde rescueData en datos iniciales??????????", dataOwner)
+			await agregarClase(dataOwner.desingShop);
+			//proceso de activacion suave de todo el ecommerce
+			async function activarTiendaOnline() {
+				// Función para mostrar el menú barra arriba muy lentamente
+				var menuOn = document.getElementById('barraMenuArriba');
+				let opacity = 0; // Comenzamos desde 0
+				menuOn.style.display = 'none'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
+				menuOn.style.opacity = '0'; // Invisible al principio
+				const checkDataOwner = setInterval(async () => {
+					if (dataOwner) {
+						menuOn.style.display = 'flex'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
+						clearInterval(checkDataOwner); // Detenemos el intervalo cuando encontramos dataOwner
+						const interval = setInterval(() => {
+							if (opacity >= 1) {
+								clearInterval(interval); // Detenemos el intervalo cuando la opacidad alcanza 1
+							} else {
+								//console.log("LLEgo hasta empezar a diseñar la pagina")
+								opacity += 0.025; // Aumentamos la opacidad
+								menuOn.style.opacity = opacity; // Aplicamos la nueva opacidad
+							}
+						}, 100); // Cada 100 milisegundos
 
-			const checkDataOwner = setInterval(async () => {
-				if (dataOwner) {
-					menuOn.style.display = 'flex'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
-					clearInterval(checkDataOwner); // Detenemos el intervalo cuando encontramos dataOwner
-					const interval = setInterval(() => {
-						if (opacity >= 1) {
-							clearInterval(interval); // Detenemos el intervalo cuando la opacidad alcanza 1
-						} else {
-							//console.log("LLEgo hasta empezar a diseñar la pagina")
-							opacity += 0.025; // Aumentamos la opacidad
-							menuOn.style.opacity = opacity; // Aplicamos la nueva opacidad
+						// imprime el fondo de pantalla del ecommerce
+						const fondoPantalla = dataOwner.fondoPantalla;
+						const bannerSection = document.getElementById('banner2233');
+						bannerSection.style.position = 'relative';
+						bannerSection.style.overflow = 'hidden'; // Asegurar que la imagen no se salga del contenedor
+						bannerSection.style.width = '100%'; // Asegurar que el contenedor ocupe el 100% del ancho
+						bannerSection.style.height = '100vh'; // Asegurar que el contenedor ocupe el 100% de la altura de la ventana
+						
+						// Crear la imagen
+						const img = new Image();
+						img.src = fondoPantalla;
+						img.alt = 'Fondo de pantalla';
+						img.style.position = 'absolute';
+						img.style.top = '0';
+						img.style.left = '0';
+						img.style.width = '100%';
+						img.style.height = '100%';
+						img.style.objectFit = 'cover';
+						img.style.opacity = '0';
+						img.style.transition = 'opacity 3s ease-in';
+						img.style.zIndex = '-1';
+						img.classList.add('fade-in');
+						img.onload = function() {
+							img.style.opacity = '1';
+						};
+						
+						// Agregar la imagen y el contenedor del spinner al bannerSection
+						bannerSection.insertBefore(img, bannerSection.firstChild);
+						
+						// Agrega el logo del ownerEcom
+						if (dataOwner.pathLogo) {
+							const logoEcomm = document.getElementById("logoSigUp");
+							logoEcomm.innerHTML = `<img src="${dataOwner.pathLogo}" style="width: auto; height: 250px; border-radius: 50%;">`;
+							//inserta el logo en el menu principal
+							const logoEcomm2 = document.getElementById("logoOwner222");
+							logoEcomm2.innerHTML = `
+								<img src="${dataOwner.pathLogo}" style="width: 100px; height: 100px; border-radius: 50%; margin-top:1rem ">
+							`;
 						}
-					}, 100); // Cada 100 milisegundos
 
-					// imprime el fondo de pantalla del ecommerce
-					const fondoPantalla = dataOwner.fondoPantalla;
-					const bannerSection = document.getElementById('banner2233');
-					bannerSection.style.position = 'relative';
-					bannerSection.style.overflow = 'hidden'; // Asegurar que la imagen no se salga del contenedor
-					bannerSection.style.width = '100%'; // Asegurar que el contenedor ocupe el 100% del ancho
-					bannerSection.style.height = '100vh'; // Asegurar que el contenedor ocupe el 100% de la altura de la ventana
-					
-					// Crear la imagen
-					const img = new Image();
-					img.src = fondoPantalla;
-					img.alt = 'Fondo de pantalla';
-					img.style.position = 'absolute';
-					img.style.top = '0';
-					img.style.left = '0';
-					img.style.width = '100%';
-					img.style.height = '100%';
-					img.style.objectFit = 'cover';
-					img.style.opacity = '0';
-					img.style.transition = 'opacity 3s ease-in';
-					img.style.zIndex = '-1';
-					img.classList.add('fade-in');
-					img.onload = function() {
-						img.style.opacity = '1';
-						spinner.style.display = 'none'; // Ocultar el spinner cuando la imagen cargue
-					};
-					
-					// Crear el spinner
-					const spinner = document.createElement('div');
-					spinner.className = 'spinner-border text-primary';
-					spinner.setAttribute('role', 'status');
-					spinner.innerHTML = '<span class="visually-hidden">Loading...</span>';
-					spinner.style.marginTop = '1rem'; // 1 rem debajo de la imagen
-					spinner.style.display = 'flex'; // Asegurar que el spinner sea visible
-					spinner.style.justifyContent = 'center'; // Centrar horizontalmente
-					spinner.style.zIndex = '1'; // Asegurarse de que esté encima de la imagen
-					
-					// Crear un contenedor para el spinner debajo de la imagen
-					const spinnerContainer = document.createElement('div');
-					spinnerContainer.style.position = 'absolute';
-					spinnerContainer.style.bottom = '0'; // Coloca el contenedor en la parte inferior del banner
-					spinnerContainer.style.width = '100%'; // Asegura que ocupe todo el ancho
-					spinnerContainer.style.display = 'flex';
-					spinnerContainer.style.justifyContent = 'center';
-					spinnerContainer.appendChild(spinner);
-					
-					// Agregar la imagen y el contenedor del spinner al bannerSection
-					bannerSection.insertBefore(img, bannerSection.firstChild);
-					bannerSection.appendChild(spinnerContainer); // Agregar el contenedor del spinner
-					
-					
-					// agrega el diseño del ecomerce elegido
-					await agregarClase(dataOwner.desingShop)
-					// Agrega el logo del ownerEcom
-					if (dataOwner.pathLogo) {
-						const logoEcomm = document.getElementById("logoSigUp");
-						logoEcomm.innerHTML = `<img src="${dataOwner.pathLogo}" style="width: auto; height: 250px; border-radius: 50%;">`;
-						//inserta el logo en el menu principal
-						const logoEcomm2 = document.getElementById("logoOwner222");
-						logoEcomm2.innerHTML = `<img src="${dataOwner.pathLogo}" style="width: 100px; height: 100px; border-radius: 50%; margin-top:1rem ">`;
-					}
-
-					// agrega el color al, icono noticias si hay noticias nuevas
-					const cheqNewsC = dataOwner.flagNews
-					if (cheqNewsC) {
-						sessionStorage.setItem("flagNews", JSON.stringify({ flagNews: true }));
-					}
-					const cheqNewsColor = JSON.parse(sessionStorage.getItem("flagNews"));
-					const cheqNewsCerrado = JSON.parse(sessionStorage.getItem("flagNewsCerrado"));
-					console.log("LLEgo hasta qui y cambio el color de la corneta news", cheqNewsCerrado)
-					// Verifica si hay noticias nuevas
-					if (cheqNewsColor.flagNews && cheqNewsCerrado === null || cheqNewsCerrado.flagNewsCerrado === false) {
-						const iconCorneta = document.getElementById("corneta");
-						iconCorneta.style.color = "green"; 
-						console.log("LLEgo hasta qui y cambio el color de la corneta news", cheqNewsColor)
-					}
-
-
-					// Inserta el nombre del comercio en el signIn y la barra del menú principal
-					const nombreDueno = document.getElementById("duenoEcom22");
-					// Limpia el contenido existente en el elemento
-					nombreDueno.innerHTML = "";
-
-					const nombreComercio = dataOwner.ecommerceName;
-
-					const nombreTitulo = document.getElementById("titulo");
-					nombreTitulo.innerHTML = `${nombreComercio}`;
-
-					// Crea un nuevo elemento div para contener el nombre del dueño
-					const nombreDuenoC = document.createElement('div');
-
-					// Agrega estilos al nuevo elemento div
-					nombreDuenoC.style.color = 'white'; // Texto blanco
-					nombreDuenoC.style.fontWeight = 'bold'; // Texto en negrita
-					nombreDuenoC.style.textAlign = 'center'; // Texto centrado horizontalmente
-					nombreDuenoC.style.display = 'flex'; // Utiliza flexbox para centrar verticalmente
-					nombreDuenoC.style.alignItems = 'center'; // Texto centrado verticalmente
-					nombreDuenoC.style.width = '300px'; // Ancho fijo
-					nombreDuenoC.style.overflow = 'hidden'; // Oculta el desbordamiento
-					nombreDuenoC.style.whiteSpace = 'nowrap'; // Texto en una sola línea
-					nombreDuenoC.style.position = 'relative';
-
-					// Agrega el nombre dle comercio deslzante en la barra alta del ecommerce
-					nombreDuenoC.innerHTML = `
-						<style>
-							.marquee {
-								margin-top: 2rem !important;
-								color:white !important;
-								width: 100%;
-								display: inline-block;
-								animation: marquee 10s linear infinite;
-								font-size: 1.5rem; /* Tamaño de letra */
+						// agrega el color al, icono noticias si hay noticias nuevas
+						const cheqNewsC = dataOwner.flagNews
+						if (cheqNewsC) {
+							sessionStorage.setItem("flagNews", JSON.stringify({ flagNews: true }));
+						}
+						const cheqNewsColor = JSON.parse(sessionStorage.getItem("flagNews"));
+						const cheqNewsCerrado = JSON.parse(sessionStorage.getItem("flagNewsCerrado"));
+						//console.log("LLEgo hasta qui y cambio el color de la corneta news", cheqNewsCerrado)
+						// Verifica si hay noticias nuevas
+						if (cheqNewsColor ){
+							if (cheqNewsColor.flagNews && cheqNewsCerrado === null || cheqNewsCerrado.flagNewsCerrado === false) {
+								const iconCorneta = document.getElementById("corneta");
+								iconCorneta.style.color = "green"; 
+								console.log("LLEgo hasta qui y cambio el color de la corneta news", cheqNewsColor)
 							}
-							@keyframes marquee {
-								from {
-									transform: translateX(100%);
-								}
-								to {
-									transform: translateX(-100%);
-								}
-							}
-							@media (max-width: 768px) {
+						}
+
+						// Inserta el nombre del comercio en el signIn y la barra del menú principal
+						const nombreDueno = document.getElementById("duenoEcom22");
+						// Limpia el contenido existente en el elemento
+						nombreDueno.innerHTML = "";
+
+						const nombreComercio = dataOwner.ecommerceName;
+
+						const nombreTitulo = document.getElementById("titulo");
+						nombreTitulo.innerHTML = `${nombreComercio}`;
+
+						// Crea un nuevo elemento div para contener el nombre del dueño
+						const nombreDuenoC = document.createElement('div');
+
+						// Agrega estilos al nuevo elemento div
+						nombreDuenoC.style.color = 'white'; // Texto blanco
+						nombreDuenoC.style.fontWeight = 'bold'; // Texto en negrita
+						nombreDuenoC.style.textAlign = 'center'; // Texto centrado horizontalmente
+						nombreDuenoC.style.display = 'flex'; // Utiliza flexbox para centrar verticalmente
+						nombreDuenoC.style.alignItems = 'center'; // Texto centrado verticalmente
+						nombreDuenoC.style.width = '300px'; // Ancho fijo
+						nombreDuenoC.style.overflow = 'hidden'; // Oculta el desbordamiento
+						nombreDuenoC.style.whiteSpace = 'nowrap'; // Texto en una sola línea
+						nombreDuenoC.style.position = 'relative';
+
+						// Agrega el nombre dle comercio deslzante en la barra alta del ecommerce
+						nombreDuenoC.innerHTML = `
+							<style>
 								.marquee {
-									animation: marquee 8s linear infinite; /* Ajustar la velocidad si es necesario */
+									margin-top: 2rem !important;
+									color:white !important;
+									width: 100%;
+									display: inline-block;
+									animation: marquee 10s linear infinite;
+									font-size: 1.5rem; /* Tamaño de letra */
 								}
-							}
-						</style>
-						<div class="marquee">
-							<p>${nombreComercio}</p>
-						</div>
-					`;
-
-					// Agrega el nuevo elemento div al elemento con id "duenoEcom"
-					nombreDueno.appendChild(nombreDuenoC);
-
-					const nombreEcomm = document.getElementById("duenoEcom2288");
-					nombreEcomm.innerHTML = `<h5>${nombreComercio}</h5>`;
-
-					// Agrega las noticias y promos
-					// Asegúrate de que los elementos de destino existen
-					const newsModal = document.getElementById('newsMmodal');
-					const carouselItems741 = document.getElementById('promosincertings2345');
-
-					//console.log("que tiene mensajes", ownerMensajes.length)
-					// Ordenar las noticias del más reciente al más antiguo
-					ownerMensajes.sort((a, b) => new Date(b.date) - new Date(a.date));
-					// guarda todos los mensajes en el sessionStorage
-					sessionStorage.setItem('ownerMensajes', JSON.stringify(ownerMensajes));
-
-					// Limpiar el contenido de los contenedores
-					newsModal.innerHTML = '';
-					carouselItems741.innerHTML = '';
-
-					// Variables para verificar la existencia
-					let hasNoticias = false;
-					let hasPromos = true;
-
-					// Filtrar noticias
-					const noticiasHTML = ownerMensajes.filter(news => news.nweNoticias).map(news => {
-						hasNoticias = true;
-						return `
-							<hr>
-							<div>
-								<h5>${news.subjectCliente}</h5>
-								<img class="d-block w-100 carousel-image" src="${news.urlImg}" alt="Noticia Imagen">
-								<p>${news.messageCliente}</p>
+								@keyframes marquee {
+									from {
+										transform: translateX(100%);
+									}
+									to {
+										transform: translateX(-100%);
+									}
+								}
+								@media (max-width: 768px) {
+									.marquee {
+										animation: marquee 8s linear infinite; /* Ajustar la velocidad si es necesario */
+									}
+								}
+							</style>
+							<div class="marquee">
+								<p>${nombreComercio}</p>
 							</div>
 						`;
-					}).join('');
-					// Filtrar promociones
-					const promosHTML = ownerMensajes.filter((proms, index) => proms.nwePromoOk).map((news, index) => {
-						hasPromos = true;
-						const isActive = index === 0 ? 'active' : '';
-						return `
-						
-					<style>
-												.carousel-content {
-													zIndex: 9;
-													text-align: center;
-													max-width: 700px;
-													margin: 10px auto;
-													padding: 20px;
-													border-radius: 10px;
-													opacity: 0.7;
-												}
-												.carousel-image {
-													object-fit: contain;
-													display: block;
-													margin: 5px auto; /* Centrar y agregar margen */
-													border-radius: 1rem !important;
-												}
-												.carousel-caption {
-													text-align: center;
-												}
-												@media (max-width: 450px) {
-													.carousel-image {
-														height:200px; 
-														width:200px
-													}
-												}
-											</style>
-	<div class="carousel-item ${isActive}">
-		<br><br>
-		<h5>Nueva promo</h5>
-		<img class="carousel-image" style="opacity:0.6; height:300px; width:300px; border-radius: 50% !important" src="${news.urlImg[0]}" alt="Noticia Imagen">
-		<h6>Ver en promociones & descuentos</h6>
+
+						// Agrega el nuevo elemento div al elemento con id "duenoEcom"
+						nombreDueno.appendChild(nombreDuenoC);
+
+						const nombreEcomm = document.getElementById("duenoEcom2288");
+						nombreEcomm.innerHTML = `<h5>${nombreComercio}</h5>`;
+
+						// Agrega las noticias y promos
+						const newsModal = document.getElementById('newsMmodal');
+						const carouselItems741 = document.getElementById('promosincertings2345');
+
+						// Ordenar las noticias del más reciente al más antiguo
+						let ownerMensajes = JSON.parse(sessionStorage.getItem('ownerMensajes'));
+						ownerMensajes.sort((a, b) => new Date(b.date) - new Date(a.date));
+						console.log("que tiene mensajes", ownerMensajes.length)
+
+						// Limpiar el contenido de los contenedores
+						newsModal.innerHTML = '';
+						carouselItems741.innerHTML = '';
+
+						// Variables para verificar la existencia
+						let hasNoticias = false;
+						let hasPromos = true;
+
+						// Filtrar noticias
+						const noticiasHTML = ownerMensajes.filter(news => news.nweNoticias).map(news => {
+							hasNoticias = true;
+							return `
+								<hr>
+	<div class="text-center d-flex flex-column align-items-center justify-content-center">
+		<h5>${news.subjectCliente}</h5>
+		<img class="d-block w-50 img-fluid carousel-image" src="${news.urlImg}" alt="Noticia Imagen" style="object-fit: contain; max-height: 100%;">
+		<p>${news.messageCliente}</p>
 	</div>
 
-						`;
-					}).join('');
+							`;
+						}).join('');
+						// Filtrar promociones
+						const promosHTML = ownerMensajes.filter((proms, index) => proms.nwePromoOk).map((news, index) => {
+							hasPromos = true;
+							const isActive = index === 0 ? 'active' : '';
+							return `
+							
+						<style>
+													.carousel-content {
+														zIndex: 9;
+														text-align: center;
+														max-width: 700px;
+														margin: 10px auto;
+														padding: 20px;
+														border-radius: 10px;
+														opacity: 0.7;
+													}
+													.carousel-image {
+														object-fit: contain;
+														display: block;
+														margin: 5px auto; /* Centrar y agregar margen */
+														border-radius: 1rem !important;
+													}
+													.carousel-caption {
+														text-align: center;
+													}
+													@media (max-width: 450px) {
+														.carousel-image {
+															height:200px; 
+															width:200px
+														}
+													}
+												</style>
+		<div class="carousel-item ${isActive}">
+			<br><br>
+			<h5>Nueva promo</h5>
+			<img class="carousel-image" style="opacity:0.6; height:300px; width:300px; border-radius: 50% !important" src="${news.urlImg[0]}" alt="Noticia Imagen">
+			<h6>Ver en promociones & descuentos</h6>
+		</div>
 
-					// Renderizar contenido de las noticias
-					if (hasNoticias ) {
-						newsModal.innerHTML = noticiasHTML;
-						//newsModal.innerHTML = promosHTML;
-					}
-					
-					console.log("dataOwner.mostrarPromoPPrin", dataOwner.mostrarPromoPPrin)
-					// Renderiza las promos en la pagina principal
-					if (hasPromos && dataOwner.mostrarPromoPPrin) {
-						carouselItems741.innerHTML = promosHTML;
-					}
+							`;
+						}).join('');
 
-					// Agrega las redes sociales
-					const socialLinks = dataOwner.linksredesSociales;
-					if (socialLinks) {
-						const savedLinksContainer = document.getElementById('savedlinks989').querySelector('ul');
-						const savedLinksContainer2 = document.getElementById('redesSocialesLinks').querySelector('ul');
-						savedLinksContainer.innerHTML = "";
-						savedLinksContainer2.innerHTML = "";
+						// Renderizar contenido de las noticias
+						if (hasNoticias ) {
+							newsModal.innerHTML = noticiasHTML;
+							//newsModal.innerHTML = promosHTML;
+						}
 
-						const socialPlatforms = {
-							facebook: { icon: 'fab fa-facebook', color: '#3b5998' },
-							twitter: { icon: 'fab fa-twitter', color: '#1da1f2' },
-							X: { icon: 'fab fa-instagram', color: 'orange' },
-							linkedin: { icon: 'fab fa-linkedin', color: '#0077b5' },
-							youtube: { icon: 'fab fa-youtube', color: '#ff0000' },
-						};
+						// Renderiza las promos en la pagina principal
+						if (hasPromos && dataOwner.mostrarPromoPPrin) {
+							carouselItems741.innerHTML = promosHTML;
+						}
 
-						Object.entries(socialLinks).forEach(([platform, url]) => {
-							if (url) {
-								const listItem1 = document.createElement('li');
-								listItem1.classList.add('list-inline-item');
-								listItem1.innerHTML = `
-									<a href="${url}" target="_blank" class="social-link" style="color: ${socialPlatforms[platform].color}">
-										<i class="${socialPlatforms[platform].icon} social-icon" style="font-size: 3em;"></i>
-									</a>
-								`;
-								savedLinksContainer.appendChild(listItem1);
+						// Agrega las redes sociales
+						const socialLinks = dataOwner.linksredesSociales;
+						if (socialLinks) {
+							const savedLinksContainer = document.getElementById('savedlinks989').querySelector('ul');
+							const savedLinksContainer2 = document.getElementById('redesSocialesLinks').querySelector('ul');
+							savedLinksContainer.innerHTML = "";
+							savedLinksContainer2.innerHTML = "";
 
-								const listItem2 = document.createElement('li');
-								listItem2.classList.add('list-inline-item');
-								listItem2.innerHTML = `
-									<a href="${url}" target="_blank" class="social-link" style="color: ${socialPlatforms[platform].color}">
-										<i class="${socialPlatforms[platform].icon} social-icon" style="font-size: 3em;"></i>
-									</a>
-								`;
-								savedLinksContainer2.appendChild(listItem2);
-							}
+							const socialPlatforms = {
+								facebook: { icon: 'fab fa-facebook', color: '#3b5998' },
+								twitter: { icon: 'fab fa-twitter', color: '#1da1f2' },
+								X: { icon: 'fab fa-instagram', color: 'orange' },
+								linkedin: { icon: 'fab fa-linkedin', color: '#0077b5' },
+								youtube: { icon: 'fab fa-youtube', color: '#ff0000' },
+							};
+
+							Object.entries(socialLinks).forEach(([platform, url]) => {
+								if (url) {
+									const listItem1 = document.createElement('li');
+									listItem1.classList.add('list-inline-item');
+									listItem1.innerHTML = `
+										<a href="${url}" target="_blank" class="social-link" style="color: ${socialPlatforms[platform].color}">
+											<i class="${socialPlatforms[platform].icon} social-icon" style="font-size: 3em;"></i>
+										</a>
+									`;
+									savedLinksContainer.appendChild(listItem1);
+
+									const listItem2 = document.createElement('li');
+									listItem2.classList.add('list-inline-item');
+									listItem2.innerHTML = `
+										<a href="${url}" target="_blank" class="social-link" style="color: ${socialPlatforms[platform].color}">
+											<i class="${socialPlatforms[platform].icon} social-icon" style="font-size: 3em;"></i>
+										</a>
+									`;
+									savedLinksContainer2.appendChild(listItem2);
+								}
+							});
+						}
+						var offcanvasRight = document.getElementById('offcanvasRight');
+						offcanvasRight.addEventListener('shown.bs.offcanvas', function () {
+							document.body.style.paddingRight = offcanvasRight.offsetWidth - offcanvasRight.clientWidth + 'px';
 						});
+				
+						offcanvasRight.addEventListener('hidden.bs.offcanvas', function () {
+							document.body.style.paddingRight = '';
+						});
+
+						document.getElementById('insertLogo').innerHTML = "";
+
 					}
-					var offcanvasRight = document.getElementById('offcanvasRight');
-					offcanvasRight.addEventListener('shown.bs.offcanvas', function () {
-						document.body.style.paddingRight = offcanvasRight.offsetWidth - offcanvasRight.clientWidth + 'px';
-					});
-			
-					offcanvasRight.addEventListener('hidden.bs.offcanvas', function () {
-						document.body.style.paddingRight = '';
-					});
-
-					document.getElementById('insertLogo').innerHTML = "";
-
-				}else{
-					menuOn.style.display = 'flex'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
-					menuOn.style.opacity = '1'; // Invisible al principio
-					menuOn.innerHTML = '<h3 style="color: red; font-size: 2rem;">Revisa tu conexión a internet, es muy lenta o no tienes.</h3>';
-				}
-			}, 100); // Revisamos cada 1 segundo si "dataOwner" está disponible
-
-
+					else{
+							menuOn.style.display = 'flex'; // Asegúrate de que sea 'flex' para alinearlos horizontalmente
+							menuOn.style.opacity = '1'; // Invisible al principio
+							menuOn.innerHTML = '<h3 style="color: red; font-size: 2rem;">Revisa tu conexión a internet, es muy lenta o no tienes.</h3>';
+						}
+				}, 100); // Revisamos cada 1 segundo si "dataOwner" está disponible
+				return true
+			};
+			const onTiendaOn = await activarTiendaOnline();
 			// verifica si hay algún cliente logeado
-			const clienteEcomm = (sessionStorage.getItem('clienteEcomm') !== null) ? JSON.parse(sessionStorage.getItem('clienteEcomm')) : null;
-			//console.log("1 que cliente encontro?", clienteEcomm);
+			let clienteEcomm = {}
+			let jwToken = {}
+			if (onTiendaOn) {
+				async function revisarSiHayPedidoPendiente() {
+					// revisa si tienens algun pedido pendiente
+					const pedidoPendientes = JSON.parse(sessionStorage.getItem('pedidoCarritoPendientePago'));
+					const dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'))
+					// revisa si hay un pedido pendiente
+					console.log("3 Que pedido pendiente encontro?", pedidoPendientes);
+					//Pedido pendiente con y sin cliente logeado carrito abandonado
+					if (pedidoPendientes && pedidoPendientes.length >= 1) {
+						console.log("Entro en el filtro que detecta un pedido pendiente de procesar");
+						// Obtiene la fecha actual
+						const fechaActual = new Date();
+						// Obtiene la fecha del pedido pendiente
+						const fechaPedido = new Date(pedidoPendientes[0].timeP);
+						// Compara las fechas para verificar si la diferencia es menor a 5 minutos
+						const diferenciaMinutos = Math.floor((fechaActual - fechaPedido) / (1000 * 60));
+						// Pregunta al usuario si desea terminar el pedido pendiente
+						if (diferenciaMinutos < 5) {
+							//console.log("El pedido tiene menos de 5 minutos de realizado");
+							// Abre el modal SI tiene un cliente logeado solo muestra el modal
+							if (dataCliente) {
+								dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || JSON.parse(sessionStorage.getItem('DataOwnerEcom'));
+								console.log("El cliente SI esta logeado ", dataOwner._id);
+								// re arma el carrito
+								pedidoPendientes.forEach(element => {
+									listaPedido.push(element)
+								});
+								oky = false
+								// arma el carrito
+								await armarCarrito(listaPedido, oky )
+								await costoEnvio(dataCliente, dataOwner )
+								
+								// cambia de color el carrito a ROJO cuando encuentra un pedido xon o sin cliente asignado
+								const carritoLleno     = document.getElementById("carriToxico");
+								carritoLleno.innerHTML = ""
+								const AElement        = document.createElement("a");
+								AElement.style.cursor = "pointer";
+								// Asignar el contenido HTML icono del carrito a rojo
+								AElement.innerHTML = `
+									<a class="fas fa-shopping-cart" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" style="color:green !important"></a>
+								`;
+								// Agregar el elemento li al elemento signIn
+								carritoLleno.appendChild(AElement);
 
-			// obtiene el token
-			const jwtToken = sessionStorage.getItem('jwtToken');
-			//console.log("2 que token encontro?", jwtToken);
-			// Si clienteEcomm es null, borra el token JWT del sessionStorage
-			if (clienteEcomm === null) {
-				sessionStorage.removeItem('jwtToken');
-			}
+								const costoDelEnvio = JSON.parse(sessionStorage.getItem('costoDelivery')) || []
 
-			// revisa si tienens algun pedido pendiente
-			const pedidoPendiente    = sessionStorage.getItem('pedidoCarritoPendientePago');
-			const pedidoPendientes   = JSON.parse(pedidoPendiente);
-			// revisa si hay un pedido pendiente
-			//console.log("3 Que pedido pendiente encontro?", pedidoPendientes);
-			
-			//Pedido pendiente sin cliente logeado
-			if (pedidoPendientes && pedidoPendientes.length >= 1) {
-				//console.log("Entro en el filtro de timeP",pedidoPendientes);
-				// Obtiene la fecha actual
-				const fechaActual = new Date();
-				// Obtiene la fecha del pedido pendiente
-				const fechaPedido = new Date(pedidoPendientes[0].timeP);
-				// Compara las fechas para verificar si la diferencia es menor a 5 minutos
-				const diferenciaMinutos = Math.floor((fechaActual - fechaPedido) / (1000 * 60));
-				// Pregunta al usuario si desea terminar el pedido pendiente
-				if (diferenciaMinutos < 5) {
-					//console.log("El pedido tiene menos de 5 minutos de realizado");
-					// Abre el modal si tiene un cliente registrado solo muestra el modal
-					if (jwtToken && clienteEcomm) {
-						const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || JSON.parse(sessionStorage.getItem('DataOwnerEcom'));
-						//console.log("El cliente SI esta logeado que datos del pedido hay enel sessionStorage?",pedidoPendientes);
-						// re arma el carrito
-						pedidoPendientes.forEach(element => {
-							listaPedido.push(element)
-						});
-						oky = false
-						// arma el carrito
-						await armarCarrito(listaPedido, oky )
-						await costoEnvio(clienteEcomm, dataOwner )
-						
-						// cambia de color el carrito a ROJO cuando encuentra un pedido xon o sin cliente asignado
-						const carritoLleno     = document.getElementById("carriToxico");
-						carritoLleno.innerHTML = ""
-						const AElement        = document.createElement("a");
-						AElement.style.cursor = "pointer";
-						// Asignar el contenido HTML al elemento li
-						AElement.innerHTML = `
-							<a class="fas fa-shopping-cart" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" style="color:green !important"></a>
-						`;
-						// Agregar el elemento li al elemento signIn
-						carritoLleno.appendChild(AElement);
+								const innerEnvioElement = document.getElementById("CostoEnvio123");
+								const innerCostoDel = document.getElementById("delivery6546");	
+								//console.log("COSTO ENVIO   8888888888Este es el costo del envio costEnvioNumber", costoDelEnvio)
+								if (costoDelEnvio.length >= 1) {
+									innerCostoDel.textContent = `${costoDelEnvio[0]}`
+									innerEnvioElement.textContent = `${costoDelEnvio[0]}`
+								}
 
-
-						const costoDelEnvio = JSON.parse(sessionStorage.getItem('costoDelivery')) || []
-
-						const innerEnvioElement = document.getElementById("CostoEnvio123");
-						const innerCostoDel = document.getElementById("delivery6546");	
-						//console.log("COSTO ENVIO   8888888888Este es el costo del envio costEnvioNumber", costoDelEnvio)
-						if (costoDelEnvio.length >= 1) {
-							innerCostoDel.textContent = `${costoDelEnvio[0]}`
-							innerEnvioElement.textContent = `${costoDelEnvio[0]}`
-						}
-
-						// revisa si es un pedido pagado por MP wallet
-						const currentURL = window.location.href;
-						const urlParams = new URLSearchParams(new URL(currentURL).search);
-						const statusCobro = urlParams.get('statusCobro');
-						//console.log("Que tiene statusCobro?", statusCobro);
-						if (!statusCobro) {
-							//console.log("Encontro un pedido que NOOOOOOOOOOOOOOOOOOOOOOOOOO   viene de Wallet MP",statusCobro)
-							// Muestra una alerta dentro del modal si ya estas registrado
-							const mensaje = `<p style="text-transform: none !important; text-decoration: none !important;">
-							Tienes un pedido pendiente para procesar. <br> 
-							<br>
-							Haz clic en <strong>"Confirmar"</strong> si deseas pagarlo. <br>
-							<br>
-							Si deseas eliminar todos los productos del carrito, haz clic en <strong>"Cancelar"</strong> <br>
-							<br>
-							También puedes presionar la <strong>"X"</strong> en la esquina superior derecha si deseas seguir agregando productos.
-								</p>`;
-						
-
-							// modal de opcion que avisa que tienes un pedido pendiente de procesar
-							const confirma = async function () {
-								const DatapedidoPendientes = {pedidoPendientes,jwtToken,clienteEcomm }
-								//console.log("Dentro de pedidosPendientes SI esta logeado y pregunta al server por las direcciones de envio", DatapedidoPendientes)
-
-									const tipoDePago = pedidoPendientes[0].tipoDePago
-									//console.log("Que tipo de pago es??????????????????????????????????????????",tipoDePago)
-									if (tipoDePago && tipoDePago == "Pago Contra Factura") {
-										//console.log("SI es pago contra entrega", tipoDePago);
-										await averiguandoDireccionEntrega(tipoDePago)
-										// const cerrarModal = document.getElementById('opciones');
-										// cerrarModal.innerHTML = "";
-									}
-									else{
-										//console.log("NO se definio el tipo de pago", tipoDePago);
-
-											// Almacena la lista de productos en sessionStorage con la clave "pedidoCarritoPendientePago"
-											const stringylistaPedido = JSON.stringify(listaPedido)
-											sessionStorage.setItem("pedidoCarritoPendientePago", stringylistaPedido);
-			
-											//console.log("que listado de pedidos guarda desde pagar",stringylistaPedido )
-											const clienteDataString  = sessionStorage.getItem('clienteEcomm');
-											const dataCliente        = JSON.parse(clienteDataString)  
-											const dataOwner          = JSON.parse(sessionStorage.getItem('ownerData'))
-											//console.log("Oprimio el boton de pago mpWallet id=btnPagar007", dataCliente,dataOwner)
-											// si no hay ningun pedido te avisa y reinicia la pagina
-											if ( listaPedido.length == 0  ) {
-												mostrarAlerta("agrega algún producto al carrito")
-												// Esperar 1 segundos (3000 milisegundos)
-												setTimeout(() => {
+								// revisa si es un pedido pagado por MP wallet
+								const currentURL = window.location.href;
+								const urlParams = new URLSearchParams(new URL(currentURL).search);
+								const statusCobro = urlParams.get('statusCobro');
+								//console.log("Que tiene statusCobro?", statusCobro);
+								if (!statusCobro) {
+									//console.log("Encontro un pedido Que no a sido cobrado",statusCobro)
+									// Muestra una alerta dentro del modal si ya estas registrado
+									const mensaje = `<p style="text-transform: none !important; text-decoration: none !important;">
+									Tienes un pedido pendiente para procesar. <br> 
+									<br>
+									Haz clic en <strong>"Confirmar"</strong> si deseas pagarlo. <br>
+									<br>
+									Si deseas eliminar todos los productos del carrito, haz clic en <strong>"Cancelar"</strong> <br>
+									<br>
+									También puedes presionar la <strong>"X"</strong> en la esquina superior derecha si deseas seguir agregando productos.
+										</p>`;
+									// modal de opcion que avisa que tienes un pedido pendiente de procesar
+									const confirma = async function () {
+											mostrarModalLoading()
+											const tipoDePago = pedidoPendientes[0].tipoDePago
+											//console.log("Que tipo de pago es??????????????????????????????????????????",tipoDePago)
+											if (tipoDePago && tipoDePago == "Pago Contra Factura") {
+												//console.log("SI es pago contra entrega", tipoDePago);
+												await averiguandoDireccionEntrega(tipoDePago)
+											}
+											else{
+												//console.log("Paga con MPWallet", tipoDePago);
+												// Almacena la lista de productos en sessionStorage con la clave "pedidoCarritoPendientePago"
+												const stringylistaPedido = JSON.stringify(listaPedido)
+												sessionStorage.setItem("pedidoCarritoPendientePago", stringylistaPedido);
+												//console.log("que listado de pedidos guarda desde pagar",stringylistaPedido )
+												dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'))
+												//console.log("Oprimio el boton de pago mpWallet id=btnPagar007", dataOwner._id)
+												// si no hay ningun pedido te avisa y reinicia la pagina
+												if ( listaPedido.length == 0  ) {
+													mostrarAlerta("agrega algún producto al carrito")
+													// Esperar 1 segundos (3000 milisegundos)
+													setTimeout(() => {
+														// Recargar la página
+														window.location.reload();
+													}, 1500);
+													return
+												}
+												let dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'))
+												if ( !dataCliente  ) {
+													mostrarAlerta("Logeate para continuar")
+													// si no hay nadie logeado debe inscribirse o logerse
 													// Recargar la página
-													window.location.reload();
-												}, 1500);
-											}
-											if ( !dataCliente  ) {
-												// si no hay nadie logeado debe inscribirse o logerse
-												// Recargar la página
-												window.location.reload();
-											}
-											// envia el boton de mercado pago al modal de la seleccion de medios de pago
-											// Mostrar el modal
-											const modal = new bootstrap.Modal(document.getElementById('staticBackdropMediosPago'));
-											modal.show();
-											// Llamar a la función mpWallet después de un breve retraso para asegurarse de que el modal se haya mostrado completamente
-											setTimeout(() => {
-												mpWallet(dataCliente, dataOwner);
-											}, 500); // Ajusta este valor según sea necesario
-									} 
+													setTimeout(() => {
+														// Recargar la página
+														window.location.reload();
+													}, 1500);
+													return
+												}
+												// envia el boton de mercado pago al modal de la seleccion de medios de pago
+												// Mostrar el modal
+												// const modal = new bootstrap.Modal(document.getElementById('staticBackdropMediosPago'));
+												// modal.show();
+												// Llamar a la función mpWallet después de un breve retraso para asegurarse de que el modal se haya mostrado completamente
+												setTimeout(() => {
+													mpWallet(clienteEcomm, dataOwner);
+												}, 500); // Ajusta este valor según sea necesario
+											} 
+									}
+									const rechaza = function rechaza() {
+										sessionStorage.removeItem('pedidoCarritoPendientePago');
+									}
+									confirmOptions(mensaje, confirma, rechaza);
+								}
+								if (statusCobro === "failed") {
+									//console.log("se devolvio desde MP sin pagar o viene de Wallet MP",statusCobro)
+									//mensajeAlert("Vo")
+									location.href = await dominioUrl();
+								};
+							} 
+							else {
+								console.log("El cliente NO esta logeado que datos del pedido hay en el sessionStorage?",pedidoPendientes);
+								// re arma el carrito
+								pedidoPendientes.forEach(element => {
+									listaPedido.push(element)
+								});
+								oky = false
+								armarCarrito(listaPedido, oky )
+								//sessionStorage.removeItem('pedidoCarritoPendientePago');
+								console.log("Encontró un pedido con menos de 5 minutos de echo y no esta logeado el CLIENTE que hay en lista pedidos", pedidoPendientes);
+								const modalUsuario = new bootstrap.Modal(document.getElementById('usuario'), {
+									backdrop: 'static',  // Evita que el modal se cierre haciendo clic fuera de él
+									keyboard: false  // Evita que el modal se cierre con la tecla Esc
+								});
+								modalUsuario.show();
+								// Muestra una alerta dentro del modal
+								mostrarAlerta("Ingresa o Inscribete y termina tu pedido");
 							}
-							const rechaza = function rechaza() {
-								sessionStorage.removeItem('pedidoCarritoPendientePago');
-							}
-							await confirmOptions(mensaje, confirma, rechaza);
+						} else {
+							// Si la diferencia es mayor a 5 minutos, elimina el pedido pendiente del almacenamiento local
+							sessionStorage.removeItem('pedidoCarritoPendientePago');
 						}
-						if (statusCobro === "failed") {
-							//console.log("se devolvio desde MP sin pagar o viene de Wallet MP",statusCobro)
-							//mensajeAlert("Vo")
-							location.href = await dominioUrl();
-						};
-					} 
-					else {
-						//console.log("El cliente NO esta logeado que datos del pedido hay en el sessionStorage?",pedidoPendientes);
-						// re arma el carrito
-						pedidoPendientes.forEach(element => {
-							listaPedido.push(element)
-						});
-						oky = false
-						armarCarrito(listaPedido, oky )
-						//sessionStorage.removeItem('pedidoCarritoPendientePago');
-
-						//console.log("Encontró un pedido con menos de 5 minutos de echo y no esta logeado que hay en lista pedidos", pedidoPendientes);
-						const modalUsuario = new bootstrap.Modal(document.getElementById('usuario'), {
-							backdrop: 'static',  // Evita que el modal se cierre haciendo clic fuera de él
-							keyboard: false  // Evita que el modal se cierre con la tecla Esc
-						});
-						modalUsuario.show();
-						// Muestra una alerta dentro del modal
-						mostrarAlerta("Ingresa o Inscribete y termina tu pedido");
 					}
-				} else {
-					// Si la diferencia es mayor a 5 minutos, elimina el pedido pendiente del almacenamiento local
-					sessionStorage.removeItem('pedidoCarritoPendientePago');
-				}
-			}
+				};
+				async function revisaExisteClienteLogeado() {
+					// verifica si hay algún cliente logeado
+					clienteEcomm = JSON.parse((sessionStorage.getItem('clienteEcomm')))
+					jwToken = sessionStorage.getItem('jwtToken')
+					console.log("1revisaExisteClienteLogeado que cliente encontro?", clienteEcomm);
+					if (clienteEcomm === null) {
+						sessionStorage.removeItem('jwtToken');
+					}
+					//Si encuentra un cliente o un token lo procesa en el Frontend para activar las intancias de cliente logeado.
+					if (clienteEcomm && jwToken ) {
+						// let clienteEcommFresh = clienteEcomm || await actualizarDatosCliente();
+						let clienteEcommFresh = clienteEcomm 
+						// Obtener la dirección IP del equipo
+						const { idCliente, nombre } = clienteEcommFresh
+						// busca los mensaje del cliente y los renderiza
+						const mensajesCliente = ownerMensajes.filter(id => id.idCliente === clienteEcommFresh._id) 
+						//console.log("que revisaExisteClienteLogeado mensajes del cliente encontro??????", mensajesCliente)
+						// Iterar sobre los mensajes y mostrarlos
+						mensajesCliente.forEach(async mensaje => {
+							mostrarMensajePush(mensaje.subjectCliente, mensaje.messageCliente, mensaje._id);
+						});
 
-			//Si encuentra un cliente o un token lo procesa en el Frontend para activar las intancias de cliente logeado.
-			if (clienteEcomm && jwtToken ) {
-				// Obtener la dirección IP del equipo
-				const { idCliente, nombre } = clienteEcomm
-				// busca los mensaje del cliente y los renderiza
-				const ownerMensajes = JSON.parse((sessionStorage.getItem('ownerMensajes')));
-				const mensajesCliente = ownerMensajes.filter(id => id.idCliente === clienteEcomm._id) 
-				//console.log("que mensajes del cliente encontro??????", mensajesCliente)
-				// Iterar sobre los mensajes y mostrarlos
-				mensajesCliente.forEach(async mensaje => {
-					// mostrarMensajePush(titulo, cuerpo, codigoPedido)
-					mostrarMensajePush(mensaje.subjectCliente, mensaje.messageCliente, mensaje._id);
-				});
-				//console.log("cual es el enpoint de automatismo?", idEnpoints22[55])
-				// Enviar datos al servidor
-				fetch(`${idEnpoints22[55]}`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${jwToken}`
-					},
-					body: JSON.stringify({ idCliente, nombre, urlOwner }),
-				})
-				.then(response => {
-					//console.log('Status:', response.status);
-					return response.json();
-				})
-				.then(async responseData => {
-					//console.log('Response Data AUTOMATIC con cliente logeado:', responseData);
-					// Guarda la información en el sessionStorage
-					if (responseData.success) {
-						const {cienteEcomm, ownerEcomm} = responseData.data
-						const dataOwner = JSON.parse(sessionStorage.getItem("DataOwnerEcom"));
-						//console.log('Que datos del dueño obtuvo y refresco *********************', dataOwner);
-						//console.log('Que datos del cliente obtuvo y refresco *********************', cienteEcomm);
-	
-						// actualiza los datos del owner y del cliente en sessionStorage
-						sessionStorage.setItem("clienteEcomm", JSON.stringify(cienteEcomm));
-						sessionStorage.setItem('ownerData', JSON.stringify(ownerEcomm));
-						sessionStorage.setItem("DataOwnerEcom", JSON.stringify(ownerEcomm));
-	
-						// Se debe poner el nombre y poner en rojo el ícono del usuario
+						// Se debe poner el nombre y poner en verde el ícono del usuario
 						const iconoUser              = document.getElementById("chekUser");
 						iconoUser.innerHTML          = "";
 						const newIconUser            = document.createElement('a');
@@ -1516,98 +1418,87 @@ imgGiga.forEach((img, index) => {
 						newIconUser.dataset.bsTarget = "#dataUsuario";
 						iconoUser.appendChild(newIconUser);
 
-    				// Inserta el nombre del comercio en el signIn y la barra del menú principal
-					const nombreUserio = document.getElementById("nombreUserArriba");
-					// Limpia el contenido existente en el elemento
-					nombreUserio.innerHTML = "";
-			
-					const nombr23e = nombre;
-			
-					// Crea un nuevo elemento div para contener el nombre del dueño
-					const nombreUser8547 = document.createElement('div');
-			
-					// Agrega estilos al nuevo elemento div
-					nombreUser8547.style.color = 'white'; // Texto blanco
-					nombreUser8547.style.fontWeight = 'bold'; // Texto en negrita
-					nombreUser8547.style.textAlign = 'center'; // Texto centrado horizontalmente
-					nombreUser8547.style.display = 'flex'; // Utiliza flexbox para centrar verticalmente
-					nombreUser8547.style.alignItems = 'center'; // Texto centrado vert1icalmente
-					nombreUser8547.style.width = '100%'; // Ancho fijo
-					nombreUser8547.style.overflow = 'hidden'; // Oculta el desbordamiento
-					nombreUser8547.style.whiteSpace = 'nowrap'; // Texto en una sola línea
-					nombreUser8547.style.position = 'relative';
-			
-					// Agrega el contenido HTML al nuevo elemento div con el CSS incluido
-					nombreUser8547.innerHTML = `
-						<style>
-						.marquees {
-							margin-top: 2rem !important;
-							color:white !important;
-							width: 100%;
-							display: inline-block;
-							animation: marquees 10s linear infinite;
-							font-size: 1.5rem; /* Tamaño de letra */
-						}
-						@keyframes marquees {
-							from {
-							transform: translateX(100%);
-							}
-							to {
-							transform: translateX(-100%);
-							}
-						}
-						@media (max-width: 768px) {
+						// Inserta el nombre del cliente en el signIn y la barra del menú principal
+						const nombreUserio = document.getElementById("nombreUserArriba");
+						// Limpia el contenido existente en el elemento
+						nombreUserio.innerHTML = "";
+				
+						const nombr23e = nombre;
+				
+						// Crea un nuevo elemento div para contener el nombre del dueño
+						const nombreUser8547 = document.createElement('div');
+				
+						// Agrega estilos al nuevo elemento div
+						nombreUser8547.style.color = 'white'; // Texto blanco
+						nombreUser8547.style.fontWeight = 'bold'; // Texto en negrita
+						nombreUser8547.style.textAlign = 'center'; // Texto centrado horizontalmente
+						nombreUser8547.style.display = 'flex'; // Utiliza flexbox para centrar verticalmente
+						nombreUser8547.style.alignItems = 'center'; // Texto centrado vert1icalmente
+						nombreUser8547.style.width = '100%'; // Ancho fijo
+						nombreUser8547.style.overflow = 'hidden'; // Oculta el desbordamiento
+						nombreUser8547.style.whiteSpace = 'nowrap'; // Texto en una sola línea
+						nombreUser8547.style.position = 'relative';
+
+						// Agrega el contenido HTML al nuevo elemento div con el CSS incluido
+						nombreUser8547.innerHTML = `
+							<style>
 							.marquees {
-								animation: marquees 10s linear infinite; /* Ajustar la velocidad si es necesario */
+								margin-top: 2rem !important;
+								color:white !important;
+								width: 100%;
+								display: inline-block;
+								animation: marquees 10s linear infinite;
+								font-size: 1.5rem; /* Tamaño de letra */
 							}
-						}
-						</style>
-						<div class="marquees">
-						<p>¡Hola, ${nombr23e}! ¿Que vamos a comprar hoy?</p>
-						</div>
-					`;
+							@keyframes marquees {
+								from {
+								transform: translateX(100%);
+								}
+								to {
+								transform: translateX(-100%);
+								}
+							}
+							@media (max-width: 768px) {
+								.marquees {
+									animation: marquees 10s linear infinite; /* Ajustar la velocidad si es necesario */
+								}
+							}
+							</style>
+							<div class="marquees">
+							<p>¡Hola, ${nombr23e}! ¿Que vamos a comprar hoy?</p>
+							</div>
+						`;
 						// Agrega el nuevo elemento div al elemento con id "duenoEcom"
 						nombreUserio.appendChild(nombreUser8547);
-						// agrega el boton salir al menu
+
+						// SALIR cerrar sesion agrega el boton salir al menu
 						const salir = document.getElementById("salir");
 						const btnSalir = document.createElement("a");
 						btnSalir.setAttribute("href", "#");
 						btnSalir.innerText = "Salir";
-						btnSalir.addEventListener("click", function(event) {
-							event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-							vuelvePronto(`Chau ${clienteEcomm.nombre}, Vuelve pronto`)
-							// Puedes redirigir a la página de inicio u otra página después de eliminar los datos del almacenamiento local
-							setTimeout(async () => {
-								sessionStorage.removeItem("clienteEcomm")
-								sessionStorage.removeItem("DataOwnerEcom")
-								await borrarsessionStorage()
-								// Recargar la página
-								location.reload();
-							}, 2000); 
-						});
-						// Agregar el enlace al elemento dataUserDiv 
 						salir.appendChild(btnSalir);
-	
+
 						// agrega el boton Mis datos al menu
 						const signIn           = document.getElementById("signIn23");
 						signIn.innerHTML = ""
-						const liElement        = document.createElement("li");
-						liElement.className    = "links";
-						liElement.style.margin = "auto auto auto -0.51rem"; // Ajuste de estilo CSS
+						const liElement        = document.createElement("i");
+						// liElement.className    = "links";
+						// liElement.style.margin = "-6rem, -4rem -4rem 8rem !important"; // Ajuste de estilo CSS
 						liElement.style.cursor = "pointer";
 						// Asignar el contenido HTML al elemento li
 						liElement.innerHTML = `
-							<a data-bs-toggle="modal" data-bs-target="#dataUsuario">Mis datos</a>
+						<a data-bs-toggle="modal" data-bs-target="#dataUsuario">Mis datos</a>
 						`;
+						liElement.style.transition = "transform 0.5s ease"; // Agrega una transición suave al efecto de zoom
 						// Agregar el elemento li al elemento signIn
 						signIn.appendChild(liElement);
-	
-						let dataC = clienteEcomm
-	
+
+						let dataC = clienteEcommFresh
+
 						// Agrega el logo del usuario al menú
 						const domLogoUser = document.getElementById("logoUser21");
 						domLogoUser.innerHTML = "";
-	
+
 						// Crea un elemento de imagen
 						const imgElement = document.createElement("img");
 						imgElement.className = "logoUser";
@@ -1618,40 +1509,48 @@ imgGiga.forEach((img, index) => {
 						imgElement.style.height = "90px"; // Establece la altura de la imagen
 						imgElement.style.borderRadius = "50%"; // Hace la imagen redonda
 						imgElement.style.transition = "transform 0.5s ease"; // Agrega una transición suave al efecto de zoom
-	
+
 						// Aplica el efecto de zoom al hacer hover sobre la imagen
 						imgElement.addEventListener("mouseenter", () => {
 							imgElement.style.transform = "scale(1.051)"; // Aumenta la escala al 110% cuando se le hace hover
 						});
-	
+
 						// Revierte el efecto de zoom cuando se quita el hover de la imagen
 						imgElement.addEventListener("mouseleave", () => {
 							imgElement.style.transform = "scale(1)"; // Restaura la escala original cuando se quita el hover
 						});
-	
+
 						// Crea un elemento de enlace
 						const linkElement = document.createElement("a");
 						linkElement.setAttribute("data-bs-toggle", "modal");
 						linkElement.setAttribute("data-bs-target", "#dataUsuario");
-	
+
 						// Agrega el elemento de imagen como hijo del enlace
 						linkElement.appendChild(imgElement);
-	
+
 						// Agrega el elemento de enlace al contenedor domLogoUser
 						domLogoUser.appendChild(linkElement);
-	
-					} else {
-						mostrarAlerta(`${responseData.message}`),
-						console.log(`Hay un error, Encontro un cliente logeado con este error:`,responseData)
-					}
-				})
-				.catch(error => {
-					console.log(`Hay un error, Encontro un cliente logeado con este error: ${error}`,
-				);
-			});
+
+					} 
+				};
+				const accionSalir = document.getElementById("salir");
+				accionSalir.addEventListener("click", function(event) {
+					event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+					vuelvePronto(`Chau ${clienteEcomm.nombre}, Vuelve pronto`)
+					// Puedes redirigir a la página de inicio u otra página después de eliminar los datos del almacenamiento local
+					setTimeout(async () => {
+						sessionStorage.removeItem("clienteEcomm")
+						sessionStorage.removeItem("DataOwnerEcom")
+						await borrarsessionStorage()
+						// Recargar la página
+						location.reload();
+					}, 2000); 
+				});
+				await revisaExisteClienteLogeado ();
+				await revisarSiHayPedidoPendiente();
 				// detecta si el url viene con un pago de Mercado PAgo
-				function detectandoPagoEnUrl() {
-					//console.log("Entro a detectar el pago en URL")
+				async function detectandoPagoEnUrl() {
+					console.log("Entro a detectar el pago en URL")
 					// Obtener la URL actual del navegador
 					const currentURL = window.location.href;
 					// Parsear la URL para obtener los parámetros de consulta
@@ -1679,23 +1578,22 @@ imgGiga.forEach((img, index) => {
 						}
 					}
 				}
-				detectandoPagoEnUrl();
+				await detectandoPagoEnUrl();
 			} 
-		}
-
 		await detectPromosparams()
-
+		}
 	}); //fin DOMContentLoaded
 
 	//*********debe quedar AFUERA del DOMContentLoaded*************************************************************
 
 	// funcion que busca primero las direcciones de envio y despues cobra y GUARDA EL EPDIDDO EN sessionStorage
 	async function averiguandoDireccionEntrega(tipoCobro) {
+		// cierra el carrito
+		$('#offcanvasExample').modal('hide');
 		// revisa si ya esta logeado
-		const jwtToken            = sessionStorage.getItem('jwtToken');
-		const clienteEcommString2 = sessionStorage.getItem('clienteEcomm');
-		const clienteEcomm       = JSON.parse(clienteEcommString2);
-		console.log("Entro a la funcion averiguandoDireccionEntrega", clienteEcomm.direcciones.length)
+		const jwtToken      = sessionStorage.getItem('jwtToken');
+		const clienteEcomm  = JSON.parse(sessionStorage.getItem('clienteEcomm'));
+		// console.log("Entro a la funcion averiguandoDireccionEntrega", clienteEcomm.direcciones.length)
 		// Evitar el envío predeterminado del formulario
 		try {
 			// Asignar la fecha actual al atributo timeP de cada elemento del array
@@ -1766,7 +1664,7 @@ imgGiga.forEach((img, index) => {
 						
 							// Agregar el manejador de eventos 'click' para elegir la dirección de envío
 							aqui.addEventListener('click', async () => {
-								console.log("Eligio una direccion 999999999999999999999999999999999999999999999999999")
+								//console.log("Eligio una direccion 999999999999999999999999999999999999999999999999999")
 								// mostrarModalLoading()
 								await $('#loadingModal').modal('show');
 								// Ahora ocultar los modal opciones pago
@@ -1799,6 +1697,8 @@ imgGiga.forEach((img, index) => {
 					modalUsuario.show();
 				} else {
 					console.log('No tienes direcciones guardadas');
+					// ocultar el carrito
+					$('#offcanvasExample').modal('hide');
 					// Mostrar el modal
 					const modalUsuario = new bootstrap.Modal(document.getElementById('exampleModalToggleDir'), {
 						backdrop: 'static',  // Evita que el modal se cierre haciendo clic fuera de él
@@ -1812,9 +1712,9 @@ imgGiga.forEach((img, index) => {
 				//NO estaba logueado o inscripto asi que guardar los datos del formulario de la compra en sessionStorage
 				mostrarAlerta(`No estás logueado. <br> Se ha guardado tu compra. <br> Inicia sesión o regístrate para completar tu compra.`)
 				// Recargar la página después de 5 segundos
-				setTimeout(() => {
-					location.reload();
-				}, 5000);
+				// setTimeout(() => {
+				// 	location.reload();
+				// }, 5000);
 			}
 		} catch (error) {
 			mostrarAlerta(`No se obtuvo la info de las direcciones de envio del cliente.${error}`)
@@ -1826,7 +1726,7 @@ imgGiga.forEach((img, index) => {
 	const offcanvasExample = new bootstrap.Offcanvas(document.getElementById('offcanvasExample'));
 	async function armarCarrito(listaPedidoClone, oky ) {
 		const clienteEcom = sessionStorage.getItem("clienteEcom")
-		const dataOwner   = sessionStorage.getItem("dataOwner") || sessionStorage.getItem("DataOwnerEcom")
+		dataOwner   = sessionStorage.getItem("dataOwner") || sessionStorage.getItem("DataOwnerEcom")
 		//console.log("Que llegan a la funcion armarCarrito",dataOwner, clienteEcom, listaPedidoClone)
 		if (clienteEcom) {
 			await costoEnvio(clienteEcom, dataOwner )
@@ -1847,6 +1747,7 @@ imgGiga.forEach((img, index) => {
 		// Iterar sobre la lista de pedidos clonada y agregar cada producto al carrito
 		listaPedidoClone.forEach(pedidoItem => {
 			const { nombreProducto, cantidad, idProducto, imagen, descripcion } = pedidoItem;
+			//console.log("Que hay?????? ownerProducts?????", ownerProducts)
 			const findAlgo = ownerProducts.find(i => i._id === idProducto) || ownerPromos.find(i => i._id === idProducto);
 			//console.log("Que hay???????????",findAlgo)
 			const cantProdRest = findAlgo.cantidad || findAlgo.cantidadDisponible - findAlgo.cantidadPromoVendidas
@@ -2167,7 +2068,7 @@ imgGiga.forEach((img, index) => {
 		}
 		console.log("Que datos recibe para cobrrar?", dataProductos.direccion);
 		const { pais, estado, localidad, calle, numeroPuerta, CP, lat, lng } = dataProductos.direccion;
-		const dataOwner = JSON.parse(sessionStorage.getItem("DataOwnerEcom"));
+		dataOwner = JSON.parse(sessionStorage.getItem("dataOwner"));
 		const cliente = JSON.parse(sessionStorage.getItem("clienteEcomm"));
 		const pedido = dataProductos.dataPedido;
 		const token = dataProductos.token;
@@ -2312,13 +2213,11 @@ imgGiga.forEach((img, index) => {
 		document.getElementById('productosEncontrados').style.display = 'none';
 	}
 
-/******************** Modulos para el usarioEcomer*/
-
 	// funcion que sirve para agregar direcciones
 	async function guardarNuevaDireccion(direccion) {
-		console.log("entra a la funcion para agregar direccion")
 		const jwtToken = sessionStorage.getItem('jwtToken');
 		const clienteEcommString = JSON.parse(sessionStorage.getItem('clienteEcomm'));
+		console.log("entra a la funcion para agregar direccion", clienteEcommString._id)
 		// Verificar si el token JWT existe en el almacenamiento local
 		if (jwtToken) {
 			// Asignar el token JWT al objeto direccion
@@ -2388,7 +2287,7 @@ imgGiga.forEach((img, index) => {
 		});
 	};
 
-	// Función para renderizar los pedidos del usuario ecommerce
+	// Función para renderizar los pedidos del usuario ecommerce.
 	function renderizarPedidos(comprasCliente) {
 		//console.log("Que llega a renderizar productos", comprasCliente)
 		const pedidosContainer = document.getElementById('pedidos223');
@@ -2403,60 +2302,59 @@ imgGiga.forEach((img, index) => {
 		const listaDelPedido = comprasCliente
 		//console.log("Que llega a renderizar listaDelPedido", listaDelPedido)
 		listaDelPedido.forEach(pedido => {
+			console.log("renderizarPedidos/", pedido);
+		
 			function formatearFecha(fecha) {
 				const options = { day: 'numeric', month: 'short', year: 'numeric' };
 				return new Date(fecha).toLocaleDateString('es-ES', options);
 			}
-
-			let totalCompra = pedido.TotalCompra
-			// Crear la estructura de la tarjeta para cada pedido
-			const card = document.createElement('div');
-			const mensaje = `¿Seguro que quiere cancelar su pedido? <br> De haber una diferencia económica a favor o en contra por acto de cancelación deberá negociarla directamente en el comercio.`
-			card.innerHTML = `<style>
-			.fa-hover:hover {
-				transform: scale(1.10); /* Aumentar tamaño en un 5% */
-				transition: transform 0.51s; /* Transición de 1 segundo */
-				color: green !important; /* Cambiar a color verde */
-				position: relative;
-			}
-			.fa-hover:active {
-				transform: scale(0.9); /* Disminuir tamaño en un 10% */
-				transition: transform 0.51s; /* Transición de 1 segundo */
-				color: red !important; /* Cambiar a color rojo */
-				position: relative;
-			}
-		</style>
 		
-		<div class="card" id="${pedido.codigoPedido}" style="height: auto !important; z-index:88888 !important">
-			<div class="card-header text-center">Código del pedido: ${pedido.codigoPedido}</div>
-			<br>
-			<a href="#">
-				<img src="${pedido.logoOwner}" style="border-radius:100rem; width:35px; height:auto"/>
-				<p>Datos del comercio</p>
-			</a>
-			<div class="card-body text-md-left">
-				<p class="card-text"><strong>Nombre del comercio:</strong> ${pedido.nombreEcomm}</p>
-				<p class="card-text"><strong>Fecha:</strong> ${formatearFecha(pedido.fecha)}</p>
-				<p class="card-text"><strong>Cantidad de productos:</strong> ${pedido.totalProductos}</p>
-				<p class="card-text"><strong>Total de la compra:</strong> ${totalCompra.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
-				<p class="card-text"><strong>Forma de pago:</strong> ${pedido.tipoDePago}</p>
-				<p class="card-text"><strong>Estado del envío:</strong> ${pedido.statusEnvio}</p>
-			</div>
-			<div class="card-footer" align="center">
-				<a class="fas fa-eye fa-hover tooltip-arrow" href="#" onclick="mostrarModalPedido('${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Mostrar Pedido"></a>
-				<a class="fas fa-exclamation-circle fa-hover" href="#" onclick="mostrarModalReclamo('${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Iniciar Reclamo"></a>
-				<a class="fas fa-sync-alt fa-hover" href="#" onclick="cambiarDirePedido('${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Ver y Cambiar Dirección del Pedido"></a>
-				<a class="fas fa-times-circle fa-hover" href="#" onclick="cancelarPedido('${mensaje}', '${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Cancelar Pedido"></a>
-			</div>
-		</div>
-			`;
-			
+			let totalCompra = pedido.TotalCompra;
+			const card = document.createElement('div');
+			const mensaje = `¿Seguro que quiere cancelar su pedido? <br> De haber una diferencia económica a favor o en contra por acto de cancelación deberá negociarla directamente en el comercio.`;
+		
+			// Aquí aseguramos que en pantallas medianas (md) las tarjetas ocupen la mitad (col-md-6) y en pantallas pequeñas (col-12) ocupen todo el ancho.
+			card.classList.add('col-md-6', 'col-12', 'mb-3');
+			card.innerHTML = `<style>
+				.fa-hover:hover {
+					transform: scale(1.10);
+					transition: transform 0.51s;
+					color: green !important;
+				}
+				.fa-hover:active {
+					transform: scale(0.9);
+					transition: transform 0.51s;
+					color: red !important;
+				}
+			</style>
+			<div class="card" id="${pedido.codigoPedido}" style="height: auto !important; z-index:88888 !important">
+				<div class="card-header text-center">
+					Código del pedido: ${pedido.codigoPedido}
+					<img src="${dataOwner.pathLogo}" style="border-radius:100rem; width:35px; height:auto"/>
+				</div>
+				<div class="card-body text-md-left">
+					<p class="card-text"><strong>Nombre del comercio:</strong> ${dataOwner.ecommerceName}</p>
+					<p class="card-text"><strong>Fecha:</strong> ${formatearFecha(pedido.fecha)}</p>
+					<p class="card-text"><strong>Cantidad de productos:</strong> ${pedido.totalProductos}</p>
+					<p class="card-text"><strong>Total de la compra:</strong> ${totalCompra.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
+					<p class="card-text"><strong>Forma de pago:</strong> ${pedido.tipoDePago}</p>
+					<p class="card-text"><strong>Estado del envío:</strong> ${pedido.statusEnvio}</p>
+				</div>
+				<div class="card-footer text-center">
+					<a class="fas fa-eye fa-hover tooltip-arrow" href="#" onclick="mostrarModalPedido('${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Mostrar Pedido"></a>
+					<a class="fas fa-exclamation-circle fa-hover" href="#" onclick="mostrarModalReclamo('${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Iniciar Reclamo"></a>
+					<a class="fas fa-sync-alt fa-hover" href="#" onclick="cambiarDirePedido('${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Ver y Cambiar Dirección del Pedido" hidden></a>
+					<a class="fas fa-times-circle fa-hover" href="#" onclick="cancelarPedido('${mensaje}', '${pedido.codigoPedido}')" data-toggle="tooltip" data-placement="top" title="Cancelar Pedido"></a>
+				</div>
+			</div>`;
+		
 			// Agregar la tarjeta al contenedor de pedidos
 			pedidosContainer.appendChild(card);
-			// Calcular el total de pedidos
+		
+			// Calcular el total de pedidos y compras
 			const totalPedidos = listaDelPedido.length;
-			// Calcular el total de compras
-			const totalCompras = listaDelPedido.reduce((total, listaDelPedido) => total + listaDelPedido.TotalCompra, 0);
+			const totalCompras = listaDelPedido.reduce((total, pedido) => total + pedido.TotalCompra, 0);
+		
 			// Actualizar los elementos HTML con los resultados
 			document.getElementById('totalPedidos').textContent = totalPedidos;
 			document.getElementById('totalCompras').textContent = totalCompras.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
@@ -2476,7 +2374,7 @@ imgGiga.forEach((img, index) => {
 			//obtener datosCLiente del sessionStorage y el pedido en cuestion
 			const dataPedClie = JSON.parse(sessionStorage.getItem('clienteEcomm'));
 			const idCliente = dataPedClie.idCliente
-			const dataO = JSON.parse(sessionStorage.getItem('DataOwnerEcom'));
+			const dataO = JSON.parse(sessionStorage.getItem('dataOwner'));
 			const idOwner = dataO._id
 			const arrayDataPed = dataPedClie.comprasCliente
 			const objPedido = arrayDataPed.find(e => e.codigoPedido === codPedi)
@@ -2666,7 +2564,6 @@ imgGiga.forEach((img, index) => {
 	function mostrarModalReclamo(codigoPedido) {
 		// Obtener el modal de reclamos y el cuerpo del modal
 		const modalReclamos = document.getElementById('modalReclamos');
-		const modalBody = modalReclamos.querySelector('.modal-body22');
 		// Actualizar el título del modal con el código del pedido
 		const tituloCodigoPedido = modalReclamos.querySelector('.modal-header h4');
 		tituloCodigoPedido.textContent = `Código del pedido: ${codigoPedido}`;
@@ -2679,9 +2576,9 @@ imgGiga.forEach((img, index) => {
 	function cambiarDirePedido(codigoPedido) {
 		codigoPedido25741 = codigoPedido
 		//console.log("quedireccion hay que cambiar por su codigo de Pedido", codigoPedido);
-		const dataOwnerCrudo = sessionStorage.getItem('DataOwnerEcom');
-		const dataOwner = JSON.parse(dataOwnerCrudo);
-		const idCliente = dataOwner._id
+		dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'));
+		dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'));
+		const idCliente = dataCliente._id
 			//console.log("Que dataOwner encontro", dataOwner)
 			// Buscamos en todas las ventas
 			const dataDire = dataOwner.Ventas.find(venta => {
@@ -2911,8 +2808,7 @@ imgGiga.forEach((img, index) => {
 	async function costoEnvio(cienteEcomm, dataOwner ) {
 		//console.log("***************Entro a la funcion costoEnvio", cienteEcomm, dataOwner)
 		// verificar si tiene empresa de envio
-		// const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'))
-		// const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'))
+		dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'))
 		if (dataOwner.deliveryCompany.length >= 1 && cienteEcomm.direcciones.length >= 1 ) {
 			const latLngClient = { lat: cienteEcomm.direcciones[0].lat, lng: cienteEcomm.direcciones[0].lng };
 			//console.log("que direccion tiene el cliente?",latLngClient)
@@ -2936,12 +2832,12 @@ imgGiga.forEach((img, index) => {
 		else{
 			if (dataOwner.deliveryCompany.length >= 1) {
 				//console.log("Debe registrar su direccion para calcular el costo de envio")
-				costoDelivery.push(`Debe registrar su direccion para calcular el costo de envio`,)
+				costoDelivery.push(`Debe registrar su dirección para calcular el costo de envío.`,)
 				// Almacenar el costo de envío en sessionStorage
 				// Almacenar costoDelivery en sessionStorage como una cadena JSON
 			}else{
 				//console.log("Comuniquese con el vendedor para calcular el costo de envio")
-				costoDelivery.push(`Comuniquese con el vendedor para calcular el costo de envio`,)
+				costoDelivery.push(`Comuniquese con el vendedor para calcular el costo de envío`,)
 			}
 			return true
 		}
@@ -3046,17 +2942,19 @@ imgGiga.forEach((img, index) => {
 
 	// sirve para re enviar a al direccion del dominio del ecommerce
 	async function dominioUrl() {
-		const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
-		const basicdata = JSON.parse(sessionStorage.getItem('datosBasicos')) || null;
-		console.log("Entro a buscar el domioURL en index Ecommerce")
+		const dataOwn = JSON.parse(sessionStorage.getItem('dataOwner')) ;
+		const dataB = JSON.parse(sessionStorage.getItem('basicData'));
+		console.log("Entro a buscar el dominio desde el index ecommerce", dataB)
+        const urlServer = dataB[0].urlServer || null;
+		console.log("Entro a buscar el domioURL en index Ecommerce", urlServer)
 		let dominio
-		if (dataOwner.dominio) {
-			dominio = dataOwner.dominio;
+		if (dataOwn.dominio) {
+			dominio = dataOwn.dominio;
 			// Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
 			//console.log("Entro por tiene dominio", dominio)
 			return dominio;
 		} else {
-			dominio = basicdata.data.ConfigsOne[0].urlServer + dataOwner.urlOwner;
+			dominio = urlServer + dataOwn.urlOwner;
 			// Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
 			console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominio)
 			return dominio;
@@ -3064,21 +2962,19 @@ imgGiga.forEach((img, index) => {
 	}
 
 	// rescata los datos desde el server
-	async function rescueData(urlOwner) {
+	async function rescueData(idCliente) {
 		try {
 			// Busca los datos del dueño del ecommerce para configurar el sitio web
 			const idEnpoints = JSON.parse(sessionStorage.getItem("idEndpoints"));
-			const idleruleru = idEnpoints[0];
 			let urlOwner = window.location.pathname.split('/')[1];
-			//console.log("***rescueData****¿Qué endpoints encontró en el local storage?", idleruleru, urlOwner, idleruleru);
-	
-			const response = await fetch(`${idleruleru}`, {
+			//console.log("***rescueData****¿Qué endpoints encontró en el local storage?",);
+			const response = await fetch(idEnpoints[0], {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 					'Authorization': `Bearer ${jwToken}`
 				},
-				body: JSON.stringify({ urlOwner, idleruleru }),
+				body: JSON.stringify({ urlOwner, idCliente }),
 			});
 	
 			if (!response.ok) {
@@ -3088,13 +2984,13 @@ imgGiga.forEach((img, index) => {
 			const responseData = await response.json();
 	
 			// Procesar y guardar los datos recibidos
-			const dataOwner = responseData.data.dataOwner;
-			const ownerMensajes = responseData.data.ownerMensajes;
-			const ownerPromos = responseData.data.ownerPromos;
-			const ownerProducts = responseData.data.ownerProducts;
-			const basicData = responseData.data.basicData;
-	
-			console.log('Datos recibidos:', responseData.data);
+			let dataOwner     = responseData.data.dataOwner;
+			let ownerMensajes = responseData.data.ownerMensajes;
+			let ownerPromos   = responseData.data.ownerPromos;
+			let ownerProducts = responseData.data.ownerProducts;
+			let basicData     = responseData.data.basicData;
+			let dataCliente   = responseData.data.dataCliente;
+			//console.log('Datos recibidos desde rescue????????????:', responseData.data);
 	
 			// Almacenar en sessionStorage
 			sessionStorage.setItem("dataOwner", JSON.stringify(dataOwner));
@@ -3102,6 +2998,9 @@ imgGiga.forEach((img, index) => {
 			sessionStorage.setItem("ownerPromos", JSON.stringify(ownerPromos));
 			sessionStorage.setItem("basicData", JSON.stringify(basicData));
 			sessionStorage.setItem("ownerMensajes", JSON.stringify(ownerMensajes));
+			if (dataCliente) {
+				sessionStorage.setItem("clienteEcomm", JSON.stringify(dataCliente));
+			}
 	
 			//console.log("Desde RESCUESESSION: ¿Qué datos encontró en session?", { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData });
 	
@@ -3117,83 +3016,97 @@ imgGiga.forEach((img, index) => {
 		}
 	}
 
-	// rescata lso datos desde el session
-	async function dataSession(urlOwner) {
-		await rescueData(urlOwner)
-		// Obtener los datos almacenados en sessionStorage
-		const dataOwner     = JSON.parse(sessionStorage.getItem("ownerData") || sessionStorage.getItem("DataOwnerEcom") || '{}');
-		const ownerProducts = JSON.parse(sessionStorage.getItem("ownerProducts") || '[]');
-		const ownerPromos   = JSON.parse(sessionStorage.getItem("ownerPromos") || '[]');
-		const ownerMensajes = JSON.parse(sessionStorage.getItem("ownerMensajes") || '[]');
-		const basicData     = JSON.parse(sessionStorage.getItem("basicData")) || JSON.parse(sessionStorage.getItem("datosBasicos") || [])
 
-		urlServer = basicData.urlServer
-		urlOwner  = dataOwner.urlOwner
-
-		if (dataOwner._id && ownerProducts && basicData) {
-			//console.log("Desde dataSession que datos enconro en session????????", {dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData})
-			return { dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData };
-		} else {
-			//console.log("Desde nul null")
-			// return false
-			const data = await rescueData(urlOwner)
-			return data
-		}
+	// agrega el diseño al ecommerce y obtiene que diseño eligio el owner
+	async function agregarClase(desing) {
+		//console.log("Entro a colorear el diseño", desing)
+		try {
+			if (desing) {
+				// Obtener los elementos por sus IDs y agregarles la clase
+				var elementosIds = ["coloratepapa", "muestraChau",
+					"coloreamePAgos","color23BigImg", "colorCpanelCli2587",
+					"coloredDir", "loadingModal", "colorElsign", "sigIngColor", 
+					"noticiasColor", "coloreame", "coloreame2", "designPromos", 
+					"colorBtnProdProm2", "colorBtnProdProm", "footer", "barraMenuArriba", 
+					"intenertOK", "offcanvasExample", "offcanvasRight", "imagenModal", 
+					"instruccionesUdpated", "coloredChangeDir","coloredChangeDir", "colorearReclamos", "colorListPEd" 
+				]; // Agrega aquí los IDs que desees
 		
+				// agrega lis ide para que se coloren las cardde productos y promos
+				ownerProducts && ownerProducts.length && ownerProducts.forEach(product => 
+					elementosIds.push(`coloreateputo${product._id}`)
+				);
+				ownerPromos && ownerPromos.length && ownerPromos.forEach(product => 
+					elementosIds.push(`coloreateProm${product._id}`)
+				);
+
+				elementosIds.forEach(function(id) {
+					var elemento = document.getElementById(id);
+					// Verificar si el elemento existe antes de agregar la clase
+					if (elemento) {
+						elemento.classList.add(desing);
+					} else {
+						console.console(`El elemento con ID "${id}" no existe en el DOM.`);
+					}
+				});
+			}
+		} catch (error) {
+			console.warn(`Se produjo un error en el diseño de la tienda `, error);
+		}
 	}
 
+	function armarListaDelCarritoProm(idProducto, cantidades, ok) {
+		// busca el producto seleccionado para el carrito de todos los productos en el array Categorias
+		function encontrarProductoPorIdEnCategorias(categorias, idProducto) {
+			for (const categoria in categorias) {
+				const productosEnCategoria = categorias[categoria];
+				const productoEncontrado = productosEnCategoria.find(producto => producto._id === idProducto);
+				if (productoEncontrado) {
+					return {
+						categoria,
+						producto: productoEncontrado
+					};
+				}
+			}
+			return null; // Retorna null si el producto no se encuentra en ninguna categoría
+		}
+
+		const product = encontrarProductoPorIdEnCategorias(categoriasProm, idProducto);
+		const producto = product.producto;
+
+		// Obtener información del producto seleccionado
+		const nombreProducto = `${producto.nombreProducto}`;
+		const cantidad = parseInt(cantidades, 10);
+		const precio = parseFloat(`${producto.precio}`);
+		const imagen = `${producto.rutaSimpleImg[0]}`;
+		const descripcion = `${producto.descripcion}`;
+		const idCliente = "";
+
+		// Crear un objeto del pedido con la información del producto solicitado
+		const pedido = { idCliente, descripcion, imagen, nombreProducto, cantidad, precio, idProducto };
+		//console.log("Contenido del pedido :", pedido);
+
+		// Clonar la lista de pedidos para evitar afectar el estado anterior
+		pedido.subTotal = cantidad * precio;
+
+		// Compara el pedido con lo que está guardado en listaPedido y lo diferente lo incluye
+		//console.log("Que lista de pedido llega a armar listaPedido", listaPedido);
+
+		const cheIngresado = listaPedido.find(e => e.idProducto === idProducto);
+
+		// Si no está ya en listaPedidos, se añade la lista de pedidos
+		if (!cheIngresado) {
+			listaPedido.push(pedido);
+		}
+
+		let listaPedidoClone = [...listaPedido];
+		armarCarrito(listaPedidoClone, ok);
+	}
 
 	//console.log("Entro al identificador para ver si tiene el /Promo")
 	async function detectPromosparams() {
 		$(document).ready(function() {
 			
-		function armarListaDelCarritoProm(idProducto, cantidades, ok) {
-			// busca el producto seleccionado para el carrito de todos los productos en el array Categorias
-			function encontrarProductoPorIdEnCategorias(categorias, idProducto) {
-				for (const categoria in categorias) {
-					const productosEnCategoria = categorias[categoria];
-					const productoEncontrado = productosEnCategoria.find(producto => producto._id === idProducto);
-					if (productoEncontrado) {
-						return {
-							categoria,
-							producto: productoEncontrado
-						};
-					}
-				}
-				return null; // Retorna null si el producto no se encuentra en ninguna categoría
-			}
-	
-			const product = encontrarProductoPorIdEnCategorias(categoriasProm, idProducto);
-			const producto = product.producto;
-	
-			// Obtener información del producto seleccionado
-			const nombreProducto = `${producto.nombreProducto}`;
-			const cantidad = parseInt(cantidades, 10);
-			const precio = parseFloat(`${producto.precio}`);
-			const imagen = `${producto.rutaSimpleImg[0]}`;
-			const descripcion = `${producto.descripcion}`;
-			const idCliente = "";
-	
-			// Crear un objeto del pedido con la información del producto solicitado
-			const pedido = { idCliente, descripcion, imagen, nombreProducto, cantidad, precio, idProducto };
-			//console.log("Contenido del pedido :", pedido);
-	
-			// Clonar la lista de pedidos para evitar afectar el estado anterior
-			pedido.subTotal = cantidad * precio;
-	
-			// Compara el pedido con lo que está guardado en listaPedido y lo diferente lo incluye
-			//console.log("Que lista de pedido llega a armar listaPedido", listaPedido);
-	
-			const cheIngresado = listaPedido.find(e => e.idProducto === idProducto);
-	
-			// Si no está ya en listaPedidos, se añade la lista de pedidos
-			if (!cheIngresado) {
-				listaPedido.push(pedido);
-			}
-	
-			let listaPedidoClone = [...listaPedido];
-			armarCarrito(listaPedidoClone, ok);
-		}
 			// Obtiene la URL actual
 			const currentUrl2 = window.location.href;
 			if (currentUrl2.includes("/Promo/")) {
@@ -3400,4 +3313,23 @@ imgGiga.forEach((img, index) => {
 				//console.log("La URL actual no incluye '/Promo/'.");
 			}
 		})
+	}
+
+
+	// esta funcion sire para borrar el local storage cuando salis de la aplicasion
+	async function borrarsessionStorage() {
+		sessionStorage.removeItem("ownerEcom");
+		sessionStorage.removeItem("dataOwner");
+		sessionStorage.removeItem("basicData");
+		sessionStorage.removeItem('dataPayOSes');
+		sessionStorage.removeItem('datosBasicos');
+		sessionStorage.removeItem('jwtToken');
+		sessionStorage.removeItem('endPointsIdTokens');
+		sessionStorage.removeItem('idEndpoints');
+		sessionStorage.removeItem('jwTokenOwner');
+		sessionStorage.removeItem('dataOwner');
+		sessionStorage.removeItem('ownerMensajes');
+		sessionStorage.removeItem('ownerProducts');
+		sessionStorage.removeItem('ownerPromos');
+		return;
 	}

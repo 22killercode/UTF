@@ -1,8 +1,11 @@
-    async function mpWallet(dataCliente, dataOwner) {
-      try {
-          console.log("Oprimió el botón de pago mpWallet id=btnPagar007", dataOwner._id, dataCliente._id)
-          const pedidoPendCobrar   = JSON.parse(sessionStorage.getItem('pedidoCarritoPendientePago'))
+    async function mpWallet(dataCli, dataOwn) {
+      try { 
+        let dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm')) || dataCli
+        let dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || dataOwn
+          console.log("Dentro de la funcion mpWallet id=btnPagar007", dataOwner._id, dataCliente._id)
+          const pedidoPendCobrar = JSON.parse(sessionStorage.getItem('pedidoCarritoPendientePago'))
           const jwToken = sessionStorage.getItem('jwtToken') 
+
           const payer = {
             firstName: dataCliente.nombre,
             lastName: dataCliente.apellido,
@@ -10,14 +13,20 @@
           }
 
           // Si no está el cliente, debe logearse
-          if (dataCliente === null || dataCliente == undefined || dataCliente.length <= 0) { 
-            console.log("El cliente NO esta!!!", dataCliente)
-            // Ocultar el modal de staticBackdrop si está presente
-            $('#staticBackdropMediosPago').modal('hide');
-            // Mostrar el modal de usuario
-            $('#usuario').modal('show');
-            return
+          if (!dataCliente || Object.keys(dataCliente).length === 0) {
+            console.log("El cliente NO está en mpWallet!!!", dataCliente);
+            mostrarAlerta("Logeate para continuar desde mpwallet");
+            
+            setTimeout(() => {
+              // Ocultar el modal de staticBackdrop si está presente
+              $('#staticBackdropMediosPago').modal('hide');
+              // Mostrar el modal de usuario
+              $('#usuario').modal('show');
+            }, 1500);
+            
+            return; // Terminar la ejecución si no hay cliente
           }
+
 
           await updatePrice(pedidoPendCobrar);
 
@@ -30,12 +39,11 @@
             amount = costEnvio[1]
           }
 
-          const data = {dataCliente, pedidoPendCobrar, jwToken, amount}
+          const data = {dataCliente, pedidoPendCobrar,  amount}
 
           const idEnpointCheq = JSON.parse(sessionStorage.getItem("idEndpoints"))
-          
-          console.log("Que mpWalletmpWalletmpWalletmpWallet", idEnpointCheq[125])
 
+          console.log("Que mpWalletmpWalletmpWalletmpWallet", idEnpointCheq[125])
           fetch(`${idEnpointCheq[125]}`, {
             //fetch(`${urlServer}MPwallets`, {
             method: 'POST',
@@ -45,9 +53,7 @@
             },
             body: JSON.stringify(data)
           })
-
           .then(response => response.json())
-
           .then(data => {
             ocultarModalLoading()
             if (data.error) {
@@ -56,7 +62,7 @@
               return
             }
             console.log("************Que datos obtiene desde MP Wallet", data)
-            createCheckoutButton(data.dataMP, payer, dataCliente, dataOwner, amount);
+            createCheckoutButton8789(data.dataMP, payer, dataCliente, dataOwner, amount);
           })
           .catch(error => {
             console.error('Error al obtener la preferencia del backend:', error);
@@ -69,8 +75,11 @@
         }
     };
 
-    async function createCheckoutButton(preferenceID, payer, dataCliente, dataOwner, amount) {
+    async function createCheckoutButton8789(preferenceID, payer, dataCliente, dataOwner, amount) {
       //const mercadopago = new MercadoPago('TEST-fd6e2ffa-d72d-4ef8-8d61-f1e341e9afb9');
+
+      const modal = new bootstrap.Modal(document.getElementById('staticBackdropMediosPago'));
+      modal.show();
 
       const basicData = JSON.parse(sessionStorage.getItem("basicData")) || JSON.parse(sessionStorage.getItem("datosBasicos"));
 
@@ -80,11 +89,11 @@
           basicData?.[0]?.ArTokenPublicMP || 
           basicData?.data?.ConfigsOne?.[0]?.ArTokenPublicMP;
 
-      console.log("00000000000ico para la WAllet encuentra???",tokenMPWallet,  preferenceID)
+      console.log("0000createCheckoutButton0000000ico para la WAllet encuentra???",tokenMPWallet,  preferenceID)
       const mercadopago = new MercadoPago(tokenMPWallet);
       //console.log("00000mercadopago000000ico para la WAllet encuentra???", mercadopago, preferenceID)
       if (tokenMPWallet == undefined) {
-        console.log("00000mercadopago000000000000000000000000")
+        console.log("tokenMPWallettokenMPWallet erroneo")
         mostrarAlerta(mercadopago)
       }
       //console.log("11111111111111Que mercadopago para la wallet armo???", mercadopago)
@@ -94,7 +103,7 @@
         // Abrir el modal
         $('#usuario').modal('show');
         $('#staticBackdropMediosPago').modal('hide');
-        mostrarAlerta("Por favor logeate nuevamente para continuar la operación");
+        mostrarAlerta("MPWALLET Por favor logeate nuevamente para continuar la operación");
         console.log("Error inesperado durante el proceso de creación del wallet:");
         //return
       } else {
@@ -212,14 +221,31 @@
         // Crea un nuevo elemento para cada producto y agrega los detalles
         const productDetails = document.createElement("div");
         productDetails.innerHTML = `
-          <div class="" style="margin: 0; padding: 0;">
-            <img src="${imagen}" style="width: 35px; height: auto;" />
-            <p style="text-align: left;">Producto: ${title}</p>
-            <p style="text-align: left;">Cantidad: ${quantity}</p>
-            <p style="text-align: left;">Precio unitario: ${unitPrice.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
-            <p style="text-align: left;">Sub total: ${subTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
-            
-          </div>
+<div class="card" style="width: 200px !important; margin: 0.5rem; padding: 1rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: #fff; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+    <!-- Contenedor para centrar el título -->
+    <div style="text-align: center; margin-bottom: 0.5rem;">
+        <p style="font-weight: bold; margin: 0;">Producto: ${title}</p>
+    </div>
+    
+    <!-- Contenedor para centrar la imagen -->
+    <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
+        <img src="${imagen}" style="width: 180px !important; height: auto; border-radius: 5px;" />
+    </div>
+
+    <!-- Texto alineado a la izquierda -->
+    <p style="text-align: left; margin-bottom: 0.5rem;">Cantidad: ${quantity}</p>
+    <p style="text-align: left; margin-bottom: 0.5rem;">Precio unitario: ${unitPrice.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
+    <p style="text-align: left;">Sub total: ${subTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
+</div>
+
+<style>
+.card:hover,
+.card:active {
+    transform: scale(1.02); /* Aumenta un 2% */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa a la derecha y abajo */
+}
+</style>
+
         `;
         // Agrega el nuevo elemento al elemento quantity
         quantityElement.appendChild(productDetails);
@@ -237,4 +263,3 @@
     document.getElementById("cerrarModalPagos").addEventListener("click", function () {
       location.reload();
     });
- 

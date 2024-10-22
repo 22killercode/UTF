@@ -15,11 +15,20 @@
 
 		<link href="/css/main.css" rel="stylesheet">
 
+		<!-- descargar excell -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 		<!-- <link rel="stylesheet" href="assets/css/font-awesome.min.css" /> -->
 		<link rel="stylesheet" href="public/css/font-awesome.min.css" />
 		<!-- Include jQuery and Bootstrap JS -->
 		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 		<!-- Bootstrap bundle JS (popper.js + bootstrap.js) -->
+		<!-- Bootstrap CSS -->
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<!-- Bootstrap JS -->
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">	  
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -50,8 +59,6 @@
 
 		<script src="/alertas.js"></script>    
 
-		<!-- <script src="/reiniciar.js"></script>     -->
-		<!-- <link rel="manifest" href="manifests/manifest.json"> -->
 	</head> 
 
 	<header id="barraMenuArriba" style="z-index:9999999 !important;display:none !important; margin: 0 !important; opacity: 0; height: 3.5rem !important; position: sticky !important; width: 100vw; justify-content: space-between; align-items: center;">
@@ -81,11 +88,9 @@
 			</i>
 			
 			<button id="butonMenu9898" style="background: transparent; border: none; margin: 0 0 0 -1rem !important;" 
-			class="none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-		<i class="fas fa-bars blanco icon-hover" style="color:white"></i>
-	</button>
-	
-			
+					class="none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+				<i class="fas fa-bars blanco icon-hover" style="color:white"></i>
+			</button>
 			<style>
 				.icon-hover {
 					transition: box-shadow 0.3s ease;
@@ -211,20 +216,27 @@
 				padding: 0 0 0 0!important;
 				}
 			}
+			
 		</style>
-		<nav class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="z-index: 9999999999999999999999999 !important;width: 100vw; max-width: 400px; overflow-y: auto;">
-			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		
+		<nav  class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="z-index: 9999999999999999999999999 !important;width: 100vw; max-width: 300px; overflow-y: auto;">
+			<div class="card-header m-2 p-2 d-flex flex-column align-items-center justify-content-center" style="color:white">
+				<div class="d-flex justify-content-between align-items-center w-100">
+					<h4>Menu de opciones</h4>
+					<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style="filter: invert(1);"></button>
+				</div>
+				<div id="logoUser21" class="mt-2"></div>
+			</div>
 			<div class="offcanvas-header">
 				<ul class="links" style="margin-top: 0; list-style-type: none;">
-					<li id="logoUser21"></li>
 					<li id="signIn23"><a href="" data-bs-toggle="modal" data-bs-target="#usuario">Ingresar</a></li>
-					<li><a href="#">Noticias</a></li>
+					<li><a href="#" data-bs-toggle="modal" data-bs-target="#modelNews">Noticias</a></li>
 					<li><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Carrito</a></li>
 					<div class="links accordion accordion-flush" id="accordionFlushExample" style="margin-left: -2rem;">
-						<li>
+						<li style="margin:-0.5rem auto -0.5rem -0.2rem">
 							<div class="accordion-item" style="background: transparent !important;">
-								<button id="botonaso" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" style="background: transparent !important;" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-									Categorías
+								<button id="botonaso" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" style="filter: invert(1); background: transparent !important;color:black !important" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+									<strong>Categorías</strong>
 								</button>
 								<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
 									<div class="accordion-body">
@@ -234,11 +246,11 @@
 									</div>
 								</div>
 							</div>
-						</li>
-						<li>
+						</li >
+						<li style="margin:-1rem auto -0.5rem -0.2rem">
 							<div class="accordion-item" style="background: transparent !important; margin-top: -0.5rem;">
-								<button id="botonaso" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" style="background: transparent !important;" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-									Productos
+								<button id="botonaso" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" style="filter: invert(1); background: transparent !important; color:black !important" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+									<strong>Productos</strong>
 								</button>
 								<div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="background: transparent !important;">
 									<div class="accordion-body" style="background: transparent !important;">
@@ -256,7 +268,10 @@
 					<li id="salir"></li>
 				</ul>
 			</div>
+			<div class="card-footer">
+			</div>
 		</nav>
+		
 	</header>
 
 	<body style="overflow-x: hidden; width: 99vw; max-width: 100%;" id="intenertOK">
@@ -394,7 +409,7 @@
 		</section>
 
 		<!-- Contenedor de productos y categorías y promociones -->
-		<div  align="center" style="padding-bottom: 1rem;">
+		<div align="center" style="padding-bottom: 1rem;">
 			<style>
 				.nav-tabs {
 					position: absolute !important; 
@@ -646,7 +661,7 @@
 			</div>
 		</div>
 
-		<!-- ofcanvas de carrito donde se ponen todos los productos elegidos a la izquierda-->
+		<!-- MODAL ofcanvas de carrito donde se ponen todos los productos elegidos a la izquierda-->
 		<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style="z-index:999999999 !important ; width: 100vw; max-width: 540px; background: linear-gradient(to bottom right, #fff, #3498db); border: none; max-height: 100vh; overflow-y: auto;color:white">
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" align="right"></button>
 				<div class="" align="center" >
@@ -667,7 +682,7 @@
 				</div>
 				<div id="" style="display: flex; flex-direction: column; align-items: center; color:white">
 					<div id="sumatoria"></div>
-					<button class="btn btn-success btn-block" id="btnPagar007" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdropMediosPago">Pagar</button>
+					<button class="btn btn-success w-75" id="btnPagar007" type="button" >Pagar</button>
 					<script>
 							const botonetero = document.getElementById('btnPagar007');
 							botonetero.addEventListener("click", async () => {
@@ -681,34 +696,28 @@
 								sessionStorage.setItem("pedidoCarritoPendientePago", stringylistaPedido);
 
 								//console.log("que listado de pedidos guarda desde pagar",stringylistaPedido )
-								const dataCliente      = JSON.parse(sessionStorage.getItem('clienteEcomm'))
-								const ownerDataString  = sessionStorage.getItem('ownerEcom');
-								//const dataOwner      = JSON.parse(ownerDataString)
-								console.log("Oprimio el boton de pago id=btnPagar007", dataCliente)
+								let dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'))
+								dataOwner   = JSON.parse(sessionStorage.getItem('dataOwner'))
+								// console.log("Oprimio el boton de pago id=btnPagar007", dataCliente)
 								// si no hay ningun pedido te avisa y reinicia la pagina
-								if ( listaPedido.length == 0  ) {
-									mostrarAlerta("Agrega algún producto al carrito")
-									// Esperar 1 segundos (3000 milisegundos)
+								if (listaPedido.length === 0) {
+									mostrarAlerta("Agrega algún producto al carrito");
+									// Esperar 2.5 segundos (2500 milisegundos)
 									setTimeout(() => {
 										// Recargar la página
 										window.location.reload();
 									}, 2500);
-								}else{
-									if (!dataCliente || Object.keys(dataCliente).length === 0) {
-										// si no hay nadie logeado debe inscribirse o logerse
-										// Recargar la página
-										$('#usuario').modal('show');
-										// setTimeout(() => {
-										// 	// Recargar la página
-										// 	window.location.reload();
-										// }, 1500);
-									}
-									if (dataCliente && listaPedido.length >= 1) {
-										// envia el boton de mercado pago al modal de la selección de medios de pago
-										await mpWallet(dataCliente, dataOwner) 
-									}else{
-										// se el cliente no esta logeado se llama al modal sigIng/UP para que lo haga
-										// Abrir el modal
+								} 
+								else {
+									if (dataCliente && Object.keys(dataCliente).length > 0) {
+										console.log("Entro a cliente SI logeado", dataCliente);
+										// Envia el botón de Mercado Pago al modal de la selección de medios de pago
+										await mpWallet(dataCliente, dataOwner);
+									} else {
+										console.log("Entro a cliente NO logeado", dataCliente);
+										mostrarAlerta("Logeate o Regístrate para continuar");
+										// Si no hay nadie logeado debe inscribirse o logearse
+										$('#staticBackdropMediosPago').modal('hide');
 										$('#usuario').modal('show');
 									}
 								}
@@ -854,21 +863,17 @@
 				const datosFormulario = { nombre, email, apellido, celular, descripcionProyecto:mensaje, consulta:true };
 							
 							console.log("Que datos tiene consulta", datosFormulario)
-							// Obtén el JWT del sessionStorage
-							const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
-							const jwToken = dataBasic.data.jwToken;
-							
 							try {
-								const idEnpointCheq = dataBasic.data.endpointTokensArray2.endpointsFronen;
-								const idEnpointCheq101 = idEnpointCheq[101];
+								const dataBasic = JSON.parse(sessionStorage.getItem('idEndpoints'));
+								// const jwToken = dataBasic.data.jwToken;
+								console.log("Hizo click en el form de CONSULTAS", dataBasic[101] );
 								// Envía los datos CUSTOM al servidor usando fetch
-								console.log("Hizo click en el form de CONSULTAS",idEnpointCheq101, );
-								const response = await fetch(`${idEnpointCheq101}`, {
+								const response = await fetch(`${dataBasic[101]}`, {
 								//const response = await fetch('/recibir/consultas', {
 									method: 'POST',
 									headers: {
 										'Content-Type': 'application/json',
-										'Authorization': `Bearer ${jwToken}`
+										// 'Authorization': `Bearer ${jwToken}`
 									},
 									body: JSON.stringify(datosFormulario)
 								});
@@ -912,24 +917,25 @@
 
 	<!-- Modal medios de cobro-->
 	<div class="modal fade" id="staticBackdropMediosPago" data-bs-target="#staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 999999999 !important">
-		<div  class="modal-dialog modal-dialog-centered modal-lg" style="overflow: hidden;">
+		<div class="modal-dialog modal-dialog-centered modal-lg" style="overflow: hidden;">
 			<div id="coloreamePAgos" class="modal-content">
 				<div class="modal-header">
 					<h5 class="text-center" id="staticBackdropLabel">Contenido de tu carrito</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="cerrarModalPagos"></button>
 				</div>
+
 				<style>
 					.modal-body {
 						text-align: center;
 					}
-					
+
 					.btn {
 						display: inline-block;
 						text-align: center;
 						vertical-align: middle;
 						margin: 10px; /* Ajusta el margen según sea necesario */
 					}
-					
+
 					.btn img {
 						display: block;
 						margin: 0 auto;
@@ -937,67 +943,169 @@
 						height: auto;
 						border-radius: 2rem;
 					}
-					
+
 					.btn p {
 						margin: 10px 0;
 					}
 				</style>
-				<div class="modal-body">
+
+				<div class="modal-body text-center d-flex flex-column align-items-center">
 					<div id="idProductoss" hidden></div>
-					<div id="quantityCompra" class="row d-flex justify-content-center" style="width: 100% !important; height: 220px !important; overflow-y: auto;"></div>
+
+					<div id="quantityCompra" class="row d-flex justify-content-center overflow-auto" style="width: 100%; height: 220px;">
+					</div>
+
 					<br>
+
 					<p id="totalCantidad"></p>
-					<!-- TODO termnar esto de incluir el costod e envio solo arme este id -->
-					<p id="CostoEnvio123"></p> 
+
+					<!-- TODO: Incluir el costo de envío, solo armé este id -->
+					<p id="CostoEnvio123"></p>
+
 					<p id="summary-total"></p>
-					<h5>Elige tu forma de pago</h5>
+
+					<h5>Desliza hacia abajo y elige la forma de pago que prefieras.</h5>
+
 					<div id="shopping-cart"></div>
+
 					<div id="statusScreenBrick_container"></div>
+
 					<div id="payment"></div>
+
 					<div id="paymentBrick_container"></div>
+
 					<div id="walletBrick_container"></div>
+
 					<div id="statusScreen"></div>
+
 					<div id="btnPagDir"></div>
-					<div id="wallet_container"></div>
-					<fieldset class="card-container" id="opcionesDePago">
+
+					<div id="wallet_container" class="w-75"></div>
+
+					<fieldset class="card-container text-center w-100 m-1 p-1" id="opcionesDePago">
 						<p>Espere, Cargando opciones de Mercado Pago</p>
 						<div class="spinner-border text-primary" role="status">
 							<span class="visually-hidden"></span>
 						</div>
 						<br><br>
 					</fieldset>
-					<script>
-						const DataOwner = JSON.parse(sessionStorage.getItem("ownerData"))||[]	;
-						const InsertBtnPgDir = document.getElementById("btnPagDir");
-						if (DataOwner.tipoMembresia === "premium") {
-							InsertBtnPgDir.innerHTML = `
-								<button class="btn-block btn-primary" id="PCE" style="border-radius: 0.45rem; align-items: center;">
-									<div style="display: flex; align-items: center; justify-content: center;" align="center">
-										<div>
-											<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem;">
-										</div>
-										<div style="color: white; margin-left: 1rem;">
-											<p style="margin: 0;">Pago Seguro & Directo. (Vendedor & Cliente)</p>
-										</div>
-									</div>
-								</button>
-							`;
-						}else{
-							InsertBtnPgDir.innerHTML = `
-								<button class="btn-block btn-secondary" id="" style="border-radius: 0.45rem; align-items: center; pointer-events: none; opacity: 0.5;">
-									<div style="display: flex; align-items: center; justify-content: center;" align="center">
-										<div>
-											<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem;">
-										</div>
-										<div style="color: white; margin-left: 1rem;">
-											<p style="margin: 0;">Pago Seguro & Directo. (Solo membresía premium)</p>
-										</div>
-									</div>
-								</button>
-							`;
-						}
-					</script>
 				</div>
+
+				<script>
+					let dataOwn = JSON.parse(sessionStorage.getItem("dataOwner")) || [];
+					const InsertBtnPgDir = document.getElementById("btnPagDir");
+
+					// Función asíncrona para obtener la ubicación y dirección del usuario para saber qué opciones de pago tiene en su región
+					async function obtenerDire2545() {
+						console.log('Intentando obtener la dirección...');
+						let ubicacion;
+						while (!ubicacion) {
+							try {
+								if (navigator.geolocation) {
+									console.log('Geolocalización soportada por el navegador.');
+									ubicacion = await new Promise((resolve, reject) => {
+										navigator.geolocation.getCurrentPosition(resolve, reject);
+									});
+
+									const latitud = ubicacion.coords.latitude;
+									const longitud = ubicacion.coords.longitude;
+									console.log(`Latitud: ${latitud}, Longitud: ${longitud}`);
+
+									const apiKey = '88c66a70b2324b81a65c9059116e088c';
+									const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitud}+${longitud}&key=${apiKey}`;
+									const response = await fetch(url);
+									const data = await response.json();
+									console.log('Data encontrada:', data);
+
+									if (data.results && data.results.length > 0) {
+										const direccionCompleta = data.results[0].formatted;
+										const pais = data.results[0].components.country;
+										console.log('Dirección encontrada:', direccionCompleta);
+										return { latitud, longitud, direccionCompleta, pais };
+									} else {
+										console.error('No se encontró ninguna dirección. Reintentando...');
+										ubicacion = null; // Reiniciar para volver a intentar
+									}
+								} else {
+									alert('La geolocalización no es compatible con este navegador.');
+									return null;
+								}
+							} catch (error) {
+								console.error('Error al obtener la ubicación:', error);
+								ubicacion = null; // Reiniciar para volver a intentar
+							}
+						}
+					}
+
+					async function actualizarBotonesPago(pais) {
+						if (!pais) {
+							console.error('No se pudo obtener el país.');
+							return;
+						}
+						if (pais === "Argentina") {
+							if (dataOwn.tipoMembresia === "premium") {
+								InsertBtnPgDir.innerHTML = `
+									<button class="btn-block btn-primary w-100" id="PCE" style="border-radius: 0.45rem; display: flex; align-items: center; justify-content: center; padding: 1rem; width: 100%;">
+										<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem; margin-right: 1rem;">
+										<div style="text-align: left; color: white;">
+											Pago Seguro & Directo. (Vendedor & Cliente)
+										</div>
+									</button>
+									<button class="btn-block btn-secondary w-100" style="border-radius: 0.45rem; pointer-events: none; opacity: 0.5; display: flex; align-items: center; justify-content: center; padding: 1rem; width: 100%;">
+										<img src="images/Modologo.jpg" alt="Próximamente" width="80px" style="border-radius: 0.25rem; margin-right: 1rem;">
+										<div style="text-align: left; color: white;">
+											(próximamente)
+										</div>
+									</button>`;
+							} else {
+								InsertBtnPgDir.innerHTML = `
+									<button class="btn-block btn-secondary w-100" style="border-radius: 0.45rem; pointer-events: none; opacity: 0.5; display: flex; align-items: center; justify-content: center; padding: 1rem; width: 100%;">
+										<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem; margin-right: 1rem;">
+										<div style="text-align: left; color: white;">
+											Pago Seguro & Directo. (Vendedor & Cliente)
+										</div>
+									</button>
+									<button class="btn-block btn-secondary w-100" style="border-radius: 0.45rem; pointer-events: none; opacity: 0.5; display: flex; align-items: center; justify-content: center; padding: 1rem; width: 100%;">
+										<img src="images/Modologo.jpg" alt="Próximamente" width="80px" style="border-radius: 0.25rem; margin-right: 1rem;">
+										<div style="text-align: left; color: white;">
+											(próximamente)
+										</div>
+									</button>`;
+							}
+						} else {
+							if (dataOwn.tipoMembresia === "premium") {
+								InsertBtnPgDir.innerHTML = `
+									<button class="btn-block btn-primary w-100" id="PCE" style="border-radius: 0.45rem; display: flex; align-items: center; justify-content: center; padding: 1rem; width: 100%;">
+										<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem; margin-right: 1rem;">
+										<div style="text-align: left; color: white;">
+											Pago Seguro & Directo. (Vendedor & Cliente)
+										</div>
+									</button>`;
+							} else {
+								InsertBtnPgDir.innerHTML = `
+									<button class="btn-block btn-secondary w-100" style="border-radius: 0.45rem; pointer-events: none; opacity: 0.5; display: flex; align-items: center; justify-content: center; padding: 1rem; width: 100%;">
+										<img src="images/logoContraEntrega.jpg" alt="Pago contra entrega" width="50px" style="border-radius: 0.25rem; margin-right: 1rem;">
+										<div style="text-align: left; color: white;">
+											Pago Seguro & Directo. (Vendedor & Cliente)
+										</div>
+									</button>`;
+							}
+						}
+					}
+
+					// Evento para ejecutar la función cuando el modal se abre
+					const modalElement = document.getElementById('staticBackdropMediosPago');
+					modalElement.addEventListener('shown.bs.modal', async () => {
+						const ubi = await obtenerDire2545();
+						// console.log("***************Ubicación obtenida:", ubi);
+						if (ubi) {
+							// const pais = "uruguay"
+							await actualizarBotonesPago(ubi.pais);
+							// console.log("*****************Que país y membresía encontró:", ubi.pais, dataOwner.tipoMembresia);
+						}
+					});
+				</script>
+
 				<div class="modal-footer">
 				</div>
 			</div>
@@ -1006,10 +1114,10 @@
 
 	<!-- Modal New´s -->
 	<div class="modal fade" id="modelNews" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index:999999999999999999999999999 !important">
-		<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-dialog  modal-dialog-scrollable modal-dialog-centered modal-lg">
 			<div class="modal-content" id="noticiasColor">
 				<div class="modal-header">
-					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Noticias</h5>
+					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Noticias y anuncios</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="location.reload();"></button>
 				</div>
 				<div class="modal-body">
@@ -1036,64 +1144,87 @@
 		});
 	</script>
 	</div>
-	
 
 	<!-- Modal Icono en tu pantalla-->
-	<div class="modal fade" id="icon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<style>
-        .responsive-img {
-            width: 100% !important; /* Ajusta la imagen a su tamaño real */
-            height: auto; /* Mantiene la proporción de la imagen */
-            display: block; /* Elimina cualquier espacio en línea que pueda causar problemas con el tamaño del contenedor */
-            transition: transform 0.3s ease; /* Añade una transición suave para el efecto hover */
-        }
+	<div class="modal fade" id="icon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 99999999999999999999 !important;">
+		<style>
+			/* Estilos renombrados para evitar conflictos */
+			.modal-img-responsive {
+				width: 50px !important; /* Tamaño fijo para todas las imágenes */
+				height: 100px; /* Asegura que todas las imágenes tengan la misma altura */
+				object-fit: cover; /* Mantiene la proporción de las imágenes sin deformarlas */
+				display: block;
+				transition: transform 0.3s ease;
+			}
 
-        .responsive-img:hover {
-            transform: scale(1.05); /* Aumenta el tamaño de la imagen en un 5% al pasar el ratón por encima */
-        }
+			.modal-img-responsive:hover {
+				transform: scale(1.05); /* Efecto hover para ampliar la imagen un 5% */
+			}
 
-        .center-align {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-		<div class="modal-dialog modal-fullscreen-xxl-down" id="">
+			.modal-center-align {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+			}
+
+			.modal-card-body-custom {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.modal-body-custom {
+				text-align: center;
+			}
+		</style>
+
+		<div class="modal-dialog modal-dialog-centered ">
 			<div class="modal-content" id="coloreame2">
 				<div class="modal-header">
-					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center !important;">Icono en tu pantalla.</h5>
+					<h5 class="modal-title" id="staticBackdropLabel" style="text-align: center;">Icono en tu pantalla.</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<div class="modal-body">
-					<div class="content">
-						<div class="card-header" style="width: 100%;">
+
+				<div class="modal-body modal-body-custom">
+					<div class="container">
+						<div class="modal-header-custom" style="width: 100%;">
 							<h4>Agrega un icono de inicio rápido a tu pantalla</h4>
 						</div>
-						<div class="row card-body" style="padding: 0.5rem;">
+
+						<div class="row modal-card-body-custom" style="padding: 0.5rem;">
 							<h5>Elije el tipo de navegador y dispositivo en el que quieres agregar el icono.</h5>
-							<br><br>
-							<div class="col card-header center-align" style="margin: 0.2rem;">
+							<br><br><br>
+
+							<!-- PC Icon -->
+							<div class="col modal-center-align" style="margin: 0.5rem;">
 								<h3>PC</h3>
 								<button class="btn" data-bs-toggle="modal" data-bs-target="#Chrome">
-									<img src="/images/iconoChrome.jpg" alt="Chrome" class="responsive-img">
+									<img src="/images/iconoChrome.jpg" alt="Chrome" class="modal-img-responsive">
 								</button>
 							</div>
-							<div class="col card-header center-align" style="margin: 0.2rem;">
-								<h4>IOS</h4>
+
+							<!-- iOS Icon -->
+							<div class="col modal-center-align" style="margin: 0.5rem;">
+								<h3>IOS</h3>
 								<button class="btn" data-bs-toggle="modal" data-bs-target="#IOS">
-									<img src="/images/iconoIOS.jpg" alt="IOS" class="responsive-img">
+									<img src="/images/iconoIOS.jpg" alt="IOS" class="modal-img-responsive" style="width: 70px !important;">
 								</button>
 							</div>
-							<div class="col card-header center-align" style="margin: 0.2rem;">
-								<h4>Android</h4>
+
+							<!-- Android Icon -->
+							<div class="col modal-center-align" style="margin: 0.5rem;">
+								<h3>Android</h3>
 								<button class="btn" data-bs-toggle="modal" data-bs-target="#Android">
-									<img src="/images/iconoAndroid.jpg" alt="Android" class="responsive-img">
+									<img src="/images/iconoAndroid.jpg" alt="Android" class="modal-img-responsive">
 								</button>
 							</div>
+
 						</div>
 					</div>                    
 				</div>
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" hidden>Close</button>
 					<button type="button" class="btn btn-primary" hidden>Volver</button>
@@ -1101,9 +1232,8 @@
 			</div>
 		</div>
 	</div>
-
 	<!-- Modal Chrome -->
-	<div class="modal fade" id="Chrome" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="Chrome" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999999999999999999 !important;">
 		<br><br>
 		<div class="modal-dialog">
 			<div class="modal-content center-align" style="border-radius:1rem;">
@@ -1138,7 +1268,7 @@
 		</div>
 	</div>
 	<!-- Modal Android -->
-	<div class="modal fade" id="Android" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="Android" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999999999999999999 !important;">
 	<br>
 	<div  class="modal-dialog">
 		<div class="modal-content center-align" style="border-radius:1rem;">
@@ -1164,24 +1294,24 @@
 	</div>
 	</div>
 	<!-- Modal IOS -->
-	<div class="modal fade" id="IOS" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="IOS" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 99999999999999999999 !important;">
 		<br>
-		<div  class="modal-dialog">
-			<div class="modal-content" style="border-radius:1rem;">
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				<div class="modal-header">
-					<img style="width:100%;border-radius:100%;" src="/images/iconoIOS.jpg" >
+		<div class="modal-dialog">
+			<div class="modal-content" style="border-radius: 1rem;">
+				<button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+				<div class="modal-header text-center" align="center">
+					<img style="width: 30%; border-radius: 100%;" src="/images/iconoIOS.jpg" alt="iOS Icon">
 				</div>
-				<div class="modal-body  text-left">
+				<div class="modal-body text-start">
 					<h4>Agregar un icono en la pantalla de inicio de iOS de una aplicación web</h4>
 					<p>Para agregar un acceso directo a una aplicación web en la pantalla de inicio de iOS, sigue estos pasos:</p>
 					<ol>
-					<li>Abre el navegador web en tu dispositivo iOS.</li>
-					<li>Dirígete a la aplicación web que deseas agregar.</li>
-					<li>Toca el botón de "Compartir" en la parte inferior de la pantalla. Generalmente se representa con un ícono cuadrado con una flecha hacia arriba.</li>
-					<li>En el menú desplegable, busca y selecciona la opción "Agregar a pantalla de inicio".</li>
-					<li>Se te pedirá que personalices el nombre del acceso directo. Puedes cambiar el nombre si lo deseas o dejarlo tal como está.</li>
-					<li>Toca el botón "Agregar" o "Aceptar" para confirmar la creación del acceso directo.</li>
+						<li>Abre el navegador web en tu dispositivo iOS.</li>
+						<li>Dirígete a la aplicación web que deseas agregar.</li>
+						<li>Toca el botón de "Compartir" en la parte inferior de la pantalla. Generalmente se representa con un ícono cuadrado con una flecha hacia arriba.</li>
+						<li>En el menú desplegable, busca y selecciona la opción "Agregar a pantalla de inicio".</li>
+						<li>Se te pedirá que personalices el nombre del acceso directo. Puedes cambiar el nombre si lo deseas o dejarlo tal como está.</li>
+						<li>Toca el botón "Agregar" o "Aceptar" para confirmar la creación del acceso directo.</li>
 					</ol>
 					<p>Una vez que hayas seguido estos pasos, se creará un acceso directo en la pantalla de inicio de tu dispositivo iOS que te llevará directamente a la aplicación web cuando lo selecciones.</p>
 					<p>Ten en cuenta que los nombres y las ubicaciones exactas de los botones y las opciones pueden variar según la versión del navegador web y la versión de iOS que estés utilizando, pero en general, estos pasos deberían ayudarte a agregar un acceso directo de una aplicación web a tu pantalla de inicio en iOS.</p>
@@ -1189,6 +1319,7 @@
 			</div>
 		</div>
 	</div>
+	
 
 	<!-- SIGNUP inscribir a nuevos usuarios clientes ecommerce -->
 	<div id="signUp" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 999999999;" data-bs-target="#staticBackdrop">
@@ -1209,7 +1340,7 @@
 							<li>Ejemplo: "Minombre22".</li>
 						</ul>
 					</div>
-					<form id="signUpForm" class="needs-validation" novalidate>
+					<form id="signUpForm7456896" class="needs-validation" novalidate>
 						<div class="row">
 							<div class="col-md-6">
 								<div class="mb-3">
@@ -1275,7 +1406,7 @@
 							</div>
 						</div>
 						<div class="mb-3 text-center">
-							<button class="btn btn-primary w-100" type="submit">Enviar</button>
+							<button class="btn btn-primary w-50" type="submit">Enviar</button>
 						</div>
 					</form>
 				</div>
@@ -1303,36 +1434,41 @@
 				const password1 = document.getElementById('validationCustomPassword').value;
 				const password2 = document.getElementById('validationCustomPassword2').value;
 				if (password1.length < 8 || !/\d/.test(password1) || !/[A-Z]/.test(password1)) {
-					alert('La contraseña debe tener al menos 8 caracteres, incluir letras mayúsculas y números.');
+					mostrarAlerta('La contraseña debe tener al menos 8 caracteres, incluir letras mayúsculas y números.');
 					return false;
 				}
 				if (password1 !== password2) {
-					alert('Las contraseñas no coinciden.');
+					mostrarAlerta('Las contraseñas no coinciden.');
 					return false;
 				}
 				return true;
 			}
 	
-			document.getElementById('signUpForm').addEventListener('submit', function(event) {
+			document.getElementById('signUpForm7456896').addEventListener('submit', function(event) {
 				event.preventDefault();
+				$('#signUp').modal('hide');
 				if (validarContraseñas()) {
 					const form = event.target;
 					const formData = new FormData(form);
-	
+					mostrarModalLoading()
 					// Obtener datos del propietario desde sessionStorage
-					let dataOwner = sessionStorage.getItem("DataOwnerEcom");
+					let dataOwner = sessionStorage.getItem("dataOwner");
+					let conPedido = JSON.parse(sessionStorage.getItem("pedidoCarritoPendientePago"));
+					let pedidoOk = false;
+					if (conPedido) {
+						pedidoOk = true
+					}
 					if (dataOwner) {
 						dataOwner = JSON.parse(dataOwner);
 						const urlOwnerID = dataOwner.urlOwner;
 						formData.append('urlOwner', urlOwnerID || '');
 						const urlServer = dataOwner.urlServer;
 						formData.append('urlServer', urlServer || '');
-	
+						formData.append('pedidoOk', pedidoOk || '');
 						// Obtener JWT token desde sessionStorage
 						const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"));
-						const endpoint = endpoints[27];
-						//console.log("Que endpoit y que token usa", "********",  endpoint)
-						fetch(endpoint, {
+						//console.log("Que endpoit y que token usa", "********",  endpoints[27])
+						fetch(endpoints[27], {
 							method: 'POST',
 							body: JSON.stringify(Object.fromEntries(formData)),
 							headers: {
@@ -1341,26 +1477,42 @@
 						})
 						.then(response => response.json())
 						.then(data => {
+							console.log("Entro a registrarse por compra", data)
+							ocultarModalLoading()
 							if (data.success) {
-								console.log('Respuesta del servidor:', data);
-								mostrarExito(data.dataInfo.message);
-								// También puedes guardar el token si es necesario
-								sessionStorage.setItem('jwtToken', data.dataInfo.token);
-								setTimeout(() => window.location.reload(), 2000);
+								if (data.dataInfo.dataUSerEcomm && Object.keys(data.dataInfo.dataUSerEcomm).length > 0){
+									console.log('se acredito un nuevo cliente lo guarda ene sessionStorage', data);
+									// poner en el session storage
+									sessionStorage.setItem('jwtToken', data.dataInfo.token);
+									sessionStorage.setItem('clienteEcomm', JSON.stringify(data.dataInfo.dataUSerEcomm));
+									window.location.reload()
+								} else {
+									console.log('Respuesta del servidor:', data);
+									mostrarExito(data.dataInfo.message);
+									// También puedes guardar el token si es necesario
+									sessionStorage.setItem('jwtToken', data.dataInfo.token);
+									setTimeout(() => window.location.reload(), 2000);
+								}
 							} else {
-								console.error('Error al enviar los datos:', error);
+								ocultarModalLoading()
+								console.log('Error al enviar los datos SignUp:', data);
 								mostrarAlerta(`${data.message}`);
 								setTimeout(() => window.location.reload(), 2000000);
 							}
 						})
 						.catch(error => {
-							console.error('Error al enviar los datos:', error);
-							mostrarAlerta(`Error al enviar los datos. Inténtelo nuevamente., ${error}`);
+							ocultarModalLoading()
+							console.error('Error al enviar los datos SignUp:', error);
+							mostrarAlerta(`Error al enviar los datos, inténtelo nuevamente mas tarde. ${error}`);
 							setTimeout(() => window.location.reload(), 2000000);
 						});
 					}
 				}
+				else{
+					setTimeout(() => window.location.reload(), 2000);
+				}
 			});
+
 		</script>
 	</div>
 
@@ -1475,9 +1627,21 @@
 										</script>
 									</div>
 									<div class="card-header" style="margin:auto">
-										<a href="" data-bs-toggle="modal" data-bs-target="#signUp" style="margin:auto;">Registrarse</a>
+										<a href="" onclick="culo()" data-bs-toggle="modal" data-bs-target="#signUp" style="margin:auto;">Registrarse</a>
 										<br><br>
-										<a href="" hidden> Inicia sesión con Google </a>
+										<script>
+											function culo() {
+												$('#usuario').modal('hide');
+												const ocultar = document.getElementById('usuario');
+												if (ocultar) {
+													ocultar.style.display = "none"; // Oculta el elemento
+													// ocultar.innerHTML = ""
+												} else {
+													console.error('El elemento con ID "usuario" no se encontró.');
+												}
+
+											}
+										</script>
 									</div>
 								</div>
 							</div>
@@ -1493,7 +1657,7 @@
 	</div>
 
 	<!-- Modal Quiénes Somos -->
-	<div class="modal fade" id="quienesSomos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalQuienesSomosLabel" aria-hidden="true">
+	<div class="modal fade" id="quienesSomos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalQuienesSomosLabel" aria-hidden="true"style="z-index: 9999999999999999999999 !important;">
 		<div class="modal-dialog modal-dialog-centered modal-lg" align="center">
 			<div class="modal-content" id="coloreame">
 				<div class="modal-header">
@@ -1532,7 +1696,7 @@
 		
 		<script>
 			// Función para abrir el modal y mostrar los datos de quienesSomos
-			const dataOwner = JSON.parse(sessionStorage.getItem("ownerData")) || JSON.parse(sessionStorage.getItem("DataOwnerEcom")) || []
+			dataOwner = JSON.parse(sessionStorage.getItem("dataOwner")) || JSON.parse(sessionStorage.getItem("DataOwnerEcom")) || []
 			const quienesSomosData = dataOwner.quienesSomos || null
 			//console.log("quienesSomosDatakfgnkegnikngiknquienesSomosDatagikngkntgik",quienesSomosData)
 				// Verifica si hay datos para mostrar
@@ -1918,14 +2082,25 @@
 		</div>
 	</div>
 
-	<!-- Full screen modulo del usuario cliente E-commerce su datos y los datos del estado de sus pedidos-->
-	<div id="dataUsuario" class="modal fade mt-5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<!-- Usuario cliente E-commerce su datos y los datos del estado de sus pedidos-->
+	<div id="dataUsuario" class="modal fade mt-5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"style="z-index: 999999999 !important;">
+		<style>
+			.card {
+				background-color: transparent;
+				padding: 1rem;
+				margin: 1rem;
+				transition: background-color 2s;
+			}
+			.card:hover {
+				background-color: white;
+			}
+		</style>
 		<script>
 
 			// Función que se activa cuando se muestra el modal
 			document.getElementById('dataUsuario').addEventListener('shown.bs.modal', function () {
 				// Lógica que deseas ejecutar cuando se abre el modal
-				console.log('El modal se ha abierto');
+				//console.log('El modal datos cliente se ha abierto');
 				// Llamar a la función que deseas ejecutar
 				activarScript();
 			});
@@ -1933,318 +2108,309 @@
 		// Función que deseas ejecutar cuando se abre el modal
 		function activarScript() {
 			const jwToken = sessionStorage.getItem('jwtToken');
-			const clienteEcommString = sessionStorage.getItem('clienteEcomm');
-			const clienteData = JSON.parse(clienteEcommString);
-	
-			const formData2 = { jwToken, clienteData }; // Corregido para incluir jwtToken y usar clienteEcommString solo una vez
-
+			let clienteData = JSON.parse(sessionStorage.getItem('clienteEcomm'));
+			const formData2 = { jwToken, clienteData };
 			//console.log("que cliente encontro en el MODAL DE DATOS DEL CLIENTE ECOMM??",clienteData)
+			if (clienteData) {
+					// Desestructurar el objeto de datos del cliente
+					let { apellido, comprasCliente, direcciones, duenoEcom, emails, idCliente, ipCliente, nombre, numCel, password, realPass, imgCli } = clienteData;
+					document.getElementById('idCliente').value = idCliente;
 
-				if (clienteData) {
-						// Desestructurar el objeto de datos del cliente
-						let { apellido, comprasCliente, direcciones, duenoEcom, emails, idCliente, ipCliente, nombre, numCel, password, realPass, imgCli } = clienteData;
-						document.getElementById('idCliente').value = idCliente;
+					//envia a un scope mas alto y general
+					comprasClientes2 = clienteData
 
-						//envia a un scope mas alto y general
-						comprasClientes2 = clienteData
+					// Utilizar los datos desestructurados como sea necesario
+					//console.log('Datos del cliente*****************:',comprasCliente);
+					// Renderizar la plantilla con los datos del cliente
+					const nombreCli = `
+					<p>Hola ${nombre}, estos son tus datos generales.</p>`
+					// Crear el nuevo elemento div y renderizarlo en el DOM la imagen del cliente
+					const renderDataCli = document.getElementById("clienteInfo");
+					const html = `
+					<div style="margin: auto auto auto 1rem">
+						<label for="fileInput">
+							<img id="cambiarImagen" src="${imgCli}" alt="" srcset="" height="150" width="150" style="border-radius: 100rem; cursor: pointer;">
+							<p style="color: black;">Click en la imagen para cambiarla.</p>
+						</label>
+						<input id="fileInput" type="file" hidden>
+						<p><strong>Nombre:</strong> ${nombre} <span></span> <strong>Apellido:</strong> ${apellido}</p>
+					</div>
+					`;
+					renderDataCli.innerHTML = html;
 
-						// Utilizar los datos desestructurados como sea necesario
-						console.log('Datos del cliente*****************:',comprasCliente);
-						// Renderizar la plantilla con los datos del cliente
-						const nombreCli = `
-						<p>Hola ${nombre}, estos son tus datos generales.</p>`
-						// Crear el nuevo elemento div y renderizarlo en el DOM la imagen del cliente
-						const renderDataCli = document.getElementById("clienteInfo");
-						const html = `
-						<div style="margin: auto auto auto 1rem">
-							<label for="fileInput">
-								<img id="cambiarImagen" src="${imgCli}" alt="" srcset="" height="150" width="150" style="border-radius: 100rem; cursor: pointer;">
-								<p style="color: black;">Click en la imagen para cambiarla.</p>
-							</label>
-							<input id="fileInput" type="file" hidden>
-							<p><strong>Nombre:</strong> ${nombre} <span></span> <strong>Apellido:</strong> ${apellido}</p>
-						</div>
-						`;
-						renderDataCli.innerHTML = html;
+					// Función para manejar el evento de cambio de imagen con fetch
+					const handleImageChange = async (event) => {
+						const file = event.target.files[0]; // Obtener el archivo seleccionado
 
-						// Función para manejar el evento de cambio de imagen con fetch
-						const handleImageChange = async (event) => {
-							const file = event.target.files[0]; // Obtener el archivo seleccionado
+						// Crear un objeto FormData para enviar el archivo al backend
+						const formData = new FormData();
+						formData.append('cambiarImg', true); // Agregar el ID de cambiar imagen
+						formData.append('idCliente', idCliente); // Agregar el ID del cliente al FormData
+						formData.append('imagen', file); // Agregar el archivo al objeto FormData
 
-							// Crear un objeto FormData para enviar el archivo al backend
-							const formData = new FormData();
-							formData.append('cambiarImg', true); // Agregar el ID de cambiar imagen
-							formData.append('idCliente', idCliente); // Agregar el ID del cliente al FormData
-							formData.append('imagen', file); // Agregar el archivo al objeto FormData
-
-							try {
-								//cerrar el modal loading
-								mostrarModalLoading()
-								const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
-								const response = await fetch(`${endpoints[14]}`, {
-									method: 'POST',
-									body: formData, // Enviar el objeto FormData que contiene la imagen al backend
-									headers: {
-										'Authorization': `Bearer ${jwToken}`
-									}	
-								});
-								if (response.ok) {
-									//cerrar el modal loading
-									ocultarModalLoading()
-									console.log('La imagen se cargó correctamente');
-									mostrarExito('La imagen se cargó/cambio correctamente');
-									// Recargar la página después de 5 segundos
-									setTimeout(() => {
-										location.reload();
-									}, 3000); // 5000 milisegundos = 5 segundos
-								} else {
-									//cerrar el modal loading
-									ocultarModalLoading()
-									console.error('Error al cargar la imagen en el backend');
-									mostrarAlerta('Error al cargar la imagen en el backend');
-								}
-							} catch (error) {
+						try {
+							//cerrar el modal loading
+							mostrarModalLoading()
+							const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+							const response = await fetch(`${endpoints[14]}`, {
+								method: 'POST',
+								body: formData, // Enviar el objeto FormData que contiene la imagen al backend
+								headers: {
+									'Authorization': `Bearer ${jwToken}`
+								}	
+							});
+							if (response.ok) {
 								//cerrar el modal loading
 								ocultarModalLoading()
-								console.error('Ocurrió un error al enviar la imagen al backend', error);
-								mostrarAlerta('Ocurrió un error al enviar la imagen al backend');
+								console.log('La imagen se cargó correctamente');
+								mostrarExito('La imagen se cargó/cambio correctamente');
+								// Recargar la página después de 5 segundos
+								setTimeout(() => {
+									location.reload();
+								}, 3000); // 5000 milisegundos = 5 segundos
+							} else {
+								//cerrar el modal loading
+								ocultarModalLoading()
+								console.error('Error al cargar la imagen en el backend');
+								mostrarAlerta('Error al cargar la imagen en el backend');
 							}
-						};
-						// Obtener el elemento de la imagen y el input de tipo file
-						const cambiarImagen = document.getElementById('cambiarImagen');
-						const fileInput = document.getElementById('fileInput');
-						// Agregar evento click al elemento de la imagen
-						cambiarImagen.addEventListener('click', () => {
-							// Agregar evento change al input de tipo file
-							fileInput.addEventListener('change', handleImageChange);
+						} catch (error) {
+							//cerrar el modal loading
+							ocultarModalLoading()
+							console.error('Ocurrió un error al enviar la imagen al backend', error);
+							mostrarAlerta('Ocurrió un error al enviar la imagen al backend');
+						}
+					};
+					// Obtener el elemento de la imagen y el input de tipo file
+					const cambiarImagen = document.getElementById('cambiarImagen');
+					const fileInput = document.getElementById('fileInput');
+					// Agregar evento click al elemento de la imagen
+					cambiarImagen.addEventListener('click', () => {
+						// Agregar evento change al input de tipo file
+						fileInput.addEventListener('change', handleImageChange);
+					});
+
+
+					// Insertar el HTML renderizado en el elemento deseado en tu página
+					document.getElementById("nombreCliente").innerHTML = nombreCli;
+
+					const aqilosCelus = document.getElementById("insertaNumCel");
+					// Iterar sobre todos los números celulares y agregarlos como opciones al elemento select
+					if (numCel.length >= 1) {
+						numCel.forEach(numCelu => {
+							const option = document.createElement('option');
+							option.value = numCelu.numCelCliente;
+							option.textContent = `Núm cel. ${numCelu.numCelCliente}`;
+							aqilosCelus.appendChild(option);
 						});
-
-
-						// Insertar el HTML renderizado en el elemento deseado en tu página
-						document.getElementById("nombreCliente").innerHTML = nombreCli;
-
-						const aqilosCelus = document.getElementById("insertaNumCel");
-						// Iterar sobre todos los números celulares y agregarlos como opciones al elemento select
-						if (numCel.length >= 1) {
-							numCel.forEach(numCelu => {
-								const option = document.createElement('option');
-								option.value = numCelu.numCelCliente;
-								option.textContent = `Núm cel. ${numCelu.numCelCliente}`;
-								aqilosCelus.appendChild(option);
-							});
-							const numCelu = `
-								<p><strong>Numero de celular principal:</strong> ${numCel[0].numCelCliente}</p>
-							`
-							document.getElementById("numCelu").innerHTML = numCelu ? numCelu : "<strong>No tiene celular, agrega uno</strong>";
-						}
-						else{
-							document.getElementById("emailCli").innerHTML = {numCelu : "No tiene Email agrega uno"}
-						}
-						const aqilosEmail = document.getElementById("insertaEmails");
-						if (emails.length >= 1) {
-							// Iterar sobre todos los números celulares y agregarlos como opciones al elemento select
-							emails.forEach(e => {
-								const option = document.createElement('option');
-								option.value = e.emailCliente;
-								option.textContent = `Email: ${e.emailCliente}`;
-								aqilosEmail.appendChild(option);
-							});
-							const emailCli = `
-								<p><strong>Email principal:</strong> ${emails[0].emailCliente}</p>
-							`
-							document.getElementById("emailCli").innerHTML = emailCli ? emailCli : "No tienes email agrega uno";
-						}
-						else{
-							document.getElementById("emailCli").innerHTML = {emailCli : "No tiene email agrega uno"}
-						}
-
-						const pass = `
-							<p><strong>Password:</strong> ${realPass}</p>
+						const numCelu = `
+							<p><strong>Numero de celular principal:</strong> ${numCel[0].numCelCliente}</p>
 						`
-						//document.getElementById("idClientaso").innerHTML = inputIdCli;
-						// Modificar el contenido de los elementos
+						document.getElementById("numCelu").innerHTML = numCelu ? numCelu : "<strong>No tiene celular, agrega uno</strong>";
+					}
+					else{
+						document.getElementById("emailCli").innerHTML = {numCelu : "No tiene Email agrega uno"}
+					}
+					const aqilosEmail = document.getElementById("insertaEmails");
+					if (emails.length >= 1) {
+						// Iterar sobre todos los números celulares y agregarlos como opciones al elemento select
+						emails.forEach(e => {
+							const option = document.createElement('option');
+							option.value = e.emailCliente;
+							option.textContent = `Email: ${e.emailCliente}`;
+							aqilosEmail.appendChild(option);
+						});
+						const emailCli = `
+							<p><strong>Email principal:</strong> ${emails[0].emailCliente}</p>
+						`
+						document.getElementById("emailCli").innerHTML = emailCli ? emailCli : "No tienes email agrega uno";
+					}
+					else{
+						document.getElementById("emailCli").innerHTML = {emailCli : "No tiene email agrega uno"}
+					}
 
-						document.getElementById("passwordi").innerHTML = realPass ? pass : "No tiene password";
+					const pass = `
+						<p><strong>Password:</strong> ${realPass}</p>
+					`
+					//document.getElementById("idClientaso").innerHTML = inputIdCli;
+					// Modificar el contenido de los elementos
 
-						const container = document.getElementById("DireccionesResgistaradas");
-						let direccionesHTML = '';
-						// Verificar que la variable 'direcciones' esté definida y no sea null o undefined
-						if (direcciones.length >= 1) {
-							// Generar HTML para las direcciones
-							function generarHTMLDirecciones(direcciones) {
-								let direccionesHTML = '';
-								direcciones.forEach(direccion => {
-									direccionesHTML += `
-										<div class="col-md-4 mb-4">
-											<div class="card" style="min-height: 50px !important;">
-												<div class="card-body">
-													<p class="text-left"><strong>Pais:</strong> ${direccion.pais}</p>
-													<p class="text-left"><strong>Estado:</strong> ${direccion.estado}</p>
-													<p class="text-left"><strong>Localidad:</strong> ${direccion.localidad}</p>
-													<p class="text-left"><strong>Calle:</strong> ${direccion.calle}<span>  </span><strong>Número:</strong>${direccion.numeroPuerta}</p>
-													<p class="text-left"><strong>C.P:</strong> ${direccion.CP}</p>
-													<!-- Agregar un identificador único a cada botón de eliminación -->
-													<input type="hidden" id="idCliente-${direccion._id}" value="${direccion._id}">
-													<button class="btn btn-danger delete-btn" id="idcliente-${direccion._id}" value="${direccion._id}">
-														<i class="fas fa-trash"></i>
-													</button>
-												</div>
+					document.getElementById("passwordi").innerHTML = realPass ? pass : "No tiene password";
+
+					const container = document.getElementById("DireccionesResgistaradas");
+					let direccionesHTML = '';
+					// Verificar que la variable 'direcciones' esté definida y no sea null o undefined
+					if (direcciones.length >= 1) {
+						// Generar HTML para las direcciones
+						function generarHTMLDirecciones(direcciones) {
+							let direccionesHTML = '';
+							direcciones.forEach(direccion => {
+								direccionesHTML += `
+									<div class="col-md-6 mb-4">
+										<div class="card" style="min-height: 50px !important;">
+											<div class="card-body">
+												<p class="text-left"><strong>Pais:</strong> ${direccion.pais}</p>
+												<p class="text-left"><strong>Estado:</strong> ${direccion.estado}</p>
+												<p class="text-left"><strong>Localidad:</strong> ${direccion.localidad}</p>
+												<p class="text-left"><strong>Calle:</strong> ${direccion.calle}<span>  </span><strong>Número:</strong>${direccion.numeroPuerta}</p>
+												<p class="text-left"><strong>C.P:</strong> ${direccion.CP}</p>
+												<!-- Agregar un identificador único a cada botón de eliminación -->
+												<input type="hidden" id="idCliente-${direccion._id}" value="${direccion._id}">
+												<button class="btn btn-danger delete-btn" id="idcliente-${direccion._id}" value="${direccion._id}">
+													<i class="fas fa-trash"></i>
+												</button>
 											</div>
 										</div>
-									`;
-								});
-								return direccionesHTML;
-							}
-							// Lógica principal para renderizar las direcciones
-							const container = document.getElementById("DireccionesResgistaradas");
-							const direccionesHTML = generarHTMLDirecciones(direcciones);
-							container.innerHTML = `
-								<div class="row">
-									${direccionesHTML}
-								</div>
-							`;
-							// Función para agregar evento de clic a los botones de eliminación
-							document.querySelectorAll('.delete-btn').forEach(button => {
-								button.addEventListener('click', async function(event) {
-									// Función para confirmar y eliminar la dirección
-									// Obtener el id de la dirección del atributo 'data-id' del botón
-									const idDireccion = button.value;
-									console.log("Que idDireccion encontro", idDireccion)
-									const jwtToken = sessionStorage.getItem("jwtToken");
-									const clienteEc1 = sessionStorage.getItem('clienteEcomm');
-									const dataCliente = JSON.parse(clienteEc1);
-									const deleteAdress = true;
+									</div>
+								`;
+							});
+							return direccionesHTML;
+						}
+						// Lógica principal para renderizar las direcciones
+						const container = document.getElementById("DireccionesResgistaradas");
+						const direccionesHTML = generarHTMLDirecciones(direcciones);
+						container.innerHTML = `
+							<div class="row">
+								${direccionesHTML}
+							</div>
+						`;
+						// Función para agregar evento de clic a los botones de eliminación
+						document.querySelectorAll('.delete-btn').forEach(button => {
+							button.addEventListener('click', async function(event) {
+								// Función para confirmar y eliminar la dirección
+								// Obtener el id de la dirección del atributo 'data-id' del botón
+								const idDireccion = button.value;
+								console.log("Que idDireccion encontro", idDireccion)
+								const jwtToken = sessionStorage.getItem("jwtToken");
+								const clienteEc1 = sessionStorage.getItem('clienteEcomm');
+								const dataCliente = JSON.parse(clienteEc1);
+								const deleteAdress = true;
+								const data = {
+									idDireccion: idDireccion,
+									idCliente: dataCliente.idCliente,
+									Token: jwtToken,
+									deleteAdress: deleteAdress
+								};
+								const mensaje = "¿Deseas eliminar esta direccion?"
+								const rechaza = () => {
+									location.reload();
+								}
+								const confirma = async function confirmaEliminarDire() {
 									const data = {
-										idDireccion: idDireccion,
-										idCliente: dataCliente.idCliente,
-										Token: jwtToken,
-										deleteAdress: deleteAdress
-									};
-									const mensaje = "¿Deseas eliminar esta direccion?"
-									const rechaza = () => {
-										location.reload();
-									}
-									const confirma = async function confirmaEliminarDire() {
-										const data = {
-										idDireccion: idDireccion,
-										idCliente: dataCliente.idCliente,
-										Token: jwtToken,
-										deleteAdress: deleteAdress
-									};
-										try {
-											//mostrar el modal loading
-											mostrarModalLoading()
-											const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
-											const jwToken = jwtToken
-											const response = await fetch(`${endpoints[14]}`, {
-											//const response = await fetch('http://localhost:3020/upDate/datos/Cliente', {
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json'
-												},
-												body: JSON.stringify(data),
-												headers: {
-													'Content-Type': 'application/json',
-													'Authorization': `Bearer ${jwToken}`
-												}	
-											});
+									idDireccion: idDireccion,
+									idCliente: dataCliente.idCliente,
+									Token: jwtToken,
+									deleteAdress: deleteAdress
+								};
+									try {
+										//mostrar el modal loading
+										mostrarModalLoading()
+										const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+										const jwToken = jwtToken
+										const response = await fetch(`${endpoints[14]}`, {
+											method: 'POST',
+											headers: {
+												'Content-Type': 'application/json'
+											},
+											body: JSON.stringify(data),
+											headers: {
+												'Content-Type': 'application/json',
+												'Authorization': `Bearer ${jwToken}`
+											}	
+										});
 
-											const responseData = await response.json();
-											//cerrar el modal loading
-											ocultarModalLoading()
+										const responseData = await response.json();
+										//cerrar el modal loading
+										ocultarModalLoading()
 
-											if (response.ok) {
-												mostrarExito(responseData.message);
-												// Esperar 2 segundos (2000 milisegundos)
-												setTimeout(function() {
-													// Refrescar la página
-													location.reload();
-												}, 1000); // 2000 milisegundos = 2 segundos
-											} else {
-												throw new Error(responseData.message); // Lanzar un error con el mensaje del backend
-											}
-										} catch (error) {
-											mostrarAlerta(error.message); // Mostrar el mensaje de error del backend
+										if (response.ok) {
+											mostrarExito(responseData.message);
+											// Esperar 2 segundos (2000 milisegundos)
 											setTimeout(function() {
 												// Refrescar la página
 												location.reload();
 											}, 1000); // 2000 milisegundos = 2 segundos
+										} else {
+											throw new Error(responseData.message); // Lanzar un error con el mensaje del backend
 										}
+									} catch (error) {
+										mostrarAlerta(error.message); // Mostrar el mensaje de error del backend
+										setTimeout(function() {
+											// Refrescar la página
+											location.reload();
+										}, 1000); // 2000 milisegundos = 2 segundos
 									}
+								}
 
 
-									// Llamar a confirmOptions con confirma como argumento
-									const opcion33 = await confirmOptions(mensaje, confirma, rechaza);
-									if (opcion33 == "true") {
-										console.log("Que devuelve la funcion confirmOptions",opcion33)
-										confirmaEliminarDire(data)
-									}
-										// Aquí iría la lógica para eliminar la dirección
-										// Por ejemplo, podrías enviar una solicitud al servidor para eliminarla
-										// luego de confirmar la eliminación
-								});
-							});
-						}
-						else{
-							// Lógica principal para renderizar las direcciones
-							const container = document.getElementById("DireccionesResgistaradas");
-							container.innerHTML = `
-								<div class="row">
-									<p>No tienes direcciones de entrega, agrega una por favor</p>
-								</div>
-							`;
-						}
-
-	// Obtener el elemento con el ID "pedidos"********************************************************************
-						let todosLosPedidos = [];
-						const pedidosContainer = document.getElementById('pedidos223');
-
-						// Renderizar los pedidos al cargar la página
-						renderizarPedidos(comprasCliente);
-					
-						// Agregar eventos a los enlaces de "Ver Envío" si es necesario
-						const linksVerEnvio = pedidosContainer.querySelectorAll('.ver-envio');
-						linksVerEnvio.forEach(link => {
-							link.addEventListener('click', function(event) {
-								// Agrega aquí la lógica para mostrar detalles del envío cuando se hace clic en el enlace
-								event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-								console.log('Se hizo clic en "Ver Envío"');
+								// Llamar a confirmOptions con confirma como argumento
+								const opcion33 = await confirmOptions(mensaje, confirma, rechaza);
+								if (opcion33 == "true") {
+									console.log("Que devuelve la funcion confirmOptions",opcion33)
+									confirmaEliminarDire(data)
+								}
 							});
 						});
-						// va a interno scope local
-						datosPedidos = comprasCliente
-						// Llamar a la función para calcular estadísticas al cargar la página
-						calcularEstadisticas(datosPedidos);
-						// va a externo scope maximo
-						comprasClientes2 = comprasCliente
-
-						//Filtra por fechas seleccionadas desde hasta
-						document.getElementById('fechaDesde').addEventListener('change', function() {
-							const fechaDesde = new Date(this.value + "T00:00:00"); // Agregamos la hora para asegurar consistencia en las comparaciones
-							const fechaHasta = new Date(document.getElementById('fechaHasta').value + "T23:59:59"); // Agregamos la hora para asegurar consistencia en las comparaciones
-							const pedidosFiltrados = datosPedidos.filter(pedido => {
-								const fechaPedido = new Date(pedido.fecha);
-								return fechaPedido >= fechaDesde && fechaPedido <= fechaHasta;
-							});
-							renderizarPedidos(pedidosFiltrados);
-						});
-						document.getElementById('fechaHasta').addEventListener('change', function() {
-							const fechaDesde = new Date(document.getElementById('fechaDesde').value + "T00:00:00"); // Agregamos la hora para asegurar consistencia en las comparaciones
-							const fechaHasta = new Date(this.value + "T23:59:59"); // Agregamos la hora para asegurar consistencia en las comparaciones
-							const pedidosFiltrados = datosPedidos.filter(pedido => {
-								const fechaPedido = new Date(pedido.fecha);
-								return fechaPedido >= fechaDesde && fechaPedido <= fechaHasta;
-							});
-							renderizarPedidos(pedidosFiltrados);
-							// Llamar a la función para calcular estadísticas al cargar la página
-							calcularEstadisticas(pedidosFiltrados);
-						});
-					
 					}
-				else {
-					throw new Error('El servidor no pudo obtener los datos del cliente');
-				}
+					else{
+						// Lógica principal para renderizar las direcciones
+						const container = document.getElementById("DireccionesResgistaradas");
+						container.innerHTML = `
+							<div class="row">
+								<p>No tienes direcciones de entrega, agrega una por favor</p>
+							</div>
+						`;
+					}
 
+// Obtener el elemento con el ID "pedidos"********************************************************************
+					let todosLosPedidos = [];
+					const pedidosContainer = document.getElementById('pedidos223');
+
+					// Renderizar los pedidos al cargar la página
+					renderizarPedidos(comprasCliente);
+				
+					// Agregar eventos a los enlaces de "Ver Envío" si es necesario
+					const linksVerEnvio = pedidosContainer.querySelectorAll('.ver-envio');
+					linksVerEnvio.forEach(link => {
+						link.addEventListener('click', function(event) {
+							// Agrega aquí la lógica para mostrar detalles del envío cuando se hace clic en el enlace
+							event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+							console.log('Se hizo clic en "Ver Envío"');
+						});
+					});
+					// va a interno scope local
+					datosPedidos = comprasCliente
+					// Llamar a la función para calcular estadísticas al cargar la página
+					calcularEstadisticas(datosPedidos);
+					// va a externo scope maximo
+					comprasClientes2 = comprasCliente
+
+					//Filtra por fechas seleccionadas desde hasta
+					document.getElementById('fechaDesde').addEventListener('change', function() {
+						const fechaDesde = new Date(this.value + "T00:00:00"); // Agregamos la hora para asegurar consistencia en las comparaciones
+						const fechaHasta = new Date(document.getElementById('fechaHasta').value + "T23:59:59"); // Agregamos la hora para asegurar consistencia en las comparaciones
+						const pedidosFiltrados = datosPedidos.filter(pedido => {
+							const fechaPedido = new Date(pedido.fecha);
+							return fechaPedido >= fechaDesde && fechaPedido <= fechaHasta;
+						});
+						renderizarPedidos(pedidosFiltrados);
+					});
+					document.getElementById('fechaHasta').addEventListener('change', function() {
+						const fechaDesde = new Date(document.getElementById('fechaDesde').value + "T00:00:00"); // Agregamos la hora para asegurar consistencia en las comparaciones
+						const fechaHasta = new Date(this.value + "T23:59:59"); // Agregamos la hora para asegurar consistencia en las comparaciones
+						const pedidosFiltrados = datosPedidos.filter(pedido => {
+							const fechaPedido = new Date(pedido.fecha);
+							return fechaPedido >= fechaDesde && fechaPedido <= fechaHasta;
+						});
+						renderizarPedidos(pedidosFiltrados);
+						// Llamar a la función para calcular estadísticas al cargar la página
+						calcularEstadisticas(pedidosFiltrados);
+					});
+				
+				}
+			else {
+				throw new Error('El servidor no pudo obtener los datos del cliente');
+			}
 		}
 		
 		</script>
@@ -2280,14 +2446,95 @@
 								<div class="body">
 									<div class="d-flex flex-wrap align-items-center justify-content-center">
 										<!-- aqui entra la info dle usuario datos y foto -->
-										<div class="card1" style="text-align:left;" id="clienteInfo">
+										<div class="card" style="text-align:left;" id="clienteInfo">
 											<h5>Buscando tus datos</h5>
 											<div class="spinner-border text-info" role="status">
 												<span class="visually-hidden">Loading...</span>
 											</div>
 										</div>
+										<!-- cambiar password -->
+										<div class="card">
+											<i id="passwordi">
+												<h5>Buscando tu password</h5>
+												<div class="spinner-border text-info" role="status">
+													<span class="visually-hidden">Loading...</span>
+												</div>
+											</i>
+											<label for="changePassword" class="form-label" style="color:black !important">Cambiar Contraseña</label>
+											<input type="password" class="form-control" id="changePassword" placeholder="Nueva Contraseña" style="color:black !important">
+											<label for="confirmPassword" class="form-label" style="color:black !important">Confirmar nueva contraseña</label>
+											<input type="password" class="form-control" id="changeConfirmPassword" placeholder="Confirmar Contraseña" style="color:black !important">
+											<button type="button" class="btn btn-primary" id="changePass">Cambiar</button>
+										</div>
+										<script>
+											document.getElementById('changePass').addEventListener('click', async () => {
+												const idClientee = document.getElementsByName('idCliente')[0].value;
+												const newPassword = document.getElementById('changePassword').value;
+												const confirmPassword = document.getElementById('changeConfirmPassword').value;
+												const jwToken = sessionStorage.getItem('jwtToken');
+												const changPass = true
+												// Verificar si las contraseñas coinciden
+												if (newPassword !== confirmPassword) {
+													mostrarAlerta('Las contraseñas no coinciden');
+													return;
+												}
+
+												// Objeto con los datos a enviar al backend
+												const data = {
+													newPassword: newPassword,
+													confirmPassword: confirmPassword,
+													idCliente: idClientee,
+													jwToken,
+													changPass
+												};
+													// Realizar la solicitud fetch
+													try {
+														//cerrar el modal loading
+														mostrarModalLoading()
+														const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
+														const response = await fetch(`${endpoints[14]}`, {
+														//const response = await fetch('http://localhost:3020/upDate/datos/Cliente', {
+															method: 'POST',
+															headers: {
+																'Content-Type': 'application/json'
+															},
+															body: JSON.stringify(data),
+															headers: {
+																'Content-Type': 'application/json',
+																'Authorization': `Bearer ${jwToken}`
+															}	
+														});
+														//cerrar el modal loading
+														ocultarModalLoading()
+														// Verificar si la solicitud fue exitosa
+														if (response.ok) {
+															const responseData = await response.json();
+															mostrarExito(responseData.message); // Mostrar mensaje del backend en la función mostrarAlerta
+															// Esperar 3 segundos antes de recargar la página
+															setTimeout(() => {
+																location.reload(); // Recargar la página
+															}, 3000); // 3000 milisegundos = 3 segundos
+														} else {
+															// Capturar el mensaje de error del backend si está presente
+															let errorMessage = 'Error al enviar los datos para canviar su password';
+															try {
+																const responseData = await response.json();
+																if (responseData && responseData.message) {
+																	errorMessage = responseData.message;
+																}
+															} catch (error) {
+																console.error('Error al parsear la respuesta del backend:', error);
+															}
+															throw new Error(errorMessage);
+														}
+													} catch (error) {
+														console.error('Error en la solicitud Fetch para canviar su password:', error);
+														mostrarAlerta("para canviar su password",error.message); // Mostrar mensaje de error en la función mostrarAlerta
+													}
+												})
+										</script>
 										<!-- upDate celular -->
-										<div class="card1" style="margin: auto;">
+										<div class="card" style="margin: auto;">
 											<i id="numCelu">
 												<h5>Buscando tu celu</h5>
 												<div class="spinner-border text-info" role="status">
@@ -2384,7 +2631,7 @@
 											document.getElementById('btnUpdate2').addEventListener('click', enviarDatosUpdate);
 										</script>
 										<!-- upDate Email -->
-										<div class="card1" style="margin: auto;">
+										<div class="card" style="margin: auto;">
 											<i id="emailCli">
 												<h5>Buscando tu Email</h5>
 												<div class="spinner-border text-info" role="status">
@@ -2484,87 +2731,7 @@
 											// Obtener el botón y agregar un evento de clic para llamar a la función enviarDatos
 											document.getElementById('btnUpdateEmail').addEventListener('click', enviarDatosUpdate2);
 										</script>
-										<!-- cambiar password -->
-										<div class="card1">
-											<i id="passwordi">
-												<h5>Buscando tu password</h5>
-												<div class="spinner-border text-info" role="status">
-													<span class="visually-hidden">Loading...</span>
-												</div>
-											</i>
-											<label for="changePassword" class="form-label" style="color:black !important">Cambiar Contraseña</label>
-											<input type="password" class="form-control" id="changePassword" placeholder="Nueva Contraseña" style="color:black !important">
-											<label for="confirmPassword" class="form-label" style="color:black !important">Confirmar nueva contraseña</label>
-											<input type="password" class="form-control" id="changeConfirmPassword" placeholder="Confirmar Contraseña" style="color:black !important">
-											<button type="button" class="btn btn-primary" id="changePass">Cambiar</button>
-										</div>
-										<script>
-											document.getElementById('changePass').addEventListener('click', async () => {
-												const idClientee = document.getElementsByName('idCliente')[0].value;
-												const newPassword = document.getElementById('changePassword').value;
-												const confirmPassword = document.getElementById('changeConfirmPassword').value;
-												const jwToken = sessionStorage.getItem('jwtToken');
-												const changPass = true
-												// Verificar si las contraseñas coinciden
-												if (newPassword !== confirmPassword) {
-													mostrarAlerta('Las contraseñas no coinciden');
-													return;
-												}
 
-												// Objeto con los datos a enviar al backend
-												const data = {
-													newPassword: newPassword,
-													confirmPassword: confirmPassword,
-													idCliente: idClientee,
-													jwToken,
-													changPass
-												};
-													// Realizar la solicitud fetch
-													try {
-														//cerrar el modal loading
-														mostrarModalLoading()
-														const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
-														const response = await fetch(`${endpoints[14]}`, {
-														//const response = await fetch('http://localhost:3020/upDate/datos/Cliente', {
-															method: 'POST',
-															headers: {
-																'Content-Type': 'application/json'
-															},
-															body: JSON.stringify(data),
-															headers: {
-																'Content-Type': 'application/json',
-																'Authorization': `Bearer ${jwToken}`
-															}	
-														});
-														//cerrar el modal loading
-														ocultarModalLoading()
-														// Verificar si la solicitud fue exitosa
-														if (response.ok) {
-															const responseData = await response.json();
-															mostrarExito(responseData.message); // Mostrar mensaje del backend en la función mostrarAlerta
-															// Esperar 3 segundos antes de recargar la página
-															setTimeout(() => {
-																location.reload(); // Recargar la página
-															}, 3000); // 3000 milisegundos = 3 segundos
-														} else {
-															// Capturar el mensaje de error del backend si está presente
-															let errorMessage = 'Error al enviar los datos para canviar su password';
-															try {
-																const responseData = await response.json();
-																if (responseData && responseData.message) {
-																	errorMessage = responseData.message;
-																}
-															} catch (error) {
-																console.error('Error al parsear la respuesta del backend:', error);
-															}
-															throw new Error(errorMessage);
-														}
-													} catch (error) {
-														console.error('Error en la solicitud Fetch para canviar su password:', error);
-														mostrarAlerta("para canviar su password",error.message); // Mostrar mensaje de error en la función mostrarAlerta
-													}
-												})
-										</script>
 									</div>
 									<br>
 									<!-- <br>// direcciones registradas -->
@@ -2629,7 +2796,7 @@
 											}
 									
 											function buscarPedido(selectedOption) {
-												console.log("que tipo de pedido encontro array u object", selectedOption)
+												//console.log("que tipo de pedido encontro array u object", selectedOption)
 												const valorInput = document.getElementById('buscarPedidoInput').value;
 												const elementoProducto = document.getElementById(valorInput);
 												const pedidosEncontradosDiv = document.getElementById('pedidos223');
@@ -2687,125 +2854,58 @@
 									</div>
 								</div>
 							</div>
-							<div class="content card-body" id="pedidos223">
+							<div class="row m-1" id="pedidos223">
 								<h2>No has realizado ningún pedido</h2>
 								<!-- Los divs se insertarán dinámicamente aquí -->
 							</div>
-								<style>
-									#pedidos223 {
-										display: flex;
-										flex-wrap: wrap;
-										justify-content: center; /* Centra horizontalmente el contenido */
-										align-items: center; /* Centra verticalmente el contenido */
-									}
-								
-									#pedidos223 .pedido {
-										width: calc(33.33% - 20px);
-										margin: 10px;
-										background-color: #f0f0f0;
-										border: 1px solid #ccc;
-										box-sizing: border-box;
-									}
-								
-									#pedidos223 .pedido h3 {
-										margin: 0;
-										padding: 10px;
-									}
-								
-									@media screen and (max-width: 768px) {
-										#pedidos223 .pedido {
-											width: calc(50% - 20px);
-										}
-									}
-								
-									@media screen and (max-width: 480px) {
-										#pedidos223 .pedido {
-											width: calc(100% - 20px);
-										}
-									}
-								</style>
-							<div class="card-footer fijoAbajo" style="background-color:white;opacity: 0.8;" >
+							<div class="card-footer m-0 p-2 fixed-bottom" style="background-color:white;opacity: 0.8;">
 								<!-- Estadísticas -->
 								<div class="d-flex justify-content-between align-items-center">
 									<!-- Estadísticas de pedidos y compras -->
 									<div align="left">
-										<p><strong>Total de pedidos:</strong> <span id="totalPedidos"></span>
+										<p><strong>Total de pedidos:</strong> <span id="totalPedidos"></span></p>
 										<p><strong>Total de compras:</strong> <span id="totalCompras"></span></p>
 									</div>
 									<!-- Botón para descargar en Excel -->
 									<button class="btn btn-primary" onclick="exportarAExcel(comprasClientes2)">Descargar en Excel</button>
 								</div>
-								<script>
-									function exportarAExcel(comprasClientes2) {
-    try {
-        // Crear una nueva hoja de trabajo
-        const worksheet = XLSX.utils.json_to_sheet(comprasClientes2);
-
-        // Crear un nuevo libro de trabajo
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas");
-
-        // Generar un archivo Excel
-        XLSX.writeFile(workbook, 'comprasCliente.xlsx');
-        
-        // Mostrar alerta de éxito
-        mostrarExito("El archivo Excel se ha descargado correctamente.");
-    } catch (error) {
-        // Mostrar alerta de error
-        mostrarAlerta("Hubo un error al intentar descargar el archivo. Por favor, intenta nuevamente más tarde.");
-    }
-}
-									// Función para descargar en Excel
-									function descargarExcel(data) {
-											// Crear un objeto FormData y agregar los datos
-											const formData = new FormData();
-											formData.append('data', JSON.stringify(data));
-												//mostrar el modal loading
-												mostrarModalLoading()
-											// Realizar la solicitud fetch
-											const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
-											const jwToken = sessionStorage.getItem('jwtToken');
-											fetch(`${endpoints[56]}`, { 
-													method: 'POST',
-													body: formData,
-													headers: {
-														'Content-Type': 'application/json',
-														'Authorization': `Bearer ${jwToken}`
-													}	
-												})
-												.then(response => {
-													// Ocultar modal después de recibir la respuesta del servidor
-													ocultarModalLoading();
-													if (response.ok) { 
-														// Crear una URL para el blob y crear un enlace para descargar el archivo
-														const url = window.URL.createObjectURL(blob);
-														const a = document.createElement('a');
-														a.href = url;
-														a.download = 'Pedidos.xlsx'; // Nombre del archivo Excel
-														document.body.appendChild(a);
-														a.click();
-														window.URL.revokeObjectURL(url); // Liberar recursos
-														// Descargar el archivo Excel directamente
-														mostrarExito("Tu excel a sido descargado y enviado por email")
-														// Esperar 3 segundos (3000 milisegundos)
-														setTimeout(() => {
-															// Recargar la página
-															window.location.reload();
-														}, 3000);
-													} else {
-														// Si hay un error en la respuesta, mostramos un mensaje de error
-														mostrarAlerta('Error en la respuesta del servidor');
-														throw new Error('Error en la respuesta del servidor');
-													}
-												})
-												.catch(error => {
-													// Si hay un error, mostrar el mensaje de error
-													console.error('Error al intentar descargar en Excel:', error.message);
-													mostrarAlerta('Error al descargar en Excel: ' + error.message);
-												});
-									}
-								</script>
 							</div>
+							<script>
+								function exportarAExcel(comprasClientes2) {
+									console.log("Entro a descargar el excel", comprasClientes2);
+
+									// Crear un nuevo libro de Excel
+									let wb = XLSX.utils.book_new();
+
+									// Crear un array para almacenar todos los datos juntos
+									let datosLimpios = [];
+
+									// Recorremos el array padre y sus subarrays
+									comprasClientes2.forEach((compra) => {
+										// Verificamos si 'compra' es un array
+										if (Array.isArray(compra)) {
+											// Si es un array, limpiamos cada objeto del array
+											compra.forEach(item => {
+												const { _id, idCliente, idOwner, clienteId, idDueno, ...limpio } = item;
+												datosLimpios.push(limpio);  // Agregamos el objeto limpio al array
+											});
+										} else if (typeof compra === 'object') {
+											// Si es un objeto, lo limpiamos y lo agregamos
+											const { _id, idCliente, idOwner, clienteId, idDueno, ...limpio } = compra;
+											datosLimpios.push(limpio);  // Agregamos el objeto limpio al array
+										}
+									});
+
+									// Convertimos el array limpio en una hoja de Excel
+									let ws = XLSX.utils.json_to_sheet(datosLimpios);
+
+									// Agregamos la hoja de Excel con todos los datos en una sola hoja
+									XLSX.utils.book_append_sheet(wb, ws, 'Compras Clientes');
+
+									// Generamos el archivo Excel
+									XLSX.writeFile(wb, 'ComprasClientes.xlsx');
+								}
+							</script>
 						</div>
 					</div>
 				</div>
@@ -2814,8 +2914,8 @@
 	</div>
 
 	<!-- modal para ver la lista de pedidos -->
-	<div class="modal" tabindex="-1" id="modalPedido5998" style="background-color: #cce5ff;z-index: 99999999999999999999 !important;">
-		<div class="modal-dialog modal-dialog-scrollable modal-xl"> <!-- Agrega la clase modal-xl aquí -->
+	<div class="modal" tabindex="-1" id="modalPedido5998" style="z-index: 99999999999999999999 !important;">
+		<div class="modal-dialog modal-dialog-scrollable modal-xl" id="colorListPEd"> <!-- Agrega la clase modal-xl aquí -->
 			<div class="modal-content">
 				<br>
 				<div class="modal-header">
@@ -2835,9 +2935,9 @@
 		</div>
 	</div>
 	
-	<!-- // modal de reclamo de pediddos -->
-	<div class="modal" tabindex="-1" id="modalReclamos" style="background-color: #cce5ff;">
-		<div class="modal-dialog modal-lg modal-dialog-scrollable">
+	<!-- Modal de reclamo de pediddos -->
+	<div class="modal" tabindex="-1" id="modalReclamos" style="z-index: 99999999999999999 !important;">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable" id="colorearReclamos">
 			<div class="modal-content">
 				<div class="modal-header">
 					<!-- Encabezado del modal -->
@@ -2860,7 +2960,7 @@
 						<button type="submit" class="btn btn-primary" id="enviarReclamoBtn">Enviar reclamo</button>
 					</form>
 				</div>
-				<div class="alert-danger" style="margin-top: -2.8rem;">
+				<div class="alert-danger" style="margin-top: 0rem;">
 					<h5 class="text-center">¡ATENCIÓN!</h5>
 					<p class="text-center">Los reclamos son privados entre las partes. En TBS-IT no intervenimos ni arbitraremos en ellos, aunque los reclamos reiterados sin atención e irresponsables pueden resultar en la cancelación de la cuenta. Se enviará un correo electrónico a las partes sobre el reclamo.</p>
 				</div>
@@ -2868,12 +2968,11 @@
 				<script>
 						const jwToken = sessionStorage.getItem('jwtToken');
 						if (jwToken) {
-							let clienteEcomm = null;
 							try {
-								const clienteEcommS = sessionStorage.getItem('clienteEcomm');
+								const clienteEcommS = JSON.parse(sessionStorage.getItem('clienteEcomm'))
 								//console.log("kmngelkngkjoengekongkrjnr", clienteEcommS)
 								if (clienteEcommS !== null || clienteEcommS !== undefined) {
-									clienteEcomm = JSON.parse(clienteEcommS);
+									clienteEcomm = clienteEcommS
 								}
 							} catch (error) {
 								console.error('Error al obtener o analizar la cadena JSON:', error);
@@ -2946,7 +3045,7 @@
 	</div>
 
 	<!-- Modal para cambiar direccion de entrega-->
-	<div class="modal fade" id="exampleModalToggleDirChange" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1" style="background-color: lightslategray !important;">
+	<div class="modal fade" id="exampleModalToggleDirChange" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1" style="z-index: 99999999999999999999 !important;">
 		<div class="modal-dialog modal-dialog-centered" id="coloredChangeDir">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -2959,7 +3058,7 @@
 					<div id="">
 						<div id="codPed78877"></div>
 						<div id="direccionInfo88799" style="text-align:left !important"></div>
-						<div id="map787" style="height: 200px; width: 100%;"></div>
+						<div id="map88" style="height: 200px; width: 100%;"></div>
 					</div>
 
 					<p>Si es la direccion correcta de cambio de envió presiona "Confirmar" o </p>
@@ -3056,8 +3155,6 @@
     }
 
 });
-
-
 					</script>
 				</div>
 			</div>
@@ -3065,7 +3162,7 @@
 		</div>
 		<!-- segunda opcion de direccion -->
 		<div class="modal fade" id="exampleModalToggle332" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-			<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-dialog modal-dialog-centered" id="coloredChangeDir2">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="exampleModalToggleLabel2">Confirma nueva dirección de envío</h5>
@@ -3108,7 +3205,7 @@
 						<script>
 
 							let mapi222 = false
-							//const jwToken = sessionStorage.getItem('jwtToken');
+							// const jwToken = sessionStorage.getItem('jwtToken');
 							// Obtener referencia al botón
 							const btnNuevaDir2298 = document.getElementById("btnNuevaDir2298");
 						
@@ -3192,8 +3289,8 @@
 								confirmButton33998759.addEventListener("click", async function(event) {
 									// Evitar que el formulario se envíe automáticamente
 									event.preventDefault();
-									const dataOwnerCrudo = sessionStorage.getItem('DataOwnerEcom');
-									const dataOwner = JSON.parse(dataOwnerCrudo);
+									dataOwnerCrudo = sessionStorage.getItem('DataOwnerEcom');
+									dataOwner = JSON.parse(dataOwnerCrudo);
 									const idOwner22 = dataOwner._id
 									console.log("444444444444444444444444444Que dato de idOwner tiene",idOwner22)
 									// Obtener los valores de los campos del formulario
@@ -3264,7 +3361,7 @@
 	</div>
 
 	<!-- Instrucicones de uso de los update de email y celus-->
-	<div class="modal fade" id="instruccionesUdpated" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal fade" id="instruccionesUdpated" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="z-index: 99999999999999999999 !important;">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -3302,19 +3399,9 @@
 	</div>
 
 	<!-- toast mensajes push-->
-	<div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; bottom: 0; right: 0; z-index: 1000; padding: 20px;">
+	<div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; bottom: 0; right: 0; z-index: 1000; padding: 20px;" style="z-index: 99999999999999999999 !important;">
 	</div>
 	
-	<!-- Menú offcanvas de opciones el que esta a la derecha-->
-	<nav class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 100vw; max-width: 400px; background: linear-gradient(to bottom right, #1155e9, #adc4fb ); overflow-y: auto;">
-		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-		<div class="offcanvas-header">
-			<!-- Encabezado del menú offcanvas -->
-		</div>
-		<div class="offcanvas-body">
-			<!-- Contenido del menú offcanvas -->
-		</div>
-	</nav>
 
 	<!-- Modal para mostrar las imágenes del producto -->
 	<div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -3338,7 +3425,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div style="z-index: 9999999999999999999999 !important;">
 
 
 	<!-- Modal para mostrar las imágenes GIGANTES de las Promos -->
@@ -3407,11 +3494,9 @@
 	<script src="/ecommerceFront/jquery.min.js"></script>
 	<script src="/ecommerceFront/jquery.scrolly.min.js"></script>
 	<script src="/ecommerceFront/jquery.scrollex.min.js"></script>
-
-	
 	<script src="/ecommerceFront/index.js"></script>
-
 	<script src="/ecommerceFront/mensajes.js"></script>
+
 	<script src="/alertas.js"></script>
 	<script src="/landingPageFunctions/LPF.js"></script>
 
@@ -3429,9 +3514,7 @@
 			<div class="modal-content" id="color23BigImg">
 				<div class="modal-header">
 					<h5 id="imagenModalPRomosLabel" style="font-size: inherit; font-weight: normal; text-transform: none; font-style: normal; text-decoration: none;">
-						Imágenes del Producto
-					</h5>
-					
+					</h5>					
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" align="center">

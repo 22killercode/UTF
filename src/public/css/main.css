@@ -296,8 +296,6 @@ input[type="number"] {
 	.cardV {
 		width: 30% !important;
 		display: inline-flex !important;
-		margin: 0px !important;
-		padding: 0px !important;
 		background-color: transparent !important;
 		border-radius: 10px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
@@ -337,8 +335,6 @@ input[type="number"] {
 
 						/* Estilo de las tarjetas */
 						.cardH {
-							min-height: 450px !important;
-							height: auto !important;
 							width: 550px !important; /* Ancho por defecto */
 							display: inline-flex !important; /* Permite que las tarjetas se alineen horizontalmente */
 							border: 1px solid #ddd; /* Borde tipo card */
@@ -347,8 +343,6 @@ input[type="number"] {
 							box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 							transition: transform 0.3s, box-shadow 0.3s;
 							justify-content: center; /* Alinea el contenido de la tarjeta en el centro */
-							margin: 10px; /* Ajusta el margen alrededor de cada tarjeta */
-							padding: 0; /* Elimina el padding del contenedor principal */
 							box-sizing: border-box; /* Incluye el padding y borde en el tamaño total del elemento */
 						}
 						

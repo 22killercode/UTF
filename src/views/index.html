@@ -56,16 +56,20 @@
 	</head>
     <style> 
     /* Eliminar los spinners en WebKit (Chrome, Safari, etc.) */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
-/* Eliminar los spinners en Firefox */
-input[type="number"] {
-    -moz-appearance: textfield;
-}
+        /* Eliminar los spinners en Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        hr{
+            border: none !important;
+        }
 
         @media (max-width: 700px) {
             .sep{
@@ -94,31 +98,47 @@ input[type="number"] {
             }
         }
 
+       /* Ocultar el botón del menú en pantallas horizontales */
+        @media (min-width: 987px) {
+            html{
+                width: 95vw !important;
+                padding: 0em!important;
+                margin: 0!important;
+                align-items: center!important;
+                justify-content: center!important;
+            }
+            
+            header {
+                width: 100% !important;  /* El header ocupará el 100% del ancho de la pantalla */
+                margin: 0 auto;          /* Centrado automático si es necesario */
+            }
+            #btnMenuCel {
+                display: none;
+            }
+        }
+        
+
         @media (max-width: 450px) {
             #separador1{
                 margin: 2rem 0 !important
             }
 
-/* Estilos generales para todos los tamaños de pantalla */
-html, body {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
+    /* Estilos generales para todos los tamaños de pantalla */
 
     html, body {
-        width: 98% !important;  /* Ocupar todo el ancho disponible */
+        box-sizing: border-box;
+        width: 100vw !important;  /* Ocupar todo el ancho disponible */
         margin: 0;
         padding: 0;
     }
 
     header {
-        width: 100% !important;  /* El header ocupará el 100% del ancho de la pantalla */
+        width: 100vw !important;  /* Ocupar todo el ancho disponible */
         margin: 0 auto;          /* Centrado automático si es necesario */
     }
 
     .container {
-        width: 100%;
+        width: 95%;
         margin: 0 auto;
         padding: 1rem;           /* Evitar que el contenido se pegue a los bordes */
         display: flex;
@@ -139,25 +159,6 @@ html, body {
 
         }
 
-        /* Ocultar el botón del menú en pantallas horizontales */
-        @media (min-width: 987px) {
-            html{
-                width: 97% !important;
-                padding: 0em!important;
-                margin: 0!important;
-                align-items: center!important;
-                justify-content: center!important;
-            }
-            
-            header {
-                width: 100% !important;  /* El header ocupará el 100% del ancho de la pantalla */
-                margin: 0 auto;          /* Centrado automático si es necesario */
-            }
-            #btnMenuCel {
-                display: none;
-            }
-        }
-        
         /* Estilos para el menú deslizable */
         #menuCelu {
             position: fixed;
@@ -490,55 +491,52 @@ html, body {
         <!-- 1er pantalla -->
         <div class="m-4 p-2 container-xxl full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
             <div class="row w-100">
-                <div class="col-md-6 left-section mt-4" style="padding: 2rem 1.5rem 0 1.5rem; text-align: center;">
-                    <h1 style="font-size: 3.5vw;">
-                        <span class="highlight">Usa tienda fácil <br> Tu tienda online gratis y en un par de clicks.</span>
+                <div class="col-md-6 left-section mt-5" style="padding: 2rem 1.5rem 0 1.5rem; text-align: center;">
+                    <h1 style="font-size: 3vw;">
+                        <span class="">
+                            Usa tienda fácil 
+                            <br> 
+                            Tu tienda online <strong>gratis</strong> y en un par de clicks.
+                        </span>
                         <br>
                     </h1>
-                    <span id="separa1"></span>
-                    <p style="font-size: 1.5rem;" align="center">
-                        <i  class="fas fa-check-circle" style="color: green;"></i> Abrí tu tienda fácil.
-                        <br> 
-                        <i class="fas fa-check-circle" style="color: green;"></i> Publicas fácil.
-                        <br> 
-                        <i class="fas fa-check-circle" style="color: green;"></i> Vendes fácil.
-                    </p>
-                    
+                    <span class="my-4"></span>
+                    <div style="display: flex; justify-content: center;">
+                        <p style="font-size: 1.5rem; text-align: left;">
+                            <i class="fas fa-check-circle" style="color: green;"></i> Abrí tu tienda fácil.
+                            <br> 
+                            <i class="fas fa-check-circle" style="color: green;"></i> Publicas fácil.
+                            <br> 
+                            <i class="fas fa-check-circle" style="color: green;"></i> Vendes fácil.
+                        </p>
+                    </div>
                     <br>
                     <h4 >¡Inscribete sin cargo y empezá a vender hoy mismo!</h4>
                     <br>
                     <a class="btn btn-success" href="#4ta" tabindex="-1" style="margin: 0 0.5rem; font-size: 1.5rem;">Crea tu tienda gratis</a>
                 </div>
-                <div class="col-md-6 p-0" style="display: relative !important">
+                <div class="col-md-6 p-0" style="display: relative !important; height: auto !important;" >
                     <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="10000">
-                        <ol class="carousel-indicators" >
+                        <div class="carousel-inner h-100">
+                            <div class="carousel-item active" style="margin-top:5rem; max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img class="img-fluid" src="/imagen/block/dispositivos" alt="Descripción de la imagen" style="height: 350px;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:6rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/rubros" alt="Descripción de la imagen" style="height: 350px;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:6rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/pasos" alt="Descripción de la imagen" style="height: 350px;">
+                            </div>
+                            <div class="carousel-item " style="margin-top:6rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <img src="/imagen/block/incluye" alt="Descripción de la imagen" style="height: 350px;">
+                            </div>
+                        </div>
+                        <ol class="carousel-indicators"  style="margin-top:18rem !important;">
                             <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
                             <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
                             <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
                             <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></li>
                         </ol>
-                        <div class="carousel-inner h-100">
-                            <div class="carousel-item active" style="margin-top:6rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img class="img-fluid" src="/imagen/block/dispositivos" alt="Descripción de la imagen" style="max-height: 450px; height: auto;">
-                            </div>
-                            <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img src="/imagen/block/rubros" alt="Descripción de la imagen" style="max-height: 100%; height: auto;">
-                            </div>
-                            <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img src="/imagen/block/pasos" alt="Descripción de la imagen" style="max-height: 100%; height: auto;">
-                            </div>
-                            <div class="carousel-item " style="margin-top:8rem;max-width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                <img src="/imagen/block/incluye" alt="Descripción de la imagen" style="max-height: 100%; height: auto;">
-                            </div>
-                        </div>
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" hidden>
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" hidden>
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -553,7 +551,7 @@ html, body {
         <div class="m-4 p-2 container-xxl full-height d-flex flex-column justify-content-between" id="1er" style="position: relative !important;">
             <div class="row w-100">
                 <div class="col-md-6 left-section" style="margin-top: 4rem; text-align: center;">
-                    <h1 style="font-size: 3vw;"><span class="highlight">Elije el diseño que más te guste.</span>
+                    <h1 style="font-size: 3vw;"><span class="">Elije el diseño que más te guste.</span>
                         <br><br>
                         !Más de una docena de diseños exclusivos para tu tienda online!</h1>
                     <br><br>
@@ -638,7 +636,7 @@ html, body {
                 </a>
             </div>
             <!-- lunita -->
-            <a href="#compa" class="moon-link" style="position: absolute; top:-9%; left: 0% !important; transform: translate(-50%, -50%); z-index: 999;">
+            <a href="#compa" class="moon-link" style="position: absolute; top:-15%; left: 0% !important; transform: translate(-50%, -50%); z-index: 999;">
                 <span class="moon" align="center">
                     <i class="fas fa-arrow-down"></i>
                 </span>
@@ -1046,8 +1044,8 @@ html, body {
                         <div class="card-header">
                             <h4>Membresía Premium</h4>
                         </div>
-                        <div class="card-body" style="margin-top:-0.1rem">
-                            <p align="center" style="margin: 1rem 0;"><strong>Sin comisiones.</strong></p>
+                        <div class="card-body" style="margin-top:0rem">
+                            <p align="center" style="margin:0 0 0.9rem 0;"><strong>Sin comisiones.</strong></p>
                             <p>
                                 Configura tu tienda online, con al menos 10 productos, cada uno con stock ilimitado y tu propio dominio y ssl. Pagas en tu moneda local.
                             </p>
@@ -1076,9 +1074,10 @@ html, body {
                                 <input type="text" id="discount-code" class="form-control w-50" maxlength="8">
                                 <p id="discount-status" style="color: blue;"></p>
                             </div>
-                            <br>
                             <!-- Sección Incluye -->
-                            <button class="btn btn-link" style="margin: -3rem 0 0 -1rem" id="toggle-includes">Ver que incluye ▼</button>
+                            <button class="btn btn-link" style="margin: 0.5rem 0 0 0" id="toggle-includes">
+                                Ver que incluye ▼
+                            </button>
                             <div id="includes" class="includes-hidden">
                                 <ul class="checklist">
                                     <li>Beneficios de membresía Basic, más...</li>
@@ -1089,7 +1088,7 @@ html, body {
                                 </ul>
                             </div>
                         </div>
-                        <div class="card-footer text-center" style="margin-top:-1.2rem;">
+                        <div class="card-footer text-center" style="margin-top:-0rem;">
                             <button id="sendDataPremium" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#signupModalPremiumXYZ123">
                                 Adquirir
                             </button>
@@ -1411,7 +1410,7 @@ html, body {
                                 <li><strong>Community Manager:</strong> Personalizado que gestiona tus redes con estrategias efectivas.</li>
                                 <li><strong>Optimización de presupuesto y ROAS:</strong> Estrategias de marketing para maximizar tu inversión y asegurar un alto retorno.</li>
                             </ul>
-                            <div class="text-left" style="margin-top:1.5rem;">
+                            <div class="text-left" style="margin-top:2rem;">
                                 <button class="btn-primary btn-block p-0" id="toggle-form">Saber más</button>
                                 <div id="custom-form" class="includes-hidden">
                                     <form id="uxuiForm156156">
@@ -1437,7 +1436,7 @@ html, body {
                                         </div>
                                     </form>
                                 </div>
-                                <button style="margin-top:0.1rem;" class="btn btn-link" id="toggle-custom-includes7456">Ver que incluye ▼</button>
+                                <button style="margin-top:1rem;" class="btn btn-link" id="toggle-custom-includes7456">Ver que incluye ▼</button>
                                 <div id="custom-includes89" class="includes-hidden">
                                     <ul class="checklist">
                                         <li>Incluye beneficios de membresía Premium, más...</li>
@@ -1449,7 +1448,7 @@ html, body {
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer text-center" style="margin-top:-0.3rem;">
+                        <div class="card-footer text-center" style="margin-top:-0.2rem;">
                             <button id="enviarData" type="submit" class="btn btn-primary">Enviar</button>
                         </div>
                         <script>
@@ -1607,67 +1606,67 @@ html, body {
         
 
         </style> 
-        <footer class="m-4 p-2 container-xxl " id="contact">
-                <div class="justify-content-center">
-                        <h2 class="text-center mb-5">Contactos</h2>
-                        <div class="d-flex justify-content-center mt-2">
-                            <div class="mb-3 me-3">
-                                <a href="#" class="icon round fab fa-whatsapp"><span class="label"></span></a>
-                            </div>
-                            <div class="mb-3 me-3">
-                                <a href="#" class="icon round fab fa-facebook-f"><span class="label"></span></a>
-                            </div>
-                            <div class="mb-3 me-3">
-                                <a href="#" class="icon round fab fa-instagram"><span class="label"></span></a>
-                            </div>
-                            <div class="mb-3">
-                                <a href="#" class="icon round fab fa-linkedin-in"><span class="label"></span></a>
-                            </div>
-                        </div>
-                        
-                        <form id="contactForm" action="" method="post">
-                            <input type="text" value="744108/5220963puebloiruya" name="tbstk" hidden>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="name" class="form-label">Nombre</label>
-                                    <input class="form-control" name="nombre" id="nameCon" type="text" placeholder="Nombre">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input class="form-control" name="email" id="emailCon" type="email" placeholder="Email">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="city" class="form-label">Apellido</label>
-                                    <input class="form-control" name="Apellido" id="ApellidoCon" type="text" placeholder="Apellido">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="phone" class="form-label">Celular</label>
-                                    <input class="form-control" name="numCel" id="numCelCon" type="text" placeholder="Número de celular">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="message" class="form-label">Mensaje</label>
-                                    <textarea class="form-control" name="mensaje" id="messageCon" rows="4" placeholder="Agrega tu mensaje incluye tu ciudad y país"></textarea>
-                                </div>
-                            </div>
-                            <!-- Botón -->
-                            <div class="text-center">
-                                <button type="button" class="btn btn-success" id="submitBtn48521">Enviar mensaje</button>
-                            </div>
-                        </form>
+        <footer class="m-5 p-4 container-xxl text-center" id="contact">
+            <h2 class="mb-5">Contactos</h2>
+            <div class="d-flex justify-content-center mt-2 mb-4">
+                <div class="mb-3 me-3 ">
+                    <a href="#" class="icon round fab fa-whatsapp"><span class="label"></span></a>
                 </div>
-                <div class="text-center mt-5">
-                    <a href="https://tbs-it.net/">
-                        <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
-                        <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
-                    </a>
-                    <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
-                    <span style="margin: 0 1rem;">|</span>
-                    <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
+                <div class="mb-3 me-3">
+                    <a href="#" class="icon round fab fa-facebook-f"><span class="label"></span></a>
                 </div>
+                <div class="mb-3 me-3">
+                    <a href="#" class="icon round fab fa-instagram"><span class="label"></span></a>
+                </div>
+                <div class="mb-3">
+                    <a href="#" class="icon round fab fa-linkedin-in"><span class="label"></span></a>
+                </div>
+            </div>
+            
+            <form id="contactForm" action="" method="post" class="text-center">
+                <input type="text" value="744108/5220963puebloiruya" name="tbstk" hidden>
+                <div class="row justify-content-center align-items-center w-75 mx-auto">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input class="form-control" name="nombre" id="nameCon" type="text" placeholder="Nombre">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input class="form-control" name="email" id="emailCon" type="email" placeholder="Email">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="city" class="form-label">Apellido</label>
+                        <input class="form-control" name="Apellido" id="ApellidoCon" type="text" placeholder="Apellido">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label">Celular</label>
+                        <input class="form-control" name="numCel" id="numCelCon" type="text" placeholder="Número de celular">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="message" class="form-label">Mensaje</label>
+                        <textarea class="form-control" name="mensaje" id="messageCon" rows="4" placeholder="Agrega tu mensaje incluye tu ciudad y país"></textarea>
+                    </div>
+                </div>
+                <!-- Botón -->
+                <div class="text-center">
+                    <button type="button" class="btn btn-success" id="submitConsulta521">Enviar mensaje</button>
+                </div>
+            </form>
+            
+
+            <div class="mt-5">
+                <a href="https://tbs-it.net/" class="d-block">
+                    <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
+                    <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
+                </a>
+                <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
+                <span style="margin: 0 1rem;">|</span>
+                <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
+            </div>
         </footer>
         <!-- Js de contacto -->
         <script>
-            document.getElementById('submitBtn48521').addEventListener('click', async function(event) {
+            document.getElementById('submitConsulta521').addEventListener('click', async function(event) {
                 event.preventDefault(); // Evita el envío del formulario de manera tradicional
                 const nombre = document.getElementById('nameCon').value.trim();
                 const email = document.getElementById('emailCon').value.trim();
@@ -1692,18 +1691,18 @@ html, body {
                 //console.log("Que datos tiene consulta", datosFormulario)
                 // Obtén el JWT del sessionStorage
                 const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
-                const jwToken = dataBasic.data.jwToken;
+                const jwToken   = dataBasic.data.jwToken;
+                const idEnpointConsulta = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'))[171];
                 
                 try {
-                    const idEnpointCheq101 = idEnpointCheq[101];
                     // Envía los datos CUSTOM al servidor usando fetch
-                    console.log("Hizo click en el form de CONSULTAS",idEnpointCheq101, );
-                    const response = await fetch(`${idEnpointCheq101}`, {
+                    console.log("Hizo click en el form de CONSULTAS d ela landing page", idEnpointConsulta, jwToken);
+                    const response = await fetch(`${idEnpointConsulta}`, {
                     //const response = await fetch('/recibir/consultas', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${jwToken}`
+                            // 'Authorization': `Bearer ${jwToken}`
                         },
                         body: JSON.stringify(datosFormulario)
                     });
@@ -1829,9 +1828,8 @@ html, body {
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('contactForm').addEventListener('submit', function (event) {
                 event.preventDefault(); // Evitar el envío del formulario por defecto
-                const dataOwner = JSON.parse(sessionStorage.getItem("DataOwnerEcom"));
+                dataOwner = JSON.parse(sessionStorage.getItem("DataOwnerEcom"));
                 const dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'));
-                //const jwToken = JSON.parse(sessionStorage.getItem('jwtToken'));
                 const jwToken = sessionStorage.getItem('jwtToken');
                 if (!(dataCliente && dataOwner && jwToken)) {
                     mostrarAlerta("Por favor, inicie sesión para enviar su consulta.");

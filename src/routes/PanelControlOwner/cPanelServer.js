@@ -290,6 +290,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             if (!dataOwner) {
                 throw new Error('Usuario no encontrado');
             }
+
             // Convertir el documento a un objeto plano y eliminar las propiedades no deseadas
             const { password, realPass, ...cleanedData } = dataOwner.toObject();
             
@@ -319,7 +320,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             //console.log("que datos envia al fronen nuevos de refresco", data)
             res.status(200).json({ success: true, data });
         });
-
 
         // 02 SIGNUP desde INSCRIPCION RAPIDA CON COMISION DESDE LANDING PAGE
         //console.log(`que endpoint fabrico en el server para signUP ${endpoint00}`)
@@ -398,7 +398,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         });
 
         // 03 SIGNIN ingresar a TiendaFacil
-        console.log("que enpoint token del signIn encontro en el server?? endpoint22", urlPoint(22) );
+        //console.log("que enpoint token del signIn encontro en el server?? endpoint22", urlPoint(22) );
         router.post(urlPoint(22), [], async (req, res) => {
             const ipCliente = req.ip || req.connection.remoteAddress;
             console.log("Se intenta ingresar de forma MANUAL desde la landing page ", req.body);
@@ -500,7 +500,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                     res.status(400).json({ success: false, message: "El servidor No encontro el usuario revise su email y password" });
                 }
         });
-        
 
         // 04 para editar los datos del Owner generales
         router.post(urlPoint(55), [verificarToken], async (req, res) => {
@@ -600,7 +599,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 res.status(500).json({ success: false, data: "Imagen no guardada correctamente" });
             }
         });
-
 
         // 06 para agregar/cambiar datos del owner
         router.post(urlPoint(14), [verificarToken], async (req, res) => {
@@ -782,7 +780,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         });
 
-
         //07 Actualizar nueva direccion
         router.post(urlPoint(69), [verificarToken], async (req, res) => {
             try {
@@ -825,7 +822,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             throw error;
         }
         })
-
 
         //08 Cambiar el estilo del ecommerce
         router.post(urlPoint(23), [verificarToken], async (req, res) =>{
@@ -1745,7 +1741,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             console.log("Datos recibidos para cambiar el estado del envío:", req.body);
             
             const requestData = req.body;
-            console.log("Datos de la solicitud de cambio de estado:", requestData);
+            //console.log("Datos de la solicitud de cambio de estado:", requestData);
             
             try {
                 const { codigoPedido, statusEnvio, idOwner, tranposterUser } = requestData;
@@ -3286,7 +3282,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
     //101 Guarda el formulario CUSTOM y CONTACTOS
     //console.log("Le endpointTokensArray101 a guardar CUSTOM ",endpoint101)
-    router.post(urlPoint(101), [verificarToken], async (req, res) => {
+    router.post(urlPoint(171), [], async (req, res) => {
     //router.post('/datos/custom/cliente', [verificarToken], async (req, res) => {
         console.log("Le entrooooooooooooo a guardar CUSTOM ",req.body)
         try {
@@ -3319,7 +3315,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 subjectOwner = "ATENCIÓN!!! Un posible cliente CUSTOM"
                 }
                 // enviar por email el mensaje
-                const dataEnviarEmail = {transportEmail, reclamo:true, enviarExcel:false, emailOwner:"sebastianpaysse@gmail.com", emailCliente:email, numCelCliente:celular, numCelOwner:celular, mensaje:`<br> ${descripcionProyecto}, <br> nos comunicaremos a la brevedad posible. <br> Gracias`, codigoPedido:"16165", nombreOwner:"Sebas", nombreCliente:nombre, subjectCliente:`Hola ${nombre}, nos llegó tu consulta`, subjectOwner, otraData:null, logoOwner:null, cancelaEnvio:false, pedidoCobrado:false, quedaUno:false, product:false, inscripcion:false, Promo:false} 
+                const dataEnviarEmail = {transportEmail, reclamo:false, enviarExcel:false, emailOwner:"sebastianpaysse@gmail.com", emailCliente:email, numCelCliente:celular, numCelOwner:celular, mensaje:`<br> ${descripcionProyecto}`, codigoPedido:"16165", nombreOwner:"Sebas", nombreCliente:nombre, subjectCliente:`Hola ${nombre}, nos llegó tu consulta`, subjectOwner, otraData:null, logoOwner:null, cancelaEnvio:false, pedidoCobrado:false, quedaUno:false, product:false, inscripcion:false, Promo:false, ConsultaOK:true } 
 
                 await sendMail(dataEnviarEmail)
 

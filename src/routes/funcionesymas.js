@@ -47,17 +47,14 @@ async function configsss() {
 // Llamar a la función configuraciones generales
 configsss();
 
-
-
-
         //Arma los endpoints del ecommerce y l alanding page de forma separada
         function endpointTokensArray2() {
-            console.log("Entro a armar las rutas para el ecommerce")
+            //console.log("Entro a armar las rutas para el ecommerce")
             const endpointsFronen  = []
             const endpointsBackend = []
             // aqui se generan los distintos enpoints
-            const generateRandomString = (length = 6) => Array.from(crypto.getRandomValues(new Uint8Array(length)), byte => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[byte % 62]).join('');
-            for (let i = 0; i < 200; i++) {
+            const generateRandomString = (length = 333) => Array.from(crypto.getRandomValues(new Uint8Array(length)), byte => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[byte % 62]).join('');
+            for (let i = 0; i < 250; i++) {
                 const formEndpoint = (generateRandomString().toString());
                 const endpointTokenFronen = `${urlServer}${formEndpoint}`
                 const endpointTokenBackend = `${formEndpoint}`
@@ -71,7 +68,7 @@ configsss();
         const verificarToken = (req, res, next) => {
             
             const authHeader = req.headers.authorization;
-            //console.log("Entro a verificar token", authHeader )
+            console.log("Entro a verificar token", authHeader )
         
             if (authHeader) {
             const token = authHeader.split(' ')[1]; // Extrae el token eliminando el prefijo "Bearer"
@@ -151,7 +148,7 @@ configsss();
         // enviar emails automaticamente
         async function sendMail(dataEnviarEmail) {
             //console.log("Datos recibidos en sendMail:", dataEnviarEmail);
-            const {NOUsartransportEmail, reclamo, enviarExcel, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData,logoOwner, cancelaEnvio, pedidoCobrado, quedaUno, product, inscripcion, Promo} = dataEnviarEmail;
+            const {NOUsartransportEmail, reclamo, enviarExcel, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData,logoOwner, cancelaEnvio, pedidoCobrado, quedaUno, product, inscripcion, Promo, ConsultaOK} = dataEnviarEmail;
 
             const transportEmail = ConfigG.transportGmail
 
@@ -203,7 +200,7 @@ configsss();
                 // Opciones de correo para el cliente
                 let mailOptionsCliente = {};
                 
-                //aviso del pedido cobrado
+                //aviso del pedido cobrado y enviado
                 if (pedidoCobrado) {
                     console.log("Que datos llegan para enviar por email el pedido cobrado", pedidoCobrado)
                     // Formatear el número en formato de moneda local (pesos argentinos)
@@ -234,7 +231,7 @@ configsss();
                         
                             <div style="background-color: #ff6f61; color: #fff; padding: 20px; text-align: center;">
                                 <img src="${dataPedido23.logoOwner}" alt="Logo" height="50%" width="50%" style="border-radius: 100%;">
-                                <h1 style="margin-bottom: 10px;">¡Nueva Pedido Recibido!</h1>
+                                <h1 style="margin-bottom: 10px;">¡Nuevo Pedido Recibido!</h1>
                                 <h2> ¡ATENCIÓN! <br> Tienes un nuevo pedido número código ${dataPedido23.codigoPedido}</h2>
                             </div>
                         
@@ -244,7 +241,7 @@ configsss();
                                     <strong>Datos del cliente:</strong>
                                     <br>
                                     <strong>Nombre:</strong> ${cliente} <br>
-                                    <strong>Email:</strong> ${emailCliente.emailCliente} <br>
+                                    <strong>Email:</strong> ${emailCliente} <br>
                                     <strong>Número de Celular:</strong> ${numCelCliente} <br>
                                     <br>
                                     <strong>Dirección Entrega:</strong>
@@ -312,7 +309,7 @@ configsss();
                                     <strong>Datos del cliente:</strong>
                                     <br>
                                     <strong>Nombre:</strong> ${cliente} <br>
-                                    <strong>Email:</strong> ${emailCliente.emailCliente} <br>
+                                    <strong>Email:</strong> ${emailCliente} <br>
                                     <strong>Número de Celular:</strong> ${numCelCliente} <br>
                                     <br>
                                     <strong>Dirección Entrega:</strong>
@@ -358,12 +355,12 @@ configsss();
                     await transporter.sendMail(mailOptionsOwner);
                     await transporter.sendMail(mailOptionsCliente);
                 }
-                // inicia un reclamo
+                // inicia un reclamo consulta
                 if (reclamo) {
-                    console.log("ENTRO A RECLAMOOOOOOO")
+                    console.log("ENTRO A reclamo consulta")
                     mailOptionsOwner = {
-                        from: "tbs-it.info@tbs-it.net",
-                        to: ["sebastianpaysse@gmail.com",emailOwner],
+                        from: emailOwner,
+                        to: ["sebastianpaysse@gmail.com", emailOwner],
                         subject: subjectOwner,
                         html: `
             <!DOCTYPE html>
@@ -371,15 +368,15 @@ configsss();
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Nueva Consulta Recibida</title>
+                <title>¡¡¡ATENCION!!! <br> Nuevo Reclamo Recibido</title>
             </head>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
 
                 <div style="background-color: #ff6f61; color: #fff; padding: 20px; text-align: center;">
                     <h1 style="margin-bottom: 10px;">¡Nuevo Reclamo Recibido!</h1>
                     <img src="${logoOwner}" alt="Logo" height="50%" width="50%" style="border-radius: 100%;">
-                    <p style="font-size: 16px;">Se ha recibido una nueva consulta desde tu sitio web. </p>
-                    <p style="font-size: 16px;">A continuación, se detallan los datos:</p>
+                    <p style="font-size: 16px;">Se ha recibido una nuevo reclamo desde tu sitio web. </p>
+                    <p style="font-size: 16px;">A continuación, se detallan los detalles:</p>
                 </div>
 
                 <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
@@ -388,24 +385,21 @@ configsss();
                         <strong>Email:</strong> ${emailCliente} <br>
                         <strong>Número de Celular:</strong> ${numCelCliente}
                     </p>
-
                     <p style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 20px;"><strong>Reclamo por el pedido número:</strong> ${codigoPedido}</p>
                     <p style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 20px;"><strong>Mensaje:</strong> ${mensaje}</p>
                     <p style="font-size: 16px; color: #333; line-height: 1.6;">
                         Asegúrate de responder a esta reclamo lo antes posible.
                     </p>
                 </div>
-
                 <div style="background-color: #ff6f61; color: #fff; padding: 20px; text-align: center;">
-                <p style="font-size: 14px; color: #fff; ">Por favor ponte en contacto con tu cliente a la brevedad o podrá ser objeto de suspension de tu cuenta.</p>
+                <p style="font-size: 14px; color: #fff; ">Por favor ponte en contacto con tu cliente a la brevedad para resolver este importante reclamo o tu cuenta podrá ser objeto de suspension.</p>
                 </div>
-
             </body>
             </html>
                         `
                     };
                     mailOptionsCliente = {
-                        from: "tbs-it.info@tbs-it.net",
+                        from: emailOwner,
                         to: emailCliente,
                         subject: subjectCliente,
                         html: `
@@ -414,14 +408,14 @@ configsss();
                         <head>
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Respuesta a tu Consulta</title>
+                            <title>Respuesta a tu Reclamo</title>
                         </head>
                         <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
                         
                             <div style="background-color: #007bff; color: #fff; padding: 20px; text-align: center;">
                                 <img src="${logoOwner}" alt="Logo" height="50%" width="50%" style="border-radius: 100%;">
                                 <h1 style="margin-bottom: 10px;">¡Hola ${nombreCliente}!</h1>
-                                <p style="font-size: 16px;">En ${nombreOwner}, hemos recibido tu consulta y queremos agradecerte por ponerte en contacto con nosotros.</p>
+                                <p style="font-size: 16px;">En ${nombreOwner}, tu proveedor a recibido tu reclamo y queremos asegurarte que lo estamos revisando.</p>
                             </div>
                         
                             <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
@@ -500,9 +494,12 @@ configsss();
                 }
                 // cancela el envio y el pedido
                 if (cancelaEnvio) {
+                    const emailOwner1   = emailOwner.replace(/'/g, '').trim();
+                    const emailCliente1 = emailCliente.replace(/'/g, '').trim();
+                    console.log("Entro a cancelar el envio")
                     mailOptionsOwner = {
                         from: "tbs-it.info@tbs-it.net",
-                        to: ["sebastianpaysse@gmail.com",emailOwner],
+                        to: ["sebastianpaysse@gmail.com", emailOwner1],
                         subject: subjectOwner,
                         html: `
             <!DOCTYPE html>
@@ -548,7 +545,7 @@ configsss();
                     };
                     mailOptionsCliente = {
                         from: "tbs-it.info@tbs-it.net",
-                        to: emailCliente,
+                        to: emailCliente1,
                         subject: subjectCliente, // Asegúrate de que subjectCliente esté formateado correctamente
                         html: `
                             <!DOCTYPE html>
@@ -588,6 +585,7 @@ configsss();
                 }
                 // avisa por email cuando solo queda un producto
                 if (quedaUno) {
+                    console.log("Entro enviar emal de queda un producto")
                     mailOptionsOwner = {
                         from: "tbs-it.info@tbs-it.net",
                         to: ["sebastianpaysse@gmail.com", emailOwner.value],
@@ -603,13 +601,14 @@ configsss();
                             <body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
                 
                                 <div style="background-color: #ff6f61; color: #fff; padding: 20px; text-align: center;">
-                                    <h1 style="margin-bottom: 10px;">¡Atención te queda un solo productos en stock!</h1>
                                     <img src="${logoOwner}" alt="Logo" height="50%" width="50%" style="border-radius: 100%;">
+                                    <h1 style="margin-bottom: 10px;">¡Atención te queda un solo productos en stock!</h1>
                                 </div>
                 
                                 <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                                    <p style="font-size: 16px;">Hemos detectado que te queda un solo producto de: <strong>${product}</strong> en stock. Cuando NO tengas mas automáticamente el mismo NO se ofrece en tu tienda online. </p>
-                                    <p style="font-size: 16px;">Si aun tienes de este producto, entra a tu panel de control y aumenta el stock de este producto:<strong> ${product}</strong></p>
+                                    <p style="font-size: 16px;">
+                                        ${mensaje.messageOwner}
+                                    </p>
                                 </div>
                 
                                 <div style="background-color: #ff6f61; color: #fff; padding: 20px; text-align: center;">
@@ -624,8 +623,7 @@ configsss();
                     const cheqEnvio1236 = await transporter.sendMail(mailOptionsOwner);
                 }
                 // inicia un reclamo
-                const consu7 = otraData?.Consulta98 ?? null;
-                if (consu7 !== null) {
+                if (ConsultaOK) {
                     
                     console.log("ENTRO A Consultaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", emailOwner, emailCliente)
 
@@ -645,7 +643,7 @@ configsss();
                         
                             <div style="background-color: #ff6f61; color: #fff; padding: 20px; text-align: center;">
                                 <h1 style="margin-bottom: 10px;">¡Nueva Consulta Recibida!</h1>
-                                <p style="font-size: 16px;">Se ha recibido una nueva consulta desde tu sitio web. </p>
+                                <p style="font-size: 16px;">Has recibido una nueva consulta. </p>
                                 <p style="font-size: 16px;">A continuación, se detallan los datos:</p>
                             </div>
                         
@@ -1104,7 +1102,7 @@ configsss();
             }
         }
 
-        async function guardarImagenCli(dataImagen, empresa, idOwner, clientesOK) {
+        async function guardarImagenCli(dataImagen, tienda, idOwner, clientesOK) {
             try {
                 // Acceder a la propiedad de imagen
                 const imagen = dataImagen.imagen;
@@ -1117,8 +1115,8 @@ configsss();
                 }
         
                 // Normalizar el nombre de la carpeta
-                const nombreCarpeta = empresa.toLowerCase().replace(/\s+/g, '');
-                //console.log("Nombre de la carpeta normalizado:", nombreCarpeta);
+                const nombreCarpeta = tienda.toLowerCase().replace(/\s+/g, '');
+                console.log("Nombre de la carpeta normalizado:", nombreCarpeta);
         
                 // Definir la ruta de la carpeta donde se guardará la imagen
                 const rutaCarpeta = path.join(__dirname, `../public/img/uploads/${clientesOK ? 'CarpetaClientes/' : ''}${nombreCarpeta}/logo`);
@@ -1531,7 +1529,6 @@ configsss();
         
             return allDeleted; // Retorna true si todas las eliminaciones fueron exitosas
         }
-
 
 
         function compararFechas(informe, lasDateInfo) {

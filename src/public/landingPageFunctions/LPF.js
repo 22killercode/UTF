@@ -1,4 +1,5 @@
-        // SignUP inscribir dueños de Ecommerce
+
+// SignUP inscribir dueños de Ecommerce
         const sigUp = document.getElementById('botonSignUp09870');
         if (sigUp) {
             sigUp.addEventListener('click', async function() {
@@ -86,7 +87,7 @@
                             // Guardar la data en sessionStorage
                             const jwToken = result.data.jwToken
                             sessionStorage.setItem('jwTokenOwner', jwToken);
-                            sessionStorage.setItem('ownerData', JSON.stringify(result.data.dataOwner));
+                            sessionStorage.setItem('dataOwner', JSON.stringify(result.data.dataOwner));
                             sessionStorage.setItem('basicData', JSON.stringify(result.data.basicData));
                             sessionStorage.setItem('ownerProducts', JSON.stringify(result.data.ownerProducts));
                             sessionStorage.setItem('ownerPromos', JSON.stringify(result.data.ownerPromos)); 

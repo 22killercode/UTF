@@ -155,8 +155,6 @@
 		const myModal = new bootstrap.Modal(div);
 		myModal.show();
 	}
-	
-
 
 	function mostrarExito(mensajeExito) {
 		reproducirSonidoE(0.8, 0.05); // Velocidad normal, volumen al 100%
@@ -178,7 +176,7 @@
 					<button style="margin: 0 -2rem 0 0" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<br>
-				<iframe class="justify-content-center align-items-center" style="border-radius: 1rem;" src="https://giphy.com/embed/f3orDrv1hzyMvgI3y6" width="150" height="150" frameborder="0" class="giphy-embed" allowfullscreen></iframe>
+				<iframe style="border-radius:1rem" src="https://giphy.com/embed/f3orDrv1hzyMvgI3y6" width="130" height="130" frameborder="0" class="giphy-embed" allowfullscreen></iframe>
 				<div class="modal-body text-center">
 					<h5>${mensajeExito}</h5>
 				</div>

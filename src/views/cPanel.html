@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es" id="protectCpanel"> 
     <head> 
         <meta charset="UTF-8">
@@ -3315,7 +3315,7 @@ if (imgCount === 0) {
                                 const membresia     = dataOwner.tipoMembresia
                                 const ownerProducts = JSON.parse(sessionStorage.getItem('ownerProducts'));
                                 const dataBasic0   = JSON.parse(sessionStorage.getItem('datosBasicos'));
-                                const ownerData    = JSON.parse(sessionStorage.getItem('ownerData'));
+                                const ownerData    = JSON.parse(sessionStorage.getItem('dataOwner'));
                                 const fechaVencMem = ownerData.fechaVencMem
                                 const renovarMem   = ownerData.renovarMem
 
@@ -3746,7 +3746,7 @@ if (imgCount === 0) {
                         if (dataOwner) {
                             // Función asíncrona para obtener el dominio
                             async function dominioURLCpanel() {
-                                const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
+                                const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || null;
                                 const basicData = JSON.parse(sessionStorage.getItem('basicData')) || null;
                                 //console.log("Entro a buscar el dominio URL", basicData.urlServer, dataOwner.dominio);
                                 let dominio;
@@ -7015,7 +7015,7 @@ card7.appendChild(cardFooterEnv);
                     console.log("Entra en la funcion guardarNuevaDireccionCpanel", direccion, direccion1)
                     // Realizar la solicitud Fetch
                     //const endpoints = JSON.parse(sessionStorage.getItem('endPointsIdTokens'));
-                    //const dataOwner = JSON.parse(sessionStorage.getItem('ownerData'));
+                    //const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner'));
                     const jwToken   = sessionStorage.getItem('jwTokenOwner');
                     direccion.idOwner = idOwner
                     fetch(`${endpoints[69]}`, { 
@@ -7598,7 +7598,7 @@ card7.appendChild(cardFooterEnv);
         await actualizarData();
     }, 3000);
     }
-    var ownerDataX = JSON.parse(sessionStorage.getItem('ownerData'))
+    var ownerDataX = JSON.parse(sessionStorage.getItem('dataOwner'))
     const {nombre, apellido, email, urlServer, cantContratosMemRealizados, tipoMembresia, fechaVencMem } =  ownerDataX
     const ownerID = ownerDataX._id
     const cantProdQTiene = ownerDataX.TotalProdCOntratados

@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     //datos generales
     endpoints      = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
     const jwToken        = sessionStorage.getItem('jwTokenOwner');
-    const dataOwner      = JSON.parse(sessionStorage.getItem('ownerData'));
+    const dataOwner      = JSON.parse(sessionStorage.getItem('dataOwner'));
     const ownerProducts  = JSON.parse(sessionStorage.getItem("ownerProducts")) || [];
     const ownerPromos    = JSON.parse(sessionStorage.getItem("ownerPromos")) || [];
     const ownerMensajes  = JSON.parse(sessionStorage.getItem("ownerMensajes")) || [];
@@ -1395,85 +1395,6 @@ if (cantidadIngresada % 1 === 0) {
 
                 `;
 
-                const htmlSindataO = `
-                <h5>Asegúrate bien de los datos que vas a agregar porque NO pueden editarse.</h5>
-            <div class="w-100 d-flex align-items-center justify-content-center mb-3">
-    <div class="text-center me-3" hidden>
-        <label for="fileInput951357">
-            <img id="cambiarImagen99798798" src="${pathLogo}" alt="" height="200" width="200" class="rounded-circle" style="cursor: pointer;">
-            <p class="text-dark">Agrega tu logo aquí <br> (1mb max).</p>
-        </label>
-        <input id="fileInput951357" type="file" hidden>
-    </div>
-    <div class="w-100">
-        <form>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="nombre33" placeholder="Ingrese su nombre" required>
-                        <label for="nombre33">Nombre</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="apellido33" placeholder="Ingrese su apellido" required>
-                        <label for="apellido33">Apellido</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="tipoDocumento" required>
-                            <option value="" disabled selected>Seleccione un tipo de documento</option>
-                            <option value="DNI">DNI</option>
-                            <option value="Pasaporte">Pasaporte</option>
-                            <option value="C.I.">Cédula Identidad</option>
-                            <option value="other">Otro</option>
-                        </select>
-                        <label for="tipoDocumento">Tipo de Documento</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="numDocu" placeholder="Número Documento" required>
-                        <label for="numDocu">Número de Documento</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="tipoDocumentoFiscal" required>
-                            <option value="" disabled selected>Seleccione un tipo de documento</option>
-                            <option value="CUIT">CUIT</option>
-                            <option value="RUC">RUC</option>
-                            <option value="RUT">RUT</option>
-                            <option value="other">Otro</option>
-                        </select>
-                        <label for="tipoDocumentoFiscal">Tipo de Documento Fiscal</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="numDocuFiscal" placeholder="Número Documento" required>
-                        <label for="numDocuFiscal">Número de Documento Fiscal</label>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="nomCom33" placeholder="Nombre del comercio" required>
-                    <label for="nomCom33">Nombre del comercio</label>
-                </div>
-                <p id="alertContainer" class="text-danger"></p>
-                <p id="messageContainer" class="mt-3" hidden></p>
-            </div>
-            <button id="botonito122987" type="button" class="btn btn-primary btn-block">Enviar</button>
-        </form>
-    </div>
-</div>
-                `;
                 const htmlSindata = `
                 <div align"center" class="card p-4 d-flex justify-content-center align-items-center vh-100">
                     <div class="p-4 shadow-sm" style="overflow: hidden;">
@@ -2054,7 +1975,7 @@ if (cantidadIngresada % 1 === 0) {
             let direccionesHTML = '';
             direcciones.forEach(direccion => {
                 direccionesHTML += `
-                    <div class="col-md-5 mb-4">
+                    <div class="col-md-6 mb-4">
                         <div class="card" style="min-height: 50px !important;">
                             <div class="card-header">
                             <h5>Datos de la dirección</h5>
@@ -2170,7 +2091,7 @@ if (cantidadIngresada % 1 === 0) {
 
         //re envia al dominio del cliente o al de UTF Cpanel
         async function dominioURLCpanel() {
-            // const dataOwner = JSON.parse(sessionStorage.getItem('ownerData')) || null;
+            const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || null;
             console.log("Entro a buscar el domioURL",urlServer, dominio)
             let dominio
             if (dataOwner.dominio) {
@@ -2186,3 +2107,38 @@ if (cantidadIngresada % 1 === 0) {
             }
         }
 
+        function exportarAExcel(dataExcel) {
+            console.log("Entro a descargar el excel", dataExcel);
+
+            // Crear un nuevo libro de Excel
+            let wb = XLSX.utils.book_new();
+
+            // Crear un array para almacenar todos los datos juntos
+            let datosLimpios = [];
+
+            // Recorremos el array padre y sus subarrays
+            dataExcel.forEach((compra) => {
+            // Verificamos si 'compra' es un array
+            if (Array.isArray(compra)) {
+                // Si es un array, limpiamos cada objeto del array
+                compra.forEach(item => {
+                const { _id, idCliente, idOwner, clienteId, idDueno, ...limpio } = item;
+                datosLimpios.push(limpio);  // Agregamos el objeto limpio al array
+                });
+            } else if (typeof compra === 'object') {
+                // Si es un objeto, lo limpiamos y lo agregamos
+                const { _id, idCliente, idOwner, clienteId, idDueno, ...limpio } = compra;
+                datosLimpios.push(limpio);  // Agregamos el objeto limpio al array
+            }
+            });
+
+            // Convertimos el array limpio en una hoja de Excel
+            let ws = XLSX.utils.json_to_sheet(datosLimpios);
+
+            // Agregamos la hoja de Excel con todos los datos en una sola hoja
+            XLSX.utils.book_append_sheet(wb, ws, 'Compras Clientes');
+
+            // Generamos el archivo Excel
+            XLSX.writeFile(wb, 'ComprasClientes.xlsx');
+        }
+    

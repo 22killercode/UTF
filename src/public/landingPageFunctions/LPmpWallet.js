@@ -57,7 +57,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
 
           const idEnpointCheq = JSON.parse(sessionStorage.getItem("endPointsIdTokensCpanel"))
           const jwToken = dataBasic.data.jwToken
-          console.log("111111111jwTokenjwTokenjwTokenEEEEEEEEEEEEEEEEEentro al pago con MP Wallet dataBasic", jwToken);
+          // console.log("111111111jwTokenjwTokenjwTokenEEEEEEEEEEEEEEEEEentro al pago con MP Wallet dataBasic", jwToken);
           console.log("22222222222idEnpointCheq129idEnpointCheq129EEEEEEEentro al pago con MP Wallet dataBasic", idEnpointCheq[129]);
 
           fetch(`${idEnpointCheq[129]}`, {
@@ -70,7 +70,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
           })
 
           .then(response => response.json())
-
+ 
           .then(data => {
             console.log("******111111111111*********Que datos obtiene desde MP Wallet", data)
             if (data.success) {
@@ -218,9 +218,9 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
 
   // upgrqde de membresia desde andentro del Cpanel
   async function CpanelmpWallet(renewMemId123) {
-      const dataBasic      = JSON.parse(sessionStorage.getItem('datosBasicos'));
-      const dataOwner      = JSON.parse(sessionStorage.getItem('ownerData'));
-      const DataPayO     = JSON.parse(sessionStorage.getItem('dataPayOSes'));
+      const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+      const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || JSON.parse(sessionStorage.getItem('dataOwner'));
+      const DataPayO  = JSON.parse(sessionStorage.getItem('dataPayOSes'));
       try {
         const {nombre, apellido, email, urlServer } = dataOwner
         const { precioPEsos, quantity, duration }   = DataPayO
@@ -453,7 +453,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
             const idEnpointCheq = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
             console.log("idEnpointCheq[169] wallet MP", idEnpointCheq[169])
             
-            var ownerDataX = JSON.parse(sessionStorage.getItem('ownerData'))
+            var ownerDataX = JSON.parse(sessionStorage.getItem('dataOwner'))
 
             const {nombre, apellido, email, urlServer, cantContratosMemRealizados, tipoMembresia, fechaVencMem } =  ownerDataX
             const ownerID = ownerDataX._id

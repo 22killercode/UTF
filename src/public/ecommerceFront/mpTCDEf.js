@@ -220,25 +220,34 @@
 
         // Crea un nuevo elemento para cada producto y agrega los detalles
         const productDetails = document.createElement("div");
-        productDetails.classList.add("col-sm-6", "col-md-4", "col-lg-3", "d-flex", "justify-content-center"); // Tarjetas responsivas
+        productDetails.classList.add("col-sm-6", "col-md-4", "d-flex", "justify-content-center"); // Tarjetas responsivas
         productDetails.innerHTML = `
-          <div class="card text-center" style="width: 18rem; height: auto">
-            <div class="card-header">
-              <p class="text-start mb-0">Producto: ${title}</p>
-            </div>
-            <div class="card-body">
-              <div class="d-flex justify-content-center">
-                <img src="${imagen}" class="img-fluid" style="max-width: 100px; object-fit: contain;" alt="${title}">
-              </div>
-              <div class="text-start mt-3">
-                <p class="mb-1">Cantidad: ${quantity}</p>
-                <p class="mb-1">Precio unitario: $${unitPrice}</p>
-              </div>
-            </div>
-            <div class="card-footer text-start">
-              <p class="mb-0">Sub total: $${subTotal}</p>
-            </div>
-          </div>
+<div class="card" style="width: 200px !important; margin: 0.5rem; padding: 1rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: #fff; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+    <!-- Contenedor para centrar el título -->
+    <div style="text-align: center; margin-bottom: 0.5rem;">
+        <p style="font-weight: bold; margin: 0;">Producto: ${title}</p>
+    </div>
+    
+    <!-- Contenedor para centrar la imagen -->
+    <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
+        <img src="${imagen}" style="width: 180px !important; height: auto; border-radius: 5px;" />
+    </div>
+
+    <!-- Texto alineado a la izquierda -->
+    <p style="text-align: left; margin-bottom: 0.5rem;">Cantidad: ${quantity}</p>
+    <p style="text-align: left; margin-bottom: 0.5rem;">Precio unitario: ${unitPrice.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
+    <p style="text-align: left;">Sub total: ${subTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</p>
+</div>
+
+<style>
+.card:hover,
+.card:active {
+    transform: scale(1.02); /* Aumenta un 2% */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa a la derecha y abajo */
+}
+</style>
+
+
         `;
         // Agrega el nuevo elemento al elemento quantity
         quantityElement.appendChild(productDetails);
