@@ -25,6 +25,7 @@ const usuario       = require('../models/User');
 const Tokens        = require('../models/Tokens'); 
 const GrlConfig     = require('../models/configsGrl');
 const PushMensajes  = require('../models/messages');
+const IncidentsModel = require('../models/incidencias');
 
 const JSONTransport = require('nodemailer/lib/json-transport');
 const { Script } = require('vm');
@@ -1362,7 +1363,7 @@ configsss();
             return endpointTokensArray
         }
 
-        async function SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal, urlServer) {
+        async function SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal, urlServer, codVend) {
             try {
                 const password = passwordXYZ123
                 console.log("Entro a la funcion de SignUp de funcionesymas 99999",emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
@@ -1392,7 +1393,8 @@ configsss();
                     fechaVencimientoCantProd,
                     ticketPath,
                     ticketNumber,
-                    precioFinal
+                    precioFinal,
+                    codVend
                 });
                 
                 console.log(cantContratosMemRealizados);
@@ -1400,7 +1402,7 @@ configsss();
                 const email = emailXYZ123;
 
                 const newUser = new usuario({cheqDocument:false, cheqDataFaltante:false,
-                    desingShop: "No tiene", usuarioBloqueado: true, tyc: true, email, password, statusInscrip: "Incompleto", transportEmail, emails: [{ emailOwner: email }], clientes: [], numCel: [], Ventas: [], linksredesSociales: {}, mediasDPagoCobro: {}, realPass: password, pathLogo: "/images/usuario.png", tipoMembresia: tipoM, urlOwner: "", urlServer, direcciones: [], quienesSomos: {}, dominioOwner: "No tiene", fondoPantalla: "No tiene", mostrarPromoPPrin: true, renovarMem: false, misProductos: [], fechaVencMem:fechaVencimientoCantProd, TotalProdCOntratados:cantPRODO,cantContratosMemRealizados
+                    desingShop: "No tiene", usuarioBloqueado: true, tyc: true, email, password, statusInscrip: "Incompleto", transportEmail, emails: [{ emailOwner: email }], clientes: [], numCel: [], Ventas: [], linksredesSociales: {}, mediasDPagoCobro: {}, realPass: password, pathLogo: "/images/usuario.png", tipoMembresia: tipoM, urlOwner: "", urlServer, direcciones: [], quienesSomos: {}, dominioOwner: "No tiene", fondoPantalla: "No tiene", mostrarPromoPPrin: true, renovarMem: false, misProductos: [], fechaVencMem:fechaVencimientoCantProd, TotalProdCOntratados:cantPRODO,cantContratosMemRealizados, codVend
                 });
                 
                 newUser.password = await newUser.encryptPassword(password);
@@ -1423,7 +1425,7 @@ configsss();
         }
 
         async function UpDateUpGrade(dataSendUpGrade) {
-            console.log("************* UPGRADE OWNER  999999 Entro a la funcion", dataSendUpGrade);
+            console.log("*******************UpDateUpGrade******** UPGRADE OWNER  999999 Entro a la funcion", dataSendUpGrade);
             try {
                 let { ownerID, paymentMethod, ticketNumber, ticketPath, dataPAyO: { precioPEsos, quantity, duration, tipoDPago }, cantProdQTiene, cantContratosMemRealizados, fechaVencMem, tipoMembresia, precioFinal } = dataSendUpGrade;
                 
@@ -1464,7 +1466,11 @@ configsss();
                     precioFinal
                 });
 
-                const TotalProdCOntratados = Number(cantProdQTiene) + Number(quantity);
+                // const TotalProdCOntratados = Number(cantProdQTiene) + Number(quantity);
+                const TotalProdCOntratados = cantContratosMemRealizados.reduce((total, contrato) => 
+                    new Date(contrato.fechaVencimientoCantProd) >= new Date() ? total + contrato.canProd : total, 0
+                );
+
                 console.log("Actualización exitosa TotalProdCOntratados:", TotalProdCOntratados, cantProdQTiene, quantity);
 
                 const tipoMembresiaUpdated = "premium";
@@ -1562,9 +1568,57 @@ configsss();
         }
         
 
+        // Función para guardar incidente y enviar email
+
+// Función para registrar y enviar incidentes
+async function registrarYEnviarIncidente(mensajeError, emailReport, userIncidentID, userEmailIncident ) {
+    const transportGmail = ConfigG.transportGmail
+    try {
+        // 1. Creación del objeto incidente con los detalles recibidos
+        console.log('Iniciando la creación del incidente...');
+        const nuevoIncidente = new IncidentsModel({
+            mensajeErrror: mensajeError,
+            emailReport: emailReport,
+            userIncidentID: userIncidentID,
+            userEmailIncident: userEmailIncident,
+        });
+
+        // 2. Guardar el incidente en MongoDB
+        console.log('Guardando el incidente en MongoDB...');
+        const incidenteGuardado = await nuevoIncidente.save();
+        console.log('Incidente guardado correctamente:', incidenteGuardado);
+
+        // 3. Configuración del correo que se enviará al administrador
+        console.log('Configurando el contenido del correo a enviar...');
+        const mailOptions = {
+            from: transportGmail.auth.user,  // Correo desde el que se enviará (debe coincidir con el usuario de auth)
+            to: emailReport,                  // Correo del destinatario (en este caso, el administrador o responsable)
+            subject: 'Nuevo incidente reportado',  // Asunto del correo
+            text: `Se ha reportado un nuevo incidente:\n\n
+                Error: ${mensajeError}\n
+                ID de Usuario: ${userIncidentID}\n
+                Correo del Usuario: ${userEmailIncident}\n
+                Fecha: ${new Date().toLocaleString()}\n`
+        };
+
+        console.log('Contenido del correo preparado:', mailOptions);
+
+        // 4. Enviar el correo usando el transporte Gmail
+        console.log('Enviando el correo al administrador...');
+        await transportGmail.sendMail(mailOptions);
+        console.log('Correo enviado correctamente a', emailReport);
+
+    } catch (error) {
+        // 5. Capturar cualquier error durante el proceso de guardado del incidente o el envío del correo
+        console.error('Error al registrar el incidente o enviar el correo:', error);
+    }
+}
+
+        
 
 
 module.exports = {
+    registrarYEnviarIncidente,
     compararFechas,
     guardarImagenCli,
     eliminarImagenes,

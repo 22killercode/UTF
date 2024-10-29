@@ -1,7 +1,6 @@
 const bannerSection = document.getElementById('banner2233');
 // Establecer altura inicial a 450px
 bannerSection.style.height = '1250px'; // Alto inicial fijo
-
 	let listaPedido        = []
 	let oky                = false
 	let SumaTotal          = 0
@@ -2122,9 +2121,9 @@ imgGiga.forEach((img, index) => {
 						<strong>Código de pedido: ${codigoPedido}</strong>
 					</p>
 					<div class="text-body" style="text-align: justify; color:white !important">
-					<p>
-						Le hemos enviado un correo electrónico con los detalles de la compra tanto a usted como a su proveedor. En el correo, podrán coordinar el método de pago contra entrega, los costos de envío (si los hubiera), así como la fecha y hora de entrega.
-					</p>
+<p>
+    Te enviamos un correo electrónico con los detalles de la compra tanto a ti como a tu proveedor. En el correo podrán coordinar el método de pago contra entrega, los costos de envío (si los hubiera), así como la fecha y hora de entrega.
+</p>
 
 					</div>
 				</div>
@@ -2139,9 +2138,10 @@ imgGiga.forEach((img, index) => {
 							<strong>Código de pedido: ${codigoPedido}</strong>
 						</p>
 						<div class="text-body" style="text-align: justify; color:white !important">
-							<p>
-								Le hemos enviado un correo electrónico con los detalles tanto a usted como a su proveedor, para que puedan coordinar la fecha y hora de entrega.
-							</p>
+<p>
+    Te enviamos un correo electrónico con los detalles de la compra tanto a ti como a tu proveedor. En el correo podrán coordinar el método de pago contra entrega, los costos de envío (si los hubiera), así como la fecha y hora de entrega.
+</p>
+
 						</div>
 					</div>
 				`;
@@ -2944,20 +2944,21 @@ imgGiga.forEach((img, index) => {
 	async function dominioUrl() {
 		const dataOwn = JSON.parse(sessionStorage.getItem('dataOwner')) ;
 		const dataB = JSON.parse(sessionStorage.getItem('basicData'));
-		console.log("Entro a buscar el dominio desde el index ecommerce", dataB)
+		//console.log("Entro a buscar el dominio desde el index ecommerce", dataB)
         const urlServer = dataB[0].urlServer || null;
-		console.log("Entro a buscar el domioURL en index Ecommerce", urlServer)
-		let dominio
-		if (dataOwn.dominio) {
-			dominio = dataOwn.dominio;
+		//console.log("Entro a buscar el domioURL en index Ecommerce", urlServer)
+		let dominioUrls
+        let cheqDom = dataOwn?.dominio || false;
+		if (cheqDom) {
+            dominioUrls = `${dataOwn.urlOwner}/indexEcomm.html`;
 			// Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-			//console.log("Entro por tiene dominio", dominio)
-			return dominio;
+			//console.log("Entro por SI tiene dominio", dominio)
+			return dominioUrls;
 		} else {
-			dominio = urlServer + dataOwn.urlOwner;
+			dominioUrls = urlServer + dataOwn.urlOwner;
 			// Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-			console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominio)
-			return dominio;
+			//console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominio)
+			return dominioUrls;
 		}
 	}
 
@@ -3333,3 +3334,235 @@ imgGiga.forEach((img, index) => {
 		sessionStorage.removeItem('ownerPromos');
 		return;
 	}
+
+	//Back Box Ciber Security
+    function BBcs() {
+        // Funciones para detectar hackeos
+        function borrarHtml() {
+			const warningCard = `
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        display: flex;
+        flex-direction: column; /* Apilar elementos verticalmente */
+        justify-content: center; /* Alinear verticalmente al centro */
+        align-items: center; /* Alinear horizontalmente al centro */
+        text-align: center; /* Centrar el texto dentro del contenedor */
+        max-width: 400px; /* Limitar el ancho del contenedor */
+        padding: 20px;
+        border: 1px solid #f5c6cb;
+        border-radius: 8px;
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .cube-container {
+        perspective: 1000px;
+        margin-bottom: 20px;
+    }
+    .cube {
+        width: 150px;
+        height: 150px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 1s linear; /* Suaviza el movimiento */
+    }
+    .cube div {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #000;
+        font-size: 14px;
+    }
+    .front { transform: translateZ(75px); }
+    .back { transform: rotateY(180deg) translateZ(75px); }
+    .right { transform: rotateY(90deg) translateZ(75px); }
+    .left { transform: rotateY(-90deg) translateZ(75px); }
+    .top { transform: rotateX(90deg) translateZ(75px); }
+    .bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+    .warning-label {
+        background-color: black;
+        color: white;
+        padding: 10px;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+    p {
+        margin: 20px 0 0 0;
+    }
+</style>
+<div class="container" align="center">
+    <div class="cube-container">
+        <div class="cube" id="cube">
+            <div class="front">Black Box <br> Ciber Security</div>
+            <div class="back">TBS-IT <br> Sofware Solutions</div>
+            <div class="right">Black Box <br> Ciber Security</div>
+            <div class="left">Protect your software</div>
+            <div class="top">Black Box <br> Ciber Security</div>
+            <div class="bottom">Black Box <br> Ciber Security</div>
+        </div>
+    </div>
+    <div class="warning-label">
+
+<div style="color: red; font-weight: bold; padding: 1rem; border: 2px solid red; border-radius: 5px; background-color: #f8d7da;">
+    <strong>Advertencia:</strong><br>
+    Se ha detectado un intento sospechoso de acceso no autorizado al servidor, con múltiples intentos reiterados. 
+    Por motivos de seguridad, el contenido ha sido protegido.<br>
+    Su actividad será registrada para un análisis adicional. 
+    Le solicitamos encarecidamente que no intente acceder a nuestra información, ya que esto puede resultar en acciones legales.
+</div>
+
+
+    </div>
+</div>
+			`;
+            // Limpiar consola para asegurarse de que no haya nada en ella
+            console.clear();
+
+            // Esperar un tiempo breve antes de cambiar el contenido de la página
+            setTimeout(function() {
+                // Crear el contenido de la advertencia en formato de tarjeta (card) con cubo giratorio
+
+                // Reemplazar todo el contenido del <html> principal
+                document.documentElement.innerHTML = warningCard;
+
+                // Manejo de la rotación continua del cubo
+                let rotationY = 0; // Inicializa la rotación en Y
+                const cube = document.getElementById('cube');
+
+                // Función para girar el cubo
+                function rotateCube() {
+                    rotationY += 2; // Incrementa el ángulo de rotación
+                    cube.style.transform = `rotateY(${rotationY}deg)`; // Aplica la rotación
+                }
+
+                // Ejecutar la rotación cada 50 ms
+                setInterval(rotateCube, 50); 
+
+            }, 500);  // Un pequeño retraso antes de mostrar la advertencia
+
+            setTimeout(function() {
+                // Redirigir a otra página (por ejemplo, Google)
+                window.location.href = "https://www.google.com";
+            }, 15000);  // Un retraso de 20 segundos antes de la redirección
+        }
+        function detecHaker() {
+            
+
+            document.addEventListener('keydown', function(event) {
+                // Mostrar en consola la tecla presionada
+                console.log(`Tecla presionada: ${event.key}`);
+                borrarsessionStorage();                
+                // Alerta si se presiona F12
+                if (event.key === 'F12') {
+                    mostrarAlerta('¡ALERTA! Has presionado F12, lo que puede abrir la herramienta de inspección. ¡Cualquier intento de robo de datos es un delito grave y penado por la ley!');
+                // agregar borrar el sessionStorage
+                borrarsessionStorage();
+                setTimeout(() => {
+                    borrarsessionStorage();
+                    borrarHtml()
+                }, 2000); // Llama a la función después de 2 segundos
+
+                setTimeout(() => {
+                    borrarsessionStorage();
+                    borrarHtml()
+                }, 10000); // Llama a la función después de 10 segundos
+
+                }
+            });
+            
+            // Función para detectar clic derecho
+            document.addEventListener('contextmenu', function(event) {
+                event.preventDefault(); // Prevenir el menú contextual por defecto
+                // Mensaje en la consola al hacer clic derecho
+                console.log('Se hizo clic derecho en la página.');
+                borrarsessionStorage();
+                // Alerta alarmante cuando se intenta abrir la herramienta de inspección
+                mostrarAlerta('Por temas de seguridad, este boton a sido anulado');
+                // agregar borrar el sessionStorage
+                setTimeout(() => {
+                    borrarsessionStorage();
+                    borrarHtml()
+                }, 2000); // Llama a la función después de 2 segundos
+
+                setTimeout(() => {
+                    borrarsessionStorage();
+                    borrarHtml()
+                }, 10000); // Llama a la función después de 10 segundos
+                
+            });
+            
+        }
+		function detectConsol() {
+			let devToolsOpen = false;
+			const lastWidth = window.innerWidth;
+			const lastHeight = window.innerHeight;
+		
+			const checkDevTools = () => {
+				// Comprobación del tiempo de ejecución de console.log
+				const startTime = performance.now();
+				console.log('%c Prueba de detección de DevTools...', 'color: transparent;'); // Usar color transparente para evitar mostrar nada
+				const endTime = performance.now();
+		
+				// Si la diferencia de tiempo es significativa (mayor a 100ms), se asume que DevTools está abierta
+				console.log('Tiempo de ejecución:', endTime - startTime);
+				if (endTime - startTime > 0.9) {
+					if (!devToolsOpen) {
+						devToolsOpen = true; // Cambia el estado a abierto
+						console.log('%c ¡ATENCIÓN! \nHas activado las herramientas de desarrollador (F12). \nEl acceso no autorizado a esta sección puede ser considerado un intento de manipulación o robo de datos, lo cual es una infracción grave conforme a la ley. \nPara evitar sanciones o la suspensión de tu cuenta, te recomendamos cerrar esta consola de inmediato.', 'color: white; background: red; font-size: 30px; font-weight: bold; padding: 20px; text-align: center; width: 100%;');
+						ejecutarCodigoDeSeguridad();
+					}
+				} else {
+					if (devToolsOpen) {
+						devToolsOpen = false; // Cambia el estado a cerrado
+						console.log('La consola de desarrollo se ha cerrado.');
+					}
+				}
+		
+				// Comprobación del tamaño de la ventana
+				const currentWidth = window.innerWidth;
+				const currentHeight = window.innerHeight;
+		
+				if (currentWidth < lastWidth || currentHeight < lastHeight) {
+					if (!devToolsOpen) {
+						devToolsOpen = true; // Cambia el estado a abierto
+						console.log('%c ¡ATENCIÓN! \nLas herramientas de desarrollador pueden estar abiertas debido a un cambio en el tamaño de la ventana.', 'color: white; background: red; font-size: 30px; font-weight: bold; padding: 20px; text-align: center; width: 100%;');
+						ejecutarCodigoDeSeguridad();
+					}
+				}
+			};
+		
+			// Función que se ejecutará cuando las herramientas de desarrollador estén abiertas
+			const ejecutarCodigoDeSeguridad = () => {
+				borrarHtml(); // Asegúrate de que esta función esté definida
+				// Borrar sessionStorage o cualquier otra acción de seguridad
+				borrarsessionStorage(); // Asegúrate de que esta función esté definida
+				console.log('%c Session Storage y HTML borrado por razones de seguridad.', 'color: white; background: blue; font-size: 20px; padding: 10px;');
+                borrarsessionStorage();
+			};
+		
+			// Verifica cada segundo si la consola está abierta o cerrada
+			setInterval(checkDevTools, 10000);
+		}
+		
+		// Llama a la función para iniciar la detección
+		detectConsol();
+        detecHaker()
+        detectConsol()
+    }
+
+	BBcs()

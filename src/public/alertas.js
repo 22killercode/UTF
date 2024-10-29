@@ -1,18 +1,41 @@
 	// funciones de modal de espera loading
 	function mostrarModalLoading() {
-		//console.log("Entro a MOSTRAR modal loading")
-		$('#loadingModal').modal('show');
-	}
-	// Función para ocultar el modal
-	function ocultarModalLoading() {
-		//console.log("Entro a ocultar modal loading")
-		$('#loadingModal').modal('hide');
-		// Eliminar todos los nodos hijos del elemento
-		const eli = document.getElementById("loadingModal");
-		if (eli) {
-			eli.remove()|| (eli.style.display = 'none')
+		const modalElement = document.getElementById('loadingModal');
+		
+		if (window.jQuery && $('#loadingModal').modal) {
+			$('#loadingModal').modal('show');
+			//console.log("Modal mostrado con jQuery (Bootstrap)");
+		} else if (modalElement) {
+			modalElement.style.display = 'block';
+			modalElement.classList.add('show');
+			//console.log("Modal mostrado con JavaScript nativo (style.display)");
+		} else {
+			console.error("No se encontró el elemento modal");
 		}
 	}
+	
+	
+	function ocultarModalLoading() {
+		const modalElement = document.getElementById('loadingModal');
+	
+		// Método 1: Usando jQuery y Bootstrap
+		if (window.jQuery && $('#loadingModal').modal) {
+			$('#loadingModal').modal('hide');
+			console.log("Modal ocultado con jQuery (Bootstrap)");
+		}
+		// Método 2: Usando JavaScript nativo
+		else if (modalElement) {
+			modalElement.style.display = 'none';
+			modalElement.classList.remove('show');
+			console.log("Modal ocultado con JavaScript nativo (style.display)");
+		}
+		// Método 3: Eliminando el nodo si existe
+		if (modalElement && modalElement.parentNode) {
+			modalElement.parentNode.removeChild(modalElement);
+			console.log("Modal eliminado del DOM");
+		}
+	}
+	
 
 	function mostrarExitoVenta(mensajeExito) {
 		// Obtener el elemento con el id "modalAlert"
@@ -65,7 +88,6 @@
 		const myModal = new bootstrap.Modal(div);
 		myModal.show();
 
-		// Mover la asignación del evento aquí
 		const botoner = div.querySelector('#btnTerminarVenta159'); // Asegúrate de seleccionar el botón correcto
 		botoner.addEventListener("click", () => {
 			modalAlert.innerHTML = ""; // Limpiar el contenido
@@ -73,7 +95,7 @@
 		});
 	}
 
-	function mostrarInfo(mensajeInfo, idOwner) {
+	function mostrarInfo(mensajeInfo, idOwner, cheqDataFaltante) {
 		// Obtener el elemento con el id "modalAlert"
 		const modalAlert = document.getElementById('informacionPlus');
 		modalAlert.innerHTML = "";
@@ -87,76 +109,62 @@
 		div.id = 'exitoVenta';
 		
 		// Asignar el contenido HTML al nuevo div
-		div.innerHTML = `
-		<div class="modal-dialog modal-dialog-centered justify-content-center align-items-center">  
-			<div class="modal-content border border-success" style="background-color: #00bcd4; color: white;">  
-				<div class="modal-header text-center justify-content-center align-items-center">  
-					<h5 class="modal-title" id="exampleModalLabel">¡Información!</h5>  
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" hidden></button>  
+
+		let info = {}
+
+		// le quita el boton de cerrar a los owner que aun no han configurado su sitio
+		if (cheqDataFaltante) {
+			info = `
+			<div class="modal-dialog modal-dialog-centered justify-content-center align-items-center">  
+				<div class="modal-content border border-success" style="background-color: #00bcd4; color: white;">  
+					<div class="modal-header text-center justify-content-center align-items-center">  
+						<h5 class="modal-title" id="exampleModalLabel">¡Información!</h5>  
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" hidden></button>  
+					</div>  
+					<div class="modal-body text-center text-white p-4" style="max-height: calc(90vh - 150px); overflow:hidden;overflow-y: auto;">  
+						<h5>${mensajeInfo}</h5>  
+					</div>
+	<div class="modal-footer justify-content-center" style="margin:0.5rem; display: flex; gap: 1rem;">  
+		<button style="margin: auto;" class="btn btn-primary" id="btnCerrarInfo159">
+			Cerrar y no mostrar de nuevo.
+		</button>
+		<p>Para que vuelva a aparecer el informe, haz clic fuera del modal o presiona "Cerrar y ocultar". Para visualizarlo nuevamente, selecciona "Ver Informe".</p>
+
+	</div>  
 				</div>  
-				<div class="modal-body text-center text-white p-4" style="max-height: calc(90vh - 150px); overflow:hidden;overflow-y: auto;">  
-					<h5>${mensajeInfo}</h5>  
-				</div>
-<div class="modal-footer justify-content-center" style="margin:0.5rem; display: flex; gap: 1rem;">  
-	<div class="">
-		<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" id="switch2">
-			<label class="form-check-label" for="switch2">No mostrar informe nuevamente.</label>
-		</div>
-		<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" id="switch1">
-			<label class="form-check-label" for="switch1">Eliminar todos los informes</label>
-		</div>
-    </div>
-    <button style="margin: auto;" class="btn btn-primary" id="btnCerrarInfo159">
-        Cerrar/Activar
-    </button>
-	<p>Puedes volver a ver el informe presionando "Ver Informe"</p>
-</div>  
-			</div>  
-		</div>
-		`;
-		
+			</div>
+			`;
+		} else {
+			info = `
+			<div class="modal-dialog modal-dialog-centered justify-content-center align-items-center">  
+				<div class="modal-content border border-success" style="background-color: #00bcd4; color: white;">  
+					<div class="modal-header text-center justify-content-center align-items-center">  
+						<h5 class="modal-title" id="exampleModalLabel">¡Información!</h5>  
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" hidden></button>  
+					</div>  
+					<div class="modal-body text-center text-white p-4" style="max-height: calc(90vh - 150px); overflow:hidden;overflow-y: auto;">  
+						<h5>${mensajeInfo}</h5>  
+					</div>
+	<div class="modal-footer justify-content-center" align="center" style="margin:0.5rem; display: flex; gap: 1rem;">  
+
+<p>Para cerrar el informe, haz clic fuera del modal. <br> Para visualizarlo nuevamente, selecciona "Ver Informe".</p>
+
+	</div>  
+				</div>  
+			</div>
+			`;
+		}
+
+		div.innerHTML = info
+
 		// Agregar el nuevo div al elemento con el id "modalAlert"
 		modalAlert.appendChild(div);
 		// Mostrar el modal
 		const myModal = new bootstrap.Modal(div);
 		myModal.show();
-	
-
-
-
-    // Switch 1
-    document.getElementById('switch1').addEventListener('change', function() {
-        if (this.checked) {
-            let confirmation = confirm("¿Estás seguro de que deseas eliminar todos los informes?");
-            if (!confirmation) {
-                this.checked = true;
-            } else {
-                // Acciones para eliminar mensajes
-                console.log("Todos los mensajes eliminados.");
-            }
-        }
-    });
-
-    // Switch 2
-    document.getElementById('switch2').addEventListener('change', function() {
-        if (this.checked) {
-            let confirmation = confirm("¿Estás seguro de que no deseas volver los informes en esta sesión?");
-            if (!confirmation) {
-                this.checked = true;
-            } else {
-                // Acciones para no volver a mostrar la información
-                console.log("No volver a mostrar esta información activado.");
-            }
-        }
-    });
-
-
-
 
 		// Añadir evento de eliminación a cada elemento
-		const cantDel = document.querySelectorAll('.delete-info').forEach((deleteBtn) => {
+		document.querySelectorAll('.delete-info').forEach((deleteBtn) => {
 			deleteBtn.addEventListener('click', (event) => {
 				const liElement = event.target.closest('li'); // Obtener el <li> más cercano
 				const idInforme = liElement.querySelector('p[data-id]').getAttribute('data-id'); // Obtener el ID del informe
@@ -178,23 +186,11 @@
 		});
 	
 		// Asignación del evento de cerrar el modal
-		const botoner = div.querySelector('#btnCerrarInfo159'); // Selecciona el botón correcto
-		botoner.addEventListener("click", () => {
-			myModal.hide(); // Cerrar el modal
-			//SI ESTANA CTIVADOS LSO SWTICHES EN TRUE ENVIA LA INFO AL SERVER
-			const cheqElimnar = document.getElementById('switch1').value
-			const cheqNover   = document.getElementById('switch2').value
-			console.log("Que valor inicial tiene cheqNover",cheqNover )
-			if (cheqNover === "on") {
-				sessionStorage.setItem("okInfo", JSON.stringify(cheqNover));
-				console.log("Entro a no volver a mostrar", cheqElimnar)
-			}
-			if (cheqElimnar === "on") {
-				// se va al servr a eliminar todos los mensajes
-				console.log("Entro a eliminar toda la info", cheqElimnar)
-			}
-
+		div.querySelector('#btnCerrarInfo159')?.addEventListener("click", () => {
+			myModal.hide();
+			sessionStorage.setItem("okInfo", JSON.stringify(true));
 		});
+		
 	}
 
 	//Mensajes de advertincia y confirmacion
@@ -296,7 +292,7 @@
 					<h5 class="modal-title" id="exampleModalLabel" >¡Bien hecho!</h5>
 				</div>
 				<br>
-				<iframe class="justify-content-center align-items-center" style="border-radius: 1rem;" width="150" height="150" frameborder="0" class="giphy-embed" allowfullscreen></iframe>
+				<iframe style="border-radius:1rem" src="https://giphy.com/embed/f3orDrv1hzyMvgI3y6" width="130" height="130" frameborder="0" class="giphy-embed" allowfullscreen></iframe>
 				<div class="modal-body text-center">
 					<h5>${mensajeExito}</h5>
 				</div>
@@ -515,11 +511,11 @@
 			if (response.ok) {
 				const data = await response.json();
 				if (data.success) {
-					console.log("¿Pudo borrar el informe?", data);
+					//console.log("¿Pudo borrar el informe?", data);
 	
 					// Verifica que RefreshactualizarData devuelva una promesa
 					const cheq = await RefreshactualizarData();
-					console.log("Resultado de RefreshactualizarData:", cheq);
+					//console.log("Resultado de RefreshactualizarData:", cheq);
 	
 					if (cheq) {
 						mostrarExito(data.message + "Si no atiendes estos temas volverán a aparecer en el informe"); // Mostrar mensaje de éxito
@@ -527,7 +523,7 @@
 						mostrarAlerta("No se actualizó la info, salga e ingrese nuevamente."); // Mostrar mensaje de alerta
 					}
 				} else {
-					console.error("Error en la respuesta del servidor:", data.message);
+					//console.error("Error en la respuesta del servidor:", data.message);
 					mostrarAlerta(data.message); // Mostrar el mensaje de error
 				}
 			} else {

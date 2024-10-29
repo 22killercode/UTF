@@ -144,7 +144,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                     success: true, 
                     endPointsIdTokens: endpointTokensArrayCpanel, 
                     data: dataDatera,
-                    configGrl: newConfigGrl 
+                    configGrl: newConfigGrl._doc 
                 });
             }, 2000); // 2000 milisegundos = 2 segundos
             
@@ -292,7 +292,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
 
             // Convertir el documento a un objeto plano y eliminar las propiedades no deseadas
-            const { password, realPass, ...cleanedData } = dataOwner.toObject();
+            const { password, ...cleanedData } = dataOwner.toObject();
             
             //console.log("Salio real y pass???????",cleanedData); // Aquí tienes el objeto sin password y realPass
             
@@ -2266,17 +2266,9 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
         // guarda  los ultimos informes de los estados
         router.post(urlPoint(31), [verificarToken], async (req, res) => {
-            console.log("que mierda biene en     // guarda  los ultimos informes de los estados", req.body)
+            console.log("que mierda biene en  // guarda  los ultimos informes de los estados", req.body)
             try {
-                // Log para verificar los datos recibidos
-                //console.log(`Datos recibidos para guardar los informes:`, req.body);
-
-                const dataBody = JSON.parse(req.body)
-
-                //console.log(`Datos recibidos para guardar los informes dataBody:`, dataBody);
-
-                const { idInfo, Date, positivo, infoMensaje, infoMmensagem, idOwner } = dataBody;
-                
+                const { idInfo, Date, positivo, infoMensaje, infoMmensagem, idOwner } = req.body;
         
                 // Buscar si existe el usuario con el idOwner
                 let dataOwner = await User.findOne({ _id: idOwner });
@@ -2319,7 +2311,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
         // consulta el informe diario
         router.post(urlPoint(33), [verificarToken], async (req, res) => {
-            console.log("consulta el informe diario", req.body)
+            //console.log("consulta el informe diario", req.body)
             try {
                 // Extraer el idOwner directamente del cuerpo de la solicitud
                 const  dataPuto  = JSON.parse(req.body);
@@ -2327,7 +2319,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         
                 // Verificar que idOwner esté definido y no sea nulo
                 if (!idOwwner2) {
-                    console.log("idOwner es undefined o null");
+                    //console.log("idOwner es undefined o null");
                     return res.status(400).json({ success: false, message: "idOwner no está definido" });
                 }
         
@@ -2336,21 +2328,21 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         
                 // Si no se encuentra el propietario, devolver error 404
                 if (!dataOwner) {
-                    console.log("Propietario no encontrado, devolviendo 404");
+                    //console.log("Propietario no encontrado, devolviendo 404");
                     return res.status(404).json({ success: false, message: "Propietario no encontrado" });
                 }
         
                 // Obtener el último informe de datInfoFilter
                 const ultimoInforme = dataOwner.lastInfo;
-                console.log(`Total de los ultimos estado encontrado: ${ultimoInforme.length}`);
+                //console.log(`Total de los ultimos estado encontrado: ${ultimoInforme.length}`);
         
                 // debe comparar fechas: si la ultima fecha de entrada es menor a un dia no manda nada
                 const lasDateInfo = dataOwner.lasDateInfo
 
                 // Ejemplo de uso:
                 const resultado = compararFechas(ultimoInforme, lasDateInfo);
-                console.log('Informes nuevos y recientes:', resultado.nuevosRecientes.length);
-                console.log('Informes viejos:', resultado.informesViejos.length);
+                //console.log('Informes nuevos y recientes:', resultado.nuevosRecientes.length);
+                //console.log('Informes viejos:', resultado.informesViejos.length);
 
                 // Retornar el último estado encontrado
                 return res.status(200).json({ success: true, message: "Último estado obtenido correctamente", ultimoInforme });
@@ -2428,8 +2420,8 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
 
     //141 Ruta para abonar la Membresia Premium por FORMA MANUAL 
-    //console.log("Le endpointTokensArray101 a guardar CUSTOM ",endpoint101)
-    router.post(urlPoint(141), [verificarToken], async (req, res) => {        
+    console.log("Le 141 141 141  endpointTokensArray101 a guardar CUSTOM ", urlPoint(141))
+    router.post(urlPoint(141), [], async (req, res) => {
         try { 
             console.log("Request Body 141 pago manual landingPAge:", req.body);
             console.log("Request Files 141 pago manual landingPAge:", req.files);
@@ -2535,7 +2527,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                     <br>
                 `
             // Preparar y enviar el correo electrónico
-            const tranportEmail = ConfigG.transportEmail
+            const tranportEmail = configGrl.transportEmail
             const dataEnviarEmail = {
                 transportEmail:tranportEmail,
                 reclamo: false,
@@ -2879,7 +2871,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 enviarExcel: false,
                 emailOwner: ['sebastianpaysse@gmail.com'],
                 emailCliente: email,
-                numCelCliente: dataOwner.numCel[0].numCelOwner,
+                numCelCliente: dataOwner.numCel[0].numCelOwner || 0,
                 numCelOwner: "",
                 mensaje: message,
                 codigoPedido: ticketNumber,
@@ -2918,7 +2910,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         console.log("  mp endpointTokensArray[129]  Qué datos obtiene MP MPwallets desde el fronen", req.body );
         try {
         const {dataPay, dataOwner, pedidoPendCobrar, urlServer} = req.body
-        const {precioFinal, cantPRODO, tiempoContratoO} = dataPay
+        const {precioFinal, cantPRODO, tiempoContratoO, discountCode} = dataPay
         const {nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123, payer} = dataOwner
 
         // 1ero debe revisar si el email ya esta registrado y existe.
@@ -2938,7 +2930,8 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             let quantity    = 1
             let unit_price  = e.precioFinal
             let subTotal    = e.precioFinal
-            pedidosItems.push({title, description, quantity, unit_price})
+            let codVend     = e.discountCode
+            pedidosItems.push({title, description, quantity, unit_price, codVend})
         });
 
         const ArTokenPrivateMP = configGrl.ArTokenPrivateMP 
@@ -2970,7 +2963,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             },
         })
         .then(data => {
-            console.log("129 MMMMMMMMMMMMMMQue data aprobo del pago con WALLET en mercado pago????????????????????????", data);
+            console.log("129 129 MMMMMMMMMMMMMMQue data aprobo del pago con WALLET en mercado pago????????????????????????", data);
             preference.idMPUser = data.id
             const dataMP = {}
             dataMP.initPoint = data.init_point
@@ -3077,14 +3070,15 @@ const {saveOrUpdateConfig}= require('../configGlrs');
         }
     });
 
-   // devolucciones desde MP del cobro o regreso en MP wallets desde la LANDING PAGE donde debe registrarse SINGUP y enviar mail
-   // para pagar/cobrar con tarjetas de credito debito tienda Online
-    //console.log("UUUUUUUurlPoint(169) que idPoint encontro ", urlPoint(169))
+    // devolucciones desde MP del cobro o regreso en MP wallets desde la LANDING PAGE donde debe registrarse SINGUP y enviar mail
+    // para pagar/cobrar con tarjetas de credito debito tienda Online
+    console.log("UUUUUUUurlPoint(169) que idPoint encontro ", urlPoint(169))
     router.post(urlPoint(169), [], async (req, res) => {
+    // router.post("/cobrandoelcheque", [], async (req, res) => {
         try {
-            console.log("Que devuelve desde MP URL????????????????????????????????", req.body)
+            console.log("Que devuelve desde MP URL??????169??????????????????????????", req.body)
             // Desestructurar la información de req.query
-            const { statusCobro, externalData, paymentId, paymentType, siteId } = req.body;
+            const { statusCobro, externalData, paymentId, paymentType, siteId, dataPay } = req.body;
             const dataExtra = JSON.parse(externalData)
             const {dataEIdx, dataPIdx, tiempoContratoO, cantPRODO, urlServer, nombre} = dataExtra
             // const { title, description, quantity, unit_price } = dataPassCompra
@@ -3101,7 +3095,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 /* ********************************************************************************************************/
                 let okCobroMP = false
                 const paymentData = await consultarEstadoPago(paymentId);
-                console.log('169......... Datos del pago:', paymentData);
+                //console.log('169......... Datos del pago:', paymentData);
                 console.log('169......... Estado del pago:', paymentData.status); // Ejemplo: 'approved', 'rejected', 'pending'
                 //console.log('169......... Datos del pago:', paymentData);
                 const precioFinal = paymentData.transaction_amount
@@ -3120,9 +3114,10 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             /* ********************************************************************************************************/
                 if (okCobroMP) {
                     // se inscribe el usuario 
+                    const codVend = dataPay.discountCode
                     const ticketPath = null
                     const urlOwner = ""
-                    const dataOwner = await SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, urlOwner);
+                    const dataOwner = await SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal, urlServer, codVend);
 
                     console.log("Se agrego el nuevo owner", dataOwner)
 
@@ -3333,6 +3328,20 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
     
     };
+
+
+
+    // Ruta para la política de privacidad
+router.get('/terminosUso', async (req, res) => {
+    res.render('terminosUso.html'); // Asegúrate de que este archivo exista y contenga la política de privacidad
+});
+
+// O, si es condiciones de uso
+router.get('/politicaPrivacidad', async (req, res) => {
+    res.render('politicasUso.html'); // Asegúrate de que este archivo exista y contenga las condiciones de uso
+});
+
+
 
     cunatos.splice(0, cunatos.length);
     cunatos = []

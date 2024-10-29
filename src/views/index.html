@@ -513,7 +513,9 @@
                     <br>
                     <h4 >¡Inscribete sin cargo y empezá a vender hoy mismo!</h4>
                     <br>
-                    <a class="btn btn-success" href="#4ta" tabindex="-1" style="margin: 0 0.5rem; font-size: 1.5rem;">Crea tu tienda gratis</a>
+                    <button class="btn btn-success w-75 w-md-50 fs-4 text-truncate" type="button" data-bs-toggle="modal" data-bs-target="#signupModal">Crea tu tienda gratis</button>
+
+
                 </div>
                 <div class="col-md-6 p-0" style="display: relative !important; height: auto !important;" >
                     <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="10000">
@@ -666,7 +668,7 @@
         </div>
         <hr id="4ta">
         <!-- 5ta pantalla membresías-->
-        <div align="center"class="m-4 p-2 container-xxl" id="1er" style="position: relative;">
+        <div align="center"class="container-xxl" id="1er" style="position: relative;">
             <!-- Modal de pago Membresía MP-->
             <div class="modal fade" id="signupModalPremiumXYZ123" tabindex="-1" aria-labelledby="signupModalLabelXYZ123" aria-hidden="true" style="z-index: 9999999998 !important;">
                 <!-- modal del pago del login membresia premium -->
@@ -736,203 +738,352 @@
                 </div>
             </div>
             <script>
-                let dataMP = {}
-                let dataPay = {}
-                let dataOwner2 = {}
-                // Llama a la función asincrónica
-                let cotizacionDolar = {};
-                (async () => {
-                    try {
-                        setTimeout(async () => {
-                            cotizacionDolar = await cotizacionesDolaresPaises(basicData);
-                            console.log('Cotización del dólar:', cotizacionDolar);
-                        }, 2000);
-                        console.log('Cotización del dólar:', cotizacionDolar);
-                    } catch (error) {
-                        console.error('Error al obtener la cotización del dólar:', error);
-                    }
-                })();
-                // const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
-                const idEnpointCheq = basicData.data.endpointTokensArray2
-                //const jwToken = dataBasic.data.jwToken
-                if (!basicData) {
-                    reloadPage()
+                    const dataBasicss     = sessionStorage.getItem('datosBasicos');
+                    const IdEnpointsIndex = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
+                    let dataMP = {}
+                    let dataPay = {}
+                    // let dataOwner2 = {}
+                    // Llama a la función asincrónica
+                    let cotizacionDolar = {};
+
+                function buscarDatosBasicos(reintentos = 20, intervalo = 500, encontrado) {
+                    let intentos = 0;
+                    const id = setInterval(() => {
+                        if (dataBasicss) {
+                            clearInterval(id);
+                            encontrado(JSON.parse(dataBasicss));
+                        } else if (++intentos >= reintentos) {
+                            clearInterval(id);
+                            console.error("No se encontró datosBasicos en sessionStorage");
+                        }
+                    }, intervalo);
                 }
-                function collectData() {
-                    const nombre = document.getElementById('NombreXYZ123').value.trim();
-                    const apellido = document.getElementById('ApellidoXYZ123').value.trim();
-                    const emailXYZ123 = document.getElementById('emailXYZ123').value.trim();
-                    const passwordXYZ123 = document.getElementById('passwordXYZ123').value;
-                    const confirmPasswordXYZ123 = document.getElementById('confirmPasswordXYZ123').value;
+                // Uso de la función
+                buscarDatosBasicos(10, 500, (dataBasicss) => {
+                    console.log("Datos basicossssssss encontrados:", dataBasicss);
+                    // Aquí puedes continuar con la lógica que necesites usando `data`.
+                    (async () => {
+                        try {
+                            setTimeout(async () => {
+                                cotizacionDolar = await cotizacionesDolaresPaises(basicData);
+                                //console.log('Cotización del dólar desde el index landinpage:', cotizacionDolar);
+                            }, 2000);
+                        } catch (error) {
+                            console.error('Error al obtener la cotización del dólar:', error);
+                        }
+                    })();
+                    // const idEnpointCheq2 = dataBasicss.data.endpointTokensArr.endpointsFronen
+                    const idEnpointCheq = IdEnpointsIndex
 
-                    // Validación de que la contraseña sea alfanumérica y tenga al menos 8 caracteres
-                    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-                    if (!passwordPattern.test(passwordXYZ123)) {
-                        mostrarAlerta(`La contraseña debe ser alfanumérica y tener al menos 8 caracteres.<br>Nombre: ${nombre} ${apellido}`);
-                        // Recargar la página después de 3 segundos
-                        setTimeout(() => {
-                            reloadPage();
-                        }, 3000);
+                    //const jwToken = dataBasic.data.jwToken
+                    function collectData() {
+                        const nombre = document.getElementById('NombreXYZ123').value.trim();
+                        const apellido = document.getElementById('ApellidoXYZ123').value.trim();
+                        const emailXYZ123 = document.getElementById('emailXYZ123').value.trim();
+                        const passwordXYZ123 = document.getElementById('passwordXYZ123').value;
+                        const confirmPasswordXYZ123 = document.getElementById('confirmPasswordXYZ123').value;
+
+                        // Validación de que la contraseña sea alfanumérica y tenga al menos 8 caracteres
+                        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                        if (!passwordPattern.test(passwordXYZ123)) {
+                            mostrarAlerta(`La contraseña debe ser alfanumérica y tener al menos 8 caracteres.<br>Nombre: ${nombre} ${apellido}`);
+                            // Recargar la página después de 3 segundos
+                            setTimeout(() => {
+                                reloadPage();
+                            }, 3000);
+                        }
+
+                        // Validación de que las contraseñas coincidan
+                        if (passwordXYZ123 !== confirmPasswordXYZ123) {
+                            mostrarAlerta(`Las contraseñas no coinciden.`);
+                            // Recargar la página después de 3 segundos
+                            setTimeout(() => {
+                                reloadPage();
+                            }, 3000);
+                        }
+
+                        // Validación de campos vacíos
+                        if (!nombre || !apellido) {
+                            mostrarAlerta('El nombre y el apellido son campos obligatorios.');
+                            // Recargar la página después de 3 segundos
+                            setTimeout(() => {
+                                reloadPage();
+                            }, 3000);
+                        }
+
+                        dataPay = dataMP;
+                        dataOwner2 = { nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123 };
+                        //console.log("8888888888Que armo la funcion collect data", dataPay, dataOwner2);
+                        return {dataPay, dataOwner2}
                     }
+                    // Se agrega botones de pago Wallet y con tC
+                    document.getElementById('signupFormXYZ123651465165').addEventListener('click', async function (e) {
+                        mostrarModalLoading()
+                        e.preventDefault(); 
+                        const {dataPay, dataOwner2} = await collectData()
+                        //console.log("1111111111111111signupFormXYZ123651465165Apreto el boton de pagar con wallet", dataPay)
+                        sessionStorage.setItem("dataPagoMemPremiumLP", JSON.stringify(dataPay))
+                        await LPmpWallet(dataPay, dataOwner2);
+                    });
+                    // Pago Manual
+    //                 document.getElementById('PagoManual').addEventListener('click', function () {
+    //                     console.log("Entro al pago manual por la landing page")
+    //                     //mostrarModalLoading()
+    //                     const borrarBtn456 = document.getElementById('borrarBTNMP')
+    //                     borrarBtn456.innerHTML=""
+    //                     const dataColect = collectData()
+    //                     console.log("Entro al pago manual landng pageeee", dataColect)
+    //                     const modalBody = document.getElementById('form54354gegghte5');
+    //                     // Limpiar el contenido del modal, excepto el div con ID 'cantyPrecio54'
+    //                     //ocultarModalLoading()
+    //                     modalBody.innerHTML = `
+    //     <div class="mb-3 text-center">
+    //         <h2>Pago Manual<h2>
+    //         <h5 style="color:green">
+    //             CVU Mercado Pago: usatiendafacil.com.mp <br>
+    //             CBU Bco. Galicia: 16546465146546165456465465465
+    //         </h5>
+    //     </div>
+    //     <form id="manualPaymentForm">
+    //         <div class="mb-3">
+    //             <label for="paymentMethod" class="form-label">Método de Pago</label>
+    //             <select class="form-select" id="paymentMethod" required>
+    //                 <option value="" disabled selected>Seleccionar método</option>
+    //                 <option value="transferencia">CVU Mercado Pago</option>
+    //                 <option value="cbu">CBU Galicia</option>
+    //             </select>
+    //         </div>
+    //         <div class="mb-3">
+    //             <label for="ticketNumber" class="form-label">Número de Ticket</label>
+    //             <input type="text" class="form-control" id="ticketNumber" placeholder="Número de ticket" required>
+    //         </div>
+    //         <div class="mb-3">
+    //             <label for="extraData" class="form-label">Datos Extras y Observaciones</label>
+    //             <textarea class="form-control" id="extraData" rows="3" placeholder="Escribe tus observaciones aquí..." required></textarea>
+    //         </div>
+    //         <div class="mb-3">
+    //             <label for="receiptImage" class="form-label">Subir Comprobante</label>
+    //             <input type="file" class="form-control" id="receiptImage" accept="image/*" required>
+    //             <small class="form-text text-muted">La imagen debe ser menor a 1MB.</small>
+    //         </div>
+    //         <button type="button" id="efggeee16566" class="btn btn-primary w-100">Enviar Datos</button>
+    //     </form>
+    // `;
+    //                     document.getElementById('efggeee16566').addEventListener('click', async function (e) {
+    //     e.preventDefault();
+    //     // Obtener los valores de los campos
+    //     const paymentMethod = document.getElementById('paymentMethod').value;
+    //     const ticketNumber = document.getElementById('ticketNumber').value;
+    //     const extraData = document.getElementById('extraData').value;
+    //     const receiptImage = document.getElementById('receiptImage');
+    //     // Validar que todos los campos estén completos
+    //     if (!paymentMethod || !ticketNumber || !receiptImage.files[0]) {
+    //         mostrarAlerta('Todos los campos deben ser completados incluyendo la imagen del ticket.');
+    //         // Recargar la página después de 3 segundos
+    //         setTimeout(() => {
+    //             reloadPage();
+    //         }, 3000);
+    //     }
+    //     // Validar tamaño de la imagen
+    //     if (receiptImage.files[0].size > 1 * 1024 * 1024) { // 1MB en bytes
+    //         mostrarAlerta('La imagen debe ser menor a 1MB.');
+    //         // Recargar la página después de 3 segundos
+    //         setTimeout(() => {
+    //             reloadPage();
+    //         }, 3000);
+    //     }
+    //     // Crear un objeto FormData para enviar la imagen y los datos del formulario
+    //     const formData = new FormData();
+    //     formData.append('paymentMethod', paymentMethod);
+    //     formData.append('ticketNumber', ticketNumber);
+    //     formData.append('extraData', extraData);
+    //     formData.append('dataOwner', JSON.stringify(dataOwner2));
+    //     formData.append('dataPay', JSON.stringify(dataPay));
+    //     // Agregar la imagen al FormData
+    //     formData.append('imgTicket', receiptImage.files[0]);
+    //     //console.log("LPM 111111111Imagen seleccionada:", receiptImage.files[0]);
+    //     console.log("LPM 222222222FormData antes del envío:", formData);
+    //     try {
+    //         const jwToken = dataBasicss.data.jwToken
+    //         const idEnpointCheq141 = idEnpointCheq[141]
+    //         console.log("Cual es el enpoint************************************", idEnpointCheq141, jwToken)
+    //         // const response = await fetch(`${idEnpointCheq141}`, {
+    //         const response = await fetch("/chupamelapija", {
+    //             method: 'POST',
+    //             body: formData,
+    //             headers : {
+    //                 // 'Authorization': `Bearer ${jwToken}`,
+    //                 'Content-Type': 'application/json', // Tipo de contenido, opcional pero recomendable
+    //                 // 'Accept': 'application/json' // Aceptar respuestas en formato JSON, opcional
+    //             }
+    //         });
 
-                    // Validación de que las contraseñas coincidan
-                    if (passwordXYZ123 !== confirmPasswordXYZ123) {
-                        mostrarAlerta(`Las contraseñas no coinciden.`);
-                        // Recargar la página después de 3 segundos
-                        setTimeout(() => {
-                            reloadPage();
-                        }, 3000);
-                    }
+    //         if (!response.ok) {
+    //             // Obtener los datos de error del backend
+    //             const errorData = await response.json();
+    //             // Si el backend no envía un mensaje, usa un mensaje por defecto
+    //             const errorMessage = errorData.message || 'Error en el envío de datos.';
+    //             throw new Error(errorMessage);
+    //         }
 
-                    // Validación de campos vacíos
-                    if (!nombre || !apellido) {
-                        mostrarAlerta('El nombre y el apellido son campos obligatorios.');
-                        // Recargar la página después de 3 segundos
-                        setTimeout(() => {
-                            reloadPage();
-                        }, 3000);
-                    }
+    //         // Convierte la respuesta a JSON
+    //         const result = await response.json();
+    //         console.log('Resultado del envío:', result);
+    //         mostrarExito(`
+    //             Bienvenid@ a nuestra membresía Premium.<br>
+    //             Tu pago esta siendo procesado. <br>
+    //             Recibirás un email con las indicaciones para continuar con tu inscripción.<br>
+    //             Si no lo encuentras en tu bandeja de entrada, por favor revisa en tu carpeta de spam y colócalo como deseado.<br>
+    //             Gracias.
+    //         `);
+    //         // Recargar la página después de 3 segundos
+    //         setTimeout(() => {
+    //             reloadPage();
+    //         }, 8000);
 
-                    dataPay = dataMP;
-                    dataOwner2 = { nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123 };
-                    //console.log("8888888888Que armo la funcion collect data", dataPay, dataOwner);
-                    return {dataPay, dataOwner2}
-                }
-                // Se agrega botones de pago Wallet y con tC
-                document.getElementById('signupFormXYZ123651465165').addEventListener('click', async function (e) {
-                    console.log("1111111111111111Apreto el boton de pagar con wallet")
-                    mostrarModalLoading()
-                    e.preventDefault(); 
-                    collectData()
-                    await LPmpWallet(dataPay, dataOwner2);
-                });
-                // Pago Manual
-                document.getElementById('PagoManual').addEventListener('click', function () {
-                    console.log("Entro al pago manual por la landing page")
-                    //mostrarModalLoading()
-                    const borrarBtn456 = document.getElementById('borrarBTNMP')
-                    borrarBtn456.innerHTML=""
-                    const dataColect = collectData()
-                    console.log("Entro al pago manual landng pageeee", dataColect)
-                    const modalBody = document.getElementById('form54354gegghte5');
-                    // Limpiar el contenido del modal, excepto el div con ID 'cantyPrecio54'
-                    //ocultarModalLoading()
-                    modalBody.innerHTML = `
-    <div class="mb-3 text-center">
-        <h2>Pago Manual<h2>
-        <h5 style="color:green">
-            CVU Mercado Pago: usatiendafacil.com.mp <br>
-            CBU Bco. Galicia: 16546465146546165456465465465
-        </h5>
-    </div>
-    <form id="manualPaymentForm">
-        <div class="mb-3">
-            <label for="paymentMethod" class="form-label">Método de Pago</label>
-            <select class="form-select" id="paymentMethod" required>
-                <option value="" disabled selected>Seleccionar método</option>
-                <option value="transferencia">CVU Mercado Pago</option>
-                <option value="cbu">CBU Galicia</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="ticketNumber" class="form-label">Número de Ticket</label>
-            <input type="text" class="form-control" id="ticketNumber" placeholder="Número de ticket" required>
-        </div>
-        <div class="mb-3">
-            <label for="extraData" class="form-label">Datos Extras y Observaciones</label>
-            <textarea class="form-control" id="extraData" rows="3" placeholder="Escribe tus observaciones aquí..." required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="receiptImage" class="form-label">Subir Comprobante</label>
-            <input type="file" class="form-control" id="receiptImage" accept="image/*" required>
-            <small class="form-text text-muted">La imagen debe ser menor a 1MB.</small>
-        </div>
-        <button type="button" id="efggeee16566" class="btn btn-primary w-100">Enviar Datos</button>
-    </form>
-`;
-                    document.getElementById('efggeee16566').addEventListener('click', async function (e) {
-    e.preventDefault();
-    // Obtener los valores de los campos
-    const paymentMethod = document.getElementById('paymentMethod').value;
-    const ticketNumber = document.getElementById('ticketNumber').value;
-    const extraData = document.getElementById('extraData').value;
-    const receiptImage = document.getElementById('receiptImage');
-    // Validar que todos los campos estén completos
-    if (!paymentMethod || !ticketNumber || !receiptImage.files[0]) {
-        mostrarAlerta('Todos los campos deben ser completados incluyendo la imagen del ticket.');
-        // Recargar la página después de 3 segundos
-        setTimeout(() => {
-            reloadPage();
-        }, 3000);
-    }
-    // Validar tamaño de la imagen
-    if (receiptImage.files[0].size > 1 * 1024 * 1024) { // 1MB en bytes
-        mostrarAlerta('La imagen debe ser menor a 1MB.');
-        // Recargar la página después de 3 segundos
-        setTimeout(() => {
-            reloadPage();
-        }, 3000);
-    }
-    // Crear un objeto FormData para enviar la imagen y los datos del formulario
-    const formData = new FormData();
-    formData.append('paymentMethod', paymentMethod);
-    formData.append('ticketNumber', ticketNumber);
-    formData.append('extraData', extraData);
-    formData.append('dataOwner', JSON.stringify(dataOwner2));
-    formData.append('dataPay', JSON.stringify(dataPay));
-    // Agregar la imagen al FormData
-    formData.append('imgTicket', receiptImage.files[0]);
-    console.log("LPM 111111111Imagen seleccionada:", receiptImage.files[0]);
-    console.log("LPM 222222222FormData antes del envío:", formData);
-    try {
-        const jwToken = dataBasic.data.jwToken
-        const idEnpointCheq141 = idEnpointCheq[141]
-        const response = await fetch(`${idEnpointCheq141}`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Authorization': `Bearer ${jwToken}`
-            }
-        });
+    //     } catch (error) {
+    //             // Mostrar el mensaje de error que proviene del backend
+    //             console.error('Error:', error.message);
+    //             mostrarAlerta(error.message); // Aquí se muestra el mensaje de error en el frontend
+    //             // Recargar la página después de 3 segundos
+    //             setTimeout(() => {
+    //                 reloadPage();
+    //             }, 3000);
+    //         }
+    //     });
+    // });
 
-        if (!response.ok) {
-            // Obtener los datos de error del backend
-            const errorData = await response.json();
-            // Si el backend no envía un mensaje, usa un mensaje por defecto
-            const errorMessage = errorData.message || 'Error en el envío de datos.';
-            throw new Error(errorMessage);
+    document.getElementById('PagoManual').addEventListener('click', function () {
+    console.log("Entro al pago manual por la landing page", idEnpointCheq[141]);
+
+    // Limpiar el contenido del botón
+    const borrarBtn456 = document.getElementById('borrarBTNMP');
+    borrarBtn456.innerHTML = "";
+
+    const dataColect = collectData();
+    console.log("Entro al pago manual landing page", dataColect);
+
+    const modalBody = document.getElementById('form54354gegghte5');
+    modalBody.innerHTML = `
+        <div class="mb-3 text-center">
+            <h2>Pago Manual</h2>
+            <h5 style="color:green">
+                CVU Mercado Pago: usatiendafacil.com.mp <br>
+                CBU Bco. Galicia: 16546465146546165456465465465
+            </h5>
+        </div>
+        <form id="manualPaymentForm">
+            <div class="mb-3">
+                <label for="paymentMethod" class="form-label">Método de Pago</label>
+                <select class="form-select" id="paymentMethod" required>
+                    <option value="" disabled selected>Seleccionar método</option>
+                    <option value="transferencia">CVU Mercado Pago</option>
+                    <option value="cbu">CBU Galicia</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="ticketNumber" class="form-label">Número de Ticket</label>
+                <input type="text" class="form-control" id="ticketNumber" placeholder="Número de ticket" required>
+            </div>
+            <div class="mb-3">
+                <label for="extraData" class="form-label">Datos Extras y Observaciones</label>
+                <textarea class="form-control" id="extraData" rows="3" placeholder="Escribe tus observaciones aquí..." required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="receiptImage" class="form-label">Subir Comprobante</label>
+                <input type="file" class="form-control" id="receiptImage" accept="image/*" required>
+                <small class="form-text text-muted">La imagen debe ser menor a 1MB.</small>
+            </div>
+            <button type="button" id="submitManualPayment" class="btn btn-primary w-100">Enviar Datos</button>
+        </form>
+    `;
+
+    document.getElementById('submitManualPayment').addEventListener('click', async function (e) {
+        e.preventDefault();
+
+        // Obtener los valores de los campos
+        const paymentMethod = document.getElementById('paymentMethod').value;
+        const ticketNumber = document.getElementById('ticketNumber').value;
+        const extraData = document.getElementById('extraData').value;
+        const receiptImage = document.getElementById('receiptImage');
+
+        // Validar que todos los campos estén completos
+        if (!paymentMethod || !ticketNumber || !receiptImage.files[0]) {
+            mostrarAlerta('Todos los campos deben ser completados incluyendo la imagen del ticket.');
+            setTimeout(reloadPage, 3000);
+            return; // Salir de la función si hay error
         }
 
-        // Convierte la respuesta a JSON
-        const result = await response.json();
-        console.log('Resultado del envío:', result);
-        mostrarExito(`
-            Bienvenid@ a nuestra membresía Premium.<br>
-            Tu pago esta siendo procesado. <br>
-            Recibirás un email con las indicaciones para continuar con tu inscripción.<br>
-            Si no lo encuentras en tu bandeja de entrada, por favor revisa en tu carpeta de spam y colócalo como deseado.<br>
-            Gracias.
-        `);
-        // Recargar la página después de 3 segundos
-        setTimeout(() => {
-            reloadPage();
-        }, 8000);
+        // Validar tamaño de la imagen
+        if (receiptImage.files[0].size > 1 * 1024 * 1024) {
+            mostrarAlerta('La imagen debe ser menor a 1MB.');
+            setTimeout(reloadPage, 3000);
+            return; // Salir de la función si hay error
+        }
 
-    } catch (error) {
-            // Mostrar el mensaje de error que proviene del backend
-            console.error('Error:', error.message);
-            mostrarAlerta(error.message); // Aquí se muestra el mensaje de error en el frontend
-            // Recargar la página después de 3 segundos
+        // Crear un objeto FormData para enviar la imagen y los datos del formulario
+        const formData = new FormData();
+        formData.append('paymentMethod', paymentMethod);
+        formData.append('ticketNumber', ticketNumber);
+        formData.append('extraData', extraData);
+        formData.append('dataOwner', JSON.stringify(dataOwner2));
+        formData.append('dataPay', JSON.stringify(dataPay));
+        formData.append('imgTicket', receiptImage.files[0]);
+
+        console.log("FormData antes del envío:", formData);
+
+        try {
+            const jwToken = dataBasicss.data.jwToken;
+            const idEnpointCheq141 = idEnpointCheq[141];
+            console.log("Cual es el endpoint", idEnpointCheq141, jwToken);
+
+            const response = await fetch(idEnpointCheq141, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    // 'Authorization': `Bearer ${jwToken}`,
+                    // 'Content-Type': 'application/json', // No se debe establecer cuando se usa FormData
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                const errorMessage = errorData.message || 'Error en el envío de datos.';
+                throw new Error(errorMessage);
+            }
+
+            const result = await response.json();
+            console.log('Resultado del envío:', result);
+            mostrarExito(`
+                Bienvenid@ a nuestra membresía Premium.<br>
+                Tu pago está siendo procesado. <br>
+                Recibirás un email con las indicaciones para continuar con tu inscripción.<br>
+                Si no lo encuentras en tu bandeja de entrada, por favor revisa en tu carpeta de spam y colócalo como deseado.<br>
+                Gracias.
+            `);
             setTimeout(() => {
-                reloadPage();
-            }, 3000);
+                // Cerrar todos los modales abiertos
+                const modals = document.getElementById('signupModalPremiumXYZ123');
+                modals.hide(); // Cierra el modal
+                // Recargar la página
+                location.reload();
+            }, 8000);
+
+
+        } catch (error) {
+            console.error('Error:', error.message);
+            mostrarAlerta(error.message);
+            setTimeout(reloadPage, 3000);
         }
     });
 });
+
+
+});            
             </script>
-            <div class="row text-start">
+            <div class="row text-start ml-0">
                 <!-- Membresía Basic -->
-                <div class="col-lg-4 col-md-4 col-12 mb-1">
+                <div class="col-lg-4 col-md-4 col-12 ml-0 mb-1">
                     <style>
                         /* Estilo para listas de verificación */
                         .checklist {
@@ -1039,7 +1190,7 @@
                     </script>
                 </div>
                 <!-- Membresía Premium -->
-                <div class="col-lg-4 col-md-4 col-12 mb-1">
+                <div class="col-lg-4 col-md-4 col-12 ml-0 mb-1">
                     <div class="card" id="premium-card">
                         <div class="card-header">
                             <h4>Membresía Premium</h4>
@@ -1049,15 +1200,15 @@
                             <p>
                                 Configura tu tienda online, con al menos 10 productos, cada uno con stock ilimitado y tu propio dominio y ssl. Pagas en tu moneda local.
                             </p>
-                            <div class="row ml-4" align="center">
-                                <div class="col-5">
+                            <div class="row" align="center">
+                                <div class="col">
                                     <p><strong>Duración:</strong></p>
                                     <select class="form-select premium-select" name="tiempoContrato" id="membership-duration">
                                         <option value="12">12 meses</option>
                                         <option value="24">24 meses</option>
                                     </select>
                                 </div>
-                                <div class="col-6">
+                                <div class="col">
                                     <p><strong>Productos:</strong></p>
                                     <div class="input-group">
                                         <button class="btn btn-outline-secondary" id="decrease-quantity">-</button>
@@ -1170,13 +1321,19 @@
                         
                     </style>
                     <script>
-                        let precioFinal = 0
-                        let subFinalPrice = 0
-                        let finalPrice = 0
-                        let quantity = 10
-                        let tiempoContratoO = 0
-                        const dataBasic0 = JSON.parse(sessionStorage.getItem('datosBasicos'));
-                        const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice } = dataBasic0.data.ConfigsOne[0] ||  dataBasic0
+                        let discountCode = ""
+                        // Uso de la función
+                        buscarDatosBasicos(10, 500, async (dataBasic0) => {
+                            const cotizacionDolar = await cotizacionesDolaresPaises(basicData);
+                            //console.log("Datos encontrados:", dataBasic0);
+                            let precioFinal = 0
+                            let subFinalPrice = 0
+                            let finalPrice = 0
+                            let quantity = 10
+                            let tiempoContratoO = 0
+
+
+const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice } = dataBasic0.data.ConfigsOne[0] ||  dataBasic0
 
                         const inserPrecioyCant = document.getElementById('cantyPrecio54')
                         const validDiscountCodes = Vendedores; // Ejemplos de códigos válidos
@@ -1233,8 +1390,7 @@
                             // Inicialización para mostrar 10 productos
                             if (quantity <= 10) {
                                 // Obtén la cotización del dólar
-                                const cotizacionDolar = await cotizacionesDolaresPaises(basicData);
-                                //console.log("Tiene menos de 10 productos", quantity)
+                                //console.log("Tiene menos de 10 productos desde linea 1258 landingpage", cotizacionDolar, quantity)
                                 // inserto en membresia Premium
                                 //console.log("fkdvnefjkvjkefnvg", basePrice, duration, cotizacionDolar)
                                 inserPrecioyCant.innerHTML = ""
@@ -1257,7 +1413,7 @@
                                 `;
                             } 
                             else {
-                                console.log("Tiene MAS de 10 productos", quantity)
+                                //console.log("Tiene MAS de 10 productos", cotizacionDolar, quantity)
                                 // inserto en membresia Premium
                                 inserPrecioyCant.innerHTML = ""
                                 document.getElementById('membership-value').innerHTML = `
@@ -1315,7 +1471,7 @@
                         }
                         
                         function applyDiscount() {
-                            const discountCode = document.getElementById('discount-code').value.trim();
+                            discountCode = document.getElementById('discount-code').value.trim();
                             const discountStatus = document.getElementById('discount-status');
                             console.log("Que codigos me validDiscountCodes", validDiscountCodes)
                             for (const e of validDiscountCodes) {
@@ -1343,21 +1499,22 @@
                         document.getElementById('sendDataPremium').addEventListener('click', function() {
                             if (quantity <= 10) {
                                 precioFinal = (basePrice * cotizacionDolar) || (basePrice * cotizacionDolar)
-                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO}
-                                console.log("Apreto el boton dataMP menos 10 productos",dataMP)
+                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO, discountCode}
+                                //console.log("Apreto el boton dataMP menos 10 productos",dataMP)
                             }else{
                                 precioFinal = ((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
-                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO}
-                                console.log("Apreto el boton dataMP",dataMP)
+                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO, discountCode}
+                                //console.log("Apreto el boton dataMP",dataMP)
                             }
                         })
 
                         // se activa automaticamente para obtener los datos del precio inicial 
                         calculateMembership()
+                    });            
                     </script>
                 </div>
                 <!-- Membresía CUSTOM Diseña tu propio e-commerce -->
-                <div class="col-lg-4 col-md-4 col-12 mb-1">
+                <div class="col-lg-4 col-md-4 col-12 ml-0 mb-1">
                     <style>
                         .checklist {
                             padding-left: 20px;
@@ -1659,9 +1816,9 @@
                     <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
                     <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
                 </a>
-                <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
+                <a href="/terminosUso" target="_blank" style="color: white;">Términos y condiciones</a>
                 <span style="margin: 0 1rem;">|</span>
-                <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
+                <a href="/politicaPrivacidad" target="_blank" style="color: white;">Políticas de uso</a>
             </div>
         </footer>
         <!-- Js de contacto -->

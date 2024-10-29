@@ -1,6 +1,6 @@
 let idPay = {}
 let dataGrlPayload = {}
-let vovlerALaUrl = ""
+let vovlerALaUrl2 = ""
 
 src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
 
@@ -32,10 +32,10 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
       }
       try {
         const {nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123} = dataOwner
-        const {precioFinal, cantPRODO, tiempoContratoO} = dataPay
+        const {precioFinal, cantPRODO, tiempoContratoO, discountCode} = dataPay
 
           const pedidoPendCobrar = []
-          pedidoPendCobrar.push({precioFinal, cantPRODO, tiempoContratoO})
+          pedidoPendCobrar.push({precioFinal, cantPRODO, tiempoContratoO, discountCode})
 
           const payer = {
             firstName: nombre,
@@ -58,7 +58,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
           const idEnpointCheq = JSON.parse(sessionStorage.getItem("endPointsIdTokensCpanel"))
           const jwToken = dataBasic.data.jwToken
           // console.log("111111111jwTokenjwTokenjwTokenEEEEEEEEEEEEEEEEEentro al pago con MP Wallet dataBasic", jwToken);
-          console.log("22222222222idEnpointCheq129idEnpointCheq129EEEEEEEentro al pago con MP Wallet dataBasic", idEnpointCheq[129]);
+          //console.log("22222222222idEnpointCheq129idEnpointCheq129EEEEEEEentro al pago con MP Wallet dataBasic", idEnpointCheq[129]);
 
           fetch(`${idEnpointCheq[129]}`, {
             method: 'POST',
@@ -199,7 +199,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
             if (messageDiv) {
               messageDiv.innerHTML = "Aguarda unos segundos, tu pago está siendo procesado.";
             }
-            // modal que muestra un gift de TC
+            // modal que muestra un gift de pago y en la vuelta desde el pago en MP se resuleve devolucionDeMP()
             mostrarPagoWallet("");
           },
         },
@@ -324,14 +324,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
           },
           onReady: async (data) => {
 
-            // Obtener la URL actual
-            var vovlerALaUrl = window.location.href;
-            // Guardar la URL en sessionStorage
-            sessionStorage.setItem('vovlerALaUrl', vovlerALaUrl);
-
-            console.log("Botón de pago generado correctamente vovlerALaUrl", vovlerALaUrl);
             const opPagosDiv = document.getElementById('opcionesDePagoUpGrade');
-
             if (opPagosDiv) {
               opPagosDiv.innerHTML = `
                 <div id="borrarElijeTC">
@@ -406,7 +399,8 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
 
 
   // analiza la url para ver si hay una devolucion del pago de las membresias premium tanto de la landing page como del uprgrade de Cpanel
-  function devolucionDeMP() {
+  async function devolucionDeMP() {
+    vovlerALaUrl2 = JSON.parse(sessionStorage.getItem("urlCpanel"));
   // verifica si hay un pedido pagado por Wallet de MP
     // Obtener la URL actual del navegador
     const currentURL = window.location.href;
@@ -430,6 +424,9 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
 
       // filtra de donde vino el pago ya sea de Cpanel para ugrade update y ÑLanding PAge para cliente nuevo
       if (statusCobro) {
+
+        await mostrarModalLoading()
+
         const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
 
         const jwToken = dataBasic.data.jwToken
@@ -442,12 +439,13 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
         const dataCobro = {externalData, statusCobro, paymentId, paymentType, siteId, dataPedidoCorbado}
 
         if (statusCobro === "approved") {
+
           console.log("Encontro un pedido cobrado por la walltet de MP: idEnpointCheq");
           // Cerrar el modal
           var modal = document.getElementById('opciones');
           modal.style.display = 'none';
           modal.innerHTML = ""
-          // aqui va ser procesada la actualizacion UPGRADE memebresia premium desde el Cpanel
+          // Aqui va ser procesada la actualizacion UPGRADE memebresia premium desde el Cpanel
           if (cheqSucces) {
             console.log("Encontro un paso cheqSucces***************", cheqSucces )
             const idEnpointCheq = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
@@ -476,13 +474,11 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
                 body: JSON.stringify(dataConsolidada)
               })
               .then(response => response.json())
-              .then(data => {
-                //TODO armar la direccion de vuelta del cobro del upgrade
-                // const vovlerALaUrl2 = sessionStorage.getItem('vovlerALaUrl')idEnpointCheq[172];
-                const vovlerALaUrl2 = idEnpointCheq[172];
-                console.log(vovlerALaUrl2);
+              .then(async data => {
+                // Obtener la URL actual
+                //console.log(vovlerALaUrl2);
                 sessionStorage.removeItem('dataPayOSes');
-                ocultarModalLoading()
+                await ocultarModalLoading()
                 //console.log("************Que datos obtiene desde MP Wallet", data)
                 mostrarExito(`
                   ¡Pago exitoso! <br>
@@ -492,16 +488,21 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
                 // Redirigir a urlOwner después de 2 segundos
                 setTimeout(async () => {
                   window.location.href = vovlerALaUrl2;
-                }, 8000);
+                }, 5000);
               })
               .catch(error => {
                 console.error('Error revisar', error);
               });
           } 
-          // aqui va a ser procesada opr primera vez que se registra desde la landing page
+          // Aqui va a ser procesada opr primera vez que se registra desde la landing page con membresia Premium
           else {
             const idEnpointCheq = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
-            console.log("idEnpointCheq[169] wallet MP", idEnpointCheq[169])
+            const dataPay = sessionStorage.getItem('dataPagoMemPremiumLP')?JSON.parse(sessionStorage.getItem('dataPagoMemPremiumLP')):{};
+          
+            sessionStorage.removeItem('dataPagoMemPremiumLP')
+            dataCobro.dataPay = dataPay
+            console.log("idEnpointCheq[169] wallet MP", dataCobro,  idEnpointCheq[169])
+            // fetch("/cobrandoelcheque", {
             fetch(`${idEnpointCheq[169]}`, {
               method: 'POST',
               headers: {
@@ -511,8 +512,8 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
               body: JSON.stringify(dataCobro)
             })
             .then(response => response.json())
-            .then(data => {
-              ocultarModalLoading()
+            .then(async data => {
+              await ocultarModalLoading()
               console.log("************Que datos obtiene desde MP Wallet", data)
               
               mostrarExito(`¡Pago exitoso! <br> Su transacción con MP ha sido aprobada y acreditada.<br>
@@ -531,8 +532,8 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
         }
         // aqui vovlio un rechazo de pago o el cliente se arrepintio y vovlio
         else{
-            const vovlerALaUrl2 = sessionStorage.getItem('vovlerALaUrl');
-            console.log("statusCobro === approved", statusCobro === "approved", vovlerALaUrl2);
+          await ocultarModalLoading()
+            // console.log("statusCobro === approved", statusCobro === "approved", vovlerALaUrl2);
             // Luego redirige a la URL almacenada
             mostrarAlerta(`Tu pedido NO pudo cobrarse, por favor elije otro medio de pago.`);
             setTimeout(async () => {

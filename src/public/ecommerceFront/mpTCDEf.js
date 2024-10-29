@@ -164,7 +164,7 @@
                     }
                     setTimeout(function() {
                       window.location.reload();
-                  }, 2000); 
+                    }, 2000); 
                   })
                   .catch((error) => {
                     // manejar la respuesta de error al intentar crear el pago

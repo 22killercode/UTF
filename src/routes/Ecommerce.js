@@ -57,7 +57,7 @@ let urlOwner = ""
 
 //const endpointTokensArray = []
 
-const {guardarImagenCli, endpointTokensArray2, verificarToken, sendMail, guardarMensajes, consultarEstadoPago} = require('./funcionesymas');
+const {registrarYEnviarIncidente, guardarImagenCli, endpointTokensArray2, verificarToken, sendMail, guardarMensajes, consultarEstadoPago} = require('./funcionesymas');
 
 //pasarela de pagos
 const { MercadoPagoConfig, Payment, Preference  } = require('mercadopago');
@@ -98,12 +98,13 @@ const configsGrl = require('../models/configsGrl');
             // primero arma los enpointsTokens 
             try {
                 // accesos de seguridad
-                //console.log("*******/buscandoDataEcommerceInicial*********que hay en el req.body",req.body);
+                console.log("*******/buscandoDataEcommerceInicial*********que hay en el req.body", req.body);
                 //const urlOwner = req.body.urlOwner.substring(1); // Eliminar el '/' inicial
                 const urlOwner = req.body.urlOwner
                 // Buscar al usuario que tenga el urlOwner especificado
-                const dataDueno = await User.findOne({ urlOwner: urlOwner });
-                //console.log("****************que dataDueno genero en el server ecommerce????",urlOwner, dataDueno._id);
+                const dataDueno = await User.findOne({ urlOwner: urlOwner }) || await User.findOne({ dominio: urlOwner }) || null;
+                //const dataDueno = await User.findOne({ urlOwner }) ?? await User.findOne({ dominio: urlOwner });
+                console.log("****************que dataDueno genero en el server ecommerce????", dataDueno.nombre);
                 const idOwner = dataDueno._id
                 // busca los datos de la BD de los productos
                 const dataProductos = await Productos.find({ idCliente: idOwner }).sort({ date: -1 });
@@ -196,7 +197,6 @@ const configsGrl = require('../models/configsGrl');
         router.post(`/${endpointTokensArray[10]}`, [], async (req, res) => {
             const ipCliente = req.ip || req.connection.remoteAddress;
             console.log("Ingresas SIGNIN ecommerce", req.body);
-
             try {
                 const { email, password, ip } = req.body;
                 const clienteEcomm = await EcommUser.findOne({emailOficial:email});
@@ -336,8 +336,9 @@ const configsGrl = require('../models/configsGrl');
             let statusEnvio   = ""
             let logoOwner     = ""
             let nombreEcomm   = ""
-            let emailCliente   = ""
-            let emailOwner     = ""
+            let emailCliente  = ""
+            let idCliente     = ""
+            let emailOwner    = ""
             let nombreCliente = ""
             let nombreOwner   = ""
             let numCelCliente = 0
@@ -362,7 +363,7 @@ const configsGrl = require('../models/configsGrl');
                 dataC = dataCliente
                 
                 const idDueno        = dataDueno._id;
-                const idCliente      = dataCliente._id;
+                idCliente     = dataCliente._id;
                 statusEnvio   = "Armando su pedido";
                 logoOwner     = dataDueno.pathLogo
                 nombreOwner   = dataDueno.nombre
@@ -617,12 +618,13 @@ const configsGrl = require('../models/configsGrl');
 /************************************************************************************************************** */
                 } 
             }
-                catch (error) {
-                    success = false
-                    console.error("Error en el proceso /confirmarCompra165165156", error);
-                    // Enviar una respuesta de error al cliente
-                    res.status(500).json({ success: false, message: "Ocurrió un error al procesar la compra, intente de nuevo mas tarde" });
-                } 
+            catch (error) {
+                success = false
+                console.error("Error en el proceso /confirmarCompra165165156", error);
+                // Enviar una respuesta de error al cliente
+                registrarYEnviarIncidente({mensajeError:error}, {emailReport:"sebastianpaysse@gmail.com"}, {userIncidentID:idCliente}, {userEmailIncident:emailCliente})
+                res.status(500).json({ success: false, message: "Ocurrió un error al procesar la compra, intente de nuevo mas tarde" });
+            } 
 
                 if (success) {
                     // enviar por email al cliente y owner el pedido y tambien a serviceWorker para que haga un pushnotification
@@ -1577,16 +1579,14 @@ const configsGrl = require('../models/configsGrl');
         });
         
         /*PAGO MP WALLETS ECOMMERCE para pago con wallets tienda Online*/
-        console.log("--------ENPOIBNTS22222222222 125 idPoint encontro ", `/${endpointTokensArray[125]}`)
+        //console.log("--------ENPOIBNTS22222222222 125 idPoint encontro ", `/${endpointTokensArray[125]}`)
         router.post(`/${endpointTokensArray[125]}`, [verificarToken], async (req, res) => {
             console.log("*******************Viene de  MPWallet 1111 MP que idPoint encontro ",req.body)
-            try {
-        
             const idCliente = req.body.dataCliente._id
             const idOwner   = req.body.dataCliente.idOwner
             const Token     = req.body.dataCliente.Token
             const amount    = req.body.amount
-        
+            try {
             // Iterar sobre el array de productos 'pedidoPendCobrar'
             const pedidosItems = [];
             // Iterar sobre el array de productos 'pedidoPendCobrar'
@@ -1659,6 +1659,8 @@ const configsGrl = require('../models/configsGrl');
             })
             } catch (error) {
                 // Enviar una respuesta de error si ocurre algún problema
+                registrarYEnviarIncidente({mensajeError:error}, {emailReport:"sebastianpaysse@gmail.com"}, {userIncidentID:idCliente}, {userEmailIncident:"emailCliente"})
+                res.status(500).json({ success: false, message: "Ocurrió un error al procesar la compra, intente de nuevo mas tarde" });
                 console.error('Error al crear la preferencia de pago endpoint125:', error);
                 res.status(500).json({ error: 'Error al crear la preferencia de pago endpoint125' });
             }
@@ -1683,9 +1685,15 @@ const configsGrl = require('../models/configsGrl');
 
                 console.log("Encotnro al owner????????????", dataOwner._id)
 
-                let dominio = dataOwner.dominio || `${urlServer}${dataOwner.urlOwner}`;
+                let dominioUrls
+                let cheqDom = dataOwner?.dominio || false;
+                if (cheqDom) {
+                    dominioUrls = `${dataOwner.urlOwner}/indexEcomm.html`;
+                } else {
+                    dominioUrls = urlServer + dataOwner.urlOwner;
+                }
 
-                console.log("Que dominio encuentra ", dominio)
+                console.log("Que dominio encuentra ", dominioUrls)
         
                 // Verificar que payment_id y collection_id no sean 'null' como cadena o undefined
                 if (payment_id !== 'null' && payment_id && collection_id !== 'null' && collection_id) {
@@ -1695,28 +1703,37 @@ const configsGrl = require('../models/configsGrl');
                     console.log(okCobroMP ? 'Pago Aprobado' : 'Pago No Aprobado');
                 } else {
                     console.log('Volvio de MP o Pago rechazado, intente con otro método de pago');
-                    const redirectURL = `${dominio}`;
+                    const redirectURL = `${dominioUrls}`;
                     return res.redirect(redirectURL);
                 }
         
                 // Verificar si el cobro fue aprobado
                 if (collection_status === 'approved' && okCobroMP) {
-                    const redirectURL = `${dominio}?statusCobro=approved&idCliente=${idCliente}&idOwner=${idOwner}&okCobroMP=${okCobroMP}&Token=${Token}`;
+                    const redirectURL = `${dominioUrls}?statusCobro=approved&idCliente=${idCliente}&idOwner=${idOwner}&okCobroMP=${okCobroMP}&Token=${Token}`;
                     console.log("El cobro SI fue aprobado", redirectURL);
                     return res.redirect(redirectURL);
                 } else {
                     console.log("El cobro NO fue aprobado");
-                    const redirectURL = `${dominio}/?statusCobro=failed&ref1=null&ref2=null&Token=${Token}`;
+                    const redirectURL = `${dominioUrls}/?statusCobro=failed&ref1=null&ref2=null&Token=${Token}`;
                     return res.redirect(redirectURL);
                 }
             } catch (error) {
                 console.error("Error al procesar el cobro en MP:", error);
-                const redirectURL = `${dominio}/?statusCobro=failed&ref1=null&ref2=null&Token=${Token}`;
+                const redirectURL = `${dominioUrls}/?statusCobro=failed&ref1=null&ref2=null&Token=${Token}`;
                 return res.redirect(redirectURL);
             }
         });
-
     }
+
+    // Ruta para la política de privacidad
+    router.get('/politicaPrivacidad', async (req, res) => {
+        res.sendFile(path.join(__dirname, '../', 'views', 'politicasUso.html'));
+    });
+    
+    // O, si es condiciones de uso
+    router.get('/terminosUso', async (req, res) => {
+        res.sendFile(path.join(__dirname, '../', 'views', 'terminosUso.html'));
+    });
 
 
 module.exports = router

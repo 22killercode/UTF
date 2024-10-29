@@ -96,8 +96,11 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('panelTitle').innerHTML = `
-                    <h4 class="navbar-brand" style="color: white !important">Panel de control <br> ${dataOwner.ecommerceName}</h4>
-                    `
+    <h4 class="navbar-brand" style="color: white !important">
+        Panel de control <br> ${dataOwner && dataOwner.ecommerceName ? dataOwner.ecommerceName : "Agrega el nombre del comercio"}
+    </h4>
+`;
+
                     ecommerceName
                     // Inyectar el botón del menú cuando la página cargue
                     const meterBTN =  document.getElementById('aqui-va-el-boton-menu')
@@ -973,6 +976,10 @@
                                                     </div>
                                                     <!-- elije el diseño de las tarjetas de los productos -->
                                                     <div class="container-xxl mt-2 w-100">
+                                                        <p class="alert alert-info">
+                                                            Elije el formato de tarjeta para mostrar tu producto que más te guste. <br>
+                                                            Para que se vean mejor tus productos, elije el mismo formato por categoría.
+                                                        </p>
                                                         <div class="row w-100">
                                                             <!-- Tarjeta 1 -->
                                                             <div class="col-lg-4 col-md-4 mb-2">
@@ -3548,7 +3555,7 @@ if (imgCount === 0) {
                                                 <h4> 
                                                     ${infoModalMemPremium}
                                                     <br>
-                                                    Añadirás ${quantity} productos durante los ${tiempoRestanteMem} meses que resta de tu membresia por un precio:
+                                                    Añadirás ${quantity} productos durante los ${tiempoRestanteMem} meses que resta de tu membresia por un precio proporcinal:
                                                 </h4>
                                             </div>
                                         `;
@@ -3745,42 +3752,44 @@ if (imgCount === 0) {
                     <script>
                         if (dataOwner) {
                             // Función asíncrona para obtener el dominio
-                            async function dominioURLCpanel() {
-                                const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || null;
-                                const basicData = JSON.parse(sessionStorage.getItem('basicData')) || null;
-                                //console.log("Entro a buscar el dominio URL", basicData.urlServer, dataOwner.dominio);
-                                let dominio;
-                    
-                                if (dataOwner.dominio) {
-                                    dominio = dataOwner.dominio;
-                                    //console.log("Es un owner premium con dominio propio y tiene dominio", dominio);
-                                    return dominio;
-                                } else {
-                                    dominio = basicData.urlServer + dataOwner.urlOwner;
-                                    //console.log("Entro por NO tiene dominio", dominio);
-                                    return dominio;
-                                }
-                            }
-                    
+        //re envia al dominio del cliente o al de UTF Cpanel
+        async function dominioURLCpanelFront() {
+            const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || null;
+            const dataBasic = JSON.parse(sessionStorage.getItem('basicData')) || null;
+            //console.log("Entro a buscar el domioURL",dataBasic.urlServer)
+            let dominioUrls
+            let cheqDom = dataOwner?.dominio || false;
+            if (cheqDom) {
+                dominioUrls = `${dataOwner.urlOwner}/indexEcomm.html`;
+                // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
+                //console.log("********Entro por tiene dominio", dominioUrls)
+                return dominioUrls;
+            } else {
+                dominioUrls = dataBasic.urlServer + dataOwner.urlOwner;
+                // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
+                //console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominioUrls)
+                return dominioUrls;
+            }
+        }                             
                             // Función asíncrona que llama a dominioURLCpanel
-                            async function inicializar() {
+                            async function inicializar258() {
                                 const ponerla = document.getElementById("ponerDomURl");
-                                let dominio = await dominioURLCpanel();
+                                let urlDominion12 = await dominioURLCpanelFront();
+
                                 ponerla.innerHTML = `
                                 <h2 id="ponerDomURl">Planifica tus campañas de marketing & comunicación.</h2>
                                 <br>
                                     <div class="alert alert-light" role="alert">
                                         <h5 class="">
                                             Este es el link de tu tienda online: <br> 
-                                            <a href="${dominio}">${dominio}</a>; <br> 
+                                            <a href="${urlDominion12}">${urlDominion12}</a>; <br> 
                                             Cópialo y pégalo diariamente en tus redes sociales.
                                         </h5>
                                     </div>
                                 `;
                             }
-                    
                             // Llamar a la función inicializar
-                            inicializar();
+                            inicializar258();
                         }
                     </script>
                     <!-- Sub Nav Tabs -->
@@ -6552,22 +6561,29 @@ card7.appendChild(cardFooterEnv);
                         // Función para actualizar el resumen financiero con los datos filtrados
                         function actualizarResumenFinanciero(ventas) {
                             // Sumar el total de ingresos
-                            const totalIngresos = Ventas2.reduce((sum, venta) => {
-                                    // Verificar si TotalCompra está definido
-                                    const totalCompra = venta.TotalCompra ? parseFloat(venta.TotalCompra) : 0;
-                                    if (venta.TotalCompra === undefined) {
-                                        //console.warn("Falta TotalCompra en una de las ventas, se cuenta como $0:", venta);
-                                    }
-                                    return sum + totalCompra;
-                                }, 0);
-                            
+                            //console.log("Que datos hay en Ventas2???????????????????????????",Ventas2)
+                            const totalIngresosMP = Ventas2.reduce((sum, venta) => {
+                                return venta.tipoDePago === "Mercado Pago" 
+                                    ? sum + (parseFloat(venta.TotalCompra) || 0) 
+                                    : sum;
+                            }, 0);
+
+                            const totalIngresosPCF = Ventas2.reduce((sum, venta) => {
+                                return venta.tipoDePago === "Pago Contra Factura" 
+                                    ? sum + (parseFloat(venta.TotalCompra) || 0) 
+                                    : sum;
+                            }, 0);
+
+                            const totalIngresos = totalIngresosMP + totalIngresosPCF;
+
                             //const totalIngresos = ventas.reduce((acumulador, venta) => acumulador + venta.TotalCompra, 0);
                             //console.log("0000000000000000Que hay en financias", totalIngresos)
                             // Calcular comisiones (16.5% del total de ingresos)
                             //const comisiones = totalIngresos * 0.165;
-                            const comisiones = basicData.data.ConfigsOne[0].comisionBasic  * 0.01 * totalIngresos;
+                            const basicData4 = JSON.parse(sessionStorage.getItem("basicData"))
+                            const comisiones = basicData4.comisionBasic  * 0.01 * totalIngresosMP;
 
-                            //console.log("11111111Que hay en financias", ventas)
+                            //console.log("11111111Que hay en financias", basicData4.tiempoParking)
 
                             // Definir otros egresos (puedes modificar el valor aquí)
                             
@@ -6576,7 +6592,7 @@ card7.appendChild(cardFooterEnv);
                             //console.log("22222222Que hay en otrosEgresos", otrosEgresos)
 
                             // calcular el monto que esta en espera de parking
-                            const diasDParking = basicData.tiempoParking; // Ejemplo del costo de parking por 72hrs
+                            const diasDParking = basicData4.tiempoParking; // Ejemplo del costo de parking por 72hrs
                             //console.log("3333333Que hay en diasDParking", diasDParking)
                             // Obtener la fecha actual
                             const fechaActual = new Date();
@@ -6595,10 +6611,8 @@ card7.appendChild(cardFooterEnv);
                             Ventas2.forEach(venta => {
                                 // Convertir la fecha del objeto a un objeto Date
                                 const fechaVenta = new Date(venta.fecha);
-                                
                                 // Calcular la diferencia en días entre la fecha actual y la fecha de la venta
                                 const diasDiferencia = diferenciaEnDias(fechaVenta, fechaActual);
-
                                 // Verificar si la diferencia en días es menor que diasDParking
                                 if (diasDiferencia < diasDParking) {
                                     // Verificar si existe TotalCompra y si es un número válido
@@ -6612,9 +6626,9 @@ card7.appendChild(cardFooterEnv);
                             // Formatear totalMontoParking como pesos mexicanos
                             const totMonParkPesos = totalMontoParking.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
-                            fondos = totalIngresos - comisiones - otrosEgresos - totalMontoParking
+                            fondos = totalIngresosMP - comisiones - otrosEgresos - totalMontoParking
                             // Calcular el monto disponible para retirar
-                            const montoDisponible = totalIngresos - comisiones - otrosEgresos - totalMontoParking;
+                            const montoDisponible = totalIngresosMP - comisiones - otrosEgresos - totalMontoParking;
                             
                             //console.log("5555555555555555555Que hay en fondos", totalIngresos , comisiones , otrosEgresos , totalMontoParking, )
                             //console.log("5555555555555555555Que hay en montoDisponible", montoDisponible,)
@@ -6673,12 +6687,20 @@ card7.appendChild(cardFooterEnv);
                                                 <td class="text-right">${formatoPesos(totalIngresos)}</td>
                                             </tr>
                                             <tr>
+                                                <td><strong>Total de Ingresos Pago Manual</strong></td>
+                                                <td class="text-right">${formatoPesos(totalIngresosPCF)}</td>
+                                            </tr>                                            
+                                            <tr>
+                                                <td><strong>Total de Ingresos con plataformas de pago. ( M.P. Stripe, Paypal, Modo, etc)</strong></td>
+                                                <td class="text-right">${formatoPesos(totalIngresosMP)}</td>
+                                            </tr>                                            
+                                            <tr>
                                                 <td><strong>Comisiones (16.5%)</strong></td>
                                                 <td class="text-right">${formatoPesos(comisiones)}</td>
                                             </tr>
 <tr>
     <td><strong>Retención parking 72 hrs</strong></td>
-    <td class="text-end text-danger">${formatoPesos(totMonParkPesos)}</td>
+    <td class="text-end text-danger">${formatoPesos(totalMontoParking)}</td>
 </tr>
 
 
@@ -6714,7 +6736,7 @@ card7.appendChild(cardFooterEnv);
                         const monto = parseFloat(document.getElementById('monto').value.replace(/[^\d]/g, ''));
                         const descripcion = document.getElementById('descripcion').value;
                         const nuevoRetiro = { monto, descripcion, fecha: new Date().toISOString() };
-                        const dataSend = { ...nuevoRetiro, idOwner, tranposterUser, tipoMembresia, fondos };
+                        const dataSend = { ...nuevoRetiro, idOwner, tranposterUser:null, tipoMembresia, fondos };
                         console.log("que fdatos envia a serler???????", cheqDocument, dataSend)
                         if (fondos >= monto && cheqDocument) {
                             fetch(`${endpoints[189]}`, {
@@ -7152,8 +7174,6 @@ card7.appendChild(cardFooterEnv);
             console.error('Error al obtener la dirección:', error);
         });
 }
-
-
                                 // Función para mostrar información de dirección en los elementos <p>
                                 async function mostrarDireccion(direccion) {
 
@@ -7511,7 +7531,10 @@ card7.appendChild(cardFooterEnv);
             </div>
         </div>
         <script>
-  
+            const urlCpanel = window.location.href; // Obtener la URL completa actual
+            sessionStorage.setItem("urlCpanel", JSON.stringify(urlCpanel)); // Guardar en sessionStorage
+            //console.log("Que urlCpanel encontro??????????????????????????????????????", urlCpanel)
+
             let dataMP = {}
             // const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
             const idEnpointCheq = basicData.data.endpointTokensArray2
@@ -7532,7 +7555,6 @@ card7.appendChild(cardFooterEnv);
                 const dataPayOSes = JSON.parse(sessionStorage.getItem('dataPayOSes'));
                 console.log("Entro al pago manual dataPayOSes", dataPayOSes)
                 const modalBody = document.getElementById('opcionesDePagoUpGrade');
-
                 //ocultarModalLoading()
                 modalBody.innerHTML = `
     <div class="mb-3 text-center">
@@ -7587,7 +7609,7 @@ card7.appendChild(cardFooterEnv);
     mostrarAlerta('Todos los campos deben ser completados incluyendo la imagen del ticket.');
     // Recargar la página después de 3 segundos
     setTimeout(async () => {
-        await actualizarData();
+        await actualizarData(urlCpanel);
     }, 3000);
     }
     // Validar tamaño de la imagen
@@ -7595,7 +7617,7 @@ card7.appendChild(cardFooterEnv);
     mostrarAlerta('La imagen debe ser menor a 1MB.');
     // Recargar la página después de 3 segundos
     setTimeout(async () => {
-        await actualizarData();
+        await actualizarData(urlCpanel);
     }, 3000);
     }
     var ownerDataX = JSON.parse(sessionStorage.getItem('dataOwner'))
@@ -7639,10 +7661,10 @@ card7.appendChild(cardFooterEnv);
 
     // Convierte la respuesta a JSON
     const result = await response.json();
-    console.log('Resultado del envío:', result);
+    //console.log('Resultado del envío:', result);
     if (tipoMembresia == "basic") {
         mostrarExito(`
-            ¡Felicitaciones! Has actualizado tu membresía a Premium.
+            ¡Felicitaciones! <br><br> Has actualizado tu membresía a Premium.
             <br><br>
             Nos pondremos en contacto contigo en un plazo de 48 horas hábiles para habilitar tu dominio personalizado.
             <br><br>
@@ -7652,29 +7674,29 @@ card7.appendChild(cardFooterEnv);
         `);
     } else {
         mostrarExito(`
-            ¡Felicitaciones! Has aumentado los productos de tu membresía Premium.
+            ¡Felicitaciones! <br><br> Has aumentado los productos de tu membresía Premium.
             <br><br>
             Recibirás un correo electrónico con la confirmación de tu transaccion.
             <br><br>
             Si no lo ves en tu bandeja de entrada, te recomendamos revisar la carpeta de spam y marcar el correo como seguro.
         `);
     }
-    // Recargar la página después de 3 segundos
-    setTimeout(async () => {
-        await actualizarData();
-    }, 4000);
+        // Recargar la página después de 3 segundos
+        setTimeout(async () => {
+            await actualizarData(urlCpanel);
+        }, 3000);
 
-    } catch (error) {
-    // Mostrar el mensaje de error que proviene del backend
-    console.error('Error:', error.message);
-    mostrarAlerta(error.message); // Aquí se muestra el mensaje de error en el frontend
-    // Recargar la página después de 3 segundos
-    setTimeout(async () => {
-        await actualizarData();
-    }, 3000);
-    }
+        } catch (error) {
+            // Mostrar el mensaje de error que proviene del backend
+            console.error('Error:', error.message);
+            mostrarAlerta(error.message); // Aquí se muestra el mensaje de error en el frontend
+            // Recargar la página después de 3 segundos
+            setTimeout(async () => {
+                await actualizarData(urlCpanel);
+            }, 3000);
+        }
     });
-    });
+            });
     </script>
 
     </div>

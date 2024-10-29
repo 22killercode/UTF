@@ -18,6 +18,8 @@ const direccionSchema = new Schema({
 
 // Esquema de Usuario
 const UserSchema = new Schema({
+    codVend: { type: String },
+    dominio: { type: Boolean },
     flagNews: { type: Boolean },
     lastInfo:[],
     lasDateInfo : { type: Date, default: Date.now },

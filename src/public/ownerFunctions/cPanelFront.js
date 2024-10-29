@@ -2092,18 +2092,20 @@ if (cantidadIngresada % 1 === 0) {
         //re envia al dominio del cliente o al de UTF Cpanel
         async function dominioURLCpanel() {
             const dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || null;
-            console.log("Entro a buscar el domioURL",urlServer, dominio)
-            let dominio
-            if (dataOwner.dominio) {
-                dominio = dataOwner.dominio;
+            const dataBasic = JSON.parse(sessionStorage.getItem('basicData')) || null;
+            console.log("Entro a buscar el domioURL",dataBasic.urlServer)
+            let dominioUrls
+            let cheqDom = dataOwner?.dominio || false;
+            if (cheqDom) {
+                dominioUrls = `${dataOwner.urlOwner}/indexEcomm.html`;
                 // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-                console.log("Es un owner premium con domnio propio y tiene dominio", dominio)
-                return dominio;
+                console.log("********Entro por tiene dominio", dominioUrls)
+                return dominioUrls;
             } else {
-                dominio = urlServer + urlOwner;
+                dominioUrls = dataBasic.urlServer + dataOwner.urlOwner;
                 // Si necesitas redirigir a la URL almacenada en 'dominio' después de recargar, puedes hacer lo siguiente:
-                console.log("Entro por NO tiene dominio", dominio)
-                return dominio;
+                console.log("Entro por NO tiene dominio desde el index ecommerce linea 3274", dominioUrls)
+                return dominioUrls;
             }
         }
 

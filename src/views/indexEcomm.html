@@ -894,9 +894,9 @@
                             <img src="images/logoTBSnuevo.jpg" class="img-fluid" style="width: 200px;" alt="Logo TBS-IT">
                             <p class="mt-3" style="color: white;">By Sebastián Payssé for TBS-IT <br> Todos los derechos reservados</p>
                         </a>
-                        <a href="/terminosUso.html" target="_blank" style="color: white;">Términos y condiciones</a>
-                        <span style="margin: 0 1rem;">|</span>
-                        <a href="/politicaPrivacidad.html" target="_blank" style="color: white;">Políticas de uso</a>
+						<a href="/terminosUso" target="_blank" style="color: white;">Términos y condiciones</a>
+						<span style="margin: 0 1rem;">|</span>
+						<a href="/					<h5>Desliza hacia abajo y elige la forma de pago que prefieras.</h5>" target="_blank" style="color: white;">Políticas de uso</a>
                     </div>
                 </div>
 			</div>
@@ -978,9 +978,8 @@
 
 					<div id="statusScreen"></div>
 
-					<div id="btnPagDir"></div>
-
-					<div id="wallet_container" class="w-75"></div>
+					<div id="btnPagDir" class="w-75"></div>
+					<div id="wallet_container" class="w-75" style=""></div>
 
 					<fieldset class="card-container text-center w-100 m-1 p-1" id="opcionesDePago">
 						<p>Espere, Cargando opciones de Mercado Pago</p>
@@ -3002,8 +3001,9 @@
 									};
 							
 									console.log('Datos a enviar:', data);
-									//cerrar el modal loading
+									//el modal loading
 									mostrarModalLoading()
+									$('#modalReclamos').hide();
 									const endpoints = JSON.parse(sessionStorage.getItem("idEndpoints"))
 									fetch(`${endpoints[18]}`, { 
 										method: 'POST',
@@ -3425,7 +3425,7 @@
 				</div>
 			</div>
 		</div>
-	</div style="z-index: 9999999999999999999999 !important;">
+	</div>
 
 
 	<!-- Modal para mostrar las imágenes GIGANTES de las Promos -->
