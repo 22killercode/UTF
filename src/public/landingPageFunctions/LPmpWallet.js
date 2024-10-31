@@ -19,8 +19,8 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
 
   // comprar memebresia desde la landing page
   async function LPmpWallet(dataPay, dataOwner) {
-    console.log("Entro por LPmpWalletLPmpWalletLPmpWallet pára apagar la membresia desde la landing PAge", )
-    const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+    console.log("Entro por LPmpWalletLPmpWalletLPmpWallet pára apagar la membresia desde la landing PAge",dataPay, dataOwner )
+    const dataBasic = basicData || JSON.parse(sessionStorage.getItem('datosBasicos'));
     const urlServer = dataBasic.urlServer
       // Si no está el cliente, debe logearse
       if (dataOwner === null) { 
@@ -33,33 +33,23 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
       try {
         const {nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123} = dataOwner
         const {precioFinal, cantPRODO, tiempoContratoO, discountCode} = dataPay
-
           const pedidoPendCobrar = []
           pedidoPendCobrar.push({precioFinal, cantPRODO, tiempoContratoO, discountCode})
-
           const payer = {
             firstName: nombre,
             lastName: apellido,
             email: emailXYZ123,
           }
-
           dataOwner.payer = payer 
-
-          const dataConfig = dataBasic.data.ConfigsOne[0]
+          const dataConfig = dataBasic
           // Obtener solo el dominio principal (sin protocolo ni barra final)
           const urlCompleta = dataConfig.urlServer 
-
           dataOwner.urlCompleta = urlCompleta
-
           dataGrlPayload = {dataPay, dataOwner, pedidoPendCobrar, urlServer}
-
-          const data = { dataOwner, pedidoPendCobrar, passwordXYZ123, confirmPasswordXYZ123}
-
+          // const data = { dataOwner, pedidoPendCobrar, passwordXYZ123, confirmPasswordXYZ123}
           const idEnpointCheq = JSON.parse(sessionStorage.getItem("endPointsIdTokensCpanel"))
-          const jwToken = dataBasic.data.jwToken
-          // console.log("111111111jwTokenjwTokenjwTokenEEEEEEEEEEEEEEEEEentro al pago con MP Wallet dataBasic", jwToken);
-          //console.log("22222222222idEnpointCheq129idEnpointCheq129EEEEEEEentro al pago con MP Wallet dataBasic", idEnpointCheq[129]);
-
+          //console.log("111111111jwTokenjwTokenjwTokenEEEEEEEEEEEEEEEEEentro al pago con MP Wallet dataBasic", jwToken);
+console.log("22222222222idEnpointCheq129idEnpointCheq129EEEEEEEentro al pago con MP Wallet dataBasic", idEnpointCheq[129]);
           fetch(`${idEnpointCheq[129]}`, {
             method: 'POST',
             headers: {
@@ -68,9 +58,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
             }, 
             body: JSON.stringify(dataGrlPayload)
           })
-
           .then(response => response.json())
- 
           .then(data => {
             console.log("******111111111111*********Que datos obtiene desde MP Wallet", data)
             if (data.success) {
@@ -81,7 +69,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
               // Refrescar la pestaña después de 2 segundos
               setTimeout(function() {
                 window.location.reload();
-              }, 2000); // 2000 milisegundos = 2 segundos
+              }, 200000000); // 2000 milisegundos = 2 segundos
             }
           })
           .catch(error => {
@@ -90,7 +78,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
             // Refrescar la pestaña después de 2 segundos
             setTimeout(function() {
               window.location.reload();
-            }, 2000); // 2000 milisegundos = 2 segundos
+            }, 2000000); // 2000 milisegundos = 2 segundos
           });
         }
       catch (error) {
@@ -99,14 +87,14 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
           // Refrescar la pestaña después de 2 segundos
           setTimeout(function() {
             window.location.reload();
-          }, 2000); // 2000 milisegundos = 2 segundos
+          }, 2000000000); // 2000 milisegundos = 2 segundos
         }
   };
   async function createCheckoutButton(preferenceID, payer, dataOwner, dataPay, dataBasic) {
     try {
       dataGrlPayload = {dataPay, dataOwner}
 
-      const ArTokenPublicMP = dataBasic.data.ConfigsOne[0].ArTokenPublicMP
+      const ArTokenPublicMP = dataBasic.ArTokenPublicMP
 
       //console.log("*createCheckoutButton eckoutButton Wallet",ArTokenPublicMP, dataBasic)
 
@@ -210,7 +198,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
       // Refrescar la pestaña después de 2 segundos
       setTimeout(function() {
         window.location.reload();
-      }, 2000); // 2000 milisegundos = 2 segundos
+      }, 2000000); // 2000 milisegundos = 2 segundos
     }
   }; 
 
@@ -399,7 +387,39 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
 
 
   // analiza la url para ver si hay una devolucion del pago de las membresias premium tanto de la landing page como del uprgrade de Cpanel
+  function ocultarModalPagos() {
+    const modalElement = document.getElementById('signupModalPremiumXYZ123');
+    if (!modalElement) return console.error("Modal no encontrado.");
+
+    // Intentar cerrar el modal
+    try {
+        const bootstrapModal = (typeof bootstrap !== 'undefined' && 
+            bootstrap.Modal && 
+            typeof bootstrap.Modal.getInstance === 'function') 
+            ? bootstrap.Modal.getInstance(modalElement) 
+            : null;
+
+        (bootstrapModal || new bootstrap.Modal(modalElement)).hide();
+    } catch (error) {
+        console.error("Error al cerrar el modal:", error);
+    } finally {
+        // Limpiar contenido y atributos
+        modalElement.innerHTML = "";
+        Array.from(modalElement.attributes).forEach(attr => modalElement.removeAttribute(attr.name));
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
+        document.body.classList.remove('modal-open');
+    }
+}
+
+
+
+
+
+  // aqui viene de MP en su devolucion del cobro
   async function devolucionDeMP() {
+
+  
     vovlerALaUrl2 = JSON.parse(sessionStorage.getItem("urlCpanel"));
   // verifica si hay un pedido pagado por Wallet de MP
     // Obtener la URL actual del navegador
@@ -429,8 +449,8 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
 
         const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
 
-        const jwToken = dataBasic.data.jwToken
-        const urlServer = dataBasic.data.ConfigsOne[0].urlServer
+        // const jwToken = dataBasic.data.jwToken
+        const urlServer = dataBasic.urlServer || dataBasic.data.ConfigsOne[0].urlServer
 
         const dataPedidoCorbado = JSON.parse(sessionStorage.getItem("dataGrlSave"));
 
@@ -479,8 +499,9 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
                 //console.log(vovlerALaUrl2);
                 sessionStorage.removeItem('dataPayOSes');
                 await ocultarModalLoading()
+                await ocultarModalPagos()
                 //console.log("************Que datos obtiene desde MP Wallet", data)
-                mostrarExito(`
+                await mostrarExito(`
                   ¡Pago exitoso! <br>
                   Su Up Grade a membresia Premium abonada con con MP ha sido aprobada y acreditada.<br>
                   Le enviamos un email con los pasos a seguir.<br>
@@ -514,12 +535,13 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j
             .then(response => response.json())
             .then(async data => {
               await ocultarModalLoading()
+              // Cerrar el modal con Bootstrap o ocultarlo manualmente
+              await ocultarModalPagos()
               console.log("************Que datos obtiene desde MP Wallet", data)
-              
-              mostrarExito(`¡Pago exitoso! <br> Su transacción con MP ha sido aprobada y acreditada.<br>
+              await mostrarExito(`¡Pago exitoso! <br> 
+                Su transacción con MP ha sido aprobada y acreditada.<br>
                 Le enviamos un email con los pasos a seguir.<br>
                 Si no lo encuentra busque en "no deseados o spam y coloquemos en correo deseado"`, data.message); 
-
               // Redirigir a urlOwner después de 2 segundos
               setTimeout(function() {
                 window.location.href = urlServer;

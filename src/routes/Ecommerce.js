@@ -104,7 +104,7 @@ const configsGrl = require('../models/configsGrl');
                 // Buscar al usuario que tenga el urlOwner especificado
                 const dataDueno = await User.findOne({ urlOwner: urlOwner }) || await User.findOne({ dominio: urlOwner }) || null;
                 //const dataDueno = await User.findOne({ urlOwner }) ?? await User.findOne({ dominio: urlOwner });
-                console.log("****************que dataDueno genero en el server ecommerce????", dataDueno.nombre);
+                //console.log("****************que dataDueno genero en el server ecommerce????", dataDueno.nombre);
                 const idOwner = dataDueno._id
                 // busca los datos de la BD de los productos
                 const dataProductos = await Productos.find({ idCliente: idOwner }).sort({ date: -1 });

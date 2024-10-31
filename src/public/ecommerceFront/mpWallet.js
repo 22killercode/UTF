@@ -14,8 +14,9 @@
 
           // Si no está el cliente, debe logearse
           if (!dataCliente || Object.keys(dataCliente).length === 0) {
+            await ocultarModalLoading()
             console.log("El cliente NO está en mpWallet!!!", dataCliente);
-            mostrarAlerta("Logeate para continuar desde mpwallet");
+            await mostrarAlerta("Logeate para continuar desde mpwallet");
             
             setTimeout(() => {
               // Ocultar el modal de staticBackdrop si está presente

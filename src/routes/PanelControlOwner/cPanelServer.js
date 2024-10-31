@@ -1742,9 +1742,9 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             
             const requestData = req.body;
             //console.log("Datos de la solicitud de cambio de estado:", requestData);
-            
+            const tranposterUser = configGrl.transportGmail
             try {
-                const { codigoPedido, statusEnvio, idOwner, tranposterUser } = requestData;
+                const { codigoPedido, statusEnvio, idOwner } = requestData;
         
                 // Verifica que todos los campos necesarios estén presentes
                 if (!codigoPedido || statusEnvio === undefined || !idOwner) {
@@ -2420,122 +2420,108 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
 
     //141 Ruta para abonar la Membresia Premium por FORMA MANUAL 
-    console.log("Le 141 141 141  endpointTokensArray101 a guardar CUSTOM ", urlPoint(141))
+    console.log("Le 141 141 141  endpointTokensArray141 a guardar CUSTOM ", urlPoint(141))
     router.post(urlPoint(141), [], async (req, res) => {
-        try { 
-            console.log("Request Body 141 pago manual landingPAge:", req.body);
-            console.log("Request Files 141 pago manual landingPAge:", req.files);
-
+        try {
             const { imgTicket } = req.files;
             const { name, tempFilePath, data } = imgTicket;
             const { paymentMethod, ticketNumber, extraData, dataOwner, dataPay } = req.body;
-            const { nombre, apellido, emailXYZ123, passwordXYZ123 } = JSON.parse(dataOwner);
+            const { nombre, apellido, email, password } = JSON.parse(dataOwner);
             const { precioFinal, cantPRODO, tiempoContratoO } = JSON.parse(dataPay);
-
+            
             // Verificar si el email ya está registrado
-            const cheqMail = await User.findOne({ email: emailXYZ123 });
-            if (cheqMail) {
+            if (await User.findOne({ email })) {
                 throw new Error('Este email ya está registrado');
             }
-
+    
             // Verificar si se subió una imagen
             if (!tempFilePath) {
                 throw new Error('La imagen del ticket es requerida.');
             }
-
-            const nameTiket = (emailXYZ123 + name )
-            const receiptImagePath = path.join(__dirname, `../public/img/uploads/imgTicketsLP/${nameTiket}`);
+    
+            const nameTiket = `${nombre}${apellido}${name}`;
+            const receiptImagePath = path.join(__dirname, `../../public/img/uploads/0imgTicketsLP/${nameTiket}`);
+            console.log("Que path para guardar la IMG armo???", receiptImagePath)
             let singUP = {}
-            // Registrar un nuevo usuario si es necesario
+            // Registrar un nuevo usuario
             if (ticketNumber) {
-                const ticketPath = receiptImagePath
-                const datosExtrasdeMP = null
-
-                console.log("Que se envia a sigUp?????????:", emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
-                singUP = await SingUp(emailXYZ123, passwordXYZ123, ticketNumber, datosExtrasdeMP, ticketPath, cantPRODO, tiempoContratoO, precioFinal);
-
+                singUP = await SingUp(email, password, ticketNumber, null, receiptImagePath, cantPRODO, tiempoContratoO, precioFinal);
                 if (!singUP.cheqSignUp) {
                     throw new Error('Debes agregar el numero de ticket y subir la imagen del mismo.');
                 }
             }
+    
 
-            // Guardar la imagen en el sistema de archivos
-            if (os.platform().startsWith('win')) {
-                // En sistemas Windows, usa mv para mover el archivo
-                req.files.imgTicket.mv(receiptImagePath, err => { 
-                if (err) {
-                    console.error('Error al mover el archivo:', err);
-                } else {
-                    console.log('Archivo movido exitosamente a', receiptImagePath);
+                // Crear directorio si no existe
+                const dirPath = path.dirname(receiptImagePath);
+                if (!fs.existsSync(dirPath)) {
+                    fs.mkdirSync(dirPath, { recursive: true }); // Crear directorios recursivamente
+                    console.log("Directorio creado:", dirPath);
                 }
-                });
-            } else {
-                // En otros sistemas, usa fs.renameSync para mover el archivo
-                fs.renameSync(tempFilePath, receiptImagePath);
-                console.log('Archivo movido exitosamente a', receiptImagePath);
-            }
             
+                // Función para mover la imagen
+                const moveImage = os.platform().startsWith('win') 
+                    ? (cb) => req.files.imgTicket.mv(receiptImagePath, cb) 
+                    : () => fs.renameSync(req.files.imgTicket.tempFilePath, receiptImagePath); // Cambié aquí para usar el `tempFilePath`
             
-            res.status(200).json({ success: true, message: 'Datos recibidos y correo enviado.' });
+                // Intentar mover la imagen
+                const attemptMoveImage = (retries = 3) => {
+                    moveImage(err => {
+                        if (err) {
+                            console.error('Error al mover el archivo:', err);
+                            if (retries > 0) {
+                                console.log(`Reintentando... (${3 - retries + 1})`);
+                                attemptMoveImage(retries - 1); // Intentar de nuevo
+                            } else {
+                                throw new Error('Error al guardar la imagen después de múltiples intentos.');
+                            }
+                        } else {
+                            console.log('Archivo movido exitosamente a', receiptImagePath);
+                        }
+                    });
+                };
             
-    /************************************************************************************************************ */          
+                attemptMoveImage(); // Iniciar el intento de mover la imagen
+
             // Guardar los datos en la base de datos
             const nuevoMensaje = new Mensajes({
-                idOwner:singUP.id,
-                email: emailXYZ123,
+                idOwner: singUP.ownerID,
+                email,
                 names: nombre,
                 apellido,
                 pais: "Pago Manual",
-                message: `
-                    Este es el ticket Nro: ${ticketNumber} que comprueba el pago por el método: ${paymentMethod}.
-                    <br>
-                    Pago: ${precioFinal}, Cantidad de productos contratados: ${cantPRODO}, por un tiempo de: ${tiempoContratoO} meses.
-                    <br>
-                    Mensaje: ${extraData}
-                `,
+                message: `Este es el ticket Nro: ${ticketNumber} que comprueba el pago por el método: ${paymentMethod}.
+                        <br>Pago: ${precioFinal}, Cantidad de productos contratados: ${cantPRODO}, por un tiempo de: ${tiempoContratoO} meses.
+                        <br>Mensaje: ${extraData}`,
                 date: new Date()
             });
             await nuevoMensaje.save();
-
-
-
-            message = `
-                    <br>
-                    ¡Hola ${nombre} Felicitaciones! <br> 
-                    <br>
-                    Tu membresía Premium y su cantidad de productos han sido correctamente actualizados.
-                    <br>
-                    No se te cobraran comisiones.
-                    <br>
-                    Te llamaremos para configurar tu nuevo dominio, ssl, pasarela de pago y demás datos.
-                    <br>
-                    Este proceso puede demorar 72 horas hábiles. 
-                    <br>
-                    Cantidad de productos contratados: ${cantPRODO}.
-                    <br>
-                    Tiempo de contrato de tu membresía y productos:${tiempoContratoO} meses.
-                    <br>
-                    <strong>Pago: ${precioFinal}.</strong> pesos.
-                    <br>
-                    Ticket Nro: ${ticketNumber} del pago por el método: ${paymentMethod}.
-                    <br>
-                    Datos Extra que nos enviaste: ${extraData}
-                    <br><br>
-                    <strong>La imputación del pago esta siendo procesada, te podemos llamar por alguna duda.<br>
-                    ya puedes disfrutar de todas las ventajas de tener la membresía premium.
-                    </strong>
-                    <br>
-                `
+    
+            const message = `
+                <br>¡Hola ${nombre} Felicitaciones! <br>
+                <br>Tu membresía Premium y su cantidad de productos han sido correctamente actualizados.
+                <br>No se te cobraran comisiones.
+                <br>Te llamaremos para configurar tu nuevo dominio, ssl, pasarela de pago y demás datos.
+                <br>Este proceso puede demorar 72 horas hábiles. 
+                <br>Cantidad de productos contratados: ${cantPRODO}.
+                <br>Tiempo de contrato de tu membresía y productos:${tiempoContratoO} meses.
+                <br><strong>Pago: ${precioFinal}.</strong> pesos.
+                <br>Ticket Nro: ${ticketNumber} del pago por el método: ${paymentMethod}.
+                <br>Datos Extra que nos enviaste: ${extraData}
+                <br><br><strong>La imputación del pago esta siendo procesada, te podemos llamar por alguna duda.<br>
+                ya puedes disfrutar de todas las ventajas de tener la membresía premium.</strong>
+                <br>
+            `;
+    
             // Preparar y enviar el correo electrónico
-            const tranportEmail = configGrl.transportEmail
             const dataEnviarEmail = {
-                transportEmail:tranportEmail,
+                transportEmail: configGrl.transportEmail,
                 reclamo: false,
                 enviarExcel: false,
                 emailOwner: 'sebastianpaysse@gmail.com',
-                emailCliente: emailXYZ123,
-                numCelCliente: 'No especificado', // Deberías agregar la variable correcta si está disponible
-                numCelOwner: 'No especificado', // Deberías agregar la variable correcta si está disponible
+                emailCliente: email,
+                numCelCliente: 'No especificado',
+                numCelOwner: 'No especificado',
                 mensaje: message,
                 codigoPedido: ticketNumber,
                 nombreOwner: "Sebas",
@@ -2550,18 +2536,22 @@ const {saveOrUpdateConfig}= require('../configGlrs');
                 product: false,
                 inscripcion: true,
                 Promo: false,
-                attachments: [{ path: receiptImagePath }]
+                ConsultaOK: false,
+                imgPAgoMemManual: [{ path: receiptImagePath }]
             };
             await sendMail(dataEnviarEmail);
-
+    
+            res.status(200).json({ success: true, message: 'Datos recibidos y correo enviado.' });
+    
         } catch (error) {
             console.error('Error:', error);
             res.status(400).json({ success: false, message: error.message });
         }
     });
+    
 
     //142 UPDATED USUARIO YA EXISTENTE Premium por FORMA MANUAL UPGRADE desde Cpanel
-    router.post(urlPoint(142), [verificarToken], async (req, res) => {        
+    router.post(urlPoint(142), [], async (req, res) => {        
         try { 
             console.log("142 Request Body:", req.body);
             console.log("142 Request Files:", req.files);
@@ -2904,19 +2894,19 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
     //***********para mostrar los botones con mercado pago DESDE LA LANDING PAGE wallet y tarjetas aprobadas
    // muestra los botones MP y TC desde Wallet de la landing page
-    //console.log("QQQQQ endpoint129endpoint encontro ", urlPoint(129))
+    console.log("QQQQQ endpoint129endpoint encontro ", urlPoint(129))
     router.post(urlPoint(129),  async (req, res) => {
         // Agrega credenciales
         console.log("  mp endpointTokensArray[129]  Qué datos obtiene MP MPwallets desde el fronen", req.body );
         try {
         const {dataPay, dataOwner, pedidoPendCobrar, urlServer} = req.body
         const {precioFinal, cantPRODO, tiempoContratoO, discountCode} = dataPay
-        const {nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123, payer} = dataOwner
+        const {nombre, apellido, email, password, confirmPasswordXYZ123, payer} = dataOwner
 
         // 1ero debe revisar si el email ya esta registrado y existe.
-        const dataPIdx = passwordXYZ123
-        const dataEIdx = emailXYZ123
-        const cheqEmail = await User.findOne({email:emailXYZ123})
+        const dataPIdx = password
+        const dataEIdx = email
+        const cheqEmail = await User.findOne({email:email})
 
         if (cheqEmail) {
             console.log("Entro y encontro un email ya refgistrado CheqEmail", cheqEmail );
@@ -3072,7 +3062,7 @@ const {saveOrUpdateConfig}= require('../configGlrs');
 
     // devolucciones desde MP del cobro o regreso en MP wallets desde la LANDING PAGE donde debe registrarse SINGUP y enviar mail
     // para pagar/cobrar con tarjetas de credito debito tienda Online
-    console.log("UUUUUUUurlPoint(169) que idPoint encontro ", urlPoint(169))
+    //console.log("UUUUUUUurlPoint(169) que idPoint encontro ", urlPoint(169))
     router.post(urlPoint(169), [], async (req, res) => {
     // router.post("/cobrandoelcheque", [], async (req, res) => {
         try {

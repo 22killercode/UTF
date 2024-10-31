@@ -149,7 +149,7 @@ configsss();
         // enviar emails automaticamente
         async function sendMail(dataEnviarEmail) {
             //console.log("Datos recibidos en sendMail:", dataEnviarEmail);
-            const {NOUsartransportEmail, reclamo, enviarExcel, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData,logoOwner, cancelaEnvio, pedidoCobrado, quedaUno, product, inscripcion, Promo, ConsultaOK} = dataEnviarEmail;
+            const {NOUsartransportEmail, reclamo, enviarExcel, emailOwner, emailCliente, numCelCliente, numCelOwner, mensaje, codigoPedido, nombreOwner, nombreCliente, subjectCliente, subjectOwner, otraData,logoOwner, cancelaEnvio, pedidoCobrado, quedaUno, product, inscripcion, Promo, ConsultaOK, imgPAgoMemManual} = dataEnviarEmail;
 
             const transportEmail = ConfigG.transportGmail
 

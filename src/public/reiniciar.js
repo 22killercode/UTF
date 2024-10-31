@@ -2,6 +2,8 @@
 endpoints = {}       
 dataBase = {}
 urlServer = ""
+// let cotizacionDolar = 0 
+// let basicData = {} 
 
 //console.log("Que hay e el primer basicData", basicData)
     // busca los datos basicos y los guarda en sessionStorage
@@ -26,58 +28,35 @@ urlServer = ""
             // Guardar datos obtenidos del servidor en sessionStorage
             urlServer = dataTokens.data.urlServer;
             endpoints = dataTokens.endPointsIdTokens;
-            dataBasic = dataTokens.configGrl;
+            let basicData = dataTokens.configGrl;
 
             sessionStorage.setItem('endPointsIdTokensCpanel', JSON.stringify(endpoints));
-            sessionStorage.setItem('datosBasicos', JSON.stringify(dataBasic));
-
+            const cotiDolar = await cotizacionesDolaresPaises(basicData);
+            basicData.cotizacionDolar = cotiDolar
+            sessionStorage.setItem('datosBasicos', JSON.stringify(basicData));
+            console.log("Que datos encontraron???????? cotizacionDolar", basicData)
+            return basicData
         } catch (error) {
             console.error('Error en la solicitud a /dataInfoTokensEtc:', error);
             mostrarAlerta(`Error en la solicitud: ${error.message}`);
             return; // Detener ejecución si hay un error en el primer fetch
         }
-    
-        // Si el primer fetch tuvo éxito, realizar el segundo fetch
-        try {
-            const responseBasicos = await fetch('/buscar/datos/basicosFronen');
-    
-            if (!responseBasicos.ok) {
-                throw new Error('Error en la solicitud: ' + responseBasicos.statusText);
-            }
-    
-            const dataBasicos = await responseBasicos.json();
-            sessionStorage.setItem('datosBasicos', JSON.stringify(dataBasicos));
-    
-            //console.log('/buscar/datos/basicosFronen - Datos guardados en sessionStorage:', dataBasicos);
-    
-            return dataBasicos; // Retornar los datos si se necesita en otra parte del código
-    
-        } catch (error) {
-            console.error('Error al obtener los datos de /buscar/datos/basicosFronen:', error);
-            // Refrescar la pestaña después de 2 segundos en caso de error
-            setTimeout(() => window.location.reload(), 2000);
-        }
     }
-    
-    // Autoejecutable para ejecutar la función
-    (async () => {
-        try {
-            const dataBase = await fetchDatosBasicos();
-            //console.log("Que datos traen1111111111111111111111",dataBase)
-            basicData = dataBase
+
+    function buscarDatosBasicos(reintentos = 2000, intervalo = 500, encontrado) {
+        let intentos = 0;
+        const id = setInterval(async () => {
             if (basicData) {
-                (async () => {
-                    const cotizacionDolar = await cotizacionesDolaresPaises(basicData);
-                    //console.log(`Cotización del dólar desde reiniciar: ${cotizacionDolar}`);
-                })();
+                clearInterval(id);
+                encontrado = await fetchDatosBasicos();
+                console.log("Encontro los datos basicos desde reiniciar linea 51", encontrado)
+            } else if (++intentos >= reintentos) {
+                clearInterval(id);
+                console.error("No se encontró datosBasicos en sessionStorage");
             }
-        
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    })();
-    
-    basicData     = JSON.parse(sessionStorage.getItem('datosBasicos'))
+        }, intervalo);
+    }
+
     jwToken       = sessionStorage.getItem('jwTokenOwner')              || "";
     ownerProducts = JSON.parse(sessionStorage.getItem("ownerProducts")) || [];
     ownerPromos   = JSON.parse(sessionStorage.getItem("ownerPromos"))   || [];
@@ -87,7 +66,6 @@ urlServer = ""
 
     //console.log("Que datos basicos grl encontro??", basicData )
 
-    
     ({ _id, nombre, apellido, tipoMembresia, Ventas, direcciones, emails, email, numCel, password, realPass, pathLogo, ecommerceName, tipoDocu, numDocu, numDocuFiscal, tipoDocuFiscal, fondoPantalla, clientes, retiros, cheqDocument, urlOwner, lastInfo } = dataOwner || {}); _id = _id || null; nombre = nombre || null; apellido = apellido || null; tipoMembresia = tipoMembresia || null; Ventas = Ventas || null; direcciones = direcciones || null; emails = emails || null; email = email || null; numCel = numCel || null; password = password || null; realPass = realPass || null; pathLogo = pathLogo || null; ecommerceName = ecommerceName || null; tipoDocu = tipoDocu || null; numDocu = numDocu || null; numDocuFiscal = numDocuFiscal || null; tipoDocuFiscal = tipoDocuFiscal || null; fondoPantalla = fondoPantalla || null; clientes = clientes || null; retiros = retiros || null; cheqDocument = cheqDocument || null; urlOwner = urlOwner || null; lastInfo = lastInfo || null;
 
     idOwner = dataOwner._id;
@@ -291,11 +269,11 @@ urlServer = ""
 
     async function cotizacionesDolaresPaises(basicData) {
         if (basicData) {
-                //console.log("cotizacionesDolaresPaises", basicData)
+                //console.log("cotizacionesDolaresPaises", basicData.preciosDolar, basicData.apiKeyMap)
                 // Obtén la configuración de precios del dólar
                 const dataConfig = basicData
-                const preciosDolar = basicData.data.ConfigsOne[0].preciosDolar || dataConfig.preciosDolar || null
-                const keyMap = basicData.data.ConfigsOne[0].apiKeyMap
+                const preciosDolar = dataConfig.preciosDolar ||  null
+                const keyMap = dataConfig.apiKeyMap || null
                 //console.log("Desde la funcion cotizacionesDolaresPaises",preciosDolar)
                 const {
                     precioDolarAr, precioDolarUy, precioDolarCh, precioDolarCl, precioDolarMx,
@@ -883,8 +861,8 @@ urlServer = ""
 
 	async function dominioUrl() {
 		let dataOwner = JSON.parse(sessionStorage.getItem('dataOwner')) || null;
-        const urlServer = (JSON.parse(sessionStorage.getItem('datosBasicos'))?.data?.ConfigsOne?.[0]?.urlServer) || (JSON.parse(sessionStorage.getItem('basicdata'))?.[0]?.urlServer) || null;
-		//console.log("Entro a buscar el domioURL en index Ecommerce", urlServer)
+        const urlServer = JSON.parse(sessionStorage.getItem('datosBasicos')).urlServer || null;
+		console.log("Entro a buscar el domioURL en index Ecommerce", urlServer)
 		let dominioUrls
         let cheqDom = dataOwner?.dominio || false;
 		if (cheqDom) {

@@ -2,7 +2,7 @@
 	async function mostrarModalLoading() {
 		console.log("Pidieorn mostrar el modal loading")
 		$('#loadingModal').modal('show');
-	}
+	} 
 	// Función para ocultar el modal
 	function ocultarModalLoading() {
 		$('#loadingModal').modal('hide');

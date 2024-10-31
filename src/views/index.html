@@ -288,13 +288,15 @@
         function reloadPage() {
     // Cerrar todos los modales abiertos (ajusta el selector según tu implementación)
     const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        const instance = bootstrap.Modal.getInstance(modal); // Si estás usando Bootstrap
-        if (instance) {
-            instance.hide();
-            window.location.reload();
-        }
-    });
+    if (modals) {
+        modals.forEach(modal => {
+            const instance = bootstrap.Modal.getInstance(modal); // Si estás usando Bootstrap
+            if (instance) {
+                instance.hide();
+                window.location.reload();
+            }
+        });
+    }
 }
         document.addEventListener('DOMContentLoaded', function () {
             const btnMenuCel = document.getElementById('btnMenuCel');
@@ -723,7 +725,7 @@
                         <div id="wallet_container"></div>
                         <fieldset class="card-container p-1" id="opcionesDePagoLandindPage"></fieldset>
                         <div id="borrarBTNMP">
-                            <button class="btn btn-primary" id="signupFormXYZ123651465165">
+                            <button class="btn btn-primary" id="signupFormXmercadopago5165">
                                 Pagar con Mercado Libre.
                             </button>
                             <button class="btn btn-primary" id="PagoManual">
@@ -738,348 +740,165 @@
                 </div>
             </div>
             <script>
-                    const dataBasicss     = sessionStorage.getItem('datosBasicos');
-                    const IdEnpointsIndex = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
-                    let dataMP = {}
-                    let dataPay = {}
-                    // let dataOwner2 = {}
-                    // Llama a la función asincrónica
-                    let cotizacionDolar = {};
-
-                function buscarDatosBasicos(reintentos = 20, intervalo = 500, encontrado) {
-                    let intentos = 0;
-                    const id = setInterval(() => {
-                        if (dataBasicss) {
-                            clearInterval(id);
-                            encontrado(JSON.parse(dataBasicss));
-                        } else if (++intentos >= reintentos) {
-                            clearInterval(id);
-                            console.error("No se encontró datosBasicos en sessionStorage");
+                let dataMP = {};
+                let dataPay = {};
+                (async () => {
+                
+                    // Obtener datos básicos
+                    const dataBasics = await fetchDatosBasicos();
+                    if (dataBasics) {
+                        console.log("Datos básicos encontrados linea 748:", dataBasics);
+                        const idEndpointCheck = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'));
+                
+                        function collectData() {
+                            const nombre = document.getElementById('NombreXYZ123').value.trim();
+                            const apellido = document.getElementById('ApellidoXYZ123').value.trim();
+                            const email = document.getElementById('emailXYZ123').value.trim();
+                            const password = document.getElementById('passwordXYZ123').value;
+                            const confirmPassword = document.getElementById('confirmPasswordXYZ123').value;
+                
+                            // Validaciones
+                            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                            if (!passwordPattern.test(password)) {
+                                mostrarAlerta("La contraseña debe ser alfanumérica y tener al menos 8 caracteres.");
+                                setTimeout(reloadPage, 3000);
+                                return;
+                            }
+                            if (password !== confirmPassword) {
+                                mostrarAlerta("Las contraseñas no coinciden.");
+                                setTimeout(reloadPage, 3000);
+                                return;
+                            }
+                            if (!nombre || !apellido) {
+                                mostrarAlerta("El nombre y el apellido son campos obligatorios.");
+                                setTimeout(reloadPage, 3000);
+                                return;
+                            }
+                
+                            dataPay = dataMP;
+                            console.log("DEesde collect data envia la info", dataPay, nombre, apellido, email, password, confirmPassword)
+                            return { dataPay, dataOwner: { nombre, apellido, email, password, confirmPassword } };
                         }
-                    }, intervalo);
-                }
-                // Uso de la función
-                buscarDatosBasicos(10, 500, (dataBasicss) => {
-                    console.log("Datos basicossssssss encontrados:", dataBasicss);
-                    // Aquí puedes continuar con la lógica que necesites usando `data`.
-                    (async () => {
-                        try {
-                            setTimeout(async () => {
-                                cotizacionDolar = await cotizacionesDolaresPaises(basicData);
-                                //console.log('Cotización del dólar desde el index landinpage:', cotizacionDolar);
-                            }, 2000);
-                        } catch (error) {
-                            console.error('Error al obtener la cotización del dólar:', error);
-                        }
-                    })();
-                    // const idEnpointCheq2 = dataBasicss.data.endpointTokensArr.endpointsFronen
-                    const idEnpointCheq = IdEnpointsIndex
+                
+                        document.getElementById('signupFormXmercadopago5165').addEventListener('click', async (e) => {
+                            e.preventDefault();
+                            mostrarModalLoading();
+                            
+                            const { dataPay, dataOwner } = await collectData();
+                            console.log("Entro por pago de mercado pago", dataPay)
+                            if (!dataOwner) return;
+                
+                            sessionStorage.setItem("dataPagoMemPremiumLP", JSON.stringify(dataPay));
 
-                    //const jwToken = dataBasic.data.jwToken
-                    function collectData() {
-                        const nombre = document.getElementById('NombreXYZ123').value.trim();
-                        const apellido = document.getElementById('ApellidoXYZ123').value.trim();
-                        const emailXYZ123 = document.getElementById('emailXYZ123').value.trim();
-                        const passwordXYZ123 = document.getElementById('passwordXYZ123').value;
-                        const confirmPasswordXYZ123 = document.getElementById('confirmPasswordXYZ123').value;
-
-                        // Validación de que la contraseña sea alfanumérica y tenga al menos 8 caracteres
-                        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-                        if (!passwordPattern.test(passwordXYZ123)) {
-                            mostrarAlerta(`La contraseña debe ser alfanumérica y tener al menos 8 caracteres.<br>Nombre: ${nombre} ${apellido}`);
-                            // Recargar la página después de 3 segundos
-                            setTimeout(() => {
-                                reloadPage();
-                            }, 3000);
-                        }
-
-                        // Validación de que las contraseñas coincidan
-                        if (passwordXYZ123 !== confirmPasswordXYZ123) {
-                            mostrarAlerta(`Las contraseñas no coinciden.`);
-                            // Recargar la página después de 3 segundos
-                            setTimeout(() => {
-                                reloadPage();
-                            }, 3000);
-                        }
-
-                        // Validación de campos vacíos
-                        if (!nombre || !apellido) {
-                            mostrarAlerta('El nombre y el apellido son campos obligatorios.');
-                            // Recargar la página después de 3 segundos
-                            setTimeout(() => {
-                                reloadPage();
-                            }, 3000);
-                        }
-
-                        dataPay = dataMP;
-                        dataOwner2 = { nombre, apellido, emailXYZ123, passwordXYZ123, confirmPasswordXYZ123 };
-                        //console.log("8888888888Que armo la funcion collect data", dataPay, dataOwner2);
-                        return {dataPay, dataOwner2}
+                            await LPmpWallet(dataPay, dataOwner);
+                        });
+                // membresia por pago manual
+                        document.getElementById('PagoManual').addEventListener('click', () => {
+                            
+                            console.log("Entró al pago manual por la landing page", idEndpointCheck[141]);
+                
+                            document.getElementById('borrarBTNMP').innerHTML = "";
+                
+                            const dataColect = collectData();
+                            if (!dataColect) return;
+                
+                            const modalBody = document.getElementById('form54354gegghte5');
+                            modalBody.innerHTML = `
+                                <div class="mb-3 text-center">
+                                    <h2>Pago Manual</h2>
+                                    <h5 style="color:green">
+                                        CVU Mercado Pago: usatiendafacil.com.mp<br>
+                                        CBU Bco. Galicia: 16546465146546165456465465465
+                                    </h5>
+                                </div>
+                                <form id="manualPaymentForm">
+                                    <div class="mb-3">
+                                        <label for="paymentMethod" class="form-label">Método de Pago</label>
+                                        <select class="form-select" id="paymentMethod" required>
+                                            <option value="" disabled selected>Seleccionar método</option>
+                                            <option value="transferencia">CVU Mercado Pago</option>
+                                            <option value="cbu">CBU Galicia</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ticketNumber" class="form-label">Número de Ticket</label>
+                                        <input type="text" class="form-control" id="ticketNumber" placeholder="Número de ticket" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="extraData" class="form-label">Datos Extras y Observaciones</label>
+                                        <textarea class="form-control" id="extraData" rows="3" placeholder="Escribe tus observaciones aquí..." required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="receiptImage" class="form-label">Subir Comprobante</label>
+                                        <input type="file" class="form-control" id="receiptImage" accept="image/*" required>
+                                        <small class="form-text text-muted">La imagen debe ser menor a 1MB.</small>
+                                    </div>
+                                    <button type="button" id="submitManualPayment" class="btn btn-primary w-100">Enviar Datos</button>
+                                </form>
+                            `;
+                
+                            document.getElementById('submitManualPayment').addEventListener('click', async (e) => {
+                                e.preventDefault();
+                                const paymentMethod = document.getElementById('paymentMethod').value;
+                                const ticketNumber = document.getElementById('ticketNumber').value;
+                                const extraData = document.getElementById('extraData').value;
+                                const receiptImage = document.getElementById('receiptImage');
+                
+                                if (!paymentMethod || !ticketNumber || !receiptImage.files[0]) {
+                                    mostrarAlerta("Todos los campos deben ser completados, incluyendo la imagen del ticket.");
+                                    setTimeout(reloadPage, 3000);
+                                    return;
+                                }
+                                if (receiptImage.files[0].size > 1 * 1024 * 1024) {
+                                    mostrarAlerta("La imagen debe ser menor a 1MB.");
+                                    setTimeout(reloadPage, 3000);
+                                    return;
+                                }
+                
+                                const formData = new FormData();
+                                formData.append('paymentMethod', paymentMethod);
+                                formData.append('ticketNumber', ticketNumber);
+                                formData.append('extraData', extraData);
+                                formData.append('dataOwner', JSON.stringify(dataColect.dataOwner));
+                                formData.append('dataPay', JSON.stringify(dataColect.dataPay));
+                                formData.append('imgTicket', receiptImage.files[0]);
+                
+                                try {
+                                    // const jwToken = dataBasics.data.jwToken;
+                                    console.log("Enviando al endpoint:", idEndpointCheck[141]);
+                
+                                    const response = await fetch(idEndpointCheck[141], {
+                                        method: 'POST',
+                                        body: formData,
+                                    });
+                
+                                    if (!response.ok) {
+                                        const errorData = await response.json();
+                                        throw new Error(errorData.message || "Error en el envío de datos.");
+                                    }
+                
+                                    const result = await response.json();
+                                    console.log("Resultado del envío:", result);
+                                    await ocultarModalPagos()
+                                    await mostrarExito(`
+                                        Bienvenid@ a nuestra membresía Premium.<br>
+                                        Tu pago está siendo procesado.<br>
+                                        Recibirás un email con indicaciones para continuar.<br>
+                                        Gracias.
+                                    `);
+                                    setTimeout(() => {
+                                        window.location.href = window.location.href;
+                                    }, 5000);
+                
+                                } catch (error) {
+                                    console.error("Error:", error.message);
+                                    mostrarAlerta(error.message);
+                                    setTimeout(reloadPage, 3000);
+                                }
+                            });
+                        });
                     }
-                    // Se agrega botones de pago Wallet y con tC
-                    document.getElementById('signupFormXYZ123651465165').addEventListener('click', async function (e) {
-                        mostrarModalLoading()
-                        e.preventDefault(); 
-                        const {dataPay, dataOwner2} = await collectData()
-                        //console.log("1111111111111111signupFormXYZ123651465165Apreto el boton de pagar con wallet", dataPay)
-                        sessionStorage.setItem("dataPagoMemPremiumLP", JSON.stringify(dataPay))
-                        await LPmpWallet(dataPay, dataOwner2);
-                    });
-                    // Pago Manual
-    //                 document.getElementById('PagoManual').addEventListener('click', function () {
-    //                     console.log("Entro al pago manual por la landing page")
-    //                     //mostrarModalLoading()
-    //                     const borrarBtn456 = document.getElementById('borrarBTNMP')
-    //                     borrarBtn456.innerHTML=""
-    //                     const dataColect = collectData()
-    //                     console.log("Entro al pago manual landng pageeee", dataColect)
-    //                     const modalBody = document.getElementById('form54354gegghte5');
-    //                     // Limpiar el contenido del modal, excepto el div con ID 'cantyPrecio54'
-    //                     //ocultarModalLoading()
-    //                     modalBody.innerHTML = `
-    //     <div class="mb-3 text-center">
-    //         <h2>Pago Manual<h2>
-    //         <h5 style="color:green">
-    //             CVU Mercado Pago: usatiendafacil.com.mp <br>
-    //             CBU Bco. Galicia: 16546465146546165456465465465
-    //         </h5>
-    //     </div>
-    //     <form id="manualPaymentForm">
-    //         <div class="mb-3">
-    //             <label for="paymentMethod" class="form-label">Método de Pago</label>
-    //             <select class="form-select" id="paymentMethod" required>
-    //                 <option value="" disabled selected>Seleccionar método</option>
-    //                 <option value="transferencia">CVU Mercado Pago</option>
-    //                 <option value="cbu">CBU Galicia</option>
-    //             </select>
-    //         </div>
-    //         <div class="mb-3">
-    //             <label for="ticketNumber" class="form-label">Número de Ticket</label>
-    //             <input type="text" class="form-control" id="ticketNumber" placeholder="Número de ticket" required>
-    //         </div>
-    //         <div class="mb-3">
-    //             <label for="extraData" class="form-label">Datos Extras y Observaciones</label>
-    //             <textarea class="form-control" id="extraData" rows="3" placeholder="Escribe tus observaciones aquí..." required></textarea>
-    //         </div>
-    //         <div class="mb-3">
-    //             <label for="receiptImage" class="form-label">Subir Comprobante</label>
-    //             <input type="file" class="form-control" id="receiptImage" accept="image/*" required>
-    //             <small class="form-text text-muted">La imagen debe ser menor a 1MB.</small>
-    //         </div>
-    //         <button type="button" id="efggeee16566" class="btn btn-primary w-100">Enviar Datos</button>
-    //     </form>
-    // `;
-    //                     document.getElementById('efggeee16566').addEventListener('click', async function (e) {
-    //     e.preventDefault();
-    //     // Obtener los valores de los campos
-    //     const paymentMethod = document.getElementById('paymentMethod').value;
-    //     const ticketNumber = document.getElementById('ticketNumber').value;
-    //     const extraData = document.getElementById('extraData').value;
-    //     const receiptImage = document.getElementById('receiptImage');
-    //     // Validar que todos los campos estén completos
-    //     if (!paymentMethod || !ticketNumber || !receiptImage.files[0]) {
-    //         mostrarAlerta('Todos los campos deben ser completados incluyendo la imagen del ticket.');
-    //         // Recargar la página después de 3 segundos
-    //         setTimeout(() => {
-    //             reloadPage();
-    //         }, 3000);
-    //     }
-    //     // Validar tamaño de la imagen
-    //     if (receiptImage.files[0].size > 1 * 1024 * 1024) { // 1MB en bytes
-    //         mostrarAlerta('La imagen debe ser menor a 1MB.');
-    //         // Recargar la página después de 3 segundos
-    //         setTimeout(() => {
-    //             reloadPage();
-    //         }, 3000);
-    //     }
-    //     // Crear un objeto FormData para enviar la imagen y los datos del formulario
-    //     const formData = new FormData();
-    //     formData.append('paymentMethod', paymentMethod);
-    //     formData.append('ticketNumber', ticketNumber);
-    //     formData.append('extraData', extraData);
-    //     formData.append('dataOwner', JSON.stringify(dataOwner2));
-    //     formData.append('dataPay', JSON.stringify(dataPay));
-    //     // Agregar la imagen al FormData
-    //     formData.append('imgTicket', receiptImage.files[0]);
-    //     //console.log("LPM 111111111Imagen seleccionada:", receiptImage.files[0]);
-    //     console.log("LPM 222222222FormData antes del envío:", formData);
-    //     try {
-    //         const jwToken = dataBasicss.data.jwToken
-    //         const idEnpointCheq141 = idEnpointCheq[141]
-    //         console.log("Cual es el enpoint************************************", idEnpointCheq141, jwToken)
-    //         // const response = await fetch(`${idEnpointCheq141}`, {
-    //         const response = await fetch("/chupamelapija", {
-    //             method: 'POST',
-    //             body: formData,
-    //             headers : {
-    //                 // 'Authorization': `Bearer ${jwToken}`,
-    //                 'Content-Type': 'application/json', // Tipo de contenido, opcional pero recomendable
-    //                 // 'Accept': 'application/json' // Aceptar respuestas en formato JSON, opcional
-    //             }
-    //         });
-
-    //         if (!response.ok) {
-    //             // Obtener los datos de error del backend
-    //             const errorData = await response.json();
-    //             // Si el backend no envía un mensaje, usa un mensaje por defecto
-    //             const errorMessage = errorData.message || 'Error en el envío de datos.';
-    //             throw new Error(errorMessage);
-    //         }
-
-    //         // Convierte la respuesta a JSON
-    //         const result = await response.json();
-    //         console.log('Resultado del envío:', result);
-    //         mostrarExito(`
-    //             Bienvenid@ a nuestra membresía Premium.<br>
-    //             Tu pago esta siendo procesado. <br>
-    //             Recibirás un email con las indicaciones para continuar con tu inscripción.<br>
-    //             Si no lo encuentras en tu bandeja de entrada, por favor revisa en tu carpeta de spam y colócalo como deseado.<br>
-    //             Gracias.
-    //         `);
-    //         // Recargar la página después de 3 segundos
-    //         setTimeout(() => {
-    //             reloadPage();
-    //         }, 8000);
-
-    //     } catch (error) {
-    //             // Mostrar el mensaje de error que proviene del backend
-    //             console.error('Error:', error.message);
-    //             mostrarAlerta(error.message); // Aquí se muestra el mensaje de error en el frontend
-    //             // Recargar la página después de 3 segundos
-    //             setTimeout(() => {
-    //                 reloadPage();
-    //             }, 3000);
-    //         }
-    //     });
-    // });
-
-    document.getElementById('PagoManual').addEventListener('click', function () {
-    console.log("Entro al pago manual por la landing page", idEnpointCheq[141]);
-
-    // Limpiar el contenido del botón
-    const borrarBtn456 = document.getElementById('borrarBTNMP');
-    borrarBtn456.innerHTML = "";
-
-    const dataColect = collectData();
-    console.log("Entro al pago manual landing page", dataColect);
-
-    const modalBody = document.getElementById('form54354gegghte5');
-    modalBody.innerHTML = `
-        <div class="mb-3 text-center">
-            <h2>Pago Manual</h2>
-            <h5 style="color:green">
-                CVU Mercado Pago: usatiendafacil.com.mp <br>
-                CBU Bco. Galicia: 16546465146546165456465465465
-            </h5>
-        </div>
-        <form id="manualPaymentForm">
-            <div class="mb-3">
-                <label for="paymentMethod" class="form-label">Método de Pago</label>
-                <select class="form-select" id="paymentMethod" required>
-                    <option value="" disabled selected>Seleccionar método</option>
-                    <option value="transferencia">CVU Mercado Pago</option>
-                    <option value="cbu">CBU Galicia</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="ticketNumber" class="form-label">Número de Ticket</label>
-                <input type="text" class="form-control" id="ticketNumber" placeholder="Número de ticket" required>
-            </div>
-            <div class="mb-3">
-                <label for="extraData" class="form-label">Datos Extras y Observaciones</label>
-                <textarea class="form-control" id="extraData" rows="3" placeholder="Escribe tus observaciones aquí..." required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="receiptImage" class="form-label">Subir Comprobante</label>
-                <input type="file" class="form-control" id="receiptImage" accept="image/*" required>
-                <small class="form-text text-muted">La imagen debe ser menor a 1MB.</small>
-            </div>
-            <button type="button" id="submitManualPayment" class="btn btn-primary w-100">Enviar Datos</button>
-        </form>
-    `;
-
-    document.getElementById('submitManualPayment').addEventListener('click', async function (e) {
-        e.preventDefault();
-
-        // Obtener los valores de los campos
-        const paymentMethod = document.getElementById('paymentMethod').value;
-        const ticketNumber = document.getElementById('ticketNumber').value;
-        const extraData = document.getElementById('extraData').value;
-        const receiptImage = document.getElementById('receiptImage');
-
-        // Validar que todos los campos estén completos
-        if (!paymentMethod || !ticketNumber || !receiptImage.files[0]) {
-            mostrarAlerta('Todos los campos deben ser completados incluyendo la imagen del ticket.');
-            setTimeout(reloadPage, 3000);
-            return; // Salir de la función si hay error
-        }
-
-        // Validar tamaño de la imagen
-        if (receiptImage.files[0].size > 1 * 1024 * 1024) {
-            mostrarAlerta('La imagen debe ser menor a 1MB.');
-            setTimeout(reloadPage, 3000);
-            return; // Salir de la función si hay error
-        }
-
-        // Crear un objeto FormData para enviar la imagen y los datos del formulario
-        const formData = new FormData();
-        formData.append('paymentMethod', paymentMethod);
-        formData.append('ticketNumber', ticketNumber);
-        formData.append('extraData', extraData);
-        formData.append('dataOwner', JSON.stringify(dataOwner2));
-        formData.append('dataPay', JSON.stringify(dataPay));
-        formData.append('imgTicket', receiptImage.files[0]);
-
-        console.log("FormData antes del envío:", formData);
-
-        try {
-            const jwToken = dataBasicss.data.jwToken;
-            const idEnpointCheq141 = idEnpointCheq[141];
-            console.log("Cual es el endpoint", idEnpointCheq141, jwToken);
-
-            const response = await fetch(idEnpointCheq141, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    // 'Authorization': `Bearer ${jwToken}`,
-                    // 'Content-Type': 'application/json', // No se debe establecer cuando se usa FormData
-                }
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                const errorMessage = errorData.message || 'Error en el envío de datos.';
-                throw new Error(errorMessage);
-            }
-
-            const result = await response.json();
-            console.log('Resultado del envío:', result);
-            mostrarExito(`
-                Bienvenid@ a nuestra membresía Premium.<br>
-                Tu pago está siendo procesado. <br>
-                Recibirás un email con las indicaciones para continuar con tu inscripción.<br>
-                Si no lo encuentras en tu bandeja de entrada, por favor revisa en tu carpeta de spam y colócalo como deseado.<br>
-                Gracias.
-            `);
-            setTimeout(() => {
-                // Cerrar todos los modales abiertos
-                const modals = document.getElementById('signupModalPremiumXYZ123');
-                modals.hide(); // Cierra el modal
-                // Recargar la página
-                location.reload();
-            }, 8000);
-
-
-        } catch (error) {
-            console.error('Error:', error.message);
-            mostrarAlerta(error.message);
-            setTimeout(reloadPage, 3000);
-        }
-    });
-});
-
-
-});            
+                })();
             </script>
             <div class="row text-start ml-0">
                 <!-- Membresía Basic -->
@@ -1320,198 +1139,191 @@
                         
                         
                     </style>
-                    <script>
-                        let discountCode = ""
-                        // Uso de la función
-                        buscarDatosBasicos(10, 500, async (dataBasic0) => {
-                            const cotizacionDolar = await cotizacionesDolaresPaises(basicData);
-                            //console.log("Datos encontrados:", dataBasic0);
-                            let precioFinal = 0
-                            let subFinalPrice = 0
-                            let finalPrice = 0
-                            let quantity = 10
-                            let tiempoContratoO = 0
+<script>
+    let discountCode = "";
+    let precioFinal = 0;
+    let subFinalPrice = 0;
+    let finalPrice = 0;
+    let quantity = 10;
+    let tiempoContratoO = 0;
 
 
-const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice } = dataBasic0.data.ConfigsOne[0] ||  dataBasic0
+    // Función para buscar los datos básicos en sessionStorage
+    function fetchBasicData() {
+        
+        // Buscar en sessionStorage
+        const storedData = sessionStorage.getItem("datosBasicos");
+        if (storedData) {
+            basicData = JSON.parse(storedData);
+            clearInterval(basicDataInterval); // Detener el intervalo cuando encontramos los datos
+            initialize();
+        }
+    }
 
-                        const inserPrecioyCant = document.getElementById('cantyPrecio54')
-                        const validDiscountCodes = Vendedores; // Ejemplos de códigos válidos
-                        document.getElementById('membership-duration').addEventListener('change', calculateMembership);
-                        document.getElementById('product-quantity').addEventListener('input', calculateMembership);
-                        document.getElementById('toggle-includes').addEventListener('click', toggleIncludes);
-                        document.getElementById('discount-code').addEventListener('input', applyDiscount);
-                        document.getElementById('decrease-quantity').addEventListener('click', () => {
-                            adjustQuantity(-1);
-                        });
-                        
-                        document.getElementById('increase-quantity').addEventListener('click', () => {
-                            adjustQuantity(1);
-                        });
-                        
-                        async function calculateMembership() {
-                            quantity = parseInt(document.getElementById('product-quantity').value) ;
-                            const duration = parseInt(document.getElementById('membership-duration').value);
-                            tiempoContratoO = duration
-                            //console.log("Cual es el valor inicial de productos", quantity)
-                            let totalPrice = basePrice;
-                            let totalExtraPrice = 0;
-                            const discountedProductPrice = extraProductPrice * discount; // Precio del producto con descuento
-                    
-                            if (quantity > 10) {
-                                totalExtraPrice = (quantity - 10) * discountedProductPrice;
-                            }
-                    
-                            finalPrice = ((quantity * extraProductPrice * discount ) / 12 * duration  )
-                            const precioSinDesc = (quantity * extraProductPrice  )
-                    
-                            //console.log("que perecio final teine", finalPrice)
-                            // Mostrar el input para código de descuento si la cantidad de productos es 25
-                            if (quantity >= 25) {
-                                document.getElementById('discount-code-section').style.display = 'block';
-                            } else {
-                                document.getElementById('discount-code-section').style.display = 'none';
-                            }
-                    
-                            let discountAmount = 0;
-                            subFinalPrice = finalPrice;
-                            let subFinalPrice2 = 0
-                            
-                            if (quantity >= 25 && applyAdditionalDiscount) {
-                                discountAmount = finalPrice * codeDiscount;
-                                subFinalPrice2 = subFinalPrice
-                                finalPrice = subFinalPrice2 - discountAmount
-                                subFinalPrice = null
-                                console.log("Cuales son los valores", discountAmount, subFinalPrice2, finalPrice, subFinalPrice)
-                            } else {
-                                applyAdditionalDiscount = false;
-                            }
+    // Intervalo para intentar encontrar los datos en sessionStorage
+    const basicDataInterval = setInterval(fetchBasicData, 1000);
 
-                            // Inicialización para mostrar 10 productos
-                            if (quantity <= 10) {
-                                // Obtén la cotización del dólar
-                                //console.log("Tiene menos de 10 productos desde linea 1258 landingpage", cotizacionDolar, quantity)
-                                // inserto en membresia Premium
-                                //console.log("fkdvnefjkvjkefnvg", basePrice, duration, cotizacionDolar)
-                                inserPrecioyCant.innerHTML = ""
-                                document.getElementById('membership-value').innerHTML = `
-                                    <h5 align="center" id="precioFinal" style="color:green">
-                                        10 productos distintos con stock ilimitado. <br>
-                                        Periodo membresia Premium: ${duration} meses:<br> 
-                                        $${(basePrice / 12 * duration ).toFixed(2)} dolares.<br>
-                                        $${(basePrice / 12 * duration * cotizacionDolar ).toFixed(2)} pesos.<br>
-                                    </h5>
-                                `;
-                                // modal MP para a cobrar 
-                                inserPrecioyCant.innerHTML = `
-                                    <h4 align="center" id="precioFinal" style="color:green">
-                                        10 productos distintos con stock ilimitado. <br>
-                                        Periodo membresia Premium: ${duration} meses:<br> 
-                                        $${(basePrice / 12 * duration ).toFixed(2)} dolares.<br>
-                                        $${(basePrice / 12 * duration * cotizacionDolar).toFixed(2)} pesos.<br>                                        
-                                    </h4>
-                                `;
-                            } 
-                            else {
-                                //console.log("Tiene MAS de 10 productos", cotizacionDolar, quantity)
-                                // inserto en membresia Premium
-                                inserPrecioyCant.innerHTML = ""
-                                document.getElementById('membership-value').innerHTML = `
-                                    <p style="color:red"> 
-                                        Precio x producto sin descuento: $${extraProductPrice.toFixed(2)} dólares<br>
-                                        Precio sin descuento: $${precioSinDesc.toFixed(2)} dólares
-                                    </p>
-                                    <p style="margin-top:-1rem"> 
-                                        Descuento x Producto (50%):  $${discountedProductPrice.toFixed(2)} dólares<br>
-                                        ${quantity >= 25 && applyAdditionalDiscount ? `
-                                        Sub-Precio final: $${subFinalPrice2.toFixed(2)} dólares
-                                        <br>
-                                        Descuento 10% por código:  $${discountAmount.toFixed(2)} dólares
-                                        ` : ''}
-                                    </p>
-                                    <h3 align="center" id="precioFinal" style="color:green">  Precio final: $${(subFinalPrice || finalPrice).toFixed(2)} dólares
-                                    $${((subFinalPrice || finalPrice) * cotizacionDolar ).toFixed(2)} pesos.<br>
-                                    </h3>
-                                `;
-                                // modal MP para pasar a cobrar
-                                inserPrecioyCant.innerHTML = `
-                                    <h4> 
-                                        Precio para ${quantity} productos distintos con stock ilimitado, por un periodo de ${duration} meses:
-                                        <br>
-                                        $ ${((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
-                                            .toFixed(2)
-                                            .replace('.', ',')
-                                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')} Pesos.
-                                        <br>
-                                    </h4> 
-                                `;
-                            }
-                        }
-                        
-                        function toggleIncludes() {
-                            const includes = document.getElementById('includes');
-                            const card = document.getElementById('premium-card');
-                        
-                            includes.classList.toggle('active');
-                        
-                            setTimeout(() => {
-                                card.style.height = includes.classList.contains('active') ? `${card.scrollHeight + 150}px` : 'auto';
+    // Función de inicialización
+    function initialize() {
 
-                            }, 150);
-                        }
-                        
-                        function adjustQuantity(amount) {
-                            const input = document.getElementById('product-quantity');
-                            let currentValue = parseInt(input.value);
-                        
-                            if ((currentValue > 10 || amount > 0) && currentValue + amount >= 10) {
-                                input.value = currentValue + amount;
-                                calculateMembership();
-                            }
-                        }
-                        
-                        function applyDiscount() {
-                            discountCode = document.getElementById('discount-code').value.trim();
-                            const discountStatus = document.getElementById('discount-status');
-                            console.log("Que codigos me validDiscountCodes", validDiscountCodes)
-                            for (const e of validDiscountCodes) {
-                                console.log("Que codigos me compara", discountCode, e.codVend)
-                                if (e.codVend === String(discountCode)) {
-                                    discountStatus.textContent = "Código válido. Descuento aplicado.";
-                                    discountStatus.style.color = "green";  // Mensaje en verde si es válido
-                                    applyAdditionalDiscount = true;  // Aplicar descuento adicional del 10%
-                                    calculateMembership();
-                                    return
-                                } else if (discountCode.length === 8) {
-                                    discountStatus.textContent = "Código no válido.";
-                                    discountStatus.style.color = "red";  // Mensaje en rojo si es inválido
-                                    applyAdditionalDiscount = false;
-                                } else {
-                                    discountStatus.textContent = "";
-                                    applyAdditionalDiscount = false;
-                                }
-                            }
-                        }
-                        
-                        // Inicialización del estado del descuento
-                        let applyAdditionalDiscount = false;
+        const { Vendedores, basePrice, codeDiscount, discount, extraProductPrice, cotizacionDolar } = basicData;
+        const inserPrecioyCant = document.getElementById('cantyPrecio54');
+        const validDiscountCodes = Vendedores;
 
-                        document.getElementById('sendDataPremium').addEventListener('click', function() {
-                            if (quantity <= 10) {
-                                precioFinal = (basePrice * cotizacionDolar) || (basePrice * cotizacionDolar)
-                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO, discountCode}
-                                //console.log("Apreto el boton dataMP menos 10 productos",dataMP)
-                            }else{
-                                precioFinal = ((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
-                                dataMP = {precioFinal, cantPRODO:quantity, tiempoContratoO, discountCode}
-                                //console.log("Apreto el boton dataMP",dataMP)
-                            }
-                        })
+        document.getElementById('membership-duration').addEventListener('change', calculateMembership);
+        document.getElementById('product-quantity').addEventListener('input', calculateMembership);
+        document.getElementById('toggle-includes').addEventListener('click', toggleIncludes);
+        document.getElementById('discount-code').addEventListener('input', applyDiscount);
+        document.getElementById('decrease-quantity').addEventListener('click', () => adjustQuantity(-1));
+        document.getElementById('increase-quantity').addEventListener('click', () => adjustQuantity(1));
 
-                        // se activa automaticamente para obtener los datos del precio inicial 
-                        calculateMembership()
-                    });            
-                    </script>
+        async function calculateMembership() {
+            quantity = parseInt(document.getElementById('product-quantity').value);
+            const duration = parseInt(document.getElementById('membership-duration').value);
+            tiempoContratoO = duration;
+
+            let totalPrice = basePrice;
+            let totalExtraPrice = 0;
+            const discountedProductPrice = extraProductPrice * discount;
+
+            if (quantity > 10) {
+                totalExtraPrice = (quantity - 10) * discountedProductPrice;
+            }
+
+            finalPrice = ((quantity * extraProductPrice * discount) / 12 * duration);
+            const precioSinDesc = (quantity * extraProductPrice);
+
+            if (quantity >= 25) {
+                document.getElementById('discount-code-section').style.display = 'block';
+            } else {
+                document.getElementById('discount-code-section').style.display = 'none';
+            }
+
+            let discountAmount = 0;
+            subFinalPrice = finalPrice;
+            let subFinalPrice2 = 0;
+
+            if (quantity >= 25 && applyAdditionalDiscount) {
+                discountAmount = finalPrice * codeDiscount;
+                subFinalPrice2 = subFinalPrice;
+                finalPrice = subFinalPrice2 - discountAmount;
+                subFinalPrice = null;
+            } else {
+                applyAdditionalDiscount = false;
+            }
+
+            if (quantity <= 10) {
+                console.log("Que dolares cotiza????????????", cotizacionDolar)
+                inserPrecioyCant.innerHTML = "";
+                document.getElementById('membership-value').innerHTML = `
+                    <h5 align="center" id="precioFinal" style="color:green">
+                        10 productos distintos con stock ilimitado. <br>
+                        Periodo membresia Premium: ${duration} meses:<br> 
+                        $${(basePrice / 12 * duration ).toFixed(2)} dólares.<br>
+                        $${(basePrice / 12 * duration * cotizacionDolar ).toFixed(2)} pesos.<br>
+                    </h5>
+                `;
+                inserPrecioyCant.innerHTML = `
+                    <h4 align="center" id="precioFinal" style="color:green">
+                        10 productos distintos con stock ilimitado. <br>
+                        Periodo membresia Premium: ${duration} meses:<br> 
+                        $${(basePrice / 12 * duration ).toFixed(2)} dólares.<br>
+                        $${(basePrice / 12 * duration * cotizacionDolar).toFixed(2)} pesos.<br>                                        
+                    </h4>
+                `;
+            } else {
+                inserPrecioyCant.innerHTML = "";
+                document.getElementById('membership-value').innerHTML = `
+                    <p style="color:red"> 
+                        Precio x producto sin descuento: $${extraProductPrice.toFixed(2)} dólares<br>
+                        Precio sin descuento: $${precioSinDesc.toFixed(2)} dólares
+                    </p>
+                    <p style="margin-top:-1rem"> 
+                        Descuento x Producto (50%):  $${discountedProductPrice.toFixed(2)} dólares<br>
+                        ${quantity >= 25 && applyAdditionalDiscount ? `
+                        Sub-Precio final: $${subFinalPrice2.toFixed(2)} dólares
+                        <br>
+                        Descuento 10% por código:  $${discountAmount.toFixed(2)} dólares
+                        ` : ''}
+                    </p>
+                    <h3 align="center" id="precioFinal" style="color:green">  
+                        Precio final: $${(subFinalPrice || finalPrice).toFixed(2)} dólares
+                        $${((subFinalPrice || finalPrice) * cotizacionDolar ).toFixed(2)} pesos.<br>
+                    </h3>
+                `;
+                inserPrecioyCant.innerHTML = `
+                    <h4> 
+                        Precio para ${quantity} productos distintos con stock ilimitado, por un periodo de ${duration} meses:
+                        <br>
+                        $${((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
+                            .toFixed(2)
+                            .replace('.', ',')
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')} Pesos.
+                        <br>
+                    </h4> 
+                `;
+            }
+        }
+
+        function toggleIncludes() {
+            const includes = document.getElementById('includes');
+            const card = document.getElementById('premium-card');
+            includes.classList.toggle('active');
+            setTimeout(() => {
+                card.style.height = includes.classList.contains('active') ? `${card.scrollHeight + 150}px` : 'auto';
+            }, 150);
+        }
+
+        function adjustQuantity(amount) {
+            const input = document.getElementById('product-quantity');
+            let currentValue = parseInt(input.value);
+            if ((currentValue > 10 || amount > 0) && currentValue + amount >= 10) {
+                input.value = currentValue + amount;
+                calculateMembership();
+            }
+        }
+
+        function applyDiscount() {
+            discountCode = document.getElementById('discount-code').value.trim();
+            const discountStatus = document.getElementById('discount-status');
+            for (const e of validDiscountCodes) {
+                if (e.codVend === String(discountCode)) {
+                    discountStatus.textContent = "Código válido. Descuento aplicado.";
+                    discountStatus.style.color = "green";
+                    applyAdditionalDiscount = true;
+                    calculateMembership();
+                    return;
+                } else if (discountCode.length === 8) {
+                    discountStatus.textContent = "Código no válido.";
+                    discountStatus.style.color = "red";
+                    applyAdditionalDiscount = false;
+                } else {
+                    discountStatus.textContent = "";
+                    applyAdditionalDiscount = false;
+                }
+            }
+        }
+
+        let applyAdditionalDiscount = false;
+        // envia los datos al modal para comprar
+        document.getElementById('sendDataPremium').addEventListener('click', function() {
+            if (quantity <= 10) {
+                precioFinal = (basePrice * cotizacionDolar) || (basePrice * cotizacionDolar);
+                dataMP = {precioFinal, cantPRODO: quantity, tiempoContratoO, discountCode};
+                console.log("Elijio 10 o menos productos dataMP", dataMP)
+            } else {
+                precioFinal = ((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar));
+                dataMP = {precioFinal, cantPRODO: quantity, tiempoContratoO, discountCode};
+                console.log("Elijio 10 o mas productos dataMP", dataMP)
+            }
+        });
+
+        calculateMembership();
+    }
+
+    fetchBasicData(); // Llamada inicial para verificar los datos básicos
+</script>
+
                 </div>
                 <!-- Membresía CUSTOM Diseña tu propio e-commerce -->
                 <div class="col-lg-4 col-md-4 col-12 ml-0 mb-1">

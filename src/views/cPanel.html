@@ -67,6 +67,7 @@
         
         <!-- reiniciar  -->
         <script src="/reiniciar.js"></script>
+        
 		<link href="/css/mainCpanel.css" rel="stylesheet">
         
         <title id="titulo">usatiendafacil.com</title>
@@ -215,13 +216,13 @@
                     <a class="nav-link" data-bs-toggle="tab" href="#envios" >Estados envíos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#stats">Ventas & Estadísticas</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#clients">Mis clientes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#mess">Mensajería</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#stats">Ventas & Estadísticas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#finans">Tus finanzas</a>
@@ -378,10 +379,18 @@
                     })();
                 </script>
                 <!-- Manual de Operaciones -->
-                <div id="manual" class="tab-pane active" align="center">
+                <div id="manual" class="tab-pane active mt-2" align="center">
                     <div align="center">
                         <div align="center" style="display: flex; flex-direction: column; align-items: center;">
-                            <img src="/images/logomtf.jpg" class="mb-0 responsive-image" id="logoImage" alt="Logo">
+                            <img src="/images/logomtf.jpg" 
+                            class="mb-0 responsive-image" 
+                            id="logoImage" 
+                            alt="Logo" 
+                            style="width: 100%; height: auto; 
+                                    transition: transform 0.2s; 
+                                    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);" 
+                            onmouseover="this.style.transform='translateY(-5px) translateX(5px) scale(1.05)';" 
+                            onmouseout="this.style.transform='';">
                             <button class="mt-4 mb-6 btn btn-outline-light" onclick="renderizarInfoDiario(idOwner, {mostrarInfo:true})">Ver informe</button>
                             <br>
                             <div id="titMO">
@@ -457,37 +466,332 @@
                         <div class="menuA1B2C3">
                             <div class="menuItemA1B2C3" onclick="toggleContent(this)">
                                 <div class="menuTitleA1B2C3">Configuración</div>
-                                <div class="menuContentA1B2C3">[Texto aleatorio de 500 palabras]</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Configuración</h5>
+                                            <p class="card-text">Aquí encontrarás 7 secciones para gestionar y personalizar tu tienda online que deben completarse por ti:</p>
+                                            <ol>
+                                            <li><strong>Datos generales</strong><br>
+                                                Completa la información básica de tu tienda, incluyendo el nombre y datos generales necesarios para poder publicar tu tienda online. Es importante que todos los campos estén completos y precisos.
+                                            </li>
+                                            <li><strong>Productos</strong><br>
+                                                Agrega todos los productos y servicios que ofreces. Puedes subir fotos, agregar descripciones detalladas y seleccionar el formato de tarjeta para mostrar cada producto en tu sitio.
+                                            </li>
+                                            <li><strong>Diseño</strong><br>
+                                                Personaliza la apariencia de tu sitio web. Elige el fondo, los colores y el estilo que mejor representen tu marca.
+                                            </li>
+                                            <li><strong>Quiénes somos</strong><br>
+                                                Comparte la historia de tu empresa, sus objetivos, y cualquier información relevante sobre el equipo y la misión de tu sitio web.
+                                            </li>
+                                            <li><strong>Medios de envío</strong><br>
+                                                Describe los medios de envío disponibles, sus costos y detalles sobre el proceso de entrega de tus productos.
+                                            </li>
+                                            <li><strong>Redes sociales</strong><br>
+                                                Vincula tus redes sociales para que los clientes puedan seguir y apoyar tu emprendimiento.
+                                            </li>
+                                            <li><strong>Nosotros</strong><br>
+                                                En <em>uatiendafacil.com</em>, compartimos nuestra misión, nuestros valores y los objetivos que nos guían.
+                                            </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="menuItemA1B2C3" onclick="toggleContent(this)">
+                                <div class="menuTitleA1B2C3">Membresias</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Membresía Basic</h5>
+                                            <p class="card-text">
+                                                La Membresía Basic es perfecta para quienes están comenzando y desean una opción asequible. Aquí están sus características:
+                                            </p>
+                                            <ul>
+                                                <li><span class="checkmark">&#10003;</span> Pagas comisión del <strong>16.5%</strong> por venta.</li>
+                                                <li><span class="checkmark">&#10003;</span> Hasta <strong>5000 distintos productos</strong> y cantidad de stock infinito.</li>
+                                                <li><span class="checkmark">&#10003;</span> Hasta <strong>3 imágenes por producto.</strong></li>
+                                                <li><span class="checkmark">&#10003;</span> Panel de control fácil y predictivo.</li>
+                                                <li><span class="checkmark">&#10003;</span> Tus redes sociales incluidas.</li>
+                                                <li><span class="checkmark">&#10003;</span> Estadísticas de ventas.</li>
+                                                <li><span class="checkmark">&#10003;</span> Descargas a Excel.</li>
+                                                <li><span class="checkmark">&#10003;</span> Opción de envíos.</li>
+                                                <li><span class="checkmark">&#10003;</span> Generación de promociones.</li>
+                                                <li><span class="checkmark">&#10003;</span> Control de tu stock con avisos automáticos de faltante.</li>
+                                                <li><span class="checkmark">&#10003;</span> Mensajes automáticos de ventas y alertas.</li>
+                                                <li><span class="checkmark">&#10003;</span> Pasarelas de pagos.</li>
+                                                <li><span class="checkmark">&#10003;</span> Diseños profesionales de tu sitio intercambiables sin cargo extra.</li>
+                                                <li><span class="checkmark">&#10003;</span> Pago directo solo con membresía premium.</li>
+                                                <li><span class="checkmark">&#10003;</span> Informes únicamente a tu casilla de email.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Membresía Premium</h5>
+                                            <p class="card-text">
+                                                La Membresía Premium está diseñada para quienes buscan maximizar sus beneficios y tener más control sobre su tienda. Sus características incluyen:
+                                            </p>
+                                            <ul>
+                                                <li><span class="checkmark">&#10003;</span> NO pagas comisión por venta.</li>
+                                                <li><span class="checkmark">&#10003;</span> Panel de control fácil y predictivo.</li>
+                                                <li><span class="checkmark">&#10003;</span> Informes a tu casilla de email, WhatsApp/SMS (opcional).</li>
+                                                <li><span class="checkmark">&#10003;</span> Promocionas por cada producto.</li>
+                                                <li><span class="checkmark">&#10003;</span> Generación de promociones con link para redes sociales.</li>
+                                                <li><span class="checkmark">&#10003;</span> Estadísticas de ventas.</li>
+                                                <li><span class="checkmark">&#10003;</span> Opción de envíos.</li>
+                                                <li><span class="checkmark">&#10003;</span> Control de tu stock con avisos automáticos de faltante.</li>
+                                                <li><span class="checkmark">&#10003;</span> Mensajes automáticos de ventas, promociones y alertas.</li>
+                                                <li><span class="checkmark">&#10003;</span> Pasarelas de pagos.</li>
+                                                <li><span class="checkmark">&#10003;</span> Eliges la cantidad de productos que maximice tus ganancias.</li>
+                                                <li><span class="checkmark">&#10003;</span> Stock infinito y <strong>5 imágenes por producto.</strong></li>
+                                                <li><span class="checkmark">&#10003;</span> Dominio propio, SSL y hosting.</li>
+                                                <li><span class="checkmark">&#10003;</span> Atención humana personalizada.</li>
+                                                <li><span class="checkmark">&#10003;</span> Estrategias SEO/SEM & marketing digital en redes sociales.</li>
+                                                <li><span class="checkmark">&#10003;</span> Soporte continuo.</li>
+                                                <li><span class="checkmark">&#10003;</span> Diseños profesionales de tu sitio que son intercambiables sin cargo extra.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
                             </div>
 
                             <div class="menuItemA1B2C3" onclick="toggleContent(this)">
                                 <div class="menuTitleA1B2C3">Marketing</div>
-                                <div class="menuContentA1B2C3">[Texto aleatorio de 500 palabras]</div>
-                            </div>
-
-                            <div class="menuItemA1B2C3" onclick="toggleContent(this)">
-                                <div class="menuTitleA1B2C3">Estado de Envios</div>
-                                <div class="menuContentA1B2C3">[Texto aleatorio de 500 palabras]</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Marketing</h5>
+                                            <p class="card-text">
+                                            Utiliza estas herramientas para dar un gran impulso comercial a tu tienda online, ofreciendo promociones por tiempo limitado y con cantidad de productos restringida. Aquí encontrarás tres secciones que te recomendamos completar:
+                                            </p>
+                                        
+                                            <ol>
+                                            <li><strong>Promociones y Descuentos</strong><br>
+                                                Aquí podrás seleccionar tus productos y generar promociones exclusivas. Estas promociones aparecerán en la sección "Promociones & Descuentos" de tu tienda. Asegúrate de mantener al menos una promoción activa para evitar que esta sección esté vacía, lo que puede afectar la experiencia visual de tus clientes.
+                                            </li>
+                                            
+                                            <li><strong>Estado de las Promociones</strong><br>
+                                                Activa esta opción para que tus promociones aparezcan en la pantalla principal de tu tienda como una marca de agua, asegurando que los clientes las vean al ingresar. Aquí también podrás monitorear el estado de cada promoción, incluyendo cuántos productos se han vendido, cuánto tiempo resta para que termine, y cuántos artículos quedan disponibles. Además, tienes un enlace para compartir la promoción en tus redes sociales, facilitando el acceso rápido a tus ofertas.
+                                            </li>
+                                            
+                                            <li><strong>Agregar Noticias</strong><br>
+                                                Utiliza esta sección para enviar noticias relevantes de tu tienda a tus clientes. Te recomendamos no enviar más de una noticia cada tres días, ya que el envío excesivo puede resultar molesto para los usuarios y llevar a bloqueos.
+                                            </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="menuItemA1B2C3" onclick="toggleContent(this)">
                                 <div class="menuTitleA1B2C3">Control de Stock</div>
-                                <div class="menuContentA1B2C3">[Texto aleatorio de 500 palabras]</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                              <h5 class="card-title">Control de Stock</h5>
+                                              <p class="card-text">
+                                                La gestión de stock es una tarea fundamental para el correcto funcionamiento de tu tienda online. Asegúrate de mantener actualizado el estado del inventario en todo momento para evitar errores en los pedidos y garantizar que los productos estén disponibles para tus clientes.
+                                              </p>
+                                          
+                                              <p><strong>Pasos para una gestión precisa del stock:</strong></p>
+                                          
+                                              <ul>
+                                                <li><strong>Registrar Nuevos Productos:</strong> Cada vez que añadas un nuevo producto, asegúrate de ingresar la cantidad correcta en el sistema para evitar futuras discrepancias.</li>
+                                                <li><strong>Actualizar Cantidades Vendidas:</strong> La IA actualiza automáticamente las cantidades vendidas en el sistema, reflejando la reducción del stock en tiempo real a medida que se realizan ventas.</li>
+                                                <li><strong>Monitoreo de Productos Escasos:</strong> La IA configura alertas para productos con stock bajo y enviará automáticamente un correo electrónico notificándote de la necesidad de reposición antes de que se agoten.</li>
+                                                <li><strong>Estados del Stock:</strong> Dependiendo de la disponibilidad, la IA marca automáticamente los productos en el estado correspondiente:
+                                                  <ul>
+                                                    <li><strong>Disponible:</strong> Stock suficiente para cubrir los pedidos.</li>
+                                                    <li><strong>Stock Bajo:</strong> Pocas unidades restantes; se enviará un email para recordarte que es momento de reponer.</li>
+                                                    <li><strong>Agotado:</strong> Sin unidades disponibles; la IA desactiva temporalmente la venta si es necesario.</li>
+                                                  </ul>
+                                                </li>
+                                              </ul>
+                                              
+                                              <p class="card-text">
+                                                La actualización automática del inventario evita la venta de productos sin stock, mantiene la confianza de los clientes y asegura una gestión eficiente. La automatización de estas tareas asegura una respuesta rápida y precisa ante cualquier cambio en el stock.
+                                              </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="menuItemA1B2C3" onclick="toggleContent(this)">
-                                <div class="menuTitleA1B2C3">Venta & Estadística</div>
-                                <div class="menuContentA1B2C3">[Texto aleatorio de 500 palabras]</div>
+                                <div class="menuTitleA1B2C3">Estado de Envios</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                          <h5 class="card-title">Estado de tus Envios</h5>
+                                          <p class="card-text">
+                                            Esta sección es fundamental para el correcto seguimiento de cada pedido. Es importante que actualices el estado de cada envío para que el cliente esté informado en todo momento. A continuación, te mostramos los estados posibles y su orden de actualización:
+                                          </p>
+                                      
+                                          <ul>
+                                            <li><strong>Armando su pedido:</strong> El primer estado, que indica que el pedido está siendo preparado.</li>
+                                            <li><strong>Pedido en camino:</strong> El pedido ha sido despachado y está en camino hacia su destino.</li>
+                                            <li>Dependiendo de la situación, puedes marcar uno de estos estados finales:</li>
+                                            <ul>
+                                              <li><strong>Pedido entregado y NO cobrado</strong></li>
+                                              <li><strong>Pedido entregado y cobrado</strong></li>
+                                              <li><strong>Pedido cancelado</strong></li>
+                                            </ul>
+                                          </ul>
+                                          <p class="card-text">
+                                            Recuerda actualizar siempre el estado de todos tus pedidos. Cada vez que realizas una actualización, se enviará un correo electrónico al cliente correspondiente, reforzando la transparencia y confiabilidad de tu servicio. Esta comunicación es clave para el control y la satisfacción de tus clientes.
+                                          </p>
+                                        </div>
+                                      </div>
+                                      
+                                </div>
+                            </div>
+
+                            <div class="menuItemA1B2C3" onclick="toggleContent(this)">
+                                <div class="menuTitleA1B2C3">Mis Clientes</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                        <h5 class="card-title">Mis Clientes</h5>
+                                        <p class="card-text">
+                                            La sección de <strong>Mis Clientes</strong> actúa como una completa agenda de contactos de todos los clientes que han interactuado con tu tienda online. Aquí podrás acceder fácilmente a toda la información relevante de cada cliente, manteniendo un historial actualizado y organizado para facilitar la comunicación y el servicio personalizado.
+                                        </p>
+                                    
+                                        <p><strong>Funcionalidades Clave para la Gestión de Clientes:</strong></p>
+                                        <ul>
+                                            <li><strong>Agenda Automatizada:</strong> La información de cada cliente se registra automáticamente en el sistema, incluyendo su nombre, apellido, email, número de contacto, y cualquier otra información adicional que hayan proporcionado. Esto asegura que siempre tendrás acceso a los datos actualizados sin necesidad de ingresarlos manualmente.</li>
+                                            <li><strong>Historial de Interacciones:</strong> Mantén un registro de las interacciones previas con cada cliente, incluyendo sus compras, preferencias y cualquier comunicación relevante. Este historial es útil para ofrecer una atención personalizada y para comprender mejor sus necesidades y preferencias.</li>
+                                            <li><strong>Acceso Rápido y Ordenado:</strong> La agenda de clientes está organizada alfabéticamente y permite realizar búsquedas rápidas por nombre o correo electrónico, haciendo que sea sencillo localizar a cualquier cliente de tu lista en cuestión de segundos.</li>
+                                        </ul>
+                                    
+                                        <p><strong>Exportación de Datos y Notificaciones Automatizadas:</strong></p>
+                                        <ul>
+                                            <li><strong>Descarga en Excel:</strong> Puedes exportar toda la información de tus clientes en formato Excel para conservar registros externos, analizar datos o integrarlos en otros sistemas de CRM. Esta función te permite mantener una base de datos actualizada y disponible en cualquier momento.</li>
+                                            <li><strong>Notificaciones Automatizadas:</strong> El sistema envía automáticamente emails a los clientes relevantes cuando es necesario, asegurando que estén informados de las novedades, actualizaciones de sus pedidos o cualquier promoción que desees compartir.</li>
+                                        </ul>
+                                    
+                                        <p class="card-text">
+                                            Con esta completa agenda de clientes y las opciones de exportación a Excel, tu tienda online cuenta con las herramientas necesarias par
+                                    
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="menuItemA1B2C3" onclick="toggleContent(this)">
                                 <div class="menuTitleA1B2C3">Mensajería</div>
-                                <div class="menuContentA1B2C3">[Texto aleatorio de 500 palabras]</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                          <h5 class="card-title">Mensajería</h5>
+                                          <p class="card-text">
+                                            La sección de <strong>Mensajería</strong> te permite gestionar todos los mensajes recibidos de tus clientes, así como las interacciones generadas por la inteligencia artificial (IA) del sistema. Aquí podrás revisar, leer y borrar mensajes fácilmente, asegurando que siempre tengas acceso a la comunicación más relevante y actualizada.
+                                          </p>
+                                      
+                                          <p><strong>Características Principales de la Mensajería:</strong></p>
+                                          <ul>
+                                            <li><strong>Acceso a Mensajes Recibidos:</strong> Todos los mensajes de tus clientes se registran automáticamente, permitiéndote acceder a sus consultas, comentarios y cualquier otra comunicación que hayan realizado. Esta función facilita la atención al cliente y asegura que no se pase por alto ninguna solicitud importante.</li>
+                                            <li><strong>Interacciones de IA:</strong> La IA también puede generar mensajes automáticos relacionados con el estado de pedidos, promociones y actualizaciones relevantes. Estos mensajes se almacenan junto con los de los clientes, brindando una visión completa de la comunicación.</li>
+                                            <li><strong>Lectura y Gestión de Mensajes:</strong> Puedes leer cada mensaje de forma rápida y sencilla, y eliminar aquellos que ya no son necesarios. Esto te permite mantener un espacio de trabajo ordenado y enfocado en la comunicación actual.</li>
+                                          </ul>
+                                      
+                                          <p><strong>Automatización y Limpieza de Mensajes:</strong></p>
+                                          <ul>
+                                            <li><strong>Eliminación Automática:</strong> Para mantener tu bandeja de entrada limpia y organizada, la IA elimina automáticamente los mensajes que tienen más de 10 días de antigüedad. Esto asegura que solo conserves la información relevante y actual, evitando la acumulación de mensajes innecesarios.</li>
+                                            <li><strong>Notificación de Nuevos Mensajes:</strong> El sistema te alertará cada vez que recibas un nuevo mensaje, asegurando que estés siempre al tanto de las consultas de tus clientes y puedas responder de manera oportuna.</li>
+                                          </ul>
+                                      
+                                          <p class="card-text">
+                                            La sección de Mensajería es una herramienta esencial para mantener una comunicación fluida y efectiva con tus clientes. La automatización de la limpieza de mensajes y la organización eficiente de la información aseguran que puedas concentrarte en lo más importante: ofrecer un excelente servicio al cliente y responder a sus necesidades de manera efectiva.
+                                          </p>
+                                        </div>
+                                      </div>
+                                </div>
                             </div>
 
                             <div class="menuItemA1B2C3" onclick="toggleContent(this)">
+                                <div class="menuTitleA1B2C3">Venta & Estadística</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                          <h5 class="card-title">Ventas y Estadísticas</h5>
+                                          <p class="card-text">
+                                            La sección de <strong>Ventas y Estadísticas</strong> proporciona una visión completa y en tiempo real de las ventas de tu tienda online. Aquí puedes hacer un seguimiento detallado de cada transacción y acceder a un análisis exhaustivo que te permite identificar patrones de compra, evaluar el rendimiento de tus productos y tomar decisiones estratégicas informadas.
+                                          </p>
+                                      
+                                          <p><strong>Automatización de Registros de Venta:</strong></p>
+                                          <ul>
+                                            <li><strong>Actualización en Tiempo Real:</strong> Cada venta que se realice en tu tienda será registrada automáticamente en el sistema. Esto incluye la cantidad vendida, el producto adquirido, la fecha y la hora de la compra, entre otros datos relevantes. Esta automatización asegura que el inventario y las estadísticas reflejen en todo momento la situación real de las ventas.</li>
+                                            <li><strong>Análisis de Datos de Ventas:</strong> La inteligencia artificial integrada se encarga de analizar los datos de ventas, generando estadísticas clave como los productos más vendidos, períodos de mayor actividad y el valor promedio de las ventas. Esta información se presenta en gráficos y tablas que te permiten visualizar el rendimiento de tu tienda de manera sencilla.</li>
+                                            <li><strong>Monitoreo de Tendencias y Patrones:</strong> Gracias a la IA, el sistema detecta y te alerta sobre patrones de compra, como cambios estacionales en la demanda o preferencias de productos específicos. Esto te permite anticipar las necesidades de tus clientes y ajustar tu oferta en consecuencia.</li>
+                                          </ul>
+                                      
+                                          <p><strong>Estado de Ventas y Exportación de Datos:</strong></p>
+                                          <ul>
+                                            <li><strong>Seguimiento del Estado de las Ventas:</strong> Cada transacción tiene un estado que se actualiza automáticamente, desde la confirmación de compra hasta la entrega final al cliente. Esto te permite llevar un registro claro de cada pedido y garantizar la transparencia en todas las operaciones.</li>
+                                            <li><strong>Descarga en Excel:</strong> Para una gestión y análisis más detallados, tienes la opción de exportar toda la información de ventas y estadísticas a un archivo Excel. Esto facilita la elaboración de informes personalizados, la integración de datos en otros sistemas y el archivo de registros de manera ordenada y profesional.</li>
+                                          </ul>
+                                      
+                                          <p class="card-text">
+                                            El acceso a estas estadísticas y la posibilidad de descargar datos en Excel te brinda herramientas poderosas para tomar decisiones estratégicas basadas en datos concretos. La automatización y el análisis en tiempo real optimizan la administración de tu tienda, mejoran la experiencia de tus clientes y respaldan el crecimiento sostenible de tu negocio online.
+                                          </p>
+                                        </div>
+                                      </div>
+                                      
+                                </div>
+                            </div>
+
+
+                            <div class="menuItemA1B2C3" onclick="toggleContent(this)">
                                 <div class="menuTitleA1B2C3">Mis Finanzas</div>
-                                <div class="menuContentA1B2C3">[Texto aleatorio de 500 palabras]</div>
+                                <div class="menuContentA1B2C3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                          <h5 class="card-title">Mis Finanzas</h5>
+                                          <p class="card-text">
+                                            La sección de <strong>Mis Finanzas</strong> es crucial para una gestión eficaz y transparente de los recursos económicos de tu tienda online. Aquí, tendrás acceso a diversas herramientas y solapas que te permitirán realizar un seguimiento detallado de tus ingresos, egresos y retiros, facilitando así la toma de decisiones informadas y estratégicas. Es importante destacar que, en la versión Basic, contarás con cuatro solapas, mientras que, al optar por la versión Premium y realizar un retiro de fondos, se reducirá a tres solapas.
+                                          </p>
+                                      
+                                          <h6>Solapas Disponibles:</h6>
+                                          <ul>
+                                            <li>
+                                              <strong>Quick View:</strong> Esta sección te ofrece un resumen ejecutivo de la actividad financiera de tu tienda desde su inauguración hasta la fecha actual. Aquí podrás visualizar la cantidad total de ventas, la facturación acumulada, el ticket promedio por transacción, así como los productos y promociones más vendidas. Además, tendrás acceso a información sobre los cinco clientes más frecuentes, lo que te permitirá identificar patrones de compra y optimizar tus estrategias de marketing y ventas. Esta visión general es indispensable para evaluar el rendimiento de tu negocio y realizar ajustes necesarios.
+                                            </li>
+                                            
+                                            <li>
+                                              <strong>Detalle de Ventas:</strong> En esta solapa, se presentan todas las transacciones de venta de manera individual y detallada. Podrás revisar cada operación, lo que te permitirá llevar un control riguroso de las ventas realizadas, facilitando la conciliación de cuentas y la identificación de posibles discrepancias. Este nivel de detalle es fundamental para asegurar la transparencia y precisión en la gestión financiera de tu tienda.
+                                            </li>
+                                            
+                                            <li>
+                                              <strong>Ingresos y Egresos:</strong> Esta sección te proporciona un análisis exhaustivo de todos tus ingresos y egresos, desglosando cada componente:
+                                              <ul>
+                                                <li><strong>Total de Ingresos:</strong> Representa la suma total de todas las ventas realizadas en tu tienda.</li>
+                                                <li><strong>Total de Ingresos Pago Manual:</strong> Incluye los ingresos generados a través de métodos de pago manuales.</li>
+                                                <li><strong>Total de Ingresos con Plataformas de Pago:</strong> Muestra los ingresos generados a través de plataformas de pago como Stripe, Paypal, y otros.</li>
+                                                <li><strong>Comisiones:</strong> Detalla el porcentaje de comisión aplicable a cada transacción, permitiéndote calcular con precisión los costos asociados.</li>
+                                                <li><strong>Retención Parking (72 hrs):</strong> Indica los montos retenidos durante el periodo de parking de 72 horas, período durante el cual no podrás realizar retiros de tus fondos.</li>
+                                                <li><strong>Retiros:</strong> Muestra el total de fondos que has solicitado retirar, ayudándote a llevar un control de tus transacciones de salida.</li>
+                                                <li><strong>Total de Egresos:</strong> Representa todos los gastos incurridos, lo que te permitirá evaluar la rentabilidad de tu tienda.</li>
+                                              </ul>
+                                              La adecuada gestión de esta información es vital para garantizar la salud financiera de tu negocio, así como para planificar futuras inversiones y gastos.
+                                            </li>
+                                            
+                                            <li>
+                                              <strong>Retiros:</strong> En esta solapa podrás solicitar el retiro de fondos hacia tu cuenta. Es imprescindible que te identifiques de manera correcta y segura antes de realizar cualquier solicitud, ya que sin la verificación necesaria, no se procesarán los depósitos por retiro. Esta medida de seguridad asegura que los fondos sean manejados de manera responsable y con el debido control.
+                                            </li>
+                                          </ul>
+                                      
+                                          <p class="card-text">
+                                            Con todas estas herramientas a tu disposición, tendrás el control necesario para gestionar tus finanzas de forma efectiva. La transparencia en la administración de tus ingresos y egresos, así como un manejo adecuado de tus solicitudes de retiro, son fundamentales para el éxito y crecimiento de tu tienda online. Mantente al tanto de tus finanzas para optimizar el rendimiento de tu negocio y alcanzar tus objetivos comerciales con confianza.
+                                          </p>
+                                        </div>
+                                      </div>
+                                      
+                                </div>
                             </div>
                         </div>
                         <script>
@@ -695,7 +999,7 @@
                                 <script>
                                     const cantImgXMem = {};
                                     const dataGrl = JSON.parse(sessionStorage.getItem("datosBasicos"));
-                                    const {cantImgXMemBasic, cantImgXMemPremium} = dataGrl.data.ConfigsOne[0]
+                                    const {cantImgXMemBasic, cantImgXMemPremium} = dataGrl || dataGrl.data.ConfigsOne[0]
 
                                     function actualizarMensajeMembresia(dataOwner) {
                                         const prodXMen = document.getElementById("prodXMen");
@@ -3236,16 +3540,64 @@ if (imgCount === 0) {
                                 <br><br>
                                 inscribete facil, publica facil, vende facil
                             </h1>
-                            <h2>
-                                <br><br>
-                                Enusatiendafacil.com, creemos que la creación de una tienda online debe ser fácil, accesible y sin complicaciones. Somos una plataforma diseñada para automatizar el proceso de creación de tiendas en línea, permitiendo a nuestros usuarios configurar su negocio digital de manera rápida y sencilla.
-                                <br><br><br>
-                                Ofrecemos membresías adaptadas a tus necesidades, que te brindan acceso a una amplia gama de herramientas y recursos para que puedas enfocarte en lo que realmente importa: hacer crecer tu negocio. 
-                                <br><br><br>
-                                Conusatiendafacil.com, tener una tienda online nunca ha sido tan fácil y economico.
-                                <br><br>
-                                inscribete facil, publica facil, vende facil
-                            </h2>
+                            <div style="text-align: left;">
+                                <h4>
+                                    <br><br>
+                                    Enusatiendafacil.com, creemos que la creación de una tienda online debe ser fácil, accesible y sin complicaciones. Somos una plataforma diseñada para automatizar el proceso de creación de tiendas en línea, permitiendo a nuestros usuarios configurar su negocio digital de manera rápida y sencilla.
+                                    <br><br>
+                                
+                                    Ofrecemos membresías adaptadas a tus necesidades, que te brindan acceso a una amplia gama de herramientas y recursos para que puedas enfocarte en lo que realmente importa: hacer crecer tu negocio. 
+                                    <br><br>
+                                
+                                    Transforma tu visión emprendedora en realidad con Usatienafacil.com. En el mundo digital actual, contar con una tienda online no es solo una ventaja competitiva; es una necesidad. En Usatienafacil.com, ofrecemos una plataforma integral y amigable que facilita el proceso de venta en línea, permitiéndote concentrarte en lo que realmente importa: hacer crecer tu negocio. 
+                                
+                                    <br><br>
+                                    Aquí te presentamos por qué deberías elegir Usatienafacil.com y las numerosas ventajas que obtendrás al pagar por nuestra plataforma:
+                                    <br><br>
+                                
+                                    1. **Precios Inigualables en el Mercado**  
+                                    En Usatienafacil.com, entendemos que el costo es un factor crucial para los emprendedores. Por eso, ofrecemos los mejores precios del mercado. Te proporcionamos acceso a herramientas avanzadas a un costo accesible, permitiéndote maximizar tus ganancias sin comprometer la calidad. Además, si eliges abonar anualmente, tendrás la opción de no pagar un porcentaje adicional, lo que representa un ahorro significativo a largo plazo.
+                                    <br><br>
+                                
+                                    2. **Configuración Extremadamente Fácil y Rápida**  
+                                    Nos destacamos en el mercado por ofrecer una configuración excepcionalmente fácil y rápida. Desde el registro hasta el lanzamiento de tu tienda online, todo el proceso se simplifica al máximo. Con nuestra interfaz intuitiva, podrás tener tu tienda operativa en cuestión de horas, no días. Esto significa que podrás empezar a vender de inmediato y sin complicaciones, permitiéndote enfocarte en lo que realmente importa: hacer crecer tu negocio.
+                                    <br><br>
+                                
+                                    3. **Facilidad de Uso y Diseño Profesional**  
+                                    Usatienafacil.com está diseñado para ser intuitivo y fácil de usar, incluso si no tienes experiencia previa en tecnología. Nuestra plataforma te permite personalizar el diseño de tu tienda para reflejar tu marca única. Desde elegir colores y fondos hasta configurar la disposición de tus productos, tienes la libertad de crear un espacio que cautive a tus clientes y los invite a explorar. La estética es fundamental para las ventas, y con Usatienafacil.com, tu tienda se verá tan profesional como cualquier tienda de renombre.
+                                    <br><br>
+                                
+                                    4. **Gestión Eficiente de Productos y Stock**  
+                                    Con herramientas robustas para la gestión de productos y stock, podrás mantener un control detallado de tus inventarios. Desde la configuración de alertas para productos escasos hasta el seguimiento de ventas en tiempo real, nuestra plataforma te brinda la visibilidad que necesitas para tomar decisiones informadas y oportunas. Además, las actualizaciones automáticas de las cantidades vendidas garantizan que siempre estés al tanto de tu situación de stock.
+                                    <br><br>
+                                
+                                    5. **Análisis de Ventas y Finanzas**  
+                                    La sección de finanzas de Usatienafacil.com ofrece estadísticas detalladas sobre tus ventas, ingresos y egresos, permitiéndote analizar el rendimiento de tu negocio con facilidad. Con informes claros y concisos, podrás identificar las tendencias de compra y optimizar tus estrategias para maximizar tus ganancias. Además, puedes descargar toda esta información en formato Excel para un análisis más profundo.
+                                    <br><br>
+                                
+                                    6. **Promociones y Marketing Efectivos**  
+                                    Nuestra herramienta de marketing te permite crear promociones atractivas y descuentos, asegurando que siempre haya algo que ofrezcas a tus clientes. Con la posibilidad de resaltar tus mejores ofertas en la pantalla principal, atraerás más atención y generarás ventas. Además, podrás enviar noticias y actualizaciones a tus clientes, manteniéndolos informados y comprometidos con tu marca.
+                                    <br><br>
+                                
+                                    7. **Atención al Cliente y Soporte Técnico**  
+                                    Nuestro compromiso no termina con la venta. En Usatienafacil.com, ofrecemos atención al cliente excepcional y soporte técnico continuo. Si enfrentas algún problema o tienes dudas sobre el uso de la plataforma, nuestro equipo de expertos está aquí para ayudarte. Nos preocupamos por tu éxito y estamos dispuestos a acompañarte en cada paso del camino.
+                                    <br><br>
+                                
+                                    8. **Seguridad y Confianza**  
+                                    Al elegir Usatienafacil.com, te beneficias de una plataforma segura y confiable. Implementamos las mejores prácticas de seguridad para proteger la información de tus clientes y tus transacciones, lo que te permitirá operar con tranquilidad. La confianza es clave en el comercio en línea, y nosotros te proporcionamos la tranquilidad que necesitas para enfocarte en tus ventas.
+                                    <br><br>
+                                
+                                    9. **Crecimiento y Escalabilidad**  
+                                    Usatienafacil.com no solo es una solución para comenzar; es una plataforma que crece contigo. A medida que tu negocio se expande, nuestras herramientas y recursos se adaptan a tus necesidades, permitiéndote escalar sin complicaciones. Esto asegura que siempre tengas acceso a las funcionalidades que necesitas para seguir avanzando.
+                                    <br><br>
+                                
+                                    **Conclusión: Un Futuro Prometedor con Usatienafacil.com**  
+                                    Invertir en Usatienafacil.com es invertir en el futuro de tu negocio. Te proporcionamos las herramientas, el soporte y la flexibilidad que necesitas para triunfar en el competitivo mundo del comercio en línea. Con una gestión simplificada, análisis detallados y un enfoque en la experiencia del cliente, estamos aquí para ayudarte a alcanzar tus objetivos comerciales.
+                                    <br><br>
+                                
+                                    No dejes pasar la oportunidad de hacer crecer tu negocio en línea. Únete a Usatienafacil.com y descubre un mundo de posibilidades!
+                                </h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3301,6 +3653,7 @@ if (imgCount === 0) {
                                                     <li><i class="fa-solid fa-check checkmark"></i>Promocionas por cada producto.</li>
                                                     <li><i class="fa-solid fa-check checkmark"></i>Dominio propio, SSL y hosting.</li>
                                                     <li><i class="fa-solid fa-check checkmark"></i>Atención Humana personalizada.</li>
+                                                    <li><i class="fa-solid fa-check checkmark"></i>Informes a tu casilla de correo, whatssap/sms (Opcional).</li>
                                                     <li><i class="fa-solid fa-check checkmark"></i>Estrategias CEO / SEM & marketing digital en redes sociales.</li>
                                                     <li><i class="fa-solid fa-check checkmark"></i>Soporte continuo.</li>
                                                 </ul>
@@ -3326,7 +3679,7 @@ if (imgCount === 0) {
                                 const fechaVencMem = ownerData.fechaVencMem
                                 const renovarMem   = ownerData.renovarMem
 
-                                const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice, preciosDolar, comisionBasic} = dataBasic0.data.ConfigsOne[0]
+                                const {Vendedores, basePrice, codeDiscount, discount, extraProductPrice, preciosDolar, comisionBasic} = dataBasic0 
 
                                 const totalProductos = ownerData.TotalProdCOntratados;
                                 function calcularMesesRestantes(fechaVencMem) {
@@ -3388,8 +3741,8 @@ if (imgCount === 0) {
                                 </p>`
                                 const infoModalMemBasic = ` 
                                 <p>
-                                    Configura tu tienda online, con al menos 10 productos, cada uno con stock ilimitado, 5 imágenes por producto, SSL y tu propio dominio.
-                                    Actualmente tu <strong>Membresía es Basic</strong> con ${ownerProducts.length} productos publicados con stock ilimitado.
+                                    Configura tu tienda online, con al menos 10 productos, cada uno con stock ilimitado, 5 imágenes por producto, SSL y tu propio dominio.<br>
+                                    Actualmente tu <strong>Membresía es Basic</strong> con ${ownerProducts.length} productos publicados con stock ilimitado y abonas el ${comisionBasic}% de comisiones.
                                 </p>`
 
                                //console.log("Upgrade de membresia desde el Cpanel", ownerProducts)
@@ -3401,7 +3754,7 @@ if (imgCount === 0) {
 
                                 
                                 // Llamar a la función obtener coizacion
-                                const cotiDolar = await cotizacionesDolaresPaises(basicData);
+                                const cotiDolar = await cotizacionesDolaresPaises(dataBasic0);
 
                                 const membresiaNombreHtml = document.getElementById('membresia-nombre');
                                 const membresiaDataHtml = document.getElementById('membresia-Data');
@@ -3429,18 +3782,21 @@ if (imgCount === 0) {
         </style>
         <h3><strong>Incluye:</strong></h3>
         <ul>
-            <li><span class="checkmark">&#10003;</span> Pagas comisión del ${comisionBasic} por venta.</li>
+            <li><span class="checkmark">&#10003;</span> Pagas comisión del ${comisionBasic}% por venta.</li>
             <li><span class="checkmark">&#10003;</span> Hasta 5000 mil distintos productos y cantidad de stock infinito.</li>
             <li><span class="checkmark">&#10003;</span> Hasta 3 imágenes por productos.</li>            
             <li><span class="checkmark">&#10003;</span> Panel de control fácil y predictivo.</li>
             <li><span class="checkmark">&#10003;</span> Tus redes sociales incluidas.</li>
             <li><span class="checkmark">&#10003;</span> Estadísticas de ventas.</li>
+            <li><span class="checkmark">&#10003;</span> Descargas a excel.</li>
             <li><span class="checkmark">&#10003;</span> Opción de Envíos.</li>
             <li><span class="checkmark">&#10003;</span> Generación de promociones.</li>
             <li><span class="checkmark">&#10003;</span> Control de tu stock con avisos automáticos de faltante.</li>
             <li><span class="checkmark">&#10003;</span> Mensajes automáticos de ventas y alertas.</li>
             <li><span class="checkmark">&#10003;</span> Pasarelas de pagos.</li>
             <li><span class="checkmark">&#10003;</span> Diseños profesionales de tu sitio intercambiables sin cargo extra.</li>
+            <li><span class="checkmark">&#10003;</span> Pago directo solo con membresia premium.</li>
+            <li><span class="checkmark">&#10003;</span> Informes únicamente a tu casilla de email.</li>
         </ul>
     `;
                                 const memberPremiumData = `
@@ -3465,6 +3821,7 @@ if (imgCount === 0) {
         <ul>
             <li><span class="checkmark">&#10003;</span> NO Pagas comisión por venta.</li>
             <li><span class="checkmark">&#10003;</span> Panel de control fácil y predictivo.</li>
+            <li><span class="checkmark">&#10003;</span> Informes a tu casilla de email, whatssap/sms (opcional).</li>
             <li><span class="checkmark">&#10003;</span> Promocionas por cada producto.</li>
             <li><span class="checkmark">&#10003;</span> Generación de promociones con link para redes sociales.</li>
             <li><span class="checkmark">&#10003;</span> Estadísticas de ventas.</li>
@@ -4640,7 +4997,6 @@ card7.appendChild(cardFooterEnv);
                                     idOwner,
                                     statusEnvio: nuevoEstado,
                                     codigoPedido: codigoPedido,
-                                    tranposterUser
                                 })
                             })
                             .then(response => response.json())
@@ -5403,124 +5759,117 @@ card7.appendChild(cardFooterEnv);
                             }
                             // funcion que muestra el modal del pedido elejido y todos sus productos
                             function mostrarModalPedido(codigoPedido) {
-                            // Obtener el modal y el cuerpo del modal
-                                const modal = document.getElementById('modalPedido5998');
-                                const modalBody = document.getElementById('modalBody8899');
-                                const datosPed = document.getElementById('dataPedido45698987');
-                            
-                                // Limpiar el cuerpo del modal
-                                modalBody.innerHTML = '';
-                                datosPed.innerHTML = '';
-                            
-                                // Buscar el pedido utilizando el codigoPedido
-                                const totalProductosPedidos = ventasOwner.find(pedido => pedido.codigoPedido === codigoPedido);
+    // Obtener el modal y el cuerpo del modal
+    const modal = document.getElementById('modalPedido5998');
+    const modalBody = document.getElementById('modalBody8899');
+    const datosPed = document.getElementById('dataPedido45698987');
 
-                                // Verificar si se encontró el pedido
-                                if (!totalProductosPedidos) {
-                                    console.error('Pedido no encontrado');
-                                    return;
-                                }
-                            
-                                // Función para formatear el número como moneda (pesos) con puntos y comas
-                                function formatCurrency(amount) {
-                                    return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-                                }
-                            
-                                const totoProd = totalProductosPedidos.totalProductos;
-                                const totMoney = totalProductosPedidos.TotalCompra;
-                                const satatus = totalProductosPedidos.statusEnvio;
-                            
-                                // Crear el título del modal con el nombre del producto
-                                const titulo4 = document.createElement('p');
-                                titulo4.textContent = `Estado del pedido: ${satatus}`;
-                                const titulo3 = document.createElement('p');
-                                titulo3.textContent = `Cantidad total de productos: ${totoProd}`;
-                                const titulo2 = document.createElement('p');
-                                titulo2.textContent = `Total de la compra: ${formatCurrency(totMoney)}`;
-                            
-                                datosPed.appendChild(titulo2);
-                                datosPed.appendChild(titulo3);
-                                datosPed.appendChild(titulo4);
-                            
-                                // Crear un contenedor de rejilla para las tarjetas
-                                const row = document.createElement('div');
-                                row.classList.add('row');
-                            
-                                totalProductosPedidos.listaProductos.forEach(pedido => {
-                                    // Crear una columna para la tarjeta
-                                    const col = document.createElement('div');
-                                    col.classList.add('col-12', 'col-sm-12', 'col-md-2', 'col-lg-12'); // Clases responsivas
+    // Limpiar el contenido del modal
+    modalBody.innerHTML = '';
+    datosPed.innerHTML = '';
 
-                                    // Crear la tarjeta
-                                    const card = document.createElement('div');
-                                    card.classList.add('card', "w100", 'h-100', "m-4");
-                                    card.style.width = 'auto'; // Ajustar el ancho de la tarjeta para que coincida con la imagen
+    // Buscar el pedido utilizando el codigoPedido
+    const totalProductosPedidos = ventasOwner.find(pedido => pedido.codigoPedido === codigoPedido);
 
-                                    // Crear el título de la tarjeta con el nombre del producto
-                                    const cardHeader = document.createElement('div');
-                                    cardHeader.classList.add('card-header');
-                                    const titulo = document.createElement('h5');
-                                    titulo.textContent = `${pedido.nombreProd}`;
-                                    cardHeader.appendChild(titulo);
-                                    card.appendChild(cardHeader);
+    // Verificar si se encontró el pedido
+    if (!totalProductosPedidos) {
+        console.error('Pedido no encontrado');
+        return;
+    }
 
-                                    // Mostrar la imagen del producto
-                                    const cardBody = document.createElement('div');
-                                    cardBody.classList.add('card-body', 'text-center');
-                                    const imagen = document.createElement('img');
-                                    imagen.src = pedido.imgProd;
-                                    imagen.alt = `Imagen de ${pedido.nombreProd}`;
-                                    imagen.style.width = '160px'; // Ajustar el ancho de la imagen
-                                    imagen.style.height = '90px';
-                                    cardBody.appendChild(imagen);
+    // Función para formatear el número como moneda (pesos) con puntos y comas
+    function formatCurrency(amount) {
+        return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    }
 
-                                    // Calcular el subtotal
-                                    const subtotal = pedido.precio * pedido.cantidadProductos;
+    const totoProd = totalProductosPedidos.totalProductos;
+    const totMoney = totalProductosPedidos.TotalCompra;
+    const status = totalProductosPedidos.statusEnvio;
 
-                                    // Formatear el subtotal como moneda con puntos y comas
-                                    const formattedSubtotal = formatCurrency(subtotal);
+    // Crear elementos de texto para mostrar los detalles generales del pedido
+    const titulo4 = document.createElement('p');
+    titulo4.textContent = `Estado del pedido: ${status}`;
+    const titulo3 = document.createElement('p');
+    titulo3.textContent = `Cantidad total de productos: ${totoProd}`;
+    const titulo2 = document.createElement('p');
+    titulo2.textContent = `Total de la compra: ${formatCurrency(totMoney)}`;
 
-                                    // Crear elementos para cada propiedad del pedido
-                                    const propiedadesPedido = [
-                                        { etiqueta: 'Precio', valor: formatCurrency(pedido.precio) },
-                                        { etiqueta: 'Cantidad', valor: pedido.cantidadProductos },
-                                        { etiqueta: 'Subtotal', valor: formattedSubtotal },
-                                    ];
+    datosPed.appendChild(titulo2);
+    datosPed.appendChild(titulo3);
+    datosPed.appendChild(titulo4);
 
-                                    // Crear una lista para las propiedades del pedido
-                                    const listaInfoPedido = document.createElement('ul');
-                                    listaInfoPedido.classList.add('list-group', 'list-group-flush');
+    // Crear un contenedor de rejilla para las tarjetas de productos
+    const row = document.createElement('div');
+    row.classList.add('row');
 
-                                    // Recorrer las propiedades del pedido y crear elementos para cada una
-                                    propiedadesPedido.forEach(propiedad => {
-                                        const listItem = document.createElement('li');
-                                        listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-left');
-                                        listItem.style.margin = '0.5rem'; // Agregar margen de 1.5rem
-                                        const label = document.createElement('span');
-                                        label.textContent = propiedad.etiqueta;
-                                        const value = document.createElement('span');
-                                        value.textContent = propiedad.valor;
-                                        value.style.marginLeft = '10px'; // Espacio entre la etiqueta y el valor
-                                        listItem.appendChild(label);
-                                        listItem.appendChild(value);
-                                        listaInfoPedido.appendChild(listItem);
-                                    });
+    totalProductosPedidos.listaProductos.forEach(pedido => {
+        // Crear una columna para cada tarjeta
+        const col = document.createElement('div');
+        col.classList.add('col-12', 'col-sm-6', 'col-md-4', 'mb-3'); // Ajuste responsivo para las tarjetas
 
-                                    // Agregar la lista de propiedades al cuerpo de la tarjeta
-                                    cardBody.appendChild(listaInfoPedido);
-                                    card.appendChild(cardBody);
-                                    col.appendChild(card);
-                                    row.appendChild(col);
-                                });
+        // Crear la tarjeta
+        const card = document.createElement('div');
+        card.classList.add('card', 'h-100', 'shadow-sm');
 
-                                // Agregar la fila al cuerpo del modal
-                                modalBody.appendChild(row);
+        // Título de la tarjeta
+        const cardHeader = document.createElement('div');
+        cardHeader.classList.add('card-header', 'text-center');
+        const titulo = document.createElement('h5');
+        titulo.textContent = pedido.nombreProd;
+        cardHeader.appendChild(titulo);
+        card.appendChild(cardHeader);
 
-                                // Mostrar el modal
-                                const modalBootstrap = new bootstrap.Modal(modal);
-                                modalBootstrap.show();
+        // Cuerpo de la tarjeta y contenedor de imagen
+        const cardBody = document.createElement('div');
+        cardBody.classList.add('card-body', 'text-center');
 
-                            }
+        const imagen = document.createElement('img');
+        imagen.src = pedido.imgProd;
+        imagen.alt = `Imagen de ${pedido.nombreProd}`;
+        imagen.classList.add('img-fluid'); // Imagen responsiva
+        imagen.style.maxHeight = '150px'; // Altura máxima
+        cardBody.appendChild(imagen);
+
+        // Calcular el subtotal
+        const subtotal = pedido.precio * pedido.cantidadProductos;
+        const formattedSubtotal = formatCurrency(subtotal);
+
+        // Crear lista para las propiedades del pedido
+        const propiedadesPedido = [
+            { etiqueta: 'Precio', valor: formatCurrency(pedido.precio) },
+            { etiqueta: 'Cantidad', valor: pedido.cantidadProductos },
+            { etiqueta: 'Subtotal', valor: formattedSubtotal }
+        ];
+
+        const listaInfoPedido = document.createElement('ul');
+        listaInfoPedido.classList.add('list-group', 'list-group-flush');
+
+        propiedadesPedido.forEach(propiedad => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between');
+            const label = document.createElement('span');
+            label.textContent = propiedad.etiqueta;
+            const value = document.createElement('span');
+            value.textContent = propiedad.valor;
+            listItem.appendChild(label);
+            listItem.appendChild(value);
+            listaInfoPedido.appendChild(listItem);
+        });
+
+        cardBody.appendChild(listaInfoPedido);
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        row.appendChild(col);
+    });
+
+    // Agregar las tarjetas al cuerpo del modal
+    modalBody.appendChild(row);
+
+    // Mostrar el modal
+    const modalBootstrap = new bootstrap.Modal(modal);
+    modalBootstrap.show();
+}
+
                             function exportarAExcel(ventasOwner) {
         try {
             // Filtrar datos para eliminar idCliente e idDueno
@@ -6715,7 +7064,7 @@ card7.appendChild(cardFooterEnv);
     <tr class="table-success">
         <td><strong>Puedes Retirar:</strong></td>
         <td class="text-right">
-            ${montoDisponible < 0 ? '<strong>No puedes retirar</strong>' : formatoPesos(montoDisponible)}
+            ${montoDisponible < 0 ? '<strong>Aún no puedes retirar</strong>' : formatoPesos(montoDisponible)}
         </td>
     </tr>
                                         </tbody>
@@ -6985,7 +7334,7 @@ card7.appendChild(cardFooterEnv);
 
         <!-- Modal para ver la lista de pedidos de ventas y estadisticas -->
         <div class="modal fade" id="modalPedido5998" tabindex="-1" aria-labelledby="modalPedidoLabel" aria-hidden="true" style="z-index: 99999999999999999999 !important;">
-            <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalPedidoLabel">Lista de productos de tu venta.</h5>
@@ -6994,7 +7343,7 @@ card7.appendChild(cardFooterEnv);
                     <div class="modal-body" align="center">
                         <p id="dataPedido45698987"></p>
                         <!-- Encabezado del modal -->
-                        <div id="modalBody8899">
+                        <div id="modalBody8899" class="row">
                             <!-- Cuerpo del modal -->
                         </div>
                     </div>
@@ -7115,7 +7464,7 @@ card7.appendChild(cardFooterEnv);
 
                         <script>
                             let country1 = {}
-
+                            let basicData = JSON.parse(sessionStorage.getItem("datosBasicos"));
                             document.addEventListener('DOMContentLoaded', async function() {
                                 // Inicializa el popup
                                 var popup = L.popup();
@@ -7137,7 +7486,7 @@ card7.appendChild(cardFooterEnv);
                                 // Función para obtener información de dirección basada en coordenadas utilizando la API de OpenCage
 
                                 async function obtenerDireccion(latitud, longitud, callback) {
-    let apiKey = basicData.data.ConfigsOne[0].apiKeyMap; // Reemplaza con tu propia API key
+    let apiKey = basicData.apiKeyMap; // Reemplaza con tu propia API key
     var url = `https://api.opencagedata.com/geocode/v1/json?q=${latitud}+${longitud}&key=${apiKey}`;
 
     fetch(url)
@@ -7320,7 +7669,7 @@ card7.appendChild(cardFooterEnv);
                                     // Llamar a la función para obtener la dirección
                                     obtenerDireccion(direccion);
                                     function obtenerDireccion(direccion) {
-                                        var apiKey = basicData.data.ConfigsOne[0].apiKeyMap; // Recuerda reemplazar con tu propia API key
+                                        var apiKey = basicData.apiKeyMap; // Recuerda reemplazar con tu propia API key
                                         const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(direccion)}&key=${apiKey}`;
                                         fetch(url)
                                             .then(response => response.json())
@@ -7536,9 +7885,9 @@ card7.appendChild(cardFooterEnv);
             //console.log("Que urlCpanel encontro??????????????????????????????????????", urlCpanel)
 
             let dataMP = {}
-            // const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
-            const idEnpointCheq = basicData.data.endpointTokensArray2
-            if (!basicData) {
+            const dataBasic = JSON.parse(sessionStorage.getItem('datosBasicos'));
+            const idEnpointCheq = dataBasic.ArTokenPublicMP
+            if (!dataBasic) {
                 reloadPage()
                 //location.reload();
             }

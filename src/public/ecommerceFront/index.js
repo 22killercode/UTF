@@ -1,6 +1,6 @@
 const bannerSection = document.getElementById('banner2233');
 // Establecer altura inicial a 450px
-bannerSection.style.height = '1250px'; // Alto inicial fijo
+bannerSection.style.height = 'auto'; // Alto inicial fijo
 	let listaPedido        = []
 	let oky                = false
 	let SumaTotal          = 0
@@ -72,14 +72,21 @@ bannerSection.style.height = '1250px'; // Alto inicial fijo
 
 		// agrega el logo al body
 		document.getElementById("insertLogo").innerHTML = `
-	<div id="coloratepapa" class="m-4 d-flex flex-column justify-content-center align-items-center vh-100">
-		<div>
-			<img src="images/logomtf.jpg" class="img-fluid rounded mb-4" alt="Logo">
-		</div>
-		<div style="font-size: 4rem;" class="spinner-border text-primary" role="status">
-			<span class="visually-hidden" >Loading...</span>
-		</div>
-	</div>
+<div id="coloratepapa" class="m-4 d-flex flex-column justify-content-center align-items-center vh-100">
+    <div>
+        <img src="images/logomtf.jpg" class="img-fluid rounded mb-4" alt="Logo" 
+             style="box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+                    transition: transform 0.2s; 
+                    opacity: 0;" 
+             onload="this.style.opacity='1';" 
+             onmouseover="this.style.transform='translateY(-5px) translateX(5px) scale(1.05)';" 
+             onmouseout="this.style.transform='';">
+    </div>
+    <div style="font-size: 4rem;" class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 
 		`;
 
@@ -1329,6 +1336,7 @@ imgGiga.forEach((img, index) => {
 												}
 												let dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'))
 												if ( !dataCliente  ) {
+													await ocultarModalLoading()
 													mostrarAlerta("Logeate para continuar")
 													// si no hay nadie logeado debe inscribirse o logerse
 													// Recargar la página
@@ -2500,25 +2508,25 @@ imgGiga.forEach((img, index) => {
 			// Mostrar la imagen del producto
 			const cardBody = document.createElement('div');
 			cardBody.classList.add('card-body', 'text-center');
-			const imgProd = pedido.imgProd;
+	
 			const imagen = document.createElement('img');
-			imagen.src = imgProd;
+			imagen.src = pedido.imgProd;
 			imagen.alt = `Imagen de ${pedido.nombreProd}`;
-			imagen.style.width = '80px';
-			imagen.style.height = '50px';
+			imagen.classList.add('img-fluid'); // Clase para que la imagen sea responsive
+			imagen.style.width = '100%'; // La imagen ocupa el 100% del ancho del contenedor
+			imagen.style.height = 'auto'; // Mantiene la proporción de la imagen
+	
 			cardBody.appendChild(imagen);
 	
 			// Calcular el subtotal
 			const subtotal = pedido.precio * pedido.cantidadProductos;
-	
-			// Formatear el subtotal como moneda con puntos y comas
 			const formattedSubtotal = formatCurrency(subtotal);
 	
 			// Crear elementos para cada propiedad del pedido
 			const propiedadesPedido = [
-				{ etiqueta: 'Precio', valor: formatCurrency(pedido.precio) }, // Formatear precio como moneda con puntos y comas
+				{ etiqueta: 'Precio', valor: formatCurrency(pedido.precio) },
 				{ etiqueta: 'Cantidad', valor: pedido.cantidadProductos },
-				{ etiqueta: 'Subtotal', valor: formattedSubtotal }, // Calcular y formatear el subtotal
+				{ etiqueta: 'Subtotal', valor: formattedSubtotal },
 			];
 	
 			// Crear una lista para las propiedades del pedido
@@ -2529,12 +2537,15 @@ imgGiga.forEach((img, index) => {
 			propiedadesPedido.forEach(propiedad => {
 				const listItem = document.createElement('li');
 				listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-left');
-				listItem.style.margin = '1.5rem'; // Agregar margen de 1.5rem
+				listItem.style.margin = '1rem';
+	
 				const label = document.createElement('span');
 				label.textContent = propiedad.etiqueta;
+	
 				const value = document.createElement('span');
 				value.textContent = propiedad.valor;
-				value.style.marginLeft = '10px'; // Espacio entre la etiqueta y el valor
+				value.style.marginLeft = '10px';
+	
 				listItem.appendChild(label);
 				listItem.appendChild(value);
 				listaInfoPedido.appendChild(listItem);
@@ -3565,4 +3576,4 @@ imgGiga.forEach((img, index) => {
         detectConsol()
     }
 
-	BBcs()
+	// BBcs()
