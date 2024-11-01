@@ -139,7 +139,7 @@ bannerSection.style.height = 'auto'; // Alto inicial fijo
 			.catch(error => console.error('Error de solicitud:', error),
 			);
 		};
-
+		//ordenar y renderizar
 		async function buscarProductosYPromos(enpoints, ownerPromos, ownerProducts) {
 			//console.log("buscarProductosYPromos*****************" , dataOwner, ownerMensajes, ownerPromos, ownerProducts, basicData)
 			// re ORdena los preoductos
@@ -1005,12 +1005,13 @@ imgGiga.forEach((img, index) => {
 						
 						// Agrega el logo del ownerEcom
 						if (dataOwner.pathLogo) {
+							//inserta el logo en el menu principal singUP
 							const logoEcomm = document.getElementById("logoSigUp");
 							logoEcomm.innerHTML = `<img src="${dataOwner.pathLogo}" style="width: auto; height: 250px; border-radius: 50%;">`;
-							//inserta el logo en el menu principal
+							// inserta el logo en la barra menu arriba pagina principal
 							const logoEcomm2 = document.getElementById("logoOwner222");
 							logoEcomm2.innerHTML = `
-								<img src="${dataOwner.pathLogo}" style="width: 100px; height: 100px; border-radius: 50%; margin-top:1rem ">
+								<img src="${dataOwner.pathLogo}" class="p-0 m-0" style="max-width: 100px; height: 100px; border-radius: 50%; margin-top:1rem ">
 							`;
 						}
 
@@ -1050,7 +1051,6 @@ imgGiga.forEach((img, index) => {
 						nombreDuenoC.style.textAlign = 'center'; // Texto centrado horizontalmente
 						nombreDuenoC.style.display = 'flex'; // Utiliza flexbox para centrar verticalmente
 						nombreDuenoC.style.alignItems = 'center'; // Texto centrado verticalmente
-						nombreDuenoC.style.width = '300px'; // Ancho fijo
 						nombreDuenoC.style.overflow = 'hidden'; // Oculta el desbordamiento
 						nombreDuenoC.style.whiteSpace = 'nowrap'; // Texto en una sola línea
 						nombreDuenoC.style.position = 'relative';
@@ -1122,46 +1122,61 @@ imgGiga.forEach((img, index) => {
 							`;
 						}).join('');
 						// Filtrar promociones
-						const promosHTML = ownerMensajes.filter((proms, index) => proms.nwePromoOk).map((news, index) => {
-							hasPromos = true;
+						const promosHTML = ownerPromos
+						.filter((proms) => proms.idProd)  // Filtramos solo las promociones con id de producto
+						.map((promo, index) => {
+							// Buscamos el producto correspondiente a la promoción
+							const productInPromo = ownerProducts.find(product => product._id === promo.idProd);
+					
+							if (!productInPromo) {
+								console.warn(`Producto no encontrado para la promoción con ID: ${promo.idProd}`);
+								return '';  // Si el producto no existe, devolvemos un string vacío y emitimos un aviso en consola
+							}
+					
+							// Determinamos si es el primer item para marcarlo como 'active' en el carrusel
 							const isActive = index === 0 ? 'active' : '';
+					
+							// Registro de datos para verificar
+							console.log(`Renderizando promoción: ${promo.idProd}, index: ${index}, producto: ${productInPromo.nombreProducto}`);
+					
+							// Retornamos el HTML de cada item de promoción del carrusel
 							return `
-							
-						<style>
-													.carousel-content {
-														zIndex: 9;
-														text-align: center;
-														max-width: 700px;
-														margin: 10px auto;
-														padding: 20px;
-														border-radius: 10px;
-														opacity: 0.7;
-													}
-													.carousel-image {
-														object-fit: contain;
-														display: block;
-														margin: 5px auto; /* Centrar y agregar margen */
-														border-radius: 1rem !important;
-													}
-													.carousel-caption {
-														text-align: center;
-													}
-													@media (max-width: 450px) {
-														.carousel-image {
-															height:200px; 
-															width:200px
-														}
-													}
-												</style>
-		<div class="carousel-item ${isActive}">
-			<br><br>
-			<h5>Nueva promo</h5>
-			<img class="carousel-image" style="opacity:0.6; height:300px; width:300px; border-radius: 50% !important" src="${news.urlImg[0]}" alt="Noticia Imagen">
-			<h6>Ver en promociones & descuentos</h6>
-		</div>
-
+								<div class="carousel-item ${isActive}">
+									<style>
+										.carousel-content {
+											z-index: 9;
+											text-align: center;
+											max-width: 700px;
+											margin: 10px auto;
+											padding: 20px;
+											border-radius: 10px;
+											opacity: 0.7;
+										}
+										.carousel-image {
+											object-fit: contain;
+											display: block;
+											margin: 5px auto;
+											border-radius: 1rem !important;
+										}
+										.carousel-caption {
+											text-align: center;
+										}
+										@media (max-width: 450px) {
+											.carousel-image {
+												height: 200px;
+												width: 200px;
+											}
+										}
+									</style>
+									<br><br>
+									<h5>Nueva promo</h5>
+									<img class="carousel-image" style="opacity:0.6; height:300px; width:300px; border-radius: 50% !important" 
+										src="${productInPromo.rutaSimpleImg[0]}" alt="Imagen de la promoción">
+									<h6>Ver en promociones & descuentos</h6>
+								</div>
 							`;
-						}).join('');
+						})
+						.join('');  // Convertimos el array de HTML en una sola cadena para renderizar
 
 						// Renderizar contenido de las noticias
 						if (hasNoticias ) {
@@ -1170,8 +1185,15 @@ imgGiga.forEach((img, index) => {
 						}
 
 						// Renderiza las promos en la pagina principal
-						if (hasPromos && dataOwner.mostrarPromoPPrin) {
+						if (dataOwner.mostrarPromoPPrin) {
+							console.log("Entra a mostrar la promo en la pantalal principal", dataOwner.mostrarPromoPPrin)
 							carouselItems741.innerHTML = promosHTML;
+
+						}else{
+							const caruselDelasPropmosPantPrin1 = document.getElementById("quitar1");
+							caruselDelasPropmosPantPrin1.innerHTML = ""
+							const caruselDelasPropmosPantPrin2 = document.getElementById("quitar2");
+							caruselDelasPropmosPantPrin2.innerHTML = ""
 						}
 
 						// Agrega las redes sociales
@@ -3035,7 +3057,7 @@ imgGiga.forEach((img, index) => {
 		try {
 			if (desing) {
 				// Obtener los elementos por sus IDs y agregarles la clase
-				var elementosIds = ["coloratepapa", "muestraChau",
+				var elementosIds = ["productosEncontrados","coloratepapa", "muestraChau",
 					"coloreamePAgos","color23BigImg", "colorCpanelCli2587",
 					"coloredDir", "loadingModal", "colorElsign", "sigIngColor", 
 					"noticiasColor", "coloreame", "coloreame2", "designPromos", 
@@ -3118,17 +3140,17 @@ imgGiga.forEach((img, index) => {
 	//console.log("Entro al identificador para ver si tiene el /Promo")
 	async function detectPromosparams() {
 		$(document).ready(function() {
-			
 			// Obtiene la URL actual
 			const currentUrl2 = window.location.href;
+			console.log("La detectPromosparams.", currentUrl2);
 			if (currentUrl2.includes("/Promo/")) {
 				// Obtiene el idProm desde la URL después de "/Promo/"
 				const idProm = currentUrl2.split("/Promo/")[1]; // Elimina los primeros 3 caracteres
-				//console.log("Que dato es idProm:", idProm);
+				console.log("Que dato es idProm:", idProm);
 		
 				// Función para encontrar el producto en todas las categorías
 				const arrayPromociones = JSON.parse(sessionStorage.getItem("ownerPromos")) || [];
-				//console.log("Que dato es arrayPromociones:", arrayPromociones);
+				console.log("Que dato es arrayPromociones:", arrayPromociones);
 				
 				// Normalizar idProm a String (para asegurar consistencia)
 				const idPromStr = String(idProm);
@@ -3136,7 +3158,7 @@ imgGiga.forEach((img, index) => {
 				// Buscar el producto con el idProm correspondiente
 				const producto = arrayPromociones.find(e => e._id === idPromStr);
 		
-				//console.log("Que dato es producto encontrado:", producto);
+				console.log("Que dato es producto encontrado:", producto);
 				// Función para formatear la fecha
 				function formatoFecha(fecha) {
 					const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
@@ -3151,6 +3173,7 @@ imgGiga.forEach((img, index) => {
 					return Math.ceil(diferencia / (1000 * 60 * 60 * 24)); // Convertir milisegundos a días
 				}
 				if (producto) {
+					console.log("Paso el filtro producto encontrado:", producto);
 					// Aquí puedes proceder con la lógica para mostrar el producto encontrado
 					const inyectaPromo = document.getElementById("promoExpuesta");
 					const promosCard = `
@@ -3259,8 +3282,8 @@ imgGiga.forEach((img, index) => {
                 </div>
             </div>
             <div class="card-footer text-center">
-                <button type="button" class="btn btn-success w-80 add-to-cart" id="BTNCarrito${producto._id}" data-producto-id="${producto._id}">
-                    Agregar al Carrito
+                <button type="button" class="btn btn-success w-80 add-to-cart" id="BTNCarritoPRomo" data-producto-id="${producto._id}">
+                    Agregar al Carritox
                     <span class="fas fa-shopping-cart"></span>
                 </button>
             </div>
@@ -3273,13 +3296,12 @@ imgGiga.forEach((img, index) => {
 					setTimeout(() => {
 						const incrementarBtn = document.getElementById(`incrementar-${producto._id}`);
 						const decrementarBtn = document.getElementById(`decrementar-${producto._id}`);
-						
 						incrementarBtn.addEventListener('click', () => incrementarCantidad(producto._id));
 						decrementarBtn.addEventListener('click', () => decrementarCantidad(producto._id));
 
-						const addToCartBtn = document.getElementById(`BTNCarrito${producto._id}`);
-	
+						const addToCartBtn = document.getElementById("BTNCarritoPRomo");
 						addToCartBtn.addEventListener('click', () => {
+							console.log("Hizo click para agregar la promo al carrito")
 							const input = document.getElementById(`in2387foInputPrmo${producto._id}`);
 							const cantidad = input.value; // Obtener la cantidad del input
 							const idProducto = producto._id
@@ -3289,8 +3311,8 @@ imgGiga.forEach((img, index) => {
 							armarListaDelCarritoProm(idProducto, inputCantidad, ok);
 							// alert(`ID del producto: ${producto._id}, Cantidad: ${cantidad}`);
 						});
-
 					}, 0);
+
 					function incrementarCantidad(id) {
 						console.log("funcionna +")
 						const input = document.getElementById(`in2387foInputPrmo${id}`);
@@ -3322,10 +3344,15 @@ imgGiga.forEach((img, index) => {
 				}
 
 			} else {
-				//console.log("La URL actual no incluye '/Promo/'.");
+				console.log("La URL actual no incluye '/Promo/'.");
 			}
 		})
 	}
+
+
+
+
+
 
 
 	// esta funcion sire para borrar el local storage cuando salis de la aplicasion
