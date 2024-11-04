@@ -1214,92 +1214,94 @@ function reloadPage() {
         document.getElementById('increase-quantity').addEventListener('click', () => adjustQuantity(1));
 
         async function calculateMembership() {
-            quantity = parseInt(document.getElementById('product-quantity').value);
-            const duration = parseInt(document.getElementById('membership-duration').value);
-            tiempoContratoO = duration;
+    const quantity = parseInt(document.getElementById('product-quantity').value);
+    const duration = parseInt(document.getElementById('membership-duration').value);
+    tiempoContratoO = duration;
 
-            let totalPrice = basePrice;
-            let totalExtraPrice = 0;
-            const discountedProductPrice = extraProductPrice * discount;
+    let totalPrice = basePrice;
+    let totalExtraPrice = 0;
+    const discountedProductPrice = extraProductPrice * discount;
 
-            if (quantity > 10) {
-                totalExtraPrice = (quantity - 10) * discountedProductPrice;
-            }
+    if (quantity > 10) {
+        totalExtraPrice = (quantity - 10) * discountedProductPrice;
+    }
 
-            finalPrice = ((quantity * extraProductPrice * discount) / 12 * duration);
-            const precioSinDesc = (quantity * extraProductPrice);
+    finalPrice = ((quantity * extraProductPrice * discount) / 12 * duration);
+    const precioSinDesc = (quantity * extraProductPrice);
 
-            if (quantity >= 25) {
-                document.getElementById('discount-code-section').style.display = 'block';
-            } else {
-                document.getElementById('discount-code-section').style.display = 'none';
-            }
+    if (quantity >= 25) {
+        document.getElementById('discount-code-section').style.display = 'block';
+    } else {
+        document.getElementById('discount-code-section').style.display = 'none';
+    }
 
-            let discountAmount = 0;
-            subFinalPrice = finalPrice;
-            let subFinalPrice2 = 0;
+    let discountAmount = 0;
+    subFinalPrice = finalPrice;
+    let subFinalPrice2 = 0;
 
-            if (quantity >= 25 && applyAdditionalDiscount) {
-                discountAmount = finalPrice * codeDiscount;
-                subFinalPrice2 = subFinalPrice;
-                finalPrice = subFinalPrice2 - discountAmount;
-                subFinalPrice = null;
-            } else {
-                applyAdditionalDiscount = false;
-            }
+    if (quantity >= 25 && applyAdditionalDiscount) {
+        discountAmount = finalPrice * codeDiscount;
+        subFinalPrice2 = subFinalPrice;
+        finalPrice = subFinalPrice2 - discountAmount;
+        subFinalPrice = null;
+    } else {
+        applyAdditionalDiscount = false;
+    }
 
-            if (quantity <= 10) {
-                console.log("Que dolares cotiza????????????", cotizacionDolar)
-                inserPrecioyCant.innerHTML = "";
-                document.getElementById('membership-value').innerHTML = `
-                    <h5 align="center" id="precioFinal" style="color:green">
-                        10 productos distintos con stock ilimitado. <br>
-                        Periodo membresia Premium: ${duration} meses:<br> 
-                        $${(basePrice / 12 * duration ).toFixed(2)} dólares.<br>
-                        $${(basePrice / 12 * duration * cotizacionDolar ).toFixed(2)} pesos.<br>
-                    </h5>
-                `;
-                inserPrecioyCant.innerHTML = `
-                    <h4 align="center" id="precioFinal" style="color:green">
-                        10 productos distintos con stock ilimitado. <br>
-                        Periodo membresia Premium: ${duration} meses:<br> 
-                        $${(basePrice / 12 * duration ).toFixed(2)} dólares.<br>
-                        $${(basePrice / 12 * duration * cotizacionDolar).toFixed(2)} pesos.<br>                                        
-                    </h4>
-                `;
-            } else {
-                inserPrecioyCant.innerHTML = "";
-                document.getElementById('membership-value').innerHTML = `
-                    <p style="color:red"> 
-                        Precio x producto sin descuento: $${extraProductPrice.toFixed(2)} dólares<br>
-                        Precio sin descuento: $${precioSinDesc.toFixed(2)} dólares
-                    </p>
-                    <p style="margin-top:-1rem"> 
-                        Descuento x Producto (50%):  $${discountedProductPrice.toFixed(2)} dólares<br>
-                        ${quantity >= 25 && applyAdditionalDiscount ? `
-                        Sub-Precio final: $${subFinalPrice2.toFixed(2)} dólares
-                        <br>
-                        Descuento 10% por código:  $${discountAmount.toFixed(2)} dólares
-                        ` : ''}
-                    </p>
-                    <h3 align="center" id="precioFinal" style="color:green">  
-                        Precio final: $${(subFinalPrice || finalPrice).toFixed(2)} dólares
-                        $${((subFinalPrice || finalPrice) * cotizacionDolar ).toFixed(2)} pesos.<br>
-                    </h3>
-                `;
-                inserPrecioyCant.innerHTML = `
-                    <h4> 
-                        Precio para ${quantity} productos distintos con stock ilimitado, por un periodo de ${duration} meses:
-                        <br>
-                        $${((subFinalPrice * cotizacionDolar) || (finalPrice * cotizacionDolar))
-                            .toFixed(2)
-                            .replace('.', ',')
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')} Pesos.
-                        <br>
-                    </h4> 
-                `;
-            }
-        }
+    // Formateador para valores en pesos
+    const formatCurrency = (value) => 
+        new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+
+    if (quantity <= 10) {
+        console.log("Que dolares cotiza????????????", cotizacionDolar)
+        inserPrecioyCant.innerHTML = "";
+        document.getElementById('membership-value').innerHTML = `
+            <h5 align="center" id="precioFinal" style="color:green">
+                10 productos distintos con stock ilimitado. <br>
+                Periodo membresia Premium: ${duration} meses:<br> 
+                $${(basePrice / 12 * duration).toFixed(2)} dólares.<br>
+                ${formatCurrency(basePrice / 12 * duration * cotizacionDolar)} pesos.<br>
+            </h5>
+        `;
+        inserPrecioyCant.innerHTML = `
+            <h4 align="center" id="precioFinal" style="color:green">
+                10 productos distintos con stock ilimitado. <br>
+                Periodo membresia Premium: ${duration} meses:<br> 
+                $${(basePrice / 12 * duration).toFixed(2)} dólares.<br>
+                ${formatCurrency(basePrice / 12 * duration * cotizacionDolar)} pesos.<br>                                        
+            </h4>
+        `;
+    } else {
+        inserPrecioyCant.innerHTML = "";
+        document.getElementById('membership-value').innerHTML = `
+            <p style="color:red"> 
+                Precio x producto sin descuento: $${extraProductPrice.toFixed(2)} dólares<br>
+                Precio sin descuento: $${precioSinDesc.toFixed(2)} dólares
+            </p>
+            <p style="margin-top:-1rem"> 
+                Descuento x Producto (50%):  $${discountedProductPrice.toFixed(2)} dólares<br>
+                ${quantity >= 25 && applyAdditionalDiscount ? `
+                Sub-Precio final: $${subFinalPrice2.toFixed(2)} dólares
+                <br>
+                Total descuento del 10% por código de descuento comercial:  $${discountAmount.toFixed(2)} dólares
+                ` : ''}
+            </p>
+            <h3 align="center" id="precioFinal" style="color:green">  
+                Precio final: $${(subFinalPrice || finalPrice).toFixed(2)} dólares
+                ${formatCurrency((subFinalPrice || finalPrice) * cotizacionDolar)} pesos.<br>
+            </h3>
+        `;
+        inserPrecioyCant.innerHTML = `
+            <h4> 
+                Precio para ${quantity} productos distintos con stock ilimitado, por un periodo de ${duration} meses:
+                <br>
+                ${formatCurrency((subFinalPrice || finalPrice) * cotizacionDolar)}
+                Pesos.
+                <br>
+            </h4> 
+        `;
+    }
+}
 
         function toggleIncludes() {
             const includes = document.getElementById('includes');

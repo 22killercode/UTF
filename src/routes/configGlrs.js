@@ -6,7 +6,7 @@ const config = {
     tiempoParking: 3,
     comisionBasic : 16.5,
     preciosDolar:{
-        precioDolarAr: 1350,
+        precioDolarAr: 1200,
         precioDolarUy: 45,
         precioDolarCh: 100,
         precioDolarCl: 1542,
@@ -48,9 +48,9 @@ const config = {
     },
     cantImgXMemBasic : 3,
     cantImgXMemPremium : 5,
-    basePrice         : 1, // Precio base
+    basePrice         : 150, // Precio base
     precioDolarAr     : 1,
-    extraProductPrice : 0.5, // Precio por producto
+    extraProductPrice : 30, // Precio por producto
     discount          : 0.5, // Descuento del 50%
     codeDiscount      : 0.1,  // 10% de descuento adicional
     idConfig: 'sebaalfiEduNatyTere',
@@ -60,8 +60,8 @@ const config = {
     ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'APP_USR-8737d261-a71e-43fe-addd-03c0c056d282',
     ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-80741225863147-082714-acfe2d6b40dd4673cbeaafbc1b61c586-1781639407',
     //seba token vendedor
-    // ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'TEST-cd8d4068-bde9-4779-bded-b0054a0bc51c',
-    // ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'TEST-634616371095007-042315-22557fa3618160d8feb06b9824adcd37-540933245',
+    // ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || '    APP_USR-df9a0135-fdaf-44a2-93f9-3fc0bb59f7c7',
+    // ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-634616371095007-042315-679bbb6b519d73fa7ec61fa4f44fd486-540933245',
     transportEmail: {
         auth: {
             pass: process.env.EMAIL_PASS || 'Sebatbs@22', // Ajusta el valor predeterminado si es necesario
