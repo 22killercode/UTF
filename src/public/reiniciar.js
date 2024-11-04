@@ -32,9 +32,9 @@ urlServer = ""
 
             sessionStorage.setItem('endPointsIdTokensCpanel', JSON.stringify(endpoints));
             const cotiDolar = await cotizacionesDolaresPaises(basicData);
+            console.log("Que datos encontraron???????? cotizacionDolar", cotiDolar)
             basicData.cotizacionDolar = cotiDolar
             sessionStorage.setItem('datosBasicos', JSON.stringify(basicData));
-            console.log("Que datos encontraron???????? cotizacionDolar", basicData)
             return basicData
         } catch (error) {
             console.error('Error en la solicitud a /dataInfoTokensEtc:', error);
@@ -267,13 +267,13 @@ urlServer = ""
         }
     }
 
-    async function cotizacionesDolaresPaises(basicData) {
+    async function cotizacionesDolaresPaisesO(basicData) {
         if (!basicData) return null; // Devuelve null si no hay datos básicos
     
         try {
             // Realizar la solicitud a la API de tipos de cambio
             const response = await fetch('https://v6.exchangerate-api.com/v6/31ad520e8bd51c6c01112c4c/latest/USD');
-            if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
+            // if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
     
             // Parsear la respuesta en JSON y extraer las tasas de conversión
             const { conversion_rates } = await response.json();
@@ -337,6 +337,74 @@ urlServer = ""
             console.error("Hubo un error al encontrar la cotizacion del dolar por pais", error);
         }
     }
+    
+    async function cotizacionesDolaresPaises(basicData) {
+        if (!basicData) return null; // Verificar datos básicos
+    
+        let conversion_rates;
+    
+        try {
+            // Intentar obtener tasas de conversión de la API
+            const response = await fetch('https://v6.exchangerate-api.com/v6/31ad520e8bd51c6c01112c4c/latest/USD');
+            // response.ok = false;
+            if (response.ok) {
+                const data = await response.json();
+                conversion_rates = data.conversion_rates;
+            } else {
+                conversion_rates = null;
+            }
+        } catch (error) {
+            console.error("Error al obtener tasas de conversión:", error);
+            conversion_rates = null;
+        }
+    
+        // Definir cotizaciones por defecto y asignar de la API si existen
+        const cotizacionesDolar = {
+            "Argentina": conversion_rates?.ARS || 1300,
+            "Uruguay": conversion_rates?.UYU || 41,
+            "Chile": conversion_rates?.CLP || 959.7623,
+            "Colombia": conversion_rates?.COP || 4426.2805,
+            "Mexico": conversion_rates?.MXN || 20.1136,
+            "Peru": conversion_rates?.PAB || 1,
+            "Paraguay": conversion_rates?.PAB || 1,
+            "Bolivia": conversion_rates?.BOB || 6.9088,
+            "Costa Rica": conversion_rates?.CRC || 512.4233,
+            "Dominican Republic": conversion_rates?.DOP || 1,
+            "Panama": conversion_rates?.PAB || 1
+        };
+    
+        const apiKey = basicData.apiKeyMap;
+    
+        // Función para obtener la ubicación del usuario
+        async function obtenerUbicacion() {
+            if (!navigator.geolocation) {
+                console.error('Geolocalización no es compatible en este navegador.');
+                return null;
+            }
+    
+            try {
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+    
+                const { latitude, longitude } = position.coords;
+                const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`);
+                const data = await response.json();
+    
+                return data.results?.length ? { pais: data.results[0].components.country } : null;
+            } catch (error) {
+                console.error('Error al obtener la ubicación:', error);
+                return null;
+            }
+        }
+    
+        // Obtener la cotización del dólar según el país
+        const { pais } = await obtenerUbicacion() || {};
+        return pais && cotizacionesDolar[pais] ? Number(cotizacionesDolar[pais]) : 1;
+    }
+    
+    
+    
     
     
 
