@@ -268,90 +268,77 @@ urlServer = ""
     }
 
     async function cotizacionesDolaresPaises(basicData) {
-        if (basicData) {
-                //console.log("cotizacionesDolaresPaises", basicData.preciosDolar, basicData.apiKeyMap)
-                // Obtén la configuración de precios del dólar
-                const dataConfig = basicData
-                const preciosDolar = dataConfig.preciosDolar ||  null
-                const keyMap = dataConfig.apiKeyMap || null
-                //console.log("Desde la funcion cotizacionesDolaresPaises",preciosDolar)
-                const {
-                    precioDolarAr, precioDolarUy, precioDolarCh, precioDolarCl, precioDolarMx,
-                    precioDolarPr, precioDolarPa, precioDolarBo, precioDolarCr, precioDolarDr, precioDolarPn
-                } = preciosDolar;
-
-                // Define la cotización del dólar para cada país
-                const cotizacionesDolar = {
-                    "Argentina": precioDolarAr,
-                    "Uruguay": precioDolarUy,
-                    "Chile": precioDolarCh,
-                    "Colombia": precioDolarCl,
-                    "Mexico": precioDolarMx,
-                    "Peru": precioDolarPr,
-                    "Paraguay": precioDolarPa,
-                    "Bolivia": precioDolarBo,
-                    "Costa Rica": precioDolarCr,
-                    "Dominican Republic": precioDolarDr,
-                    "Panama": precioDolarPn
-                };
-
-                // Función para obtener la ubicación del usuario
-                async function obtenerUbicacion() {
-                    if (!navigator.geolocation) {
-                        console.error('Geolocalización no es compatible en este navegador.');
-                        return null;
-                    }
-
-                    try {
-                        const position = await new Promise((resolve, reject) => {
-                            navigator.geolocation.getCurrentPosition(resolve, reject);
-                        });
-
-                        const latitud = position.coords.latitude;
-                        const longitud = position.coords.longitude;
-                        const apiKey = keyMap; // Reemplaza con tu propia API key
-                        const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitud}+${longitud}&key=${apiKey}`;
-                        
-                        const response = await fetch(url);
-                        const data = await response.json();
-                        
-                        //console.error('Geolocalización SI es compatible en este navegador.', data.results);
-
-                        if (data.results && data.results.length > 0) {
-                            const direccion = data.results[0].components;
-                            const pais = direccion.country;
-                            return { pais, direccion };
-                        } else {
-                            console.error('No se encontraron resultados para la ubicación.');
-                            return null;
-                        }
-                    } catch (error) {
-                        console.error('Error al obtener la ubicación:', error);
-                        return null;
-                    }
+        if (!basicData) return null; // Devuelve null si no hay datos básicos
+    
+        try {
+            // Realizar la solicitud a la API de tipos de cambio
+            const response = await fetch('https://v6.exchangerate-api.com/v6/31ad520e8bd51c6c01112c4c/latest/USD');
+            if (!response.ok) throw new Error(`Error en la solicitud: ${response.status}`);
+    
+            // Parsear la respuesta en JSON y extraer las tasas de conversión
+            const { conversion_rates } = await response.json();
+            const cotizacionesDolar = {
+                "Argentina": conversion_rates.ARS || 1300,
+                "Uruguay": conversion_rates.UYU || 41,
+                "Chile": conversion_rates.CLP || 959.7623,
+                "Colombia": conversion_rates.COP || 4426.2805,
+                "Mexico": conversion_rates.MXN || 20.1136,
+                "Peru": conversion_rates.PAB || 1,
+                "Paraguay": conversion_rates.PAB || 1,
+                "Bolivia": conversion_rates.BOB || 6.9088,
+                "Costa Rica": conversion_rates.CRC || 512.4233,
+                "Dominican Republic": conversion_rates.DOP || 1,
+                "Panama": conversion_rates.PAB || 1
+            };
+    
+            const apiKey = basicData.apiKeyMap || null;
+    
+            console.log("Que cotizaciones de dolar por paises encontro???", cotizacionesDolar);
+    
+            // Función para obtener la ubicación del usuario
+            async function obtenerUbicacion() {
+                if (!navigator.geolocation) {
+                    console.error('Geolocalización no es compatible en este navegador.');
+                    return null;
                 }
-
-                // Función para obtener la cotización del dólar según el país
-                async function obtenerCotizacion() {
-                    try {
-                        const dataLugar = await obtenerUbicacion();
-                        if (dataLugar?.pais) {
-                            const cotiDolar = Number(cotizacionesDolar[dataLugar.pais]);
-                            return cotiDolar;
-                        } else {
-                            console.error('No se pudo obtener la ubicación.');
-                            return null;
-                        }
-                    } catch (error) {
-                        console.error('Error en la obtención de ubicación:', error);
+    
+                try {
+                    const position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject);
+                    });
+    
+                    const { latitude, longitude } = position.coords;
+                    const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`);
+                    const data = await response.json();
+    
+                    if (data.results?.length) {
+                        return { pais: data.results[0].components.country };
+                    } else {
+                        console.error('No se encontraron resultados para la ubicación.');
                         return null;
                     }
+                } catch (error) {
+                    console.error('Error al obtener la ubicación:', error);
+                    return null;
                 }
-
-                // Obtén y retorna la cotización del dólar
-                return await obtenerCotizacion();
+            }
+    
+            // Función para obtener la cotización del dólar según el país
+            async function obtenerCotizacion() {
+                const { pais } = await obtenerUbicacion() || {};
+                // Devuelve 1 si no hay país o no hay coincidencia en las cotizaciones
+                return pais && cotizacionesDolar[pais] ? Number(cotizacionesDolar[pais]) : 1;
+            }
+    
+            // Retorna la cotización del dólar
+            return await obtenerCotizacion();
+    
+        } catch (error) {
+            console.error("Hubo un error al encontrar la cotizacion del dolar por pais", error);
         }
     }
+    
+    
 
     function cerrarModalPorId(idModal) {
         // Obtener el elemento del modal por su ID
