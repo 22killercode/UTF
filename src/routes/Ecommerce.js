@@ -280,7 +280,8 @@ const configsGrl = require('../models/configsGrl');
                 if (await EcommUser.findOne({ emailOficial:email })) return res.status(400).json({ success:false, message: 'Correo electrónico ya registrado' });
 
 
-                    const dataUSerEcomm = new EcommUser({ 
+                    const dataUSerEcomm = new EcommUser({
+                        usuarioSuspendido:false, 
                         nombre, 
                         apellido,
                         emailOficial : email,

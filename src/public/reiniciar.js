@@ -879,4 +879,52 @@ urlServer = ""
 	}
 
 
+    async function olvidePass() {
+        mostrarModalLoading();
+        const email = prompt("Por favor, introduce tu correo electrónico: Si no tienes más acceso a tu correo, envíanos un email por contacto");
+
+            
+        if (!email) {
+            await ocultarModalLoading();
+            mostrarAlerta("Debes ingresar un correo electrónico para continuar.");
+            return;
+        }
+    
+        try {
+            const endpoint = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'))[100];
+            
+            if (!endpoint) {
+                await ocultarModalLoading();
+                mostrarAlerta("No se pudo encontrar el endpoint de recuperación de contraseña.");
+                return;
+            }
+    
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwToken}`
+                },
+                body: JSON.stringify({ email })
+            });
+    
+            await ocultarModalLoading();
+            
+            // Manejo de la respuesta
+            if (response.ok) {
+                const responseData = await response.json(); // Extraer el JSON
+                mostrarInfo(responseData.message); // Mostrar el mensaje del backend
+            } else {
+                const errorData = await response.json(); // Extraer el JSON de error
+                mostrarAlerta(errorData.message || "Ocurrió un error inesperado."); // Mostrar mensaje de error
+            }
+        } catch (error) {
+            await ocultarModalLoading();
+            mostrarAlerta("Ocurrió un error al enviar la solicitud. Por favor, verifica tu conexión e intenta nuevamente.");
+            console.error("Error:", error);
+        }
+    }
+
+
+
     //BBcs()

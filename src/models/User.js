@@ -18,6 +18,7 @@ const direccionSchema = new Schema({
 
 // Esquema de Usuario
 const UserSchema = new Schema({
+    usuarioSuspendido: { type: Boolean },
     codVend: { type: String },
     dominio: { type: Boolean },
     flagNews: { type: Boolean },

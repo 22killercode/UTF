@@ -1316,7 +1316,7 @@ imgGiga.forEach((img, index) => {
 								const currentURL = window.location.href;
 								const urlParams = new URLSearchParams(new URL(currentURL).search);
 								const statusCobro = urlParams.get('statusCobro');
-								//console.log("Que tiene statusCobro?", statusCobro);
+								console.log("Que tiene statusCobro?", statusCobro);
 								if (!statusCobro) {
 									//console.log("Encontro un pedido Que no a sido cobrado",statusCobro)
 									// Muestra una alerta dentro del modal si ya estas registrado
@@ -3349,12 +3349,6 @@ imgGiga.forEach((img, index) => {
 		})
 	}
 
-
-
-
-
-
-
 	// esta funcion sire para borrar el local storage cuando salis de la aplicasion
 	async function borrarsessionStorage() {
 		sessionStorage.removeItem("ownerEcom");
@@ -3370,6 +3364,7 @@ imgGiga.forEach((img, index) => {
 		sessionStorage.removeItem('ownerMensajes');
 		sessionStorage.removeItem('ownerProducts');
 		sessionStorage.removeItem('ownerPromos');
+		sessionStorage.clear()
 		return;
 	}
 

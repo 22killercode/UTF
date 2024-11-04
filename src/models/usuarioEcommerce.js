@@ -39,6 +39,7 @@ const direccionSchema = new Schema({
 });
 
 const UserEcommSchema = new Schema({
+    usuarioSuspendido: { type: Boolean },
     emailOficial: {
         type: String,
         required: true

@@ -91,6 +91,7 @@
 
             header{
                 width: 100% !important;
+                margin: 0 !important;
             }
 
             body{
@@ -119,37 +120,43 @@
         
 
         @media (max-width: 450px) {
+
+            header {
+                width: 100% !important;  /* Ocupar todo el ancho disponible */
+                margin: 0 auto !important;          /* Centrado automático si es necesario */
+            }
+
+
             #separador1{
                 margin: 2rem 0 !important
             }
+            header{
+                width: 100% !important;
+                margin: 0 !important;
+            }
 
-    /* Estilos generales para todos los tamaños de pantalla */
+            /* Estilos generales para todos los tamaños de pantalla */
 
-    html, body {
-        box-sizing: border-box;
-        width: 100vw !important;  /* Ocupar todo el ancho disponible */
-        margin: 0;
-        padding: 0;
-    }
+            html, body {
+                box-sizing: border-box;
+                width: 100vw !important;  /* Ocupar todo el ancho disponible */
+                margin: 0;
+                padding: 0;
+            }
 
-    header {
-        width: 100vw !important;  /* Ocupar todo el ancho disponible */
-        margin: 0 auto;          /* Centrado automático si es necesario */
-    }
+            .container {
+                width: 95%;
+                margin: 0 auto;
+                padding: 1rem;           /* Evitar que el contenido se pegue a los bordes */
+                display: flex;
+                flex-direction: column;  /* Alinea los hijos en columna para pantallas pequeñas */
+            }
 
-    .container {
-        width: 95%;
-        margin: 0 auto;
-        padding: 1rem;           /* Evitar que el contenido se pegue a los bordes */
-        display: flex;
-        flex-direction: column;  /* Alinea los hijos en columna para pantallas pequeñas */
-    }
-
-    .flex-item {
-        margin-bottom: 1rem;     /* Espaciado entre los elementos */
-        width: 100%;             /* Cada hijo ocupa el 100% del contenedor */
-        text-align: left;        /* Alineación del texto a la izquierda */
-    }
+            .flex-item {
+                margin-bottom: 1rem;     /* Espaciado entre los elementos */
+                width: 100%;             /* Cada hijo ocupa el 100% del contenedor */
+                text-align: left;        /* Alineación del texto a la izquierda */
+            }
 
 
             #cPanel654, #cPanelOff {
@@ -236,6 +243,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#4ta" tabindex="-1">Precios</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="olvidePass(); return false;" tabindex="0">Olvidé mi contraseña</a>
+                        </li>
                         <br>
                         <li>
                             <form class="">
@@ -259,7 +269,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#compa">Comparaciones</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" hidden>
                             <a class="nav-link" href="#4ta" tabindex="-1">Precios</a>
                         </li>
                         <li class="nav-item ">
@@ -267,11 +277,35 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Soluciones & opciones
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown" style="background-color:yellow">
-                                    <li><a class="dropdown-item" href="#2da651">Galería de estilos</a></li>
-                                    <li><a class="dropdown-item"href="#cPanel654" >Panel de Control</a></li>
-                                    <li><a class="dropdown-item" href="#4ta">Membresías</a></li>
-                                    <li><a class="dropdown-item" href="#contact">Contáctenos</a></li>
+                                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown" style="background-color: yellow;">
+                                    <style>
+                                        .dropdown-menu .dropdown-item {
+                                            background-color: yellow;
+                                            transition: transform 0.2s ease;
+                                        }
+                                        .dropdown-menu .dropdown-item:hover {
+                                            transform: scale(1.02);
+                                            background-color: yellow; /* Mantener el fondo amarillo en hover */
+                                        }
+                                    </style>
+                                    <li>
+                                        <a class="dropdown-item" href="#4ta" tabindex="-1">Precios</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#2da651">Galería de estilos</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#cPanel654">Panel de Control</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#4ta">Membresías</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="olvidePass(); return false;" tabindex="0">Olvidé mi contraseña</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#contact">Contáctenos</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -285,7 +319,7 @@
         </nav>
     </header>
     <script>
-        function reloadPage() {
+function reloadPage() {
     // Cerrar todos los modales abiertos (ajusta el selector según tu implementación)
     const modals = document.querySelectorAll('.modal');
     if (modals) {
@@ -298,6 +332,8 @@
         });
     }
 }
+
+
         document.addEventListener('DOMContentLoaded', function () {
             const btnMenuCel = document.getElementById('btnMenuCel');
             const menuCelu = document.getElementById('menuCelu');
@@ -1696,6 +1732,7 @@
 	<div id="exitoVenta"   data-bs-backdrop="static"  style="z-index: 999999999999999 !important; position: absolute;"></div>
 	<div id="opciones"      style="z-index: 999999999999999 !important; position: absolute;"></div>
 	<div id="pagoWallet"    style="z-index: 999999999999999 !important; position: absolute;"></div>
+    <div id="informacionPlus" style="z-index: 99999 !important; position: absolute;"></div>
 
     <!-- modales signUp-->
     <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true" style="z-index: 999999999 !important">  
@@ -1865,6 +1902,26 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+
+    <script>
+        
+function checkPasswordChangeStatus() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const statusChangePass = urlParams.get('changePaswordOK');
+
+    console.log("URL:", window.location.href, "Status:", statusChangePass);
+
+    if (statusChangePass === "true") {
+        mostrarExito("Su contraseña fue cambiada exitosamente.");
+    } else if (statusChangePass) {
+        mostrarExito("Su contraseña NO fue cambiada. Intente más tarde.");
+    }
+}
+
+// Llama a la función cuando el documento esté listo
+document.addEventListener("DOMContentLoaded", checkPasswordChangeStatus);
+
+    </script>
 
 </html>
 

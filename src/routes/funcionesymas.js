@@ -1401,7 +1401,7 @@ configsss();
                 
                 const email = emailXYZ123;
 
-                const newUser = new usuario({cheqDocument:false, cheqDataFaltante:false,
+                const newUser = new usuario({usuarioSuspendido:false,cheqDocument:false, cheqDataFaltante:false,
                     desingShop: "No tiene", usuarioBloqueado: true, tyc: true, email, password, statusInscrip: "Incompleto", transportEmail, emails: [{ emailOwner: email }], clientes: [], numCel: [], Ventas: [], linksredesSociales: {}, mediasDPagoCobro: {}, realPass: password, pathLogo: "/images/usuario.png", tipoMembresia: tipoM, urlOwner: "", urlServer, direcciones: [], quienesSomos: {}, dominioOwner: "No tiene", fondoPantalla: "No tiene", mostrarPromoPPrin: true, renovarMem: false, misProductos: [], fechaVencMem:fechaVencimientoCantProd, TotalProdCOntratados:cantPRODO,cantContratosMemRealizados, codVend
                 });
                 
