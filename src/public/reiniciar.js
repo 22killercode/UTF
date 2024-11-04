@@ -403,10 +403,6 @@ urlServer = ""
         return pais && cotizacionesDolar[pais] ? Number(cotizacionesDolar[pais]) : 1;
     }
     
-    
-    
-    
-    
 
     function cerrarModalPorId(idModal) {
         // Obtener el elemento del modal por su ID

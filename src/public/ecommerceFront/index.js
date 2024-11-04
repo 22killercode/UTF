@@ -1356,7 +1356,7 @@ imgGiga.forEach((img, index) => {
 													}, 1500);
 													return
 												}
-												let dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'))
+												dataCliente = JSON.parse(sessionStorage.getItem('clienteEcomm'))
 												if ( !dataCliente  ) {
 													await ocultarModalLoading()
 													mostrarAlerta("Logeate para continuar")
@@ -1417,7 +1417,7 @@ imgGiga.forEach((img, index) => {
 					// verifica si hay algún cliente logeado
 					clienteEcomm = JSON.parse((sessionStorage.getItem('clienteEcomm')))
 					jwToken = sessionStorage.getItem('jwtToken')
-					console.log("1revisaExisteClienteLogeado que cliente encontro?", clienteEcomm);
+					console.log("1111111111111111Que cliente logeado encontro?", clienteEcomm);
 					if (clienteEcomm === null) {
 						sessionStorage.removeItem('jwtToken');
 					}
@@ -1429,12 +1429,15 @@ imgGiga.forEach((img, index) => {
 						const { idCliente, nombre } = clienteEcommFresh
 						// busca los mensaje del cliente y los renderiza
 						const mensajesCliente = ownerMensajes.filter(id => id.idCliente === clienteEcommFresh._id) 
-						//console.log("que revisaExisteClienteLogeado mensajes del cliente encontro??????", mensajesCliente)
+						console.log("que mensajesCliente del cliente encontro??????", mensajesCliente)
 						// Iterar sobre los mensajes y mostrarlos
-						mensajesCliente.forEach(async mensaje => {
-							mostrarMensajePush(mensaje.subjectCliente, mensaje.messageCliente, mensaje._id);
-						});
+						if (mensajesCliente.length >= 1 ) {
+							mensajesCliente.forEach(async mensaje => {
+								mostrarMensajePush(mensaje.subjectCliente, mensaje.messageCliente, mensaje._id);
+							});
+						}
 
+						console.log("55555555555555", )
 						// Se debe poner el nombre y poner en verde el ícono del usuario
 						const iconoUser              = document.getElementById("chekUser");
 						iconoUser.innerHTML          = "";
@@ -1446,12 +1449,11 @@ imgGiga.forEach((img, index) => {
 						newIconUser.dataset.bsToggle = "modal";
 						newIconUser.dataset.bsTarget = "#dataUsuario";
 						iconoUser.appendChild(newIconUser);
-
+						console.log("6666666666", )
 						// Inserta el nombre del cliente en el signIn y la barra del menú principal
 						const nombreUserio = document.getElementById("nombreUserArriba");
 						// Limpia el contenido existente en el elemento
 						nombreUserio.innerHTML = "";
-				
 						const nombr23e = nombre;
 				
 						// Crea un nuevo elemento div para contener el nombre del dueño
@@ -1560,6 +1562,13 @@ imgGiga.forEach((img, index) => {
 						// Agrega el elemento de enlace al contenedor domLogoUser
 						domLogoUser.appendChild(linkElement);
 
+					}else{
+						// Inserta el nombre del cliente en el signIn y la barra del menú principal
+						const nombreUserio = document.getElementById("nombreUserArriba");
+						// Limpia el contenido existente en el elemento
+						nombreUserio.innerHTML = "";
+						// Establece un ancho del 33% con !important
+						nombreUserio.setAttribute("style", "width: 67% !important;");
 					} 
 				};
 				const accionSalir = document.getElementById("salir");
@@ -1608,6 +1617,7 @@ imgGiga.forEach((img, index) => {
 					}
 				}
 				await detectandoPagoEnUrl();
+				console.log("Llego al final de ", onTiendaOn);
 			} 
 		await detectPromosparams()
 		}

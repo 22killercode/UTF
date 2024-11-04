@@ -57,11 +57,11 @@ const config = {
     urlServer: 'http://localhost:3020/',
     //urlServer: 'https://utf-odfm.onrender.com/',
     // alfi token vendedor
-    ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'APP_USR-8737d261-a71e-43fe-addd-03c0c056d282',
-    ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-80741225863147-082714-acfe2d6b40dd4673cbeaafbc1b61c586-1781639407',
+    // ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'APP_USR-8737d261-a71e-43fe-addd-03c0c056d282',
+    // ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-80741225863147-082714-acfe2d6b40dd4673cbeaafbc1b61c586-1781639407',
     //seba token vendedor
-    // ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || '    APP_USR-df9a0135-fdaf-44a2-93f9-3fc0bb59f7c7',
-    // ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-634616371095007-042315-679bbb6b519d73fa7ec61fa4f44fd486-540933245',
+    ArTokenPublicMP: process.env.AR_TOKEN_PUBLIC_MP || 'APP_USR-df9a0135-fdaf-44a2-93f9-3fc0bb59f7c7',
+    ArTokenPrivateMP: process.env.AR_TOKEN_PRIVATE_MP || 'APP_USR-634616371095007-042315-679bbb6b519d73fa7ec61fa4f44fd486-540933245',
     transportEmail: {
         auth: {
             pass: process.env.EMAIL_PASS || 'Sebatbs@22', // Ajusta el valor predeterminado si es necesario

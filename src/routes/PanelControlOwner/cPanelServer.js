@@ -3525,9 +3525,6 @@ const {saveOrUpdateConfig}= require('../configGlrs');
             }
         }
     });
-
-
-
     router.post(`/cambiarPassCLienteEcommerce97894561468435156/:token/:urlOwner`, async (req, res) => {
         console.log("Paso 1: Verificando si las contraseñas coinciden.");
         const { token, urlOwner } = req.params;  // Obtiene el token de la URL
