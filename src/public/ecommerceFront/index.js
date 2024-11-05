@@ -3090,7 +3090,7 @@ imgGiga.forEach((img, index) => {
 					if (elemento) {
 						elemento.classList.add(desing);
 					} else {
-						console.console(`El elemento con ID "${id}" no existe en el DOM.`);
+						console.log(`El elemento con ID "${id}" no existe en el DOM.`);
 					}
 				});
 			}

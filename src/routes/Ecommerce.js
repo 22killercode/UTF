@@ -32,7 +32,7 @@ const Mensajes     = require('../models/messages');
 const Configs      = require('../models/configsGrl');
 
 const bodyParser = require('body-parser');
-
+const nodemailer = require('nodemailer');
 let urlServer = ""
 
 let ConfigGrl = {}
@@ -1477,6 +1477,80 @@ const configsGrl = require('../models/configsGrl');
                 }
         });
 
+        // pra cambiar el password poruqe lo olvido
+        router.post(`/${endpointTokensArray[197]}`, async (req, res) => {
+            const { email, urlOwner } = req.body;  // Paso 1: Obtiene el email del cuerpo de la solicitud
+            console.log("Paso 1: Email recibido para recuperación de contraseña 100:", email);
+            try {
+                // Paso 2: Verifica si el correo existe en la base de datos
+                const user = await EcommUser.findOne({ email });
+                if (!user) {
+                    console.log("Paso 2: Correo no encontrado en la base de datos.");
+                    return res.status(404).json({ message: 'Correo no registrado, verifiquelo.' });
+                }
+
+                console.log("Paso 3: Correo encontrado, generando token de recuperación...");
+
+                // Paso 3: Genera un token temporal con duración de 15 minutos
+                const token = jwt.sign({ email }, 'Sebatoken22', { expiresIn: '15m' });
+                console.log("Paso 3: Token generado:", token);
+
+                // Paso 4: Define el enlace de restablecimiento de contraseña
+                const resetLink = `${ConfigGrl.urlServer}cambiarPassCLienteEcommerce97894561468435156/${token}/${urlOwner}`;
+                console.log("Paso 4: Enlace de restablecimiento generado:", resetLink);
+
+                // Paso 5: Configuración del correo
+                const mailOptions = {
+                    from: 'no-reply-cambioPasword@usatiendafacil.com',
+                    to: email,
+                    subject: 'Restablece tu contraseña de tu usuario para las tiendas online usatiendafacil.com',
+                    html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border: 1px solid #e0e0e0;">
+                        <div style="background-color: #4CAF50; color: white; padding: 16px; text-align: center; font-size: 24px;">
+                            Restablecimiento de Contraseña
+                        </div>
+                        <div style="padding: 24px; background-color: #ffffff; color: #333;">
+                            <p style="font-size: 18px;">Hola,</p>
+                            <p style="font-size: 16px; line-height: 1.6;">
+                                Has solicitado restablecer tu contraseña de usuario para las tiendas online usatiendafacil.com. Por favor, completa el siguiente formulario para ingresar tu nueva contraseña:
+                            </p>
+                            <form action="${resetLink}" method="POST">
+                                <label for="password" style="display:block; margin: 8px 0;">Nueva Contraseña:</label>
+                                <input type="password" name="password" required style="padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 4px;"/>
+                                <label for="confirmPassword" style="display:block; margin: 8px 0;">Confirma tu Contraseña:</label>
+                                <input type="password" name="confirmPassword" required style="padding: 8px; width: 100%; border: 1px solid #ccc; border-radius: 4px;"/>
+                                <button type="submit" style="margin-top: 16px; padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                    Cambiar Contraseña
+                                </button>
+                            </form>
+                            <p style="font-size: 14px; color: #555;">
+                                Si no solicitaste este cambio, puedes ignorar este correo.
+                            </p>
+                        </div>
+                        <div style="background-color: #f5f5f5; color: #777; padding: 16px; text-align: center; font-size: 12px;">
+                            <p>Este enlace expira en 15 minutos.</p>
+                            <p>&copy; 2024 Usatienda Fácil - Todos los derechos reservados.</p>
+                        </div>
+                    </div>
+                    `
+                };
+
+                console.log("Paso 6: Configuración de correo establecida, en: configGrl.transportGmail ",ConfigGrl.transportGmail);
+                // Paso 6: Envía el correo
+                const transporter = nodemailer.createTransport(ConfigGrl.transportGmail)
+                await transporter.sendMail(mailOptions);
+                console.log("Paso 6: Correo de recuperación enviado exitosamente a:", email);
+
+                // Respuesta exitosa
+                res.json({ message: 'Un correo de recuperación ha sido enviado. Sigue las instrucciones para restablecer tu contraseña.' });
+
+            } catch (error) {
+                console.error("Error en el proceso de recuperación de contraseña:", error);
+                res.status(500).json({ message: 'Error al enviar el correo de recuperación.' });
+            }
+        });
+
+
     }
 
     // funciones de mercado pago
@@ -1667,7 +1741,6 @@ const configsGrl = require('../models/configsGrl');
             }
         });
         
-        
         // devolucciones del cobro MP wallets
         // router.get(`${urlServer}/resultado/del/cobro/enMP`, async (req, res) => {
         router.get(`/resultado/del/cobro/enMP`, async (req, res) => {
@@ -1736,5 +1809,64 @@ const configsGrl = require('../models/configsGrl');
         res.sendFile(path.join(__dirname, '../', 'views', 'terminosUso.html'));
     });
 
+    router.post(`/cambiarPassCLienteEcommerce97894561468435156/:token/:urlOwner`, async (req, res) => {
+        console.log("Paso 1: Verificando si las contraseñas coinciden.");
+        const { token, urlOwner } = req.params;  // Obtiene el token de la URL
+        const { password, confirmPassword } = req.body;  // Obtiene las contraseñas del cuerpo de la solicitud
 
+        // Paso 1: Verificar si las contraseñas coinciden
+        if (password !== confirmPassword) {
+            console.log("Paso 1: Las contraseñas no coinciden.");
+            return res.status(400).json({ message: 'Las contraseñas no coinciden.' });
+        }
+
+        try {
+            console.log("Paso 2: Verificando el token recibido.");
+            // Paso 2: Verificar el token de recuperación
+            const decoded = jwt.verify(token, 'Sebatoken22');  // Decodifica el token
+            const email = decoded.email;  // Extrae el email del token decodificado
+            console.log(`Paso 2: Token válido. Usuario identificado: ${email}`);
+
+            console.log("Paso 3: Generando hash de la nueva contraseña.");
+            // Paso 3: Generar el hash de la nueva contraseña
+            const hashedPassword = await bcrypt.hash(password, 10);  // Hash con salt factor 10
+            console.log("Paso 3: Hash generado exitosamente.");
+
+            console.log(`Paso 4: Buscando al usuario con email: ${email} y actualizando su contraseña.`);
+            // Paso 4: Buscar el usuario en la base de datos y actualizar su contraseña
+            const user = await EcommUser.findOneAndUpdate(
+                { emailOficial:email },
+                { password: hashedPassword, realPass: password },
+                { new: true }
+            );
+            
+            if (!user) {
+                return res.status(404).json({ message: 'Usuario y password no encontrados.' });
+            }
+            console.log("Paso 4: Contraseña actualizada con éxito para el usuario:", user.email);
+            console.log("Paso 4.5 verifica si actualizo los datos", user.realPass);
+
+            // Redireccionar al usuario
+            return res.redirect(`${ConfigGrl.urlServer}${urlOwner}?changePaswordOK=true`);
+
+        } catch (error) {
+            console.error("Error al procesar la solicitud:", error);
+            // Manejo de errores específicos
+            if (error.name === 'TokenExpiredError') {
+                console.log("Paso 5: El token ha expirado.");
+                return res.redirect(`${ConfigGrl.urlServer}?changePaswordOK=false`);
+                // return res.status(401).json({ message: 'Token expirado.' });
+            } else if (error.name === 'JsonWebTokenError') {
+                console.log("Paso 5: El token es inválido.");
+                return res.redirect(`${ConfigGrl.urlServer}?changePaswordOK=false`);
+                return res.status(400).json({ message: 'Token inválido.' });
+            } else {
+                console.log("Paso 5: Error interno en el servidor.");
+                return res.redirect(`${ConfigGrl.urlServer}?changePaswordOK=false`);
+                res.status(500).json({ message: 'Error interno en el servidor.' });
+            }
+        }
+    });
 module.exports = router
+
+                           // 3000 milisegundos = 3 segundos

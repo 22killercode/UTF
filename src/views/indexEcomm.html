@@ -1660,7 +1660,8 @@
         try {
             let urlOwner = JSON.parse(sessionStorage.getItem('dataOwner')).urlOwner;
 			console.log("Que urlowner encontro???", urlOwner)
-            const endpoint = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'))[197];
+            // const endpoint = JSON.parse(sessionStorage.getItem('endPointsIdTokensCpanel'))[197];
+			const endpoint = JSON.parse(sessionStorage.getItem("idEndpoints"))[197]
             if (!endpoint) {
                 await ocultarModalLoading();
                 mostrarAlerta("No se pudo encontrar el endpoint de recuperación de contraseña.");
@@ -1684,7 +1685,7 @@
             if (response.ok) {
 				await ocultarModalLoading();
                 const responseData = await response.json(); // Extraer el JSON
-                mostrarInfo(responseData.message); // Mostrar el mensaje del backend
+                mostrarExito(responseData.message); // Mostrar el mensaje del backend
             } else {
 				await ocultarModalLoading();
                 const errorData = await response.json(); // Extraer el JSON de error
@@ -3630,14 +3631,21 @@
 
 <script>
         
-		function checkPasswordChangeStatusEcommerce() {
+async function checkPasswordChangeStatusEcommerce() {
     const urlParams = new URLSearchParams(window.location.search);
     const statusChangePass = urlParams.get('changePaswordOK');
 
     console.log("URL:", window.location.href, "Status:", statusChangePass);
 
     if (statusChangePass === "true") {
+		await ocultarModalLoading()
         mostrarExito("Su contraseña fue cambiada exitosamente.");
+		const url = window.location.href;        // Obtiene la URL completa
+		const baseUrl = url.split('?')[0];       // Se queda con la primera parte antes de '?'
+		console.log("*****************************primera parte", baseUrl)
+		setTimeout(() => {
+			window.location.href = baseUrl;      // Redirige a la URL base después de 3 segundos
+		}, 3000);     
     } else if (statusChangePass) {
         mostrarExito("Su contraseña NO fue cambiada. Intente más tarde.");
     }
